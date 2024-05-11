@@ -1,0 +1,11 @@
+@Articles_HostAddress = http://localhost:5024
+
+GET {{Articles_HostAddress}}/todos/
+Accept: application/json
+
+###
+
+GET {{Articles_HostAddress}}/todos/1
+Accept: application/json
+
+###
