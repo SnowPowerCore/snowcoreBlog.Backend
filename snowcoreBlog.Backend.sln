@@ -1,0 +1,46 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "snowcoreBlog.ApplicationLaunch", "snowcoreBlog.Universal\UniversalModules\ApplicationLaunch\snowcoreBlog.ApplicationLaunch.csproj", "{3D8132DA-76CC-4CA0-91B4-8EF15B869CF0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UsersManagement", "BusinessServices\UsersManagement\snowcoreBlog.Backend.UsersManagement.csproj", "{8FC76EB5-D917-4A0B-9CB0-D775100431C6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Articles", "BusinessServices\Articles\snowcoreBlog.Backend.Articles.csproj", "{0E201005-AEE7-4FD0-A624-3980ECAF4E51}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdminsManagement", "BusinessServices\AdminsManagement\snowcoreBlog.Backend.AdminsManagement.csproj", "{EC817D39-5F84-4202-9A0F-AF87AC53A0BC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Authentication", "Shared\BusinessServices\Authentication\snowcoreBlog.Backend.Authentication.csproj", "{93D52131-2B5F-4468-AF4B-965DC8438599}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3D8132DA-76CC-4CA0-91B4-8EF15B869CF0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D8132DA-76CC-4CA0-91B4-8EF15B869CF0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D8132DA-76CC-4CA0-91B4-8EF15B869CF0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D8132DA-76CC-4CA0-91B4-8EF15B869CF0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8FC76EB5-D917-4A0B-9CB0-D775100431C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8FC76EB5-D917-4A0B-9CB0-D775100431C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8FC76EB5-D917-4A0B-9CB0-D775100431C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8FC76EB5-D917-4A0B-9CB0-D775100431C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0E201005-AEE7-4FD0-A624-3980ECAF4E51}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0E201005-AEE7-4FD0-A624-3980ECAF4E51}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0E201005-AEE7-4FD0-A624-3980ECAF4E51}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0E201005-AEE7-4FD0-A624-3980ECAF4E51}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EC817D39-5F84-4202-9A0F-AF87AC53A0BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC817D39-5F84-4202-9A0F-AF87AC53A0BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC817D39-5F84-4202-9A0F-AF87AC53A0BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC817D39-5F84-4202-9A0F-AF87AC53A0BC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{93D52131-2B5F-4468-AF4B-965DC8438599}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{93D52131-2B5F-4468-AF4B-965DC8438599}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{93D52131-2B5F-4468-AF4B-965DC8438599}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{93D52131-2B5F-4468-AF4B-965DC8438599}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
