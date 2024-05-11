@@ -11,7 +11,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Articles", "BusinessService
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdminsManagement", "BusinessServices\AdminsManagement\snowcoreBlog.Backend.AdminsManagement.csproj", "{EC817D39-5F84-4202-9A0F-AF87AC53A0BC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Authentication", "Shared\BusinessServices\Authentication\snowcoreBlog.Backend.Authentication.csproj", "{93D52131-2B5F-4468-AF4B-965DC8438599}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Authentication", "Shared\Services\Authentication\snowcoreBlog.Backend.Authentication.csproj", "{93D52131-2B5F-4468-AF4B-965DC8438599}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "snowcoreBlog.ServiceDefaults", "snowcoreBlog.Universal\ServiceDefaults\snowcoreBlog.ServiceDefaults.csproj", "{5EBA7817-7973-4CB0-B389-576CF1F2E399}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{93D52131-2B5F-4468-AF4B-965DC8438599}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{93D52131-2B5F-4468-AF4B-965DC8438599}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{93D52131-2B5F-4468-AF4B-965DC8438599}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5EBA7817-7973-4CB0-B389-576CF1F2E399}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5EBA7817-7973-4CB0-B389-576CF1F2E399}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5EBA7817-7973-4CB0-B389-576CF1F2E399}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5EBA7817-7973-4CB0-B389-576CF1F2E399}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -21,4 +21,8 @@
     <None Update="**/FodyWeavers.*" Visible="false" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\snowcoreBlog.Universal\ServiceDefaults\snowcoreBlog.ServiceDefaults.csproj" />
+  </ItemGroup>
+
 </Project>
