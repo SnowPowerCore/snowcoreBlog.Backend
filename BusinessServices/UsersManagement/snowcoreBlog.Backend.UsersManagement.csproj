@@ -25,4 +25,8 @@
     <Folder Include="Endpoints\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\snowcoreBlog.Universal\ServiceDefaults\snowcoreBlog.ServiceDefaults.csproj" />
+  </ItemGroup>
+
 </Project>
