@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Aspire.Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.1" />
     <PackageReference Include="FastEndpoints" Version="5.25.0" />
     <PackageReference Include="Fody" Version="6.8.1">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -18,7 +19,7 @@
     <PackageReference Include="Marten" Version="7.16.0" />
     <PackageReference Include="MinimalStepifiedSystem.Core" Version="1.0.2" />
     <PackageReference Include="Riok.Mapperly" Version="3.5.1">
-      <ExcludeAssets>runtime</ExcludeAssets>
+      <IncludeAssets>runtime</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
   </ItemGroup>
@@ -33,6 +34,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\snowcoreBlog.Universal\ServiceDefaults\snowcoreBlog.ServiceDefaults.csproj" />
+    <ProjectReference Include="..\..\Shared\Infrastructure\snowcoreBlog.Backend.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\snowcoreBlog.Universal\UniversalModules\ApplicationLaunch.Implementations\snowcoreBlog.ApplicationLaunch.Implementations.csproj" />
     <ProjectReference Include="..\..\snowcoreBlog.Universal\PublicApi\snowcoreBlog.PublicApi.csproj" />
   </ItemGroup>
 
