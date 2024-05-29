@@ -27,7 +27,7 @@ public class CreateReaderAccountEndpoint : Endpoint<CreateReaderAccountDto, ApiR
     {
         var context = new CreateReaderAccountContext(req);
 
-        await CreateReaderAccount(context);
+        await CreateReaderAccount(context, ct);
         var result = context.GetFromData<IResult<CreateReaderAccountDto>>(
             ReaderAccountConstants.CreateReaderAccountResult);
 
