@@ -1,4 +1,5 @@
-﻿using FastEndpoints;
+﻿using System.Net;
+using FastEndpoints;
 using MinimalStepifiedSystem.Attributes;
 using Results;
 using snowcoreBlog.PublicApi;
@@ -11,6 +12,8 @@ public class CreateReaderAccountEndpoint : Endpoint<CreateReaderAccountDto, ApiR
     [StepifiedProcess(Steps = [
         typeof(ValidateCreateReaderAccountStep),
         typeof(CreateUserForReaderAccountStep),
+        typeof(CreateNewReaderEntityStep),
+        typeof(SendEmailToNewReaderAccountStep),
     ])]
     protected CreateReaderAccountDelegate CreateReaderAccount { get; }
 
@@ -28,9 +31,12 @@ public class CreateReaderAccountEndpoint : Endpoint<CreateReaderAccountDto, ApiR
         var context = new CreateReaderAccountContext(req);
 
         await CreateReaderAccount(context, ct);
-        var result = context.GetFromData<IResult<CreateReaderAccountDto>>(
+        var result = context.GetFromData<IResult<ReaderAccountCreationResultDto>>(
             ReaderAccountConstants.CreateReaderAccountResult);
 
-        await SendAsync(result?.ToApiResponse(), cancellation: ct);
+        await SendAsync(
+            result?.ToApiResponse(),
+            result?.ToStatusCode() ?? (int)HttpStatusCode.InternalServerError,
+            ct);
     }
 }
