@@ -2,5 +2,5 @@
 
 public abstract record BaseEntity()
 {
-    public required Guid Id { get; init; }
+    public Guid Id { get; init; }
 }

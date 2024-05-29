@@ -20,7 +20,15 @@ public class CreateUserForReaderAccountStep(IRequestClient<CreateUser> client) :
         {
             context.SetDataWith(
                 ReaderAccountConstants.CreateReaderAccountResult,
-                CreateUserForReaderAccountError<CreateReaderAccountDto>.Create(error.Message, error.Errors));
+                CreateUserForReaderAccountError<ReaderAccountCreationResultDto>.Create(error.Message, error.Errors));
+            return;
+        }
+        else
+        {
+            context.SetDataWith(
+                ReaderAccountConstants.CreateReaderAccountResult,
+                CreateUserForReaderAccountError<ReaderAccountCreationResultDto>.Create(
+                    ReaderAccountConstants.UserForReaderAccountCreationGenericError));
             return;
         }
 
