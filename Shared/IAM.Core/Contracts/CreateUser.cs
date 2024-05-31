@@ -1,6 +1,6 @@
 ﻿namespace snowcoreBlog.Backend.IAM.Core.Contracts;
 
-public record CreateUser
+public sealed record CreateUser
 {
     public string FirstName { get; init; } = string.Empty;
 

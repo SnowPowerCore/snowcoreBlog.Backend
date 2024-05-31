@@ -1,6 +1,6 @@
 ﻿namespace snowcoreBlog.Backend.IAM.Core.Contracts;
 
-public record UserCreationResult
+public sealed record UserCreationResult
 {
     public required Guid Id { get; init; }
 }

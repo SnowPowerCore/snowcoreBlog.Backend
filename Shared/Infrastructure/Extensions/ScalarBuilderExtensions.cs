@@ -18,7 +18,7 @@ public static class ScalarBuilderExtensions
 
     static ScalarBuilderExtensions()
     {
-        JsonSerializerOptions.TypeInfoResolverChain.Add(CoreSerializationContext.Default);
+        JsonSerializerOptions.SetJsonSerializationContext();
     }
 
     public static IEndpointConventionBuilder MapScalarApiReference(this IEndpointRouteBuilder endpoints,

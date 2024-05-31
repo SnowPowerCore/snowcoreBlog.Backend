@@ -26,6 +26,4 @@ namespace snowcoreBlog.Backend.Infrastructure;
 [JsonSerializable(typeof(Fault<UserCreationResult>))]
 [JsonSerializable(typeof(FaultEvent<UserCreationResult>))]
 [JsonSerializable(typeof(DataResult<UserCreationResult>))]
-internal partial class CoreSerializationContext : JsonSerializerContext
-{
-}
+internal sealed partial class CoreSerializationContext : JsonSerializerContext { }
