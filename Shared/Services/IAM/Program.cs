@@ -27,7 +27,10 @@ builder.Services.Configure<Argon2PasswordHasherOptions>(options =>
     options.Strength = Argon2HashStrength.Moderate;
 });
 
-builder.Services.SetJsonSerializationContext();
+builder.Services.ConfigureHttpJsonOptions(options =>
+{
+    options.SerializerOptions.SetJsonSerializationContext();
+});
 
 builder.AddServiceDefaults();
 builder.Services.AddOpenTelemetry()
@@ -52,11 +55,7 @@ builder.Services.AddMassTransit(busConfigurator =>
     busConfigurator.AddConsumer<CreateUserConsumer>();
     busConfigurator.UsingRabbitMq((context, config) =>
     {
-        config.ConfigureJsonSerializerOptions(options =>
-        {
-            options.SetJsonSerializationContext();
-            return options;
-        });
+        config.ConfigureJsonSerializerOptions(options => options.SetJsonSerializationContext());
         config.Host(builder.Configuration.GetConnectionString("rabbitmq"));
         config.ConfigureEndpoints(context);
     });
