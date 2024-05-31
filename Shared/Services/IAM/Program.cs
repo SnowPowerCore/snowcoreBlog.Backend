@@ -1,11 +1,19 @@
 using Marten;
 using MassTransit;
 using Microsoft.AspNetCore.Identity;
+using snowcoreBlog.Backend.Infrastructure.Extensions;
 using snowcoreBlog.Backend.IAM.Entities;
 using snowcoreBlog.Backend.IAM.Extensions;
 using snowcoreBlog.Backend.IAM.Models;
 using snowcoreBlog.Backend.IAM.Options;
 using snowcoreBlog.ServiceDefaults.Extensions;
+using snowcoreBlog.Backend.IAM.Features.User;
+using snowcoreBlog.Backend.IAM.Core.Contracts;
+using FluentValidation;
+using snowcoreBlog.Backend.IAM.Validation;
+using snowcoreBlog.Backend.IAM.Core.Interfaces.Services.Password;
+using snowcoreBlog.Backend.IAM.Services.Password;
+using Microsoft.AspNetCore.Http.Json;
 
 var builder = WebApplication.CreateSlimBuilder(args);
 
@@ -19,11 +27,13 @@ builder.Services.Configure<Argon2PasswordHasherOptions>(options =>
     options.Strength = Argon2HashStrength.Moderate;
 });
 
+builder.Services.SetJsonSerializationContext();
+
 builder.AddServiceDefaults();
 builder.Services.AddOpenTelemetry()
     .WithTracing(tracing => tracing.AddSource("Marten"))
     .WithMetrics(metrics => metrics.AddMeter("Marten"));
-builder.Services.AddNpgsqlDataSource("db-iam-entities");
+builder.Services.AddNpgsqlDataSource(builder.Configuration.GetConnectionString("db-iam-entities"));
 builder.Services.AddMarten(opts =>
 {
     opts.Policies.AllDocumentsSoftDeleted();
@@ -31,51 +41,28 @@ builder.Services.AddMarten(opts =>
     .UseNpgsqlDataSource();
 builder.Services
     .AddIdentityCore<ApplicationUser>()
-    .AddMartenStores<ApplicationUser, IdentityRole>()
-    .AddDefaultTokenProviders();
+    .AddRoles<IdentityRole>()
+    .AddMartenStores<ApplicationUser, IdentityRole>();
 builder.Services
     .AddIdentityCore<ApplicationAdmin>()
-    .AddMartenStores<ApplicationAdmin, IdentityRole>()
-    .AddDefaultTokenProviders();
+    .AddRoles<IdentityRole>()
+    .AddMartenStores<ApplicationAdmin, IdentityRole>();
 builder.Services.AddMassTransit(busConfigurator =>
 {
+    busConfigurator.AddConsumer<CreateUserConsumer>();
     busConfigurator.UsingRabbitMq((context, config) =>
     {
+        config.ConfigureJsonSerializerOptions(options =>
+        {
+            options.SetJsonSerializationContext();
+            return options;
+        });
         config.Host(builder.Configuration.GetConnectionString("rabbitmq"));
+        config.ConfigureEndpoints(context);
     });
 });
-//builder.Services.AddMultipleAuthentications(
-//    builder.Configuration["Security:Signing:User:Key"]!,
-//    builder.Configuration["Security:Signing:Admin:Key"]!);
-//builder.Services.AddAuthorization()
-// .AddFastEndpoints(static o =>
-// {
-//     o.SourceGeneratorDiscoveredTypes.AddRange(DiscoveredTypes.All);
-// })
-// .AddCors();
 
-// app.UseCookiePolicy(new()
-// {
-//     MinimumSameSitePolicy = SameSiteMode.Strict,
-//     HttpOnly = HttpOnlyPolicy.Always,
-//     Secure = CookieSecurePolicy.Always
-// })
-//.UseMiddleware<CookieJsonWebTokenMiddleware>()
-//.UseAuthentication()
-//.UseAuthorization();
-//.UseFastEndpoints(c =>
-//{
-//    c.Errors.ResponseBuilder = static (failures, ctx, statusCode) =>
-//     {
-//         var failuresDict = failures
-//             .GroupBy(f => f.PropertyName)
-//             .ToDictionary(
-//                 keySelector: e => e.Key,
-//                 elementSelector: e => e.Select(m => $"{e.Key}: {m.ErrorMessage}").ToArray());
-
-//         return ErrorResponseUtilities.ApiResponseWithErrors(
-//             failuresDict.Values.SelectMany(x => x.Select(s => s)).ToList(), statusCode);
-//     };
-//});
+builder.Services.AddSingleton<IValidator<CreateUser>, CreateUserValidator>();
+builder.Services.AddSingleton<IPasswordHasher, Argon2PasswordHasher>();
 
 await builder.Build().RunAsync();

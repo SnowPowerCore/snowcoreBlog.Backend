@@ -1,7 +1,6 @@
-﻿namespace snowcoreBlog.Backend.IAM.Core.Interfaces.Identity
+﻿namespace snowcoreBlog.Backend.IAM.Core.Interfaces.Identity;
+
+public interface IClaimsUser
 {
-    public interface IClaimsUser
-    {
-        IList<string> RoleClaims { get; set; }
-    }
+    IList<string> RoleClaims { get; set; }
 }

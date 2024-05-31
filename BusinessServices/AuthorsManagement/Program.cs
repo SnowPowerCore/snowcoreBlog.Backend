@@ -16,10 +16,10 @@ builder.Services.AddMarten(opts =>
     opts.Policies.AllDocumentsSoftDeleted();
 })
     .UseNpgsqlDataSource();
-builder.Services.AddFastEndpoints()
-    .AddHostedService(sp =>
-        new ApplicationLaunchWorker(sp.GetRequiredService<IHostApplicationLifetime>(),
-            sp.GetRequiredService<IApplicationLaunchService>()));
+//builder.Services.AddFastEndpoints();
+// builder.Services.AddHostedService(sp =>
+//         new ApplicationLaunchWorker(sp.GetRequiredService<IHostApplicationLifetime>(),
+//             sp.GetRequiredService<IApplicationLaunchService>()));
 
 var app = builder.Build();
 

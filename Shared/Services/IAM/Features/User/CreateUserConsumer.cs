@@ -1,18 +1,18 @@
 ﻿using FluentValidation;
 using MassTransit;
+using Microsoft.AspNetCore.Identity;
 using Results;
-using snowcoreBlog.Backend.Core;
 using snowcoreBlog.Backend.IAM.Core.Contracts;
 using snowcoreBlog.Backend.IAM.Core.Interfaces.Services.Password;
 using snowcoreBlog.Backend.IAM.Entities;
 using snowcoreBlog.Backend.IAM.Extensions;
-using snowcoreBlog.Backend.IAM.Stores;
+using snowcoreBlog.PublicApi;
 
 namespace snowcoreBlog.Backend.IAM.Features.User;
 
 public class CreateUserConsumer(IValidator<CreateUser> validator,
                                 IPasswordHasher passwordHasher,
-                                MartenUserStore<ApplicationUser> userStore) : IConsumer<CreateUser>
+                                IUserStore<ApplicationUser> userStore) : IConsumer<CreateUser>
 {
     public async Task Consume(ConsumeContext<CreateUser> context)
     {
@@ -20,7 +20,9 @@ public class CreateUserConsumer(IValidator<CreateUser> validator,
         if (!result.IsValid)
         {
             await context.RespondAsync(
-                new ValidationErrorResult<UserCreationResult>(result));
+                new DataResult<UserCreationResult>(
+                    Errors: result.Errors.Select(e => new ErrorResultDetail(e.PropertyName, e.ErrorMessage)).ToList()));
+            return;
         }
 
         var passwordHash = passwordHasher.HashPassword(context.Message.Password);
@@ -30,12 +32,13 @@ public class CreateUserConsumer(IValidator<CreateUser> validator,
         if (creationResult.Succeeded)
         {
             await context.RespondAsync(
-                Result.Success(new UserCreationResult { Id = Guid.Parse(userEntity.Id) }));
+                new DataResult<UserCreationResult>(new UserCreationResult { Id = Guid.Parse(userEntity.Id) }));
         }
         else
         {
             await context.RespondAsync(
-                new ApplicationIdentityStoreCreationError<UserCreationResult>(creationResult.Errors.ToList()));
+                new DataResult<UserCreationResult>(
+                    Errors: creationResult.Errors.Select(e => new ErrorResultDetail(e.Code, e.Description)).ToList()));
         }
     }
 }

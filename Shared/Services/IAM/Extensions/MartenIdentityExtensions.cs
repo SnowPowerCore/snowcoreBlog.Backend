@@ -8,11 +8,15 @@ namespace snowcoreBlog.Backend.IAM.Extensions
     {
         public static IdentityBuilder AddMartenStores<TUser, TRole>(this IdentityBuilder builder)
                                                                     where TUser : IdentityUser, IClaimsUser
-                                                                    where TRole : IdentityRole =>
+                                                                    where TRole : IdentityRole
+        {
             builder
                 .AddRoleStore<MartenRoleStore<TRole>>()
-                .AddRoleManager<RoleManager<TRole>>()
+                .AddRoleManager<RoleManager<TRole>>();
+            builder
                 .AddUserStore<MartenUserStore<TUser>>()
                 .AddUserManager<UserManager<TUser>>();
+            return builder;
+        }
     }
 }

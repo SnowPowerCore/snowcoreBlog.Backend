@@ -4,6 +4,7 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <UserSecretsId>f4650b45-fed6-4a9a-9b97-2918092e0f30</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -13,8 +14,10 @@
     </PackageReference>
     <PackageReference Include="ConfigureAwait.Fody" Version="3.3.2" />
     <PackageReference Include="Marten" Version="7.16.0" />
+    <PackageReference Include="MassTransit.RabbitMQ" Version="8.2.2" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.5" />
+    <PackageReference Include="Scalar.AspNetCore" Version="1.1.1" />
   </ItemGroup>
 
   <ItemGroup>
