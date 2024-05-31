@@ -1,6 +1,6 @@
 ﻿namespace snowcoreBlog.Backend.IAM.Core.Contracts;
 
-public record CreateAdmin
+public sealed record CreateAdmin
 {
     public required Guid FromAdmin { get; init; } = Guid.Empty;
 

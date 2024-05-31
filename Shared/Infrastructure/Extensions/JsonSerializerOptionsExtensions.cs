@@ -1,8 +1,8 @@
 ﻿using System.Text.Json;
 
-namespace snowcoreBlog.Backend.Infrastructure;
+namespace snowcoreBlog.Backend.Infrastructure.Extensions;
 
-public static class FastEndpointsConfigExtensions
+public static class JsonSerializerOptionsExtensions
 {
     public static JsonSerializerOptions SetJsonSerializationContext(this JsonSerializerOptions options)
     {

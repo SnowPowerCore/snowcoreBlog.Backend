@@ -5,7 +5,6 @@ using MassTransit;
 using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.AspNetCore.Routing.Constraints;
 using Microsoft.OpenApi.Models;
-using snowcoreBlog.Backend.IAM.Core.Contracts;
 using snowcoreBlog.Backend.Infrastructure.Extensions;
 using snowcoreBlog.Backend.Infrastructure.HttpMiddleware;
 using snowcoreBlog.Backend.Infrastructure.Utilities;
@@ -25,7 +24,10 @@ builder.Services.Configure<RouteOptions>(options =>
     options.SetParameterPolicy<RegexInlineRouteConstraint>("regex");
 });
 
-builder.Services.SetJsonSerializationContext();
+builder.Services.ConfigureHttpJsonOptions(options =>
+{
+    options.SerializerOptions.SetJsonSerializationContext();
+});
 
 builder.AddServiceDefaults();
 builder.Services.AddOpenTelemetry()
@@ -42,11 +44,7 @@ builder.Services.AddMassTransit(busConfigurator =>
 {
     busConfigurator.UsingRabbitMq((context, config) =>
     {
-        config.ConfigureJsonSerializerOptions(options =>
-        {
-            options.SetJsonSerializationContext();
-            return options;
-        });
+        config.ConfigureJsonSerializerOptions(options => options.SetJsonSerializationContext());
         config.Host(builder.Configuration.GetConnectionString("rabbitmq"));
     });
 });
