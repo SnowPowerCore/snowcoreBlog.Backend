@@ -2,5 +2,5 @@
 
 public interface ICompiledQueriesProvider
 {
-    TOutQueryType GetQuery<TOutQueryType>();
+    TCompiledQuery? GetQuery<TCompiledQuery>() where TCompiledQuery : notnull;
 }

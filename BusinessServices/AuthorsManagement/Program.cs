@@ -1,7 +1,4 @@
-using FastEndpoints;
 using Marten;
-using snowcoreBlog.ApplicationLaunch.Implementations.BackgroundServices;
-using snowcoreBlog.ApplicationLaunch.Interfaces;
 using snowcoreBlog.ServiceDefaults.Extensions;
 
 var builder = WebApplication.CreateSlimBuilder(args);

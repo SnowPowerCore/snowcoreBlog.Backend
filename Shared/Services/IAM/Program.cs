@@ -13,7 +13,6 @@ using FluentValidation;
 using snowcoreBlog.Backend.IAM.Validation;
 using snowcoreBlog.Backend.IAM.Core.Interfaces.Services.Password;
 using snowcoreBlog.Backend.IAM.Services.Password;
-using Microsoft.AspNetCore.Http.Json;
 
 var builder = WebApplication.CreateSlimBuilder(args);
 
@@ -53,6 +52,7 @@ builder.Services
 builder.Services.AddMassTransit(busConfigurator =>
 {
     busConfigurator.AddConsumer<CreateUserConsumer>();
+    busConfigurator.AddConsumer<ValidateUserExistsConsumer>();
     busConfigurator.UsingRabbitMq((context, config) =>
     {
         config.ConfigureJsonSerializerOptions(options => options.SetJsonSerializationContext());

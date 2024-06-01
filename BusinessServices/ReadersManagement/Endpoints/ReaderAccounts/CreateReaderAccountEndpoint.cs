@@ -11,6 +11,7 @@ public class CreateReaderAccountEndpoint : Endpoint<CreateReaderAccountDto, ApiR
 {
     [StepifiedProcess(Steps = [
         typeof(ValidateCreateReaderAccountStep),
+        typeof(ValidateReaderAccountNotExistsStep),
         typeof(CreateUserForReaderAccountStep),
         typeof(CreateNewReaderEntityStep),
         typeof(SendEmailToNewReaderAccountStep),

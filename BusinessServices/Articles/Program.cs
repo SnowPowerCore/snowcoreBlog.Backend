@@ -1,4 +1,3 @@
-using FastEndpoints;
 using snowcoreBlog.ServiceDefaults.Extensions;
 
 var builder = WebApplication.CreateSlimBuilder(args);

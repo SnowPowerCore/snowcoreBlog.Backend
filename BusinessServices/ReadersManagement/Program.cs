@@ -64,7 +64,7 @@ builder.Services.AddSwaggerGen(c =>
     c.SwaggerDoc("v1", new OpenApiInfo { Title = nameof(snowcoreBlog.Backend.ReadersManagement), Version = "v1" });
 });
 
-var swaggerSuffix = "/swagger/v1/swagger.json";
+var swaggerRoute = "/swagger/v1/swagger.json";
 
 builder.Services.AddSingleton<IValidator<CreateReaderAccountDto>, CreateReaderAccountValidation>();
 
@@ -73,6 +73,7 @@ builder.Services.AddScoped<IReaderRepository, ReaderRepository>();
 builder.Services.AddScoped<CookieJsonWebTokenMiddleware>();
 
 builder.Services.AddScoped<ValidateCreateReaderAccountStep>();
+builder.Services.AddScoped<ValidateReaderAccountNotExistsStep>();
 builder.Services.AddScoped<CreateUserForReaderAccountStep>();
 builder.Services.AddScoped<CreateNewReaderEntityStep>();
 builder.Services.AddScoped<SendEmailToNewReaderAccountStep>();
@@ -110,7 +111,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI(c =>
     {
-        c.SwaggerEndpoint(swaggerSuffix, $"{nameof(snowcoreBlog.Backend.ReadersManagement)} v1");
+        c.SwaggerEndpoint(swaggerRoute, $"{nameof(snowcoreBlog.Backend.ReadersManagement)} v1");
         c.RoutePrefix = string.Empty;
     });
     app.MapScalarApiReference(c =>
