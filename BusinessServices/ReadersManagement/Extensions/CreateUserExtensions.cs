@@ -10,6 +10,8 @@ public static partial class CreateUserExtensions
 {
     public static partial CreateUser ToCreateUser(this CreateReaderAccountDto createReaderAccountDto);
 
+    public static partial ValidateUserExists ToValidateUserExists(this CreateReaderAccountDto createReaderAccountDto);
+
     public static ReaderEntity ToEntity(this CreateReaderAccountDto createReaderAccountDto, Guid userId) =>
         new()
         {

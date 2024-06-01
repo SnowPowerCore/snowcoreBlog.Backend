@@ -24,14 +24,6 @@ public class CreateUserForReaderAccountStep(IRequestClient<CreateUser> client) :
                     ReaderAccountConstants.UserForReaderAccountUnableToCreateUpdateError, response.Message.Errors));
             return;
         }
-        // else
-        // {
-        //     context.SetDataWith(
-        //         ReaderAccountConstants.CreateReaderAccountResult,
-        //         CreateUserForReaderAccountError<ReaderAccountCreationResultDto>.Create(
-        //             ReaderAccountConstants.UserForReaderAccountCreationGenericError));
-        //     return;
-        // }
 
         await next(context, token);
     }

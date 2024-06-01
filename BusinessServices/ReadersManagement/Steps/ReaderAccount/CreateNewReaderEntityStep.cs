@@ -11,10 +11,10 @@ public class CreateNewReaderEntityStep(IReaderRepository readerRepository) : ISt
     public async Task InvokeAsync(CreateReaderAccountContext context, CreateReaderAccountDelegate next, CancellationToken token = default)
     {
         var createUserForReaderAccountResult = context.GetFromData<SuccessResult<UserCreationResult>>(
-                ReaderAccountConstants.CreateUserForReaderAccountResult);
+            ReaderAccountConstants.CreateUserForReaderAccountResult);
 
         var newReaderEntity = await readerRepository
-            .AddOrUpdateAsync(context.Request.ToEntity(createUserForReaderAccountResult.Data.Id), token: token);
+            .AddOrUpdateAsync(context.Request.ToEntity(createUserForReaderAccountResult!.Data.Id), token: token);
 
         if (newReaderEntity is default(ReaderEntity))
         {
@@ -28,6 +28,7 @@ public class CreateNewReaderEntityStep(IReaderRepository readerRepository) : ISt
             context.SetDataWith(
                 ReaderAccountConstants.CreateReaderAccountResult,
                 Result.Success(new ReaderAccountCreationResultDto(newReaderEntity.Id)));
+
             await next(context, token);
         }
     }
