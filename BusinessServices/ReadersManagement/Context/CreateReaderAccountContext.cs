@@ -1,7 +1,7 @@
 ﻿using MinimalStepifiedSystem.Base;
-using snowcoreBlog.PublicApi;
+using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 
-namespace snowcoreBlog.Backend.ReadersManagement;
+namespace snowcoreBlog.Backend.ReadersManagement.Context;
 
 public class CreateReaderAccountContext(CreateReaderAccountDto request) : BaseGenericContext
 {

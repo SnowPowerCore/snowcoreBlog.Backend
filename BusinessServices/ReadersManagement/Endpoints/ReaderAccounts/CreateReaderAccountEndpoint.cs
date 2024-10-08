@@ -1,11 +1,14 @@
 ﻿using System.Net;
 using FastEndpoints;
 using MinimalStepifiedSystem.Attributes;
-using Results;
-using snowcoreBlog.PublicApi;
+using snowcoreBlog.Backend.ReadersManagement.Context;
+using snowcoreBlog.Backend.ReadersManagement.Delegates;
+using snowcoreBlog.Backend.ReadersManagement.Steps.ReaderAccount;
+using snowcoreBlog.PublicApi.BusinessObjects.Dto;
+using snowcoreBlog.PublicApi.Extensions;
 using snowcoreBlog.PublicApi.Utilities.Api;
 
-namespace snowcoreBlog.Backend.ReadersManagement;
+namespace snowcoreBlog.Backend.ReadersManagement.Endpoints.ReaderAccounts;
 
 public class CreateReaderAccountEndpoint : Endpoint<CreateReaderAccountDto, ApiResponse?>
 {
@@ -31,9 +34,7 @@ public class CreateReaderAccountEndpoint : Endpoint<CreateReaderAccountDto, ApiR
     {
         var context = new CreateReaderAccountContext(req);
 
-        await CreateReaderAccount(context, ct);
-        var result = context.GetFromData<IResult<ReaderAccountCreationResultDto>>(
-            ReaderAccountConstants.CreateReaderAccountResult);
+        var result = await CreateReaderAccount(context, ct);
 
         await SendAsync(
             result?.ToApiResponse(),

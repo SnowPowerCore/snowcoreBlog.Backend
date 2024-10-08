@@ -3,20 +3,18 @@ using MassTransit;
 using Microsoft.AspNetCore.Identity;
 using Results;
 using snowcoreBlog.Backend.IAM.Core.Contracts;
-using snowcoreBlog.Backend.IAM.Core.Interfaces.Services.Password;
 using snowcoreBlog.Backend.IAM.Entities;
 using snowcoreBlog.Backend.IAM.Extensions;
-using snowcoreBlog.PublicApi;
+using snowcoreBlog.PublicApi.Utilities.DataResult;
 
 namespace snowcoreBlog.Backend.IAM.Features.User;
 
 public class CreateUserConsumer(IValidator<CreateUser> validator,
-                                IPasswordHasher passwordHasher,
-                                IUserStore<ApplicationUser> userStore) : IConsumer<CreateUser>
+                                UserManager<ApplicationUser> userManager) : IConsumer<CreateUser>
 {
     public async Task Consume(ConsumeContext<CreateUser> context)
     {
-        var result = await validator.ValidateAsync(context.Message);
+        var result = await validator.ValidateAsync(context.Message, context.CancellationToken);
         if (!result.IsValid)
         {
             await context.RespondAsync(
@@ -25,10 +23,8 @@ public class CreateUserConsumer(IValidator<CreateUser> validator,
             return;
         }
 
-        var passwordHash = passwordHasher.HashPassword(context.Message.Password);
-
-        var userEntity = context.Message.ToEntity(passwordHash);
-        var creationResult = await userStore.CreateAsync(userEntity, context.CancellationToken);
+        var userEntity = context.Message.ToEntity();
+        var creationResult = await userManager.CreateAsync(userEntity);
         if (creationResult.Succeeded)
         {
             await context.RespondAsync(

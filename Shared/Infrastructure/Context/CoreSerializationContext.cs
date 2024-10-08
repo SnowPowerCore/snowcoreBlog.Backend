@@ -4,8 +4,9 @@ using MassTransit;
 using MassTransit.Events;
 using Scalar.AspNetCore;
 using snowcoreBlog.Backend.IAM.Core.Contracts;
-using snowcoreBlog.PublicApi;
+using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 using snowcoreBlog.PublicApi.Utilities.Api;
+using snowcoreBlog.PublicApi.Utilities.DataResult;
 
 namespace snowcoreBlog.Backend.Infrastructure;
 
