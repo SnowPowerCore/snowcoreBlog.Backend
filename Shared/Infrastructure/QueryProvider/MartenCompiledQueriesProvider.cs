@@ -1,7 +1,7 @@
 ﻿using Marten.Linq;
 using snowcoreBlog.Backend.Core.Interfaces.CompiledQueries;
 
-namespace snowcoreBlog.Backend.Infrastructure;
+namespace snowcoreBlog.Backend.Infrastructure.QueryProvider;
 
 public class MartenCompiledQueryProvider<TDoc, TOut> : ICompiledQueriesProvider
 {

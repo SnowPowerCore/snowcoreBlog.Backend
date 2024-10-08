@@ -1,13 +1,17 @@
 ﻿using FluentValidation;
 using MinimalStepifiedSystem.Interfaces;
+using Results;
 using snowcoreBlog.Backend.Core;
-using snowcoreBlog.PublicApi;
+using snowcoreBlog.Backend.ReadersManagement.Context;
+using snowcoreBlog.Backend.ReadersManagement.Delegates;
+using snowcoreBlog.PublicApi.BusinessObjects.Dto;
+using snowcoreBlog.PublicApi.Constants;
 
-namespace snowcoreBlog.Backend.ReadersManagement;
+namespace snowcoreBlog.Backend.ReadersManagement.Steps.ReaderAccount;
 
-public class ValidateCreateReaderAccountStep(IValidator<CreateReaderAccountDto> validator) : IStep<CreateReaderAccountDelegate, CreateReaderAccountContext>
+public class ValidateCreateReaderAccountStep(IValidator<CreateReaderAccountDto> validator) : IStep<CreateReaderAccountDelegate, CreateReaderAccountContext, IResult<ReaderAccountCreationResultDto>>
 {
-    public async Task InvokeAsync(CreateReaderAccountContext context, CreateReaderAccountDelegate next, CancellationToken token = default)
+    public async Task<IResult<ReaderAccountCreationResultDto>> InvokeAsync(CreateReaderAccountContext context, CreateReaderAccountDelegate next, CancellationToken token = default)
     {
         var result = await validator.ValidateAsync(context.Request, token);
         if (!result.IsValid)
@@ -15,8 +19,11 @@ public class ValidateCreateReaderAccountStep(IValidator<CreateReaderAccountDto> 
             context.SetDataWith(
                 ReaderAccountConstants.CreateReaderAccountResult,
                 new ValidationErrorResult<CreateReaderAccountDto>(result));
-            return;
+            return default;
         }
-        await next(context, token);
+        else
+        {
+            return await next(context, token);
+        }
     }
 }

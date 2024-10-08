@@ -1,3 +1,7 @@
-﻿namespace snowcoreBlog.Backend.ReadersManagement;
+﻿using Results;
+using snowcoreBlog.Backend.ReadersManagement.Context;
+using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 
-public delegate Task CreateReaderAccountDelegate(CreateReaderAccountContext context, CancellationToken token = default);
+namespace snowcoreBlog.Backend.ReadersManagement.Delegates;
+
+public delegate Task<IResult<ReaderAccountCreationResultDto>> CreateReaderAccountDelegate(CreateReaderAccountContext context, CancellationToken token = default);

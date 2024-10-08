@@ -1,35 +1,38 @@
 ﻿using MinimalStepifiedSystem.Interfaces;
 using Results;
-using snowcoreBlog.Backend.Core;
 using snowcoreBlog.Backend.IAM.Core.Contracts;
-using snowcoreBlog.PublicApi;
+using snowcoreBlog.Backend.ReadersManagement.Constants;
+using snowcoreBlog.Backend.ReadersManagement.Context;
+using snowcoreBlog.Backend.ReadersManagement.Delegates;
+using snowcoreBlog.Backend.ReadersManagement.Entities.Reader;
+using snowcoreBlog.Backend.ReadersManagement.Interfaces.Repositories.Marten;
+using snowcoreBlog.PublicApi.BusinessObjects.Dto;
+using snowcoreBlog.PublicApi.Constants;
 
-namespace snowcoreBlog.Backend.ReadersManagement;
+namespace snowcoreBlog.Backend.ReadersManagement.Steps.ReaderAccount;
 
-public class CreateNewReaderEntityStep(IReaderRepository readerRepository) : IStep<CreateReaderAccountDelegate, CreateReaderAccountContext>
+public class CreateNewReaderEntityStep(IReaderRepository readerRepository) : IStep<CreateReaderAccountDelegate, CreateReaderAccountContext, IResult<ReaderAccountCreationResultDto>>
 {
-    public async Task InvokeAsync(CreateReaderAccountContext context, CreateReaderAccountDelegate next, CancellationToken token = default)
+    public async Task<IResult<ReaderAccountCreationResultDto>> InvokeAsync(CreateReaderAccountContext context, CreateReaderAccountDelegate next, CancellationToken token = default)
     {
         var createUserForReaderAccountResult = context.GetFromData<SuccessResult<UserCreationResult>>(
-            ReaderAccountConstants.CreateUserForReaderAccountResult);
+            ReaderAccountUserConstants.CreateUserForReaderAccountResult);
 
         var newReaderEntity = await readerRepository
             .AddOrUpdateAsync(context.Request.ToEntity(createUserForReaderAccountResult!.Data.Id), token: token);
 
-        if (newReaderEntity is default(ReaderEntity))
-        {
-            context.SetDataWith(
-                ReaderAccountConstants.CreateReaderAccountResult,
-                CreateReaderAccountError<ReaderAccountCreationResultDto>.Create(
-                    ReaderAccountConstants.ReaderAccountUnableToCreateUpdateError));
-        }
-        else
+        if (newReaderEntity is not default(ReaderEntity))
         {
             context.SetDataWith(
                 ReaderAccountConstants.CreateReaderAccountResult,
                 Result.Success(new ReaderAccountCreationResultDto(newReaderEntity.Id)));
 
-            await next(context, token);
+            return await next(context, token);
+        }
+        else
+        {
+            return CreateReaderAccountError<ReaderAccountCreationResultDto>.Create(
+                ReaderAccountConstants.ReaderAccountUnableToCreateUpdateError);
         }
     }
 }

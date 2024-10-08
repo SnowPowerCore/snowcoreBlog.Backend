@@ -2,29 +2,30 @@
 using MinimalStepifiedSystem.Interfaces;
 using Results;
 using snowcoreBlog.Backend.IAM.Core.Contracts;
-using snowcoreBlog.PublicApi;
+using snowcoreBlog.Backend.ReadersManagement.Constants;
+using snowcoreBlog.Backend.ReadersManagement.Context;
+using snowcoreBlog.Backend.ReadersManagement.Delegates;
+using snowcoreBlog.PublicApi.BusinessObjects.Dto;
+using snowcoreBlog.PublicApi.Utilities.DataResult;
 
-namespace snowcoreBlog.Backend.ReadersManagement;
+namespace snowcoreBlog.Backend.ReadersManagement.Steps.ReaderAccount;
 
-public class CreateUserForReaderAccountStep(IRequestClient<CreateUser> client) : IStep<CreateReaderAccountDelegate, CreateReaderAccountContext>
+public class CreateUserForReaderAccountStep(IRequestClient<CreateUser> client) : IStep<CreateReaderAccountDelegate, CreateReaderAccountContext, IResult<ReaderAccountCreationResultDto>>
 {
-    public async Task InvokeAsync(CreateReaderAccountContext context, CreateReaderAccountDelegate next, CancellationToken token = default)
+    public async Task<IResult<ReaderAccountCreationResultDto>> InvokeAsync(CreateReaderAccountContext context, CreateReaderAccountDelegate next, CancellationToken token = default)
     {
         var response = await client.GetResponse<DataResult<UserCreationResult>>(context.Request.ToCreateUser(), token);
         if (response.Message.IsSuccess)
         {
             context.SetDataWith(
-                ReaderAccountConstants.CreateUserForReaderAccountResult, Result.Success(response.Message.Value));
+                ReaderAccountUserConstants.CreateUserForReaderAccountResult, Result.Success(response.Message.Value));
+
+            return await next(context, token);
         }
         else
         {
-            context.SetDataWith(
-                ReaderAccountConstants.CreateReaderAccountResult,
-                CreateUserForReaderAccountError<ReaderAccountCreationResultDto>.Create(
-                    ReaderAccountConstants.UserForReaderAccountUnableToCreateUpdateError, response.Message.Errors));
-            return;
+            return CreateUserForReaderAccountError<ReaderAccountCreationResultDto>.Create(
+                ReaderAccountUserConstants.UserForReaderAccountUnableToCreateUpdateError, response.Message.Errors);
         }
-
-        await next(context, token);
     }
 }

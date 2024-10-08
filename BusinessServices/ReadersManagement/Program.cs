@@ -1,4 +1,5 @@
 using FastEndpoints;
+using FastEndpoints.Swagger;
 using FluentValidation;
 using Marten;
 using MassTransit;
@@ -6,10 +7,13 @@ using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.AspNetCore.Routing.Constraints;
 using Microsoft.OpenApi.Models;
 using snowcoreBlog.Backend.Infrastructure.Extensions;
-using snowcoreBlog.Backend.Infrastructure.HttpMiddleware;
+using snowcoreBlog.Backend.Infrastructure.HttpProcessors;
 using snowcoreBlog.Backend.Infrastructure.Utilities;
-using snowcoreBlog.Backend.ReadersManagement;
-using snowcoreBlog.PublicApi;
+using snowcoreBlog.Backend.ReadersManagement.Interfaces.Repositories.Marten;
+using snowcoreBlog.Backend.ReadersManagement.Repositories.Marten;
+using snowcoreBlog.Backend.ReadersManagement.Steps.ReaderAccount;
+using snowcoreBlog.PublicApi.BusinessObjects.Dto;
+using snowcoreBlog.PublicApi.Validation.Dto;
 using snowcoreBlog.ServiceDefaults.Extensions;
 
 var builder = WebApplication.CreateSlimBuilder(args);
@@ -54,23 +58,14 @@ builder.Services.AddMultipleAuthentications(
 builder.Services.AddAuthorization()
     .AddFastEndpoints(static o =>
     {
-        o.SourceGeneratorDiscoveredTypes.AddRange(DiscoveredTypes.All);
+        o.SourceGeneratorDiscoveredTypes.AddRange(snowcoreBlog.Backend.ReadersManagement.DiscoveredTypes.All);
     })
+    .SwaggerDocument()
     .AddCors();
-builder.Services.AddFastEndpoints();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(c =>
-{
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = nameof(snowcoreBlog.Backend.ReadersManagement), Version = "v1" });
-});
-
-var swaggerRoute = "/swagger/v1/swagger.json";
 
 builder.Services.AddSingleton<IValidator<CreateReaderAccountDto>, CreateReaderAccountValidation>();
 
 builder.Services.AddScoped<IReaderRepository, ReaderRepository>();
-
-builder.Services.AddScoped<CookieJsonWebTokenMiddleware>();
 
 builder.Services.AddScoped<ValidateCreateReaderAccountStep>();
 builder.Services.AddScoped<ValidateReaderAccountNotExistsStep>();
@@ -86,12 +81,15 @@ app.UseCookiePolicy(new()
     HttpOnly = HttpOnlyPolicy.Always,
     Secure = CookieSecurePolicy.Always
 })
-    .UseMiddleware<CookieJsonWebTokenMiddleware>()
     .UseAuthentication()
     .UseAuthorization()
     .UseFastEndpoints(c =>
     {
         c.Serializer.Options.SetJsonSerializationContext();
+        c.Endpoints.Configurator = ep =>
+        {
+            ep.PreProcessor<CookieJsonWebTokenProcessor>(Order.Before);
+        };
         c.Errors.ResponseBuilder = static (failures, ctx, statusCode) =>
         {
             var failuresDict = failures
@@ -103,17 +101,12 @@ app.UseCookiePolicy(new()
             return ErrorResponseUtilities.ApiResponseWithErrors(
                 failuresDict.Values.SelectMany(x => x.Select(s => s)).ToList(), statusCode);
         };
-    });
+    })
+    .UseSwaggerGen();
 
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
-    app.UseSwagger();
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint(swaggerRoute, $"{nameof(snowcoreBlog.Backend.ReadersManagement)} v1");
-        c.RoutePrefix = string.Empty;
-    });
     app.MapScalarApiReference(c =>
     {
         c.EndpointPathPrefix = "/scalar";

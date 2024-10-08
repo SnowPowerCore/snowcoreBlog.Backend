@@ -1,11 +1,22 @@
-﻿using MinimalStepifiedSystem.Interfaces;
+﻿using MassTransit;
+using MinimalStepifiedSystem.Interfaces;
+using Results;
+using snowcoreBlog.Backend.ReadersManagement.Constants;
+using snowcoreBlog.Backend.ReadersManagement.Context;
+using snowcoreBlog.Backend.ReadersManagement.Delegates;
+using snowcoreBlog.Backend.ReadersManagement.Extensions;
+using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 
-namespace snowcoreBlog.Backend.ReadersManagement;
+namespace snowcoreBlog.Backend.ReadersManagement.Steps.ReaderAccount;
 
-public class SendEmailToNewReaderAccountStep : IStep<CreateReaderAccountDelegate, CreateReaderAccountContext>
+public class SendEmailToNewReaderAccountStep(IPublishEndpoint publishEndpoint) : IStep<CreateReaderAccountDelegate, CreateReaderAccountContext, IResult<ReaderAccountCreationResultDto>>
 {
-    public Task InvokeAsync(CreateReaderAccountContext context, CreateReaderAccountDelegate next, CancellationToken token = default)
+    public async Task<IResult<ReaderAccountCreationResultDto>> InvokeAsync(CreateReaderAccountContext context, CreateReaderAccountDelegate next, CancellationToken token = default)
     {
-        return next(context, token);
+        var sendTask = publishEndpoint.Publish(
+            GenericEmailExtensions.ToGeneric(context.Request.Email, EmailConstants.ReaderAccountCreatedSubject, ""), token);
+        var continueTask = next(context, token);
+        await Task.WhenAll(sendTask, continueTask);
+        return await continueTask;
     }
 }
