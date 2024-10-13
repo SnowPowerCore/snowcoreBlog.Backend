@@ -18,6 +18,8 @@ public class CreateReaderAccountEndpoint : Endpoint<CreateReaderAccountDto, ApiR
         typeof(CreateUserForReaderAccountStep),
         typeof(CreateNewReaderEntityStep),
         typeof(SendEmailToNewReaderAccountStep),
+        typeof(GenerateTokenForNewReaderAccountStep),
+        typeof(ReturnCreatedReaderEntityStep),
     ])]
     protected CreateReaderAccountDelegate CreateReaderAccount { get; }
 
