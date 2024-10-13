@@ -24,6 +24,7 @@ builder.Services.AddSendGrid(options => options.ApiKey = builder.Configuration["
 builder.Services.AddMassTransit(busConfigurator =>
 {
     busConfigurator.AddConsumer<SendEmailUsingSendGridConsumer>();
+    busConfigurator.AddConsumer<CheckEmailDomainConsumer>();
     busConfigurator.UsingRabbitMq((context, config) =>
     {
         config.ConfigureJsonSerializerOptions(options => options.SetJsonSerializationContext());
@@ -33,5 +34,6 @@ builder.Services.AddMassTransit(busConfigurator =>
 });
 
 builder.Services.AddSingleton<IValidator<SendGenericEmail>, GenericEmailValidator>();
+builder.Services.AddSingleton<IValidator<CheckEmailDomain>, CheckEmailDomainValidator>();
 
 await builder.Build().RunAsync();

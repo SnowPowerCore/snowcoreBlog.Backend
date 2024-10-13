@@ -5,7 +5,6 @@ using Marten;
 using MassTransit;
 using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.AspNetCore.Routing.Constraints;
-using Microsoft.OpenApi.Models;
 using snowcoreBlog.Backend.Infrastructure.Extensions;
 using snowcoreBlog.Backend.Infrastructure.HttpProcessors;
 using snowcoreBlog.Backend.Infrastructure.Utilities;
@@ -107,6 +106,10 @@ app.UseCookiePolicy(new()
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
+    app.UseSwagger(options =>
+    {
+        options.RouteTemplate = "openapi/{documentName}.json";
+    });
     app.MapScalarApiReference(c =>
     {
         c.EndpointPathPrefix = "/scalar";

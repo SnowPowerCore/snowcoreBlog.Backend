@@ -10,6 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="DnsClient" Version="1.8.0" />
     <PackageReference Include="Fody" Version="6.8.1">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
@@ -26,11 +27,6 @@
 
   <ItemGroup>
     <None Update="**/FodyWeavers.*" Visible="false" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Features\" />
-    <Folder Include="Features\SendGrid\" />
   </ItemGroup>
 
   <ItemGroup>
