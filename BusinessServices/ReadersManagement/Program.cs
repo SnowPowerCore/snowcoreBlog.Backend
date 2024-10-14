@@ -102,16 +102,12 @@ app.UseCookiePolicy(new()
             return ErrorResponseUtilities.ApiResponseWithErrors(
                 failuresDict.Values.SelectMany(x => x.Select(s => s)).ToList(), statusCode);
         };
-    })
-    .UseSwaggerGen();
+    });
 
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
-    app.UseSwagger(options =>
-    {
-        options.RouteTemplate = "openapi/{documentName}.json";
-    });
+    app.UseOpenApi(o => o.Path = "openapi/{documentName}.json");
     app.MapScalarApiReference(o =>
     {
         o.DarkMode = true;
