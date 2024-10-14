@@ -34,6 +34,7 @@ builder.Services.ConfigureHttpJsonOptions(options =>
 });
 
 builder.AddServiceDefaults();
+builder.Services.AddSwaggerGen();
 builder.Services.AddOpenTelemetry()
     .WithTracing(tracing => tracing.AddSource("Marten"))
     .WithMetrics(metrics => metrics.AddMeter("Marten"));
@@ -113,7 +114,6 @@ if (app.Environment.IsDevelopment())
     });
     app.MapScalarApiReference(o =>
     {
-        o.EndpointPathPrefix = "/scalar";
         o.DarkMode = true;
     });
 }
