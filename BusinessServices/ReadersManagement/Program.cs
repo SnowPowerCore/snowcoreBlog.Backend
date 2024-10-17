@@ -78,7 +78,6 @@ builder.Services.AddSingleton<IValidator<CreateReaderAccountDto>, CreateReaderAc
 
 builder.Services.AddScoped<IReaderRepository, ReaderRepository>();
 
-builder.Services.AddScoped<ValidateCreateReaderAccountStep>();
 builder.Services.AddScoped<ValidateReaderAccountNotExistsStep>();
 builder.Services.AddScoped<CreateUserForReaderAccountStep>();
 builder.Services.AddScoped<CreateNewReaderEntityStep>();

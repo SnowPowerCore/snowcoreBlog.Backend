@@ -8,13 +8,13 @@ using snowcoreBlog.Backend.ReadersManagement.Steps.ReaderAccount;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 using snowcoreBlog.PublicApi.Extensions;
 using snowcoreBlog.PublicApi.Utilities.Api;
+using snowcoreBlog.PublicApi.Validation.Dto;
 
 namespace snowcoreBlog.Backend.ReadersManagement.Endpoints.ReaderAccounts;
 
 public class CreateReaderAccountEndpoint : Endpoint<CreateReaderAccountDto, ApiResponse?>
 {
     [StepifiedProcess(Steps = [
-        typeof(ValidateCreateReaderAccountStep),
         typeof(ValidateReaderAccountNotExistsStep),
         typeof(CreateUserForReaderAccountStep),
         typeof(CreateNewReaderEntityStep),
@@ -28,6 +28,7 @@ public class CreateReaderAccountEndpoint : Endpoint<CreateReaderAccountDto, ApiR
     {
         Post("/readers/create");
         SerializerContext(CoreSerializationContext.Default);
+        Validator<CreateReaderAccountValidation>();
         AllowAnonymous();
     }
 
