@@ -1,9 +1,11 @@
 using FastEndpoints;
 using FastEndpoints.Swagger;
 using FluentValidation;
+using JasperFx.CodeGeneration;
 using Marten;
 using MassTransit;
 using Microsoft.AspNetCore.CookiePolicy;
+using Microsoft.AspNetCore.Http.Json;
 using Microsoft.AspNetCore.Routing.Constraints;
 using Scalar.AspNetCore;
 using snowcoreBlog.Backend.Infrastructure.Extensions;
@@ -18,17 +20,22 @@ using snowcoreBlog.ServiceDefaults.Extensions;
 
 var builder = WebApplication.CreateSlimBuilder(args);
 
-builder.Services.Configure<MassTransitHostOptions>(options =>
+builder.Services.Configure<MassTransitHostOptions>(static options =>
 {
     options.WaitUntilStarted = true;
 });
 
-builder.Services.Configure<RouteOptions>(options =>
+builder.Services.Configure<RouteOptions>(static options =>
 {
     options.SetParameterPolicy<RegexInlineRouteConstraint>("regex");
 });
 
-builder.Services.ConfigureHttpJsonOptions(options =>
+builder.Services.Configure<JsonOptions>(static options =>
+{
+    options.SerializerOptions.SetJsonSerializationContext();
+});
+
+builder.Services.ConfigureHttpJsonOptions(static options =>
 {
     options.SerializerOptions.SetJsonSerializationContext();
 });
@@ -36,17 +43,19 @@ builder.Services.ConfigureHttpJsonOptions(options =>
 builder.AddServiceDefaults();
 builder.Services.AddSwaggerGen();
 builder.Services.AddOpenTelemetry()
-    .WithTracing(tracing => tracing.AddSource("Marten"))
-    .WithMetrics(metrics => metrics.AddMeter("Marten"));
+    .WithTracing(static tracing => tracing.AddSource("Marten"))
+    .WithMetrics(static metrics => metrics.AddMeter("Marten"));
 builder.Services.AddNpgsqlDataSource(builder.Configuration.GetConnectionString("db-iam-entities"));
-builder.Services.AddMarten(opts =>
+builder.Services.AddMarten(static opts =>
 {
+    opts.GeneratedCodeMode = TypeLoadMode.Static;
     opts.Policies.AllDocumentsSoftDeleted();
 })
     .UseNpgsqlDataSource();
 
 builder.Services.AddMassTransit(busConfigurator =>
 {
+    busConfigurator.ConfigureHttpJsonOptions(o => o.SerializerOptions.SetJsonSerializationContext());
     busConfigurator.UsingRabbitMq((context, config) =>
     {
         config.ConfigureJsonSerializerOptions(options => options.SetJsonSerializationContext());
@@ -56,7 +65,8 @@ builder.Services.AddMassTransit(busConfigurator =>
 builder.Services.AddMultipleAuthentications(
    builder.Configuration["Security:Signing:User:Key"]!,
    builder.Configuration["Security:Signing:Admin:Key"]!);
-builder.Services.AddAuthorization()
+builder.Services
+    .AddAuthorization()
     .AddFastEndpoints(static o =>
     {
         o.SourceGeneratorDiscoveredTypes.AddRange(snowcoreBlog.Backend.ReadersManagement.DiscoveredTypes.All);
@@ -73,6 +83,8 @@ builder.Services.AddScoped<ValidateReaderAccountNotExistsStep>();
 builder.Services.AddScoped<CreateUserForReaderAccountStep>();
 builder.Services.AddScoped<CreateNewReaderEntityStep>();
 builder.Services.AddScoped<SendEmailToNewReaderAccountStep>();
+builder.Services.AddScoped<GenerateTokenForNewReaderAccountStep>();
+builder.Services.AddScoped<ReturnCreatedReaderEntityStep>();
 
 var app = builder.Build();
 
@@ -84,7 +96,7 @@ app.UseCookiePolicy(new()
 })
     .UseAuthentication()
     .UseAuthorization()
-    .UseFastEndpoints(c =>
+    .UseFastEndpoints(static c =>
     {
         c.Serializer.Options.SetJsonSerializationContext();
         c.Endpoints.Configurator = ep =>
@@ -107,8 +119,8 @@ app.UseCookiePolicy(new()
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
-    app.UseOpenApi(o => o.Path = "openapi/{documentName}.json");
-    app.MapScalarApiReference(o =>
+    app.UseOpenApi(static o => o.Path = "openapi/{documentName}.json");
+    app.MapScalarApiReference(static o =>
     {
         o.DarkMode = true;
     });

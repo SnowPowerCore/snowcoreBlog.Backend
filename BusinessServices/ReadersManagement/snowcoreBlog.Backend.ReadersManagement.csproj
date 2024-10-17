@@ -5,7 +5,8 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <InvariantGlobalization>true</InvariantGlobalization>
-    <PublishAot>true</PublishAot>
+    <PublishTrimmed>true</PublishTrimmed>
+    <PublishReadyToRun>true</PublishReadyToRun>
     <UserSecretsId>f4650b45-fed6-4a9a-9b97-2918092e0f30</UserSecretsId>
   </PropertyGroup>
 
@@ -22,7 +23,7 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="ConfigureAwait.Fody" Version="3.3.2" />
-    <PackageReference Include="MassTransit.RabbitMQ" Version="8.2.5" />
+    <PackageReference Include="MassTransit.RabbitMQ" Version="8.3.0" />
     <PackageReference Include="Marten" Version="7.30.1" />
     <PackageReference Include="MinimalStepifiedSystem.Core" Version="1.1.1" />
     <PackageReference Include="Scalar.AspNetCore" Version="1.2.9" />
@@ -30,7 +31,7 @@
       <ExcludeAssets>runtime</ExcludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.8.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.9.0" />
   </ItemGroup>
 
   <ItemGroup>

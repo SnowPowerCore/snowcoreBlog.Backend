@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using FastEndpoints;
 using MinimalStepifiedSystem.Attributes;
+using snowcoreBlog.Backend.Infrastructure;
 using snowcoreBlog.Backend.ReadersManagement.Context;
 using snowcoreBlog.Backend.ReadersManagement.Delegates;
 using snowcoreBlog.Backend.ReadersManagement.Steps.ReaderAccount;
@@ -26,6 +27,7 @@ public class CreateReaderAccountEndpoint : Endpoint<CreateReaderAccountDto, ApiR
     public override void Configure()
     {
         Post("/readers/create");
+        SerializerContext(CoreSerializationContext.Default);
         AllowAnonymous();
     }
 
