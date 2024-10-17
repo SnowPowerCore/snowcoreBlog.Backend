@@ -5,10 +5,10 @@ var builder = WebApplication.CreateSlimBuilder(args);
 
 builder.AddServiceDefaults();
 builder.Services.AddOpenTelemetry()
-    .WithTracing(tracing => tracing.AddSource("Marten"))
-    .WithMetrics(metrics => metrics.AddMeter("Marten"));
+    .WithTracing(static tracing => tracing.AddSource("Marten"))
+    .WithMetrics(static metrics => metrics.AddMeter("Marten"));
 builder.Services.AddNpgsqlDataSource("db-snowcore-blog-entities");
-builder.Services.AddMarten(opts =>
+builder.Services.AddMarten(static opts =>
 {
     opts.Policies.AllDocumentsSoftDeleted();
 })

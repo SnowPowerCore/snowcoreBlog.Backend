@@ -13,31 +13,45 @@ using FluentValidation;
 using snowcoreBlog.Backend.IAM.Validation;
 using snowcoreBlog.Backend.IAM.Core.Interfaces.Services.Password;
 using snowcoreBlog.Backend.IAM.Services.Password;
+using JasperFx.CodeGeneration;
+using Oakton;
+using Microsoft.AspNetCore.Http.Json;
 
 var builder = WebApplication.CreateSlimBuilder(args);
+builder.Host.ApplyOaktonExtensions();
 
 builder.Services.Configure<MassTransitHostOptions>(options =>
 {
     options.WaitUntilStarted = true;
 });
 
-builder.Services.Configure<Argon2PasswordHasherOptions>(options =>
+builder.Services.Configure<Argon2PasswordHasherOptions>(static options =>
 {
     options.Strength = Argon2HashStrength.Moderate;
 });
 
-builder.Services.ConfigureHttpJsonOptions(options =>
+builder.Services.Configure<JsonOptions>(static options =>
+{
+    options.SerializerOptions.SetJsonSerializationContext();
+});
+
+builder.Services.ConfigureHttpJsonOptions(static options =>
 {
     options.SerializerOptions.SetJsonSerializationContext();
 });
 
 builder.AddServiceDefaults();
 builder.Services.AddOpenTelemetry()
-    .WithTracing(tracing => tracing.AddSource("Marten"))
-    .WithMetrics(metrics => metrics.AddMeter("Marten"));
+    .WithTracing(static tracing => tracing.AddSource("Marten"))
+    .WithMetrics(static metrics => metrics.AddMeter("Marten"));
 builder.Services.AddNpgsqlDataSource(builder.Configuration.GetConnectionString("db-iam-entities"));
-builder.Services.AddMarten(opts =>
+//builder.Services.AddNpgsqlDataSource("Host=localhost;Port=54523;Username=postgres;Password=xQ6S1zf+)!kTnjFFCtt(Ks");
+builder.Services.AddMarten(static opts =>
 {
+    opts.RegisterDocumentType<ApplicationAdmin>();
+    opts.RegisterDocumentType<ApplicationUser>();
+    opts.GeneratedCodeMode = TypeLoadMode.Static;
+    opts.UseSystemTextJsonForSerialization(configure: o => o.SetJsonSerializationContext());
     opts.Policies.AllDocumentsSoftDeleted();
 })
     .UseNpgsqlDataSource();
@@ -51,6 +65,7 @@ builder.Services
     .AddMartenStores<ApplicationAdmin, IdentityRole>();
 builder.Services.AddMassTransit(busConfigurator =>
 {
+    busConfigurator.ConfigureHttpJsonOptions(o => o.SerializerOptions.SetJsonSerializationContext());
     busConfigurator.AddConsumer<CreateUserConsumer>();
     busConfigurator.AddConsumer<ValidateUserExistsConsumer>();
     busConfigurator.UsingRabbitMq((context, config) =>
@@ -64,4 +79,4 @@ builder.Services.AddMassTransit(busConfigurator =>
 builder.Services.AddSingleton<IValidator<CreateUser>, CreateUserValidator>();
 builder.Services.AddSingleton<IPasswordHasher, Argon2PasswordHasher>();
 
-await builder.Build().RunAsync();
+await builder.Build().RunOaktonCommands(args);

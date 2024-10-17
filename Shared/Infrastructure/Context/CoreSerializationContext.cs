@@ -13,18 +13,25 @@ namespace snowcoreBlog.Backend.Infrastructure;
 /// <summary>
 /// Defines the serialization context.
 /// </summary>
-[JsonSourceGenerationOptions(
-    JsonSerializerDefaults.Web,
-    UseStringEnumConverter = true,
-    DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
-    PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase)]
 [JsonSerializable(typeof(ScalarOptions))]
 [JsonSerializable(typeof(ApiResponse))]
 [JsonSerializable(typeof(CreateAdmin))]
 [JsonSerializable(typeof(CreateUser))]
+[JsonSerializable(typeof(ValidateUserExists))]
 [JsonSerializable(typeof(CreateReaderAccountDto))]
 [JsonSerializable(typeof(ReaderAccountCreationResultDto))]
 [JsonSerializable(typeof(Fault<UserCreationResult>))]
 [JsonSerializable(typeof(FaultEvent<UserCreationResult>))]
 [JsonSerializable(typeof(DataResult<UserCreationResult>))]
-internal sealed partial class CoreSerializationContext : JsonSerializerContext { }
+[JsonSerializable(typeof(Fault<ValidateUserExists>))]
+[JsonSerializable(typeof(FaultEvent<ValidateUserExists>))]
+[JsonSerializable(typeof(Fault<UserExistsValidationResult>))]
+[JsonSerializable(typeof(FaultEvent<UserExistsValidationResult>))]
+[JsonSerializable(typeof(DataResult<UserExistsValidationResult>))]
+[JsonSourceGenerationOptions(
+    JsonSerializerDefaults.Web,
+    UseStringEnumConverter = true,
+    WriteIndented = true,
+    DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+    PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase)]
+public partial class CoreSerializationContext : JsonSerializerContext { }

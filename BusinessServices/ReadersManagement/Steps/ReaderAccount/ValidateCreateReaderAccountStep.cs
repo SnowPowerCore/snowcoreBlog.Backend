@@ -13,13 +13,13 @@ public class ValidateCreateReaderAccountStep(IValidator<CreateReaderAccountDto> 
     public async Task<IResult<ReaderAccountCreationResultDto>> InvokeAsync(CreateReaderAccountContext context, CreateReaderAccountDelegate next, CancellationToken token = default)
     {
         var result = await validator.ValidateAsync(context.Request, token);
-        if (!result.IsValid)
+        if (result.IsValid)
         {
-            return new ValidationErrorResult<ReaderAccountCreationResultDto>(result);
+            return await next(context, token);
         }
         else
         {
-            return await next(context, token);
+            return new ValidationErrorResult<ReaderAccountCreationResultDto>(result);
         }
     }
 }

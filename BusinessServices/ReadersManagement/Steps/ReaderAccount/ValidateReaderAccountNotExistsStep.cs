@@ -17,14 +17,14 @@ public class ValidateReaderAccountNotExistsStep(IRequestClient<ValidateUserExist
         var result = await requestClient.GetResponse<DataResult<UserExistsValidationResult>>(context.Request.ToValidateUserExists());
         if (result.Message.IsSuccess)
         {
-            if (!result.Message.Value!.Exists)
-            {
-                return await next(context, token);
-            }
-            else
+            if (result.Message.Value!.Exists)
             {
                 return ReaderAccountAlreadyExistsError<ReaderAccountCreationResultDto>.Create(
                     ReaderAccountConstants.ReaderAccountAlreadyExistsError);
+            }
+            else
+            {
+                return await next(context, token);
             }
         }
         else
