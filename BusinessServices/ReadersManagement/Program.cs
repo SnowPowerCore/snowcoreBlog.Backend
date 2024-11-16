@@ -1,6 +1,8 @@
+using System.Security.Cryptography;
 using FastEndpoints;
 using FastEndpoints.Swagger;
 using FluentValidation;
+using Ixnas.AltchaNet;
 using JasperFx.CodeGeneration;
 using Marten;
 using MassTransit;
@@ -10,6 +12,7 @@ using Microsoft.AspNetCore.Routing.Constraints;
 using Scalar.AspNetCore;
 using snowcoreBlog.Backend.Infrastructure.Extensions;
 using snowcoreBlog.Backend.Infrastructure.HttpProcessors;
+using snowcoreBlog.Backend.Infrastructure.Stores;
 using snowcoreBlog.Backend.Infrastructure.Utilities;
 using snowcoreBlog.Backend.ReadersManagement.Interfaces.Repositories.Marten;
 using snowcoreBlog.Backend.ReadersManagement.Repositories.Marten;
@@ -41,18 +44,27 @@ builder.Services.ConfigureHttpJsonOptions(static options =>
 });
 
 builder.AddServiceDefaults();
-builder.Services.AddSwaggerGen();
+builder.Services.AddOpenApi();
 builder.Services.AddOpenTelemetry()
     .WithTracing(static tracing => tracing.AddSource("Marten"))
     .WithMetrics(static metrics => metrics.AddMeter("Marten"));
-builder.Services.AddNpgsqlDataSource(builder.Configuration.GetConnectionString("db-iam-entities"));
+builder.Services.AddNpgsqlDataSource(builder.Configuration.GetConnectionString("db-iam-entities")!);
 builder.Services.AddMarten(static opts =>
 {
     opts.GeneratedCodeMode = TypeLoadMode.Static;
     opts.Policies.AllDocumentsSoftDeleted();
 })
     .UseNpgsqlDataSource();
-
+builder.Services.AddSingleton(static sp =>
+{
+    var key = new byte[64];
+    using var rng = RandomNumberGenerator.Create();
+    rng.GetBytes(key);
+    return Altcha.CreateServiceBuilder()
+        .UseSha256(key)
+        .UseStore(() => sp.GetRequiredService<IAltchaChallengeStore>())
+        .Build();
+});
 builder.Services.AddMassTransit(busConfigurator =>
 {
     busConfigurator.ConfigureHttpJsonOptions(o => o.SerializerOptions.SetJsonSerializationContext());
@@ -76,6 +88,7 @@ builder.Services
 
 builder.Services.AddSingleton<IValidator<CreateReaderAccountDto>, CreateReaderAccountValidation>();
 
+builder.Services.AddScoped<IAltchaChallengeStore, AltchaChallengeStore>();
 builder.Services.AddScoped<IReaderRepository, ReaderRepository>();
 
 builder.Services.AddScoped<ValidateReaderAccountNotExistsStep>();
@@ -97,6 +110,7 @@ app.UseCookiePolicy(new()
     .UseAuthorization()
     .UseFastEndpoints(static c =>
     {
+        c.Versioning.Prefix = "v";
         c.Serializer.Options.SetJsonSerializationContext();
         c.Endpoints.Configurator = ep =>
         {
@@ -118,8 +132,8 @@ app.UseCookiePolicy(new()
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
-    app.UseOpenApi(static o => o.Path = "openapi/{documentName}.json");
-    app.MapScalarApiReference(static o =>
+    app.MapOpenApi();
+    app.MapScalarApiReference(o =>
     {
         o.DarkMode = true;
     });

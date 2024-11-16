@@ -1,5 +1,6 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
+using Ixnas.AltchaNet;
 using MassTransit;
 using MassTransit.Events;
 using Scalar.AspNetCore;
@@ -28,6 +29,7 @@ namespace snowcoreBlog.Backend.Infrastructure;
 [JsonSerializable(typeof(Fault<UserExistsValidationResult>))]
 [JsonSerializable(typeof(FaultEvent<UserExistsValidationResult>))]
 [JsonSerializable(typeof(DataResult<UserExistsValidationResult>))]
+[JsonSerializable(typeof(AltchaChallenge))]
 [JsonSourceGenerationOptions(
     JsonSerializerDefaults.Web,
     UseStringEnumConverter = true,
