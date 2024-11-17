@@ -16,7 +16,7 @@ namespace snowcoreBlog.Backend.Infrastructure;
 /// </summary>
 [JsonSerializable(typeof(ScalarOptions))]
 [JsonSerializable(typeof(ApiResponse))]
-//[JsonSerializable(typeof(ApplicationUser))]
+[JsonSerializable(typeof(IAM.Core.Entities.ApplicationUser))]
 [JsonSerializable(typeof(CreateAdmin))]
 [JsonSerializable(typeof(CreateUser))]
 [JsonSerializable(typeof(ValidateUserExists))]
