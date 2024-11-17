@@ -110,6 +110,7 @@ app.UseCookiePolicy(new()
     .UseAuthorization()
     .UseFastEndpoints(static c =>
     {
+        c.Endpoints.RoutePrefix = "api";
         c.Versioning.Prefix = "v";
         c.Serializer.Options.SetJsonSerializationContext();
         c.Endpoints.Configurator = ep =>

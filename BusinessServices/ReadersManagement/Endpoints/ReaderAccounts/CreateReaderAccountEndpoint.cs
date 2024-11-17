@@ -30,6 +30,7 @@ public class CreateReaderAccountEndpoint : Endpoint<CreateReaderAccountDto, ApiR
     public override void Configure()
     {
         Post("readers/create");
+        Version(1);
         SerializerContext(CoreSerializationContext.Default);
         Validator<CreateReaderAccountValidation>();
         AllowAnonymous();
