@@ -9,19 +9,19 @@ using System;
 using System.Collections.Generic;
 using Weasel.Core;
 using Weasel.Postgresql;
-using snowcoreBlog.Backend.IAM.Entities;
+using snowcoreBlog.Backend.IAM.Core.Entities;
 
 namespace Marten.Generated.DocumentStorage
 {
     // START: UpsertApplicationUserOperation1908805755
-    public class UpsertApplicationUserOperation1908805755 : Marten.Internal.Operations.StorageOperation<snowcoreBlog.Backend.IAM.Entities.ApplicationUser, string>
+    public class UpsertApplicationUserOperation1908805755 : Marten.Internal.Operations.StorageOperation<ApplicationUser, string>
     {
-        private readonly snowcoreBlog.Backend.IAM.Entities.ApplicationUser _document;
+        private readonly ApplicationUser _document;
         private readonly string _id;
         private readonly System.Collections.Generic.Dictionary<string, System.Guid> _versions;
         private readonly Marten.Schema.DocumentMapping _mapping;
 
-        public UpsertApplicationUserOperation1908805755(snowcoreBlog.Backend.IAM.Entities.ApplicationUser document, string id, System.Collections.Generic.Dictionary<string, System.Guid> versions, Marten.Schema.DocumentMapping mapping) : base(document, id, versions, mapping)
+        public UpsertApplicationUserOperation1908805755(ApplicationUser document, string id, System.Collections.Generic.Dictionary<string, System.Guid> versions, Marten.Schema.DocumentMapping mapping) : base(document, id, versions, mapping)
         {
             _document = document;
             _id = id;
@@ -57,7 +57,7 @@ namespace Marten.Generated.DocumentStorage
         }
 
 
-        public override void ConfigureParameters(Weasel.Postgresql.IGroupedParameterBuilder parameterBuilder, Weasel.Postgresql.ICommandBuilder builder, snowcoreBlog.Backend.IAM.Entities.ApplicationUser document, Marten.Internal.IMartenSession session)
+        public override void ConfigureParameters(Weasel.Postgresql.IGroupedParameterBuilder parameterBuilder, Weasel.Postgresql.ICommandBuilder builder, ApplicationUser document, Marten.Internal.IMartenSession session)
         {
             builder.Append("select public.mt_upsert_applicationuser(");
             var parameter0 = parameterBuilder.AppendParameter(session.Serializer.ToJson(_document));
@@ -84,17 +84,17 @@ namespace Marten.Generated.DocumentStorage
     }
 
     // END: UpsertApplicationUserOperation1908805755
-    
-    
+
+
     // START: InsertApplicationUserOperation1908805755
-    public class InsertApplicationUserOperation1908805755 : Marten.Internal.Operations.StorageOperation<snowcoreBlog.Backend.IAM.Entities.ApplicationUser, string>
+    public class InsertApplicationUserOperation1908805755 : Marten.Internal.Operations.StorageOperation<ApplicationUser, string>
     {
-        private readonly snowcoreBlog.Backend.IAM.Entities.ApplicationUser _document;
+        private readonly ApplicationUser _document;
         private readonly string _id;
         private readonly System.Collections.Generic.Dictionary<string, System.Guid> _versions;
         private readonly Marten.Schema.DocumentMapping _mapping;
 
-        public InsertApplicationUserOperation1908805755(snowcoreBlog.Backend.IAM.Entities.ApplicationUser document, string id, System.Collections.Generic.Dictionary<string, System.Guid> versions, Marten.Schema.DocumentMapping mapping) : base(document, id, versions, mapping)
+        public InsertApplicationUserOperation1908805755(ApplicationUser document, string id, System.Collections.Generic.Dictionary<string, System.Guid> versions, Marten.Schema.DocumentMapping mapping) : base(document, id, versions, mapping)
         {
             _document = document;
             _id = id;
@@ -130,7 +130,7 @@ namespace Marten.Generated.DocumentStorage
         }
 
 
-        public override void ConfigureParameters(Weasel.Postgresql.IGroupedParameterBuilder parameterBuilder, Weasel.Postgresql.ICommandBuilder builder, snowcoreBlog.Backend.IAM.Entities.ApplicationUser document, Marten.Internal.IMartenSession session)
+        public override void ConfigureParameters(Weasel.Postgresql.IGroupedParameterBuilder parameterBuilder, Weasel.Postgresql.ICommandBuilder builder, ApplicationUser document, Marten.Internal.IMartenSession session)
         {
             builder.Append("select public.mt_insert_applicationuser(");
             var parameter0 = parameterBuilder.AppendParameter(session.Serializer.ToJson(_document));
@@ -157,17 +157,17 @@ namespace Marten.Generated.DocumentStorage
     }
 
     // END: InsertApplicationUserOperation1908805755
-    
-    
+
+
     // START: UpdateApplicationUserOperation1908805755
-    public class UpdateApplicationUserOperation1908805755 : Marten.Internal.Operations.StorageOperation<snowcoreBlog.Backend.IAM.Entities.ApplicationUser, string>
+    public class UpdateApplicationUserOperation1908805755 : Marten.Internal.Operations.StorageOperation<ApplicationUser, string>
     {
-        private readonly snowcoreBlog.Backend.IAM.Entities.ApplicationUser _document;
+        private readonly ApplicationUser _document;
         private readonly string _id;
         private readonly System.Collections.Generic.Dictionary<string, System.Guid> _versions;
         private readonly Marten.Schema.DocumentMapping _mapping;
 
-        public UpdateApplicationUserOperation1908805755(snowcoreBlog.Backend.IAM.Entities.ApplicationUser document, string id, System.Collections.Generic.Dictionary<string, System.Guid> versions, Marten.Schema.DocumentMapping mapping) : base(document, id, versions, mapping)
+        public UpdateApplicationUserOperation1908805755(ApplicationUser document, string id, System.Collections.Generic.Dictionary<string, System.Guid> versions, Marten.Schema.DocumentMapping mapping) : base(document, id, versions, mapping)
         {
             _document = document;
             _id = id;
@@ -203,7 +203,7 @@ namespace Marten.Generated.DocumentStorage
         }
 
 
-        public override void ConfigureParameters(Weasel.Postgresql.IGroupedParameterBuilder parameterBuilder, Weasel.Postgresql.ICommandBuilder builder, snowcoreBlog.Backend.IAM.Entities.ApplicationUser document, Marten.Internal.IMartenSession session)
+        public override void ConfigureParameters(Weasel.Postgresql.IGroupedParameterBuilder parameterBuilder, Weasel.Postgresql.ICommandBuilder builder, ApplicationUser document, Marten.Internal.IMartenSession session)
         {
             builder.Append("select public.mt_update_applicationuser(");
             var parameter0 = parameterBuilder.AppendParameter(session.Serializer.ToJson(_document));
@@ -230,10 +230,10 @@ namespace Marten.Generated.DocumentStorage
     }
 
     // END: UpdateApplicationUserOperation1908805755
-    
-    
+
+
     // START: QueryOnlyApplicationUserSelector1908805755
-    public class QueryOnlyApplicationUserSelector1908805755 : Marten.Internal.CodeGeneration.DocumentSelectorWithOnlySerializer, Marten.Linq.Selectors.ISelector<snowcoreBlog.Backend.IAM.Entities.ApplicationUser>
+    public class QueryOnlyApplicationUserSelector1908805755 : Marten.Internal.CodeGeneration.DocumentSelectorWithOnlySerializer, Marten.Linq.Selectors.ISelector<ApplicationUser>
     {
         private readonly Marten.Internal.IMartenSession _session;
         private readonly Marten.Schema.DocumentMapping _mapping;
@@ -246,30 +246,30 @@ namespace Marten.Generated.DocumentStorage
 
 
 
-        public snowcoreBlog.Backend.IAM.Entities.ApplicationUser Resolve(System.Data.Common.DbDataReader reader)
+        public ApplicationUser Resolve(System.Data.Common.DbDataReader reader)
         {
 
-            snowcoreBlog.Backend.IAM.Entities.ApplicationUser document;
-            document = _serializer.FromJson<snowcoreBlog.Backend.IAM.Entities.ApplicationUser>(reader, 0);
+            ApplicationUser document;
+            document = _serializer.FromJson<ApplicationUser>(reader, 0);
             return document;
         }
 
 
-        public async System.Threading.Tasks.Task<snowcoreBlog.Backend.IAM.Entities.ApplicationUser> ResolveAsync(System.Data.Common.DbDataReader reader, System.Threading.CancellationToken token)
+        public async System.Threading.Tasks.Task<ApplicationUser> ResolveAsync(System.Data.Common.DbDataReader reader, System.Threading.CancellationToken token)
         {
 
-            snowcoreBlog.Backend.IAM.Entities.ApplicationUser document;
-            document = await _serializer.FromJsonAsync<snowcoreBlog.Backend.IAM.Entities.ApplicationUser>(reader, 0, token).ConfigureAwait(false);
+            ApplicationUser document;
+            document = await _serializer.FromJsonAsync<ApplicationUser>(reader, 0, token).ConfigureAwait(false);
             return document;
         }
 
     }
 
     // END: QueryOnlyApplicationUserSelector1908805755
-    
-    
+
+
     // START: LightweightApplicationUserSelector1908805755
-    public class LightweightApplicationUserSelector1908805755 : Marten.Internal.CodeGeneration.DocumentSelectorWithVersions<snowcoreBlog.Backend.IAM.Entities.ApplicationUser, string>, Marten.Linq.Selectors.ISelector<snowcoreBlog.Backend.IAM.Entities.ApplicationUser>
+    public class LightweightApplicationUserSelector1908805755 : Marten.Internal.CodeGeneration.DocumentSelectorWithVersions<ApplicationUser, string>, Marten.Linq.Selectors.ISelector<ApplicationUser>
     {
         private readonly Marten.Internal.IMartenSession _session;
         private readonly Marten.Schema.DocumentMapping _mapping;
@@ -282,23 +282,23 @@ namespace Marten.Generated.DocumentStorage
 
 
 
-        public snowcoreBlog.Backend.IAM.Entities.ApplicationUser Resolve(System.Data.Common.DbDataReader reader)
+        public ApplicationUser Resolve(System.Data.Common.DbDataReader reader)
         {
             var id = reader.GetFieldValue<string>(0);
 
-            snowcoreBlog.Backend.IAM.Entities.ApplicationUser document;
-            document = _serializer.FromJson<snowcoreBlog.Backend.IAM.Entities.ApplicationUser>(reader, 1);
+            ApplicationUser document;
+            document = _serializer.FromJson<ApplicationUser>(reader, 1);
             _session.MarkAsDocumentLoaded(id, document);
             return document;
         }
 
 
-        public async System.Threading.Tasks.Task<snowcoreBlog.Backend.IAM.Entities.ApplicationUser> ResolveAsync(System.Data.Common.DbDataReader reader, System.Threading.CancellationToken token)
+        public async System.Threading.Tasks.Task<ApplicationUser> ResolveAsync(System.Data.Common.DbDataReader reader, System.Threading.CancellationToken token)
         {
             var id = await reader.GetFieldValueAsync<string>(0, token);
 
-            snowcoreBlog.Backend.IAM.Entities.ApplicationUser document;
-            document = await _serializer.FromJsonAsync<snowcoreBlog.Backend.IAM.Entities.ApplicationUser>(reader, 1, token).ConfigureAwait(false);
+            ApplicationUser document;
+            document = await _serializer.FromJsonAsync<ApplicationUser>(reader, 1, token).ConfigureAwait(false);
             _session.MarkAsDocumentLoaded(id, document);
             return document;
         }
@@ -306,10 +306,10 @@ namespace Marten.Generated.DocumentStorage
     }
 
     // END: LightweightApplicationUserSelector1908805755
-    
-    
+
+
     // START: IdentityMapApplicationUserSelector1908805755
-    public class IdentityMapApplicationUserSelector1908805755 : Marten.Internal.CodeGeneration.DocumentSelectorWithIdentityMap<snowcoreBlog.Backend.IAM.Entities.ApplicationUser, string>, Marten.Linq.Selectors.ISelector<snowcoreBlog.Backend.IAM.Entities.ApplicationUser>
+    public class IdentityMapApplicationUserSelector1908805755 : Marten.Internal.CodeGeneration.DocumentSelectorWithIdentityMap<ApplicationUser, string>, Marten.Linq.Selectors.ISelector<ApplicationUser>
     {
         private readonly Marten.Internal.IMartenSession _session;
         private readonly Marten.Schema.DocumentMapping _mapping;
@@ -322,26 +322,26 @@ namespace Marten.Generated.DocumentStorage
 
 
 
-        public snowcoreBlog.Backend.IAM.Entities.ApplicationUser Resolve(System.Data.Common.DbDataReader reader)
+        public ApplicationUser Resolve(System.Data.Common.DbDataReader reader)
         {
             var id = reader.GetFieldValue<string>(0);
             if (_identityMap.TryGetValue(id, out var existing)) return existing;
 
-            snowcoreBlog.Backend.IAM.Entities.ApplicationUser document;
-            document = _serializer.FromJson<snowcoreBlog.Backend.IAM.Entities.ApplicationUser>(reader, 1);
+            ApplicationUser document;
+            document = _serializer.FromJson<ApplicationUser>(reader, 1);
             _session.MarkAsDocumentLoaded(id, document);
             _identityMap[id] = document;
             return document;
         }
 
 
-        public async System.Threading.Tasks.Task<snowcoreBlog.Backend.IAM.Entities.ApplicationUser> ResolveAsync(System.Data.Common.DbDataReader reader, System.Threading.CancellationToken token)
+        public async System.Threading.Tasks.Task<ApplicationUser> ResolveAsync(System.Data.Common.DbDataReader reader, System.Threading.CancellationToken token)
         {
             var id = await reader.GetFieldValueAsync<string>(0, token);
             if (_identityMap.TryGetValue(id, out var existing)) return existing;
 
-            snowcoreBlog.Backend.IAM.Entities.ApplicationUser document;
-            document = await _serializer.FromJsonAsync<snowcoreBlog.Backend.IAM.Entities.ApplicationUser>(reader, 1, token).ConfigureAwait(false);
+            ApplicationUser document;
+            document = await _serializer.FromJsonAsync<ApplicationUser>(reader, 1, token).ConfigureAwait(false);
             _session.MarkAsDocumentLoaded(id, document);
             _identityMap[id] = document;
             return document;
@@ -350,10 +350,10 @@ namespace Marten.Generated.DocumentStorage
     }
 
     // END: IdentityMapApplicationUserSelector1908805755
-    
-    
+
+
     // START: DirtyTrackingApplicationUserSelector1908805755
-    public class DirtyTrackingApplicationUserSelector1908805755 : Marten.Internal.CodeGeneration.DocumentSelectorWithDirtyChecking<snowcoreBlog.Backend.IAM.Entities.ApplicationUser, string>, Marten.Linq.Selectors.ISelector<snowcoreBlog.Backend.IAM.Entities.ApplicationUser>
+    public class DirtyTrackingApplicationUserSelector1908805755 : Marten.Internal.CodeGeneration.DocumentSelectorWithDirtyChecking<ApplicationUser, string>, Marten.Linq.Selectors.ISelector<ApplicationUser>
     {
         private readonly Marten.Internal.IMartenSession _session;
         private readonly Marten.Schema.DocumentMapping _mapping;
@@ -366,13 +366,13 @@ namespace Marten.Generated.DocumentStorage
 
 
 
-        public snowcoreBlog.Backend.IAM.Entities.ApplicationUser Resolve(System.Data.Common.DbDataReader reader)
+        public ApplicationUser Resolve(System.Data.Common.DbDataReader reader)
         {
             var id = reader.GetFieldValue<string>(0);
             if (_identityMap.TryGetValue(id, out var existing)) return existing;
 
-            snowcoreBlog.Backend.IAM.Entities.ApplicationUser document;
-            document = _serializer.FromJson<snowcoreBlog.Backend.IAM.Entities.ApplicationUser>(reader, 1);
+            ApplicationUser document;
+            document = _serializer.FromJson<ApplicationUser>(reader, 1);
             _session.MarkAsDocumentLoaded(id, document);
             _identityMap[id] = document;
             StoreTracker(_session, document);
@@ -380,13 +380,13 @@ namespace Marten.Generated.DocumentStorage
         }
 
 
-        public async System.Threading.Tasks.Task<snowcoreBlog.Backend.IAM.Entities.ApplicationUser> ResolveAsync(System.Data.Common.DbDataReader reader, System.Threading.CancellationToken token)
+        public async System.Threading.Tasks.Task<ApplicationUser> ResolveAsync(System.Data.Common.DbDataReader reader, System.Threading.CancellationToken token)
         {
             var id = await reader.GetFieldValueAsync<string>(0, token);
             if (_identityMap.TryGetValue(id, out var existing)) return existing;
 
-            snowcoreBlog.Backend.IAM.Entities.ApplicationUser document;
-            document = await _serializer.FromJsonAsync<snowcoreBlog.Backend.IAM.Entities.ApplicationUser>(reader, 1, token).ConfigureAwait(false);
+            ApplicationUser document;
+            document = await _serializer.FromJsonAsync<ApplicationUser>(reader, 1, token).ConfigureAwait(false);
             _session.MarkAsDocumentLoaded(id, document);
             _identityMap[id] = document;
             StoreTracker(_session, document);
@@ -396,10 +396,10 @@ namespace Marten.Generated.DocumentStorage
     }
 
     // END: DirtyTrackingApplicationUserSelector1908805755
-    
-    
+
+
     // START: QueryOnlyApplicationUserDocumentStorage1908805755
-    public class QueryOnlyApplicationUserDocumentStorage1908805755 : Marten.Internal.Storage.QueryOnlyDocumentStorage<snowcoreBlog.Backend.IAM.Entities.ApplicationUser, string>
+    public class QueryOnlyApplicationUserDocumentStorage1908805755 : Marten.Internal.Storage.QueryOnlyDocumentStorage<ApplicationUser, string>
     {
         private readonly Marten.Schema.DocumentMapping _document;
 
@@ -410,59 +410,59 @@ namespace Marten.Generated.DocumentStorage
 
 
 
-        public override string AssignIdentity(snowcoreBlog.Backend.IAM.Entities.ApplicationUser document, string tenantId, Marten.Storage.IMartenDatabase database)
+        public override string AssignIdentity(ApplicationUser document, string tenantId, Marten.Storage.IMartenDatabase database)
         {
             if (string.IsNullOrEmpty(document.Id)) throw new InvalidOperationException("Id/id values cannot be null or empty");
             return document.Id;
         }
 
 
-        public override Marten.Internal.Operations.IStorageOperation Update(snowcoreBlog.Backend.IAM.Entities.ApplicationUser document, Marten.Internal.IMartenSession session, string tenant)
+        public override Marten.Internal.Operations.IStorageOperation Update(ApplicationUser document, Marten.Internal.IMartenSession session, string tenant)
         {
 
             return new Marten.Generated.DocumentStorage.UpdateApplicationUserOperation1908805755
             (
                 document, Identity(document),
-                session.Versions.ForType<snowcoreBlog.Backend.IAM.Entities.ApplicationUser, string>(),
+                session.Versions.ForType<ApplicationUser, string>(),
                 _document
-                
+
             );
         }
 
 
-        public override Marten.Internal.Operations.IStorageOperation Insert(snowcoreBlog.Backend.IAM.Entities.ApplicationUser document, Marten.Internal.IMartenSession session, string tenant)
+        public override Marten.Internal.Operations.IStorageOperation Insert(ApplicationUser document, Marten.Internal.IMartenSession session, string tenant)
         {
 
             return new Marten.Generated.DocumentStorage.InsertApplicationUserOperation1908805755
             (
                 document, Identity(document),
-                session.Versions.ForType<snowcoreBlog.Backend.IAM.Entities.ApplicationUser, string>(),
+                session.Versions.ForType<ApplicationUser, string>(),
                 _document
-                
+
             );
         }
 
 
-        public override Marten.Internal.Operations.IStorageOperation Upsert(snowcoreBlog.Backend.IAM.Entities.ApplicationUser document, Marten.Internal.IMartenSession session, string tenant)
+        public override Marten.Internal.Operations.IStorageOperation Upsert(ApplicationUser document, Marten.Internal.IMartenSession session, string tenant)
         {
 
             return new Marten.Generated.DocumentStorage.UpsertApplicationUserOperation1908805755
             (
                 document, Identity(document),
-                session.Versions.ForType<snowcoreBlog.Backend.IAM.Entities.ApplicationUser, string>(),
+                session.Versions.ForType<ApplicationUser, string>(),
                 _document
-                
+
             );
         }
 
 
-        public override Marten.Internal.Operations.IStorageOperation Overwrite(snowcoreBlog.Backend.IAM.Entities.ApplicationUser document, Marten.Internal.IMartenSession session, string tenant)
+        public override Marten.Internal.Operations.IStorageOperation Overwrite(ApplicationUser document, Marten.Internal.IMartenSession session, string tenant)
         {
             throw new System.NotSupportedException();
         }
 
 
-        public override string Identity(snowcoreBlog.Backend.IAM.Entities.ApplicationUser document)
+        public override string Identity(ApplicationUser document)
         {
             return document.Id;
         }
@@ -488,10 +488,10 @@ namespace Marten.Generated.DocumentStorage
     }
 
     // END: QueryOnlyApplicationUserDocumentStorage1908805755
-    
-    
+
+
     // START: LightweightApplicationUserDocumentStorage1908805755
-    public class LightweightApplicationUserDocumentStorage1908805755 : Marten.Internal.Storage.LightweightDocumentStorage<snowcoreBlog.Backend.IAM.Entities.ApplicationUser, string>
+    public class LightweightApplicationUserDocumentStorage1908805755 : Marten.Internal.Storage.LightweightDocumentStorage<ApplicationUser, string>
     {
         private readonly Marten.Schema.DocumentMapping _document;
 
@@ -502,59 +502,59 @@ namespace Marten.Generated.DocumentStorage
 
 
 
-        public override string AssignIdentity(snowcoreBlog.Backend.IAM.Entities.ApplicationUser document, string tenantId, Marten.Storage.IMartenDatabase database)
+        public override string AssignIdentity(ApplicationUser document, string tenantId, Marten.Storage.IMartenDatabase database)
         {
             if (string.IsNullOrEmpty(document.Id)) throw new InvalidOperationException("Id/id values cannot be null or empty");
             return document.Id;
         }
 
 
-        public override Marten.Internal.Operations.IStorageOperation Update(snowcoreBlog.Backend.IAM.Entities.ApplicationUser document, Marten.Internal.IMartenSession session, string tenant)
+        public override Marten.Internal.Operations.IStorageOperation Update(ApplicationUser document, Marten.Internal.IMartenSession session, string tenant)
         {
 
             return new Marten.Generated.DocumentStorage.UpdateApplicationUserOperation1908805755
             (
                 document, Identity(document),
-                session.Versions.ForType<snowcoreBlog.Backend.IAM.Entities.ApplicationUser, string>(),
+                session.Versions.ForType<ApplicationUser, string>(),
                 _document
-                
+
             );
         }
 
 
-        public override Marten.Internal.Operations.IStorageOperation Insert(snowcoreBlog.Backend.IAM.Entities.ApplicationUser document, Marten.Internal.IMartenSession session, string tenant)
+        public override Marten.Internal.Operations.IStorageOperation Insert(ApplicationUser document, Marten.Internal.IMartenSession session, string tenant)
         {
 
             return new Marten.Generated.DocumentStorage.InsertApplicationUserOperation1908805755
             (
                 document, Identity(document),
-                session.Versions.ForType<snowcoreBlog.Backend.IAM.Entities.ApplicationUser, string>(),
+                session.Versions.ForType<ApplicationUser, string>(),
                 _document
-                
+
             );
         }
 
 
-        public override Marten.Internal.Operations.IStorageOperation Upsert(snowcoreBlog.Backend.IAM.Entities.ApplicationUser document, Marten.Internal.IMartenSession session, string tenant)
+        public override Marten.Internal.Operations.IStorageOperation Upsert(ApplicationUser document, Marten.Internal.IMartenSession session, string tenant)
         {
 
             return new Marten.Generated.DocumentStorage.UpsertApplicationUserOperation1908805755
             (
                 document, Identity(document),
-                session.Versions.ForType<snowcoreBlog.Backend.IAM.Entities.ApplicationUser, string>(),
+                session.Versions.ForType<ApplicationUser, string>(),
                 _document
-                
+
             );
         }
 
 
-        public override Marten.Internal.Operations.IStorageOperation Overwrite(snowcoreBlog.Backend.IAM.Entities.ApplicationUser document, Marten.Internal.IMartenSession session, string tenant)
+        public override Marten.Internal.Operations.IStorageOperation Overwrite(ApplicationUser document, Marten.Internal.IMartenSession session, string tenant)
         {
             throw new System.NotSupportedException();
         }
 
 
-        public override string Identity(snowcoreBlog.Backend.IAM.Entities.ApplicationUser document)
+        public override string Identity(ApplicationUser document)
         {
             return document.Id;
         }
@@ -580,10 +580,10 @@ namespace Marten.Generated.DocumentStorage
     }
 
     // END: LightweightApplicationUserDocumentStorage1908805755
-    
-    
+
+
     // START: IdentityMapApplicationUserDocumentStorage1908805755
-    public class IdentityMapApplicationUserDocumentStorage1908805755 : Marten.Internal.Storage.IdentityMapDocumentStorage<snowcoreBlog.Backend.IAM.Entities.ApplicationUser, string>
+    public class IdentityMapApplicationUserDocumentStorage1908805755 : Marten.Internal.Storage.IdentityMapDocumentStorage<ApplicationUser, string>
     {
         private readonly Marten.Schema.DocumentMapping _document;
 
@@ -594,59 +594,59 @@ namespace Marten.Generated.DocumentStorage
 
 
 
-        public override string AssignIdentity(snowcoreBlog.Backend.IAM.Entities.ApplicationUser document, string tenantId, Marten.Storage.IMartenDatabase database)
+        public override string AssignIdentity(ApplicationUser document, string tenantId, Marten.Storage.IMartenDatabase database)
         {
             if (string.IsNullOrEmpty(document.Id)) throw new InvalidOperationException("Id/id values cannot be null or empty");
             return document.Id;
         }
 
 
-        public override Marten.Internal.Operations.IStorageOperation Update(snowcoreBlog.Backend.IAM.Entities.ApplicationUser document, Marten.Internal.IMartenSession session, string tenant)
+        public override Marten.Internal.Operations.IStorageOperation Update(ApplicationUser document, Marten.Internal.IMartenSession session, string tenant)
         {
 
             return new Marten.Generated.DocumentStorage.UpdateApplicationUserOperation1908805755
             (
                 document, Identity(document),
-                session.Versions.ForType<snowcoreBlog.Backend.IAM.Entities.ApplicationUser, string>(),
+                session.Versions.ForType<ApplicationUser, string>(),
                 _document
-                
+
             );
         }
 
 
-        public override Marten.Internal.Operations.IStorageOperation Insert(snowcoreBlog.Backend.IAM.Entities.ApplicationUser document, Marten.Internal.IMartenSession session, string tenant)
+        public override Marten.Internal.Operations.IStorageOperation Insert(ApplicationUser document, Marten.Internal.IMartenSession session, string tenant)
         {
 
             return new Marten.Generated.DocumentStorage.InsertApplicationUserOperation1908805755
             (
                 document, Identity(document),
-                session.Versions.ForType<snowcoreBlog.Backend.IAM.Entities.ApplicationUser, string>(),
+                session.Versions.ForType<ApplicationUser, string>(),
                 _document
-                
+
             );
         }
 
 
-        public override Marten.Internal.Operations.IStorageOperation Upsert(snowcoreBlog.Backend.IAM.Entities.ApplicationUser document, Marten.Internal.IMartenSession session, string tenant)
+        public override Marten.Internal.Operations.IStorageOperation Upsert(ApplicationUser document, Marten.Internal.IMartenSession session, string tenant)
         {
 
             return new Marten.Generated.DocumentStorage.UpsertApplicationUserOperation1908805755
             (
                 document, Identity(document),
-                session.Versions.ForType<snowcoreBlog.Backend.IAM.Entities.ApplicationUser, string>(),
+                session.Versions.ForType<ApplicationUser, string>(),
                 _document
-                
+
             );
         }
 
 
-        public override Marten.Internal.Operations.IStorageOperation Overwrite(snowcoreBlog.Backend.IAM.Entities.ApplicationUser document, Marten.Internal.IMartenSession session, string tenant)
+        public override Marten.Internal.Operations.IStorageOperation Overwrite(ApplicationUser document, Marten.Internal.IMartenSession session, string tenant)
         {
             throw new System.NotSupportedException();
         }
 
 
-        public override string Identity(snowcoreBlog.Backend.IAM.Entities.ApplicationUser document)
+        public override string Identity(ApplicationUser document)
         {
             return document.Id;
         }
@@ -672,10 +672,10 @@ namespace Marten.Generated.DocumentStorage
     }
 
     // END: IdentityMapApplicationUserDocumentStorage1908805755
-    
-    
+
+
     // START: DirtyTrackingApplicationUserDocumentStorage1908805755
-    public class DirtyTrackingApplicationUserDocumentStorage1908805755 : Marten.Internal.Storage.DirtyCheckedDocumentStorage<snowcoreBlog.Backend.IAM.Entities.ApplicationUser, string>
+    public class DirtyTrackingApplicationUserDocumentStorage1908805755 : Marten.Internal.Storage.DirtyCheckedDocumentStorage<ApplicationUser, string>
     {
         private readonly Marten.Schema.DocumentMapping _document;
 
@@ -686,59 +686,59 @@ namespace Marten.Generated.DocumentStorage
 
 
 
-        public override string AssignIdentity(snowcoreBlog.Backend.IAM.Entities.ApplicationUser document, string tenantId, Marten.Storage.IMartenDatabase database)
+        public override string AssignIdentity(ApplicationUser document, string tenantId, Marten.Storage.IMartenDatabase database)
         {
             if (string.IsNullOrEmpty(document.Id)) throw new InvalidOperationException("Id/id values cannot be null or empty");
             return document.Id;
         }
 
 
-        public override Marten.Internal.Operations.IStorageOperation Update(snowcoreBlog.Backend.IAM.Entities.ApplicationUser document, Marten.Internal.IMartenSession session, string tenant)
+        public override Marten.Internal.Operations.IStorageOperation Update(ApplicationUser document, Marten.Internal.IMartenSession session, string tenant)
         {
 
             return new Marten.Generated.DocumentStorage.UpdateApplicationUserOperation1908805755
             (
                 document, Identity(document),
-                session.Versions.ForType<snowcoreBlog.Backend.IAM.Entities.ApplicationUser, string>(),
+                session.Versions.ForType<ApplicationUser, string>(),
                 _document
-                
+
             );
         }
 
 
-        public override Marten.Internal.Operations.IStorageOperation Insert(snowcoreBlog.Backend.IAM.Entities.ApplicationUser document, Marten.Internal.IMartenSession session, string tenant)
+        public override Marten.Internal.Operations.IStorageOperation Insert(ApplicationUser document, Marten.Internal.IMartenSession session, string tenant)
         {
 
             return new Marten.Generated.DocumentStorage.InsertApplicationUserOperation1908805755
             (
                 document, Identity(document),
-                session.Versions.ForType<snowcoreBlog.Backend.IAM.Entities.ApplicationUser, string>(),
+                session.Versions.ForType<ApplicationUser, string>(),
                 _document
-                
+
             );
         }
 
 
-        public override Marten.Internal.Operations.IStorageOperation Upsert(snowcoreBlog.Backend.IAM.Entities.ApplicationUser document, Marten.Internal.IMartenSession session, string tenant)
+        public override Marten.Internal.Operations.IStorageOperation Upsert(ApplicationUser document, Marten.Internal.IMartenSession session, string tenant)
         {
 
             return new Marten.Generated.DocumentStorage.UpsertApplicationUserOperation1908805755
             (
                 document, Identity(document),
-                session.Versions.ForType<snowcoreBlog.Backend.IAM.Entities.ApplicationUser, string>(),
+                session.Versions.ForType<ApplicationUser, string>(),
                 _document
-                
+
             );
         }
 
 
-        public override Marten.Internal.Operations.IStorageOperation Overwrite(snowcoreBlog.Backend.IAM.Entities.ApplicationUser document, Marten.Internal.IMartenSession session, string tenant)
+        public override Marten.Internal.Operations.IStorageOperation Overwrite(ApplicationUser document, Marten.Internal.IMartenSession session, string tenant)
         {
             throw new System.NotSupportedException();
         }
 
 
-        public override string Identity(snowcoreBlog.Backend.IAM.Entities.ApplicationUser document)
+        public override string Identity(ApplicationUser document)
         {
             return document.Id;
         }
@@ -764,14 +764,14 @@ namespace Marten.Generated.DocumentStorage
     }
 
     // END: DirtyTrackingApplicationUserDocumentStorage1908805755
-    
-    
-    // START: ApplicationUserBulkLoader1908805755
-    public class ApplicationUserBulkLoader1908805755 : Marten.Internal.CodeGeneration.BulkLoader<snowcoreBlog.Backend.IAM.Entities.ApplicationUser, string>
-    {
-        private readonly Marten.Internal.Storage.IDocumentStorage<snowcoreBlog.Backend.IAM.Entities.ApplicationUser, string> _storage;
 
-        public ApplicationUserBulkLoader1908805755(Marten.Internal.Storage.IDocumentStorage<snowcoreBlog.Backend.IAM.Entities.ApplicationUser, string> storage) : base(storage)
+
+    // START: ApplicationUserBulkLoader1908805755
+    public class ApplicationUserBulkLoader1908805755 : Marten.Internal.CodeGeneration.BulkLoader<ApplicationUser, string>
+    {
+        private readonly Marten.Internal.Storage.IDocumentStorage<ApplicationUser, string> _storage;
+
+        public ApplicationUserBulkLoader1908805755(Marten.Internal.Storage.IDocumentStorage<ApplicationUser, string> storage) : base(storage)
         {
             _storage = storage;
         }
@@ -806,7 +806,7 @@ namespace Marten.Generated.DocumentStorage
         }
 
 
-        public override void LoadRow(Npgsql.NpgsqlBinaryImporter writer, snowcoreBlog.Backend.IAM.Entities.ApplicationUser document, Marten.Storage.Tenant tenant, Marten.ISerializer serializer)
+        public override void LoadRow(Npgsql.NpgsqlBinaryImporter writer, ApplicationUser document, Marten.Storage.Tenant tenant, Marten.ISerializer serializer)
         {
             writer.Write(document.GetType().FullName, NpgsqlTypes.NpgsqlDbType.Varchar);
             writer.Write(document.Id, NpgsqlTypes.NpgsqlDbType.Text);
@@ -815,7 +815,7 @@ namespace Marten.Generated.DocumentStorage
         }
 
 
-        public override async System.Threading.Tasks.Task LoadRowAsync(Npgsql.NpgsqlBinaryImporter writer, snowcoreBlog.Backend.IAM.Entities.ApplicationUser document, Marten.Storage.Tenant tenant, Marten.ISerializer serializer, System.Threading.CancellationToken cancellation)
+        public override async System.Threading.Tasks.Task LoadRowAsync(Npgsql.NpgsqlBinaryImporter writer, ApplicationUser document, Marten.Storage.Tenant tenant, Marten.ISerializer serializer, System.Threading.CancellationToken cancellation)
         {
             await writer.WriteAsync(document.GetType().FullName, NpgsqlTypes.NpgsqlDbType.Varchar, cancellation);
             await writer.WriteAsync(document.Id, NpgsqlTypes.NpgsqlDbType.Text, cancellation);
@@ -838,10 +838,10 @@ namespace Marten.Generated.DocumentStorage
     }
 
     // END: ApplicationUserBulkLoader1908805755
-    
-    
+
+
     // START: ApplicationUserProvider1908805755
-    public class ApplicationUserProvider1908805755 : Marten.Internal.Storage.DocumentProvider<snowcoreBlog.Backend.IAM.Entities.ApplicationUser>
+    public class ApplicationUserProvider1908805755 : Marten.Internal.Storage.DocumentProvider<ApplicationUser>
     {
         private readonly Marten.Schema.DocumentMapping _mapping;
 
@@ -854,7 +854,7 @@ namespace Marten.Generated.DocumentStorage
     }
 
     // END: ApplicationUserProvider1908805755
-    
-    
+
+
 }
 

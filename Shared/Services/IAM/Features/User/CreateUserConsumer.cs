@@ -3,7 +3,7 @@ using MassTransit;
 using Microsoft.AspNetCore.Identity;
 using Results;
 using snowcoreBlog.Backend.IAM.Core.Contracts;
-using snowcoreBlog.Backend.IAM.Entities;
+using snowcoreBlog.Backend.IAM.Core.Entities;
 using snowcoreBlog.Backend.IAM.Extensions;
 using snowcoreBlog.PublicApi.Utilities.DataResult;
 
