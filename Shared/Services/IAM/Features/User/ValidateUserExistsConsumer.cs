@@ -1,7 +1,7 @@
 ﻿using MassTransit;
 using Microsoft.AspNetCore.Identity;
 using snowcoreBlog.Backend.IAM.Core.Contracts;
-using snowcoreBlog.Backend.IAM.Entities;
+using snowcoreBlog.Backend.IAM.Core.Entities;
 using snowcoreBlog.PublicApi.Utilities.DataResult;
 
 namespace snowcoreBlog.Backend.IAM.Features.User;

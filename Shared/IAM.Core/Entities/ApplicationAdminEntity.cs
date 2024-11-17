@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using snowcoreBlog.Backend.IAM.Core.Interfaces.Identity;
 
-namespace snowcoreBlog.Backend.IAM.Entities;
+namespace snowcoreBlog.Backend.IAM.Core.Entities;
 
 public class ApplicationAdmin : IdentityUser, IClaimsUser
 {

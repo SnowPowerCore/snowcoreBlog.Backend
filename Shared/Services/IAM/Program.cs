@@ -2,7 +2,6 @@ using Marten;
 using MassTransit;
 using Microsoft.AspNetCore.Identity;
 using snowcoreBlog.Backend.Infrastructure.Extensions;
-using snowcoreBlog.Backend.IAM.Entities;
 using snowcoreBlog.Backend.IAM.Extensions;
 using snowcoreBlog.Backend.IAM.Models;
 using snowcoreBlog.Backend.IAM.Options;
@@ -16,6 +15,7 @@ using snowcoreBlog.Backend.IAM.Services.Password;
 using JasperFx.CodeGeneration;
 using Oakton;
 using Microsoft.AspNetCore.Http.Json;
+using snowcoreBlog.Backend.IAM.Core.Entities;
 
 var builder = WebApplication.CreateSlimBuilder(args);
 builder.Host.ApplyOaktonExtensions();

@@ -1,5 +1,5 @@
 ﻿using snowcoreBlog.Backend.IAM.Core.Contracts;
-using snowcoreBlog.Backend.IAM.Entities;
+using snowcoreBlog.Backend.IAM.Core.Entities;
 
 namespace snowcoreBlog.Backend.IAM.Extensions;
 

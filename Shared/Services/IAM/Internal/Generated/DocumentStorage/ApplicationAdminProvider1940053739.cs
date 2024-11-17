@@ -9,19 +9,19 @@ using System;
 using System.Collections.Generic;
 using Weasel.Core;
 using Weasel.Postgresql;
-using snowcoreBlog.Backend.IAM.Entities;
+using snowcoreBlog.Backend.IAM.Core.Entities;
 
 namespace Marten.Generated.DocumentStorage
 {
     // START: UpsertApplicationAdminOperation1940053739
-    public class UpsertApplicationAdminOperation1940053739 : Marten.Internal.Operations.StorageOperation<snowcoreBlog.Backend.IAM.Entities.ApplicationAdmin, string>
+    public class UpsertApplicationAdminOperation1940053739 : Marten.Internal.Operations.StorageOperation<ApplicationAdmin, string>
     {
-        private readonly snowcoreBlog.Backend.IAM.Entities.ApplicationAdmin _document;
+        private readonly ApplicationAdmin _document;
         private readonly string _id;
         private readonly System.Collections.Generic.Dictionary<string, System.Guid> _versions;
         private readonly Marten.Schema.DocumentMapping _mapping;
 
-        public UpsertApplicationAdminOperation1940053739(snowcoreBlog.Backend.IAM.Entities.ApplicationAdmin document, string id, System.Collections.Generic.Dictionary<string, System.Guid> versions, Marten.Schema.DocumentMapping mapping) : base(document, id, versions, mapping)
+        public UpsertApplicationAdminOperation1940053739(ApplicationAdmin document, string id, System.Collections.Generic.Dictionary<string, System.Guid> versions, Marten.Schema.DocumentMapping mapping) : base(document, id, versions, mapping)
         {
             _document = document;
             _id = id;
@@ -57,7 +57,7 @@ namespace Marten.Generated.DocumentStorage
         }
 
 
-        public override void ConfigureParameters(Weasel.Postgresql.IGroupedParameterBuilder parameterBuilder, Weasel.Postgresql.ICommandBuilder builder, snowcoreBlog.Backend.IAM.Entities.ApplicationAdmin document, Marten.Internal.IMartenSession session)
+        public override void ConfigureParameters(Weasel.Postgresql.IGroupedParameterBuilder parameterBuilder, Weasel.Postgresql.ICommandBuilder builder, ApplicationAdmin document, Marten.Internal.IMartenSession session)
         {
             builder.Append("select public.mt_upsert_applicationadmin(");
             var parameter0 = parameterBuilder.AppendParameter(session.Serializer.ToJson(_document));
@@ -84,17 +84,17 @@ namespace Marten.Generated.DocumentStorage
     }
 
     // END: UpsertApplicationAdminOperation1940053739
-    
-    
+
+
     // START: InsertApplicationAdminOperation1940053739
-    public class InsertApplicationAdminOperation1940053739 : Marten.Internal.Operations.StorageOperation<snowcoreBlog.Backend.IAM.Entities.ApplicationAdmin, string>
+    public class InsertApplicationAdminOperation1940053739 : Marten.Internal.Operations.StorageOperation<ApplicationAdmin, string>
     {
-        private readonly snowcoreBlog.Backend.IAM.Entities.ApplicationAdmin _document;
+        private readonly ApplicationAdmin _document;
         private readonly string _id;
         private readonly System.Collections.Generic.Dictionary<string, System.Guid> _versions;
         private readonly Marten.Schema.DocumentMapping _mapping;
 
-        public InsertApplicationAdminOperation1940053739(snowcoreBlog.Backend.IAM.Entities.ApplicationAdmin document, string id, System.Collections.Generic.Dictionary<string, System.Guid> versions, Marten.Schema.DocumentMapping mapping) : base(document, id, versions, mapping)
+        public InsertApplicationAdminOperation1940053739(ApplicationAdmin document, string id, System.Collections.Generic.Dictionary<string, System.Guid> versions, Marten.Schema.DocumentMapping mapping) : base(document, id, versions, mapping)
         {
             _document = document;
             _id = id;
@@ -130,7 +130,7 @@ namespace Marten.Generated.DocumentStorage
         }
 
 
-        public override void ConfigureParameters(Weasel.Postgresql.IGroupedParameterBuilder parameterBuilder, Weasel.Postgresql.ICommandBuilder builder, snowcoreBlog.Backend.IAM.Entities.ApplicationAdmin document, Marten.Internal.IMartenSession session)
+        public override void ConfigureParameters(Weasel.Postgresql.IGroupedParameterBuilder parameterBuilder, Weasel.Postgresql.ICommandBuilder builder, ApplicationAdmin document, Marten.Internal.IMartenSession session)
         {
             builder.Append("select public.mt_insert_applicationadmin(");
             var parameter0 = parameterBuilder.AppendParameter(session.Serializer.ToJson(_document));
@@ -157,17 +157,17 @@ namespace Marten.Generated.DocumentStorage
     }
 
     // END: InsertApplicationAdminOperation1940053739
-    
-    
+
+
     // START: UpdateApplicationAdminOperation1940053739
-    public class UpdateApplicationAdminOperation1940053739 : Marten.Internal.Operations.StorageOperation<snowcoreBlog.Backend.IAM.Entities.ApplicationAdmin, string>
+    public class UpdateApplicationAdminOperation1940053739 : Marten.Internal.Operations.StorageOperation<ApplicationAdmin, string>
     {
-        private readonly snowcoreBlog.Backend.IAM.Entities.ApplicationAdmin _document;
+        private readonly ApplicationAdmin _document;
         private readonly string _id;
         private readonly System.Collections.Generic.Dictionary<string, System.Guid> _versions;
         private readonly Marten.Schema.DocumentMapping _mapping;
 
-        public UpdateApplicationAdminOperation1940053739(snowcoreBlog.Backend.IAM.Entities.ApplicationAdmin document, string id, System.Collections.Generic.Dictionary<string, System.Guid> versions, Marten.Schema.DocumentMapping mapping) : base(document, id, versions, mapping)
+        public UpdateApplicationAdminOperation1940053739(ApplicationAdmin document, string id, System.Collections.Generic.Dictionary<string, System.Guid> versions, Marten.Schema.DocumentMapping mapping) : base(document, id, versions, mapping)
         {
             _document = document;
             _id = id;
@@ -203,7 +203,7 @@ namespace Marten.Generated.DocumentStorage
         }
 
 
-        public override void ConfigureParameters(Weasel.Postgresql.IGroupedParameterBuilder parameterBuilder, Weasel.Postgresql.ICommandBuilder builder, snowcoreBlog.Backend.IAM.Entities.ApplicationAdmin document, Marten.Internal.IMartenSession session)
+        public override void ConfigureParameters(Weasel.Postgresql.IGroupedParameterBuilder parameterBuilder, Weasel.Postgresql.ICommandBuilder builder, ApplicationAdmin document, Marten.Internal.IMartenSession session)
         {
             builder.Append("select public.mt_update_applicationadmin(");
             var parameter0 = parameterBuilder.AppendParameter(session.Serializer.ToJson(_document));
@@ -230,10 +230,10 @@ namespace Marten.Generated.DocumentStorage
     }
 
     // END: UpdateApplicationAdminOperation1940053739
-    
-    
+
+
     // START: QueryOnlyApplicationAdminSelector1940053739
-    public class QueryOnlyApplicationAdminSelector1940053739 : Marten.Internal.CodeGeneration.DocumentSelectorWithOnlySerializer, Marten.Linq.Selectors.ISelector<snowcoreBlog.Backend.IAM.Entities.ApplicationAdmin>
+    public class QueryOnlyApplicationAdminSelector1940053739 : Marten.Internal.CodeGeneration.DocumentSelectorWithOnlySerializer, Marten.Linq.Selectors.ISelector<ApplicationAdmin>
     {
         private readonly Marten.Internal.IMartenSession _session;
         private readonly Marten.Schema.DocumentMapping _mapping;
@@ -246,30 +246,30 @@ namespace Marten.Generated.DocumentStorage
 
 
 
-        public snowcoreBlog.Backend.IAM.Entities.ApplicationAdmin Resolve(System.Data.Common.DbDataReader reader)
+        public ApplicationAdmin Resolve(System.Data.Common.DbDataReader reader)
         {
 
-            snowcoreBlog.Backend.IAM.Entities.ApplicationAdmin document;
-            document = _serializer.FromJson<snowcoreBlog.Backend.IAM.Entities.ApplicationAdmin>(reader, 0);
+            ApplicationAdmin document;
+            document = _serializer.FromJson<ApplicationAdmin>(reader, 0);
             return document;
         }
 
 
-        public async System.Threading.Tasks.Task<snowcoreBlog.Backend.IAM.Entities.ApplicationAdmin> ResolveAsync(System.Data.Common.DbDataReader reader, System.Threading.CancellationToken token)
+        public async System.Threading.Tasks.Task<ApplicationAdmin> ResolveAsync(System.Data.Common.DbDataReader reader, System.Threading.CancellationToken token)
         {
 
-            snowcoreBlog.Backend.IAM.Entities.ApplicationAdmin document;
-            document = await _serializer.FromJsonAsync<snowcoreBlog.Backend.IAM.Entities.ApplicationAdmin>(reader, 0, token).ConfigureAwait(false);
+            ApplicationAdmin document;
+            document = await _serializer.FromJsonAsync<ApplicationAdmin>(reader, 0, token).ConfigureAwait(false);
             return document;
         }
 
     }
 
     // END: QueryOnlyApplicationAdminSelector1940053739
-    
-    
+
+
     // START: LightweightApplicationAdminSelector1940053739
-    public class LightweightApplicationAdminSelector1940053739 : Marten.Internal.CodeGeneration.DocumentSelectorWithVersions<snowcoreBlog.Backend.IAM.Entities.ApplicationAdmin, string>, Marten.Linq.Selectors.ISelector<snowcoreBlog.Backend.IAM.Entities.ApplicationAdmin>
+    public class LightweightApplicationAdminSelector1940053739 : Marten.Internal.CodeGeneration.DocumentSelectorWithVersions<ApplicationAdmin, string>, Marten.Linq.Selectors.ISelector<ApplicationAdmin>
     {
         private readonly Marten.Internal.IMartenSession _session;
         private readonly Marten.Schema.DocumentMapping _mapping;
@@ -282,23 +282,23 @@ namespace Marten.Generated.DocumentStorage
 
 
 
-        public snowcoreBlog.Backend.IAM.Entities.ApplicationAdmin Resolve(System.Data.Common.DbDataReader reader)
+        public ApplicationAdmin Resolve(System.Data.Common.DbDataReader reader)
         {
             var id = reader.GetFieldValue<string>(0);
 
-            snowcoreBlog.Backend.IAM.Entities.ApplicationAdmin document;
-            document = _serializer.FromJson<snowcoreBlog.Backend.IAM.Entities.ApplicationAdmin>(reader, 1);
+            ApplicationAdmin document;
+            document = _serializer.FromJson<ApplicationAdmin>(reader, 1);
             _session.MarkAsDocumentLoaded(id, document);
             return document;
         }
 
 
-        public async System.Threading.Tasks.Task<snowcoreBlog.Backend.IAM.Entities.ApplicationAdmin> ResolveAsync(System.Data.Common.DbDataReader reader, System.Threading.CancellationToken token)
+        public async System.Threading.Tasks.Task<ApplicationAdmin> ResolveAsync(System.Data.Common.DbDataReader reader, System.Threading.CancellationToken token)
         {
             var id = await reader.GetFieldValueAsync<string>(0, token);
 
-            snowcoreBlog.Backend.IAM.Entities.ApplicationAdmin document;
-            document = await _serializer.FromJsonAsync<snowcoreBlog.Backend.IAM.Entities.ApplicationAdmin>(reader, 1, token).ConfigureAwait(false);
+            ApplicationAdmin document;
+            document = await _serializer.FromJsonAsync<ApplicationAdmin>(reader, 1, token).ConfigureAwait(false);
             _session.MarkAsDocumentLoaded(id, document);
             return document;
         }
@@ -306,10 +306,10 @@ namespace Marten.Generated.DocumentStorage
     }
 
     // END: LightweightApplicationAdminSelector1940053739
-    
-    
+
+
     // START: IdentityMapApplicationAdminSelector1940053739
-    public class IdentityMapApplicationAdminSelector1940053739 : Marten.Internal.CodeGeneration.DocumentSelectorWithIdentityMap<snowcoreBlog.Backend.IAM.Entities.ApplicationAdmin, string>, Marten.Linq.Selectors.ISelector<snowcoreBlog.Backend.IAM.Entities.ApplicationAdmin>
+    public class IdentityMapApplicationAdminSelector1940053739 : Marten.Internal.CodeGeneration.DocumentSelectorWithIdentityMap<ApplicationAdmin, string>, Marten.Linq.Selectors.ISelector<ApplicationAdmin>
     {
         private readonly Marten.Internal.IMartenSession _session;
         private readonly Marten.Schema.DocumentMapping _mapping;
@@ -322,26 +322,26 @@ namespace Marten.Generated.DocumentStorage
 
 
 
-        public snowcoreBlog.Backend.IAM.Entities.ApplicationAdmin Resolve(System.Data.Common.DbDataReader reader)
+        public ApplicationAdmin Resolve(System.Data.Common.DbDataReader reader)
         {
             var id = reader.GetFieldValue<string>(0);
             if (_identityMap.TryGetValue(id, out var existing)) return existing;
 
-            snowcoreBlog.Backend.IAM.Entities.ApplicationAdmin document;
-            document = _serializer.FromJson<snowcoreBlog.Backend.IAM.Entities.ApplicationAdmin>(reader, 1);
+            ApplicationAdmin document;
+            document = _serializer.FromJson<ApplicationAdmin>(reader, 1);
             _session.MarkAsDocumentLoaded(id, document);
             _identityMap[id] = document;
             return document;
         }
 
 
-        public async System.Threading.Tasks.Task<snowcoreBlog.Backend.IAM.Entities.ApplicationAdmin> ResolveAsync(System.Data.Common.DbDataReader reader, System.Threading.CancellationToken token)
+        public async System.Threading.Tasks.Task<ApplicationAdmin> ResolveAsync(System.Data.Common.DbDataReader reader, System.Threading.CancellationToken token)
         {
             var id = await reader.GetFieldValueAsync<string>(0, token);
             if (_identityMap.TryGetValue(id, out var existing)) return existing;
 
-            snowcoreBlog.Backend.IAM.Entities.ApplicationAdmin document;
-            document = await _serializer.FromJsonAsync<snowcoreBlog.Backend.IAM.Entities.ApplicationAdmin>(reader, 1, token).ConfigureAwait(false);
+            ApplicationAdmin document;
+            document = await _serializer.FromJsonAsync<ApplicationAdmin>(reader, 1, token).ConfigureAwait(false);
             _session.MarkAsDocumentLoaded(id, document);
             _identityMap[id] = document;
             return document;
@@ -350,10 +350,10 @@ namespace Marten.Generated.DocumentStorage
     }
 
     // END: IdentityMapApplicationAdminSelector1940053739
-    
-    
+
+
     // START: DirtyTrackingApplicationAdminSelector1940053739
-    public class DirtyTrackingApplicationAdminSelector1940053739 : Marten.Internal.CodeGeneration.DocumentSelectorWithDirtyChecking<snowcoreBlog.Backend.IAM.Entities.ApplicationAdmin, string>, Marten.Linq.Selectors.ISelector<snowcoreBlog.Backend.IAM.Entities.ApplicationAdmin>
+    public class DirtyTrackingApplicationAdminSelector1940053739 : Marten.Internal.CodeGeneration.DocumentSelectorWithDirtyChecking<ApplicationAdmin, string>, Marten.Linq.Selectors.ISelector<ApplicationAdmin>
     {
         private readonly Marten.Internal.IMartenSession _session;
         private readonly Marten.Schema.DocumentMapping _mapping;
@@ -366,13 +366,13 @@ namespace Marten.Generated.DocumentStorage
 
 
 
-        public snowcoreBlog.Backend.IAM.Entities.ApplicationAdmin Resolve(System.Data.Common.DbDataReader reader)
+        public ApplicationAdmin Resolve(System.Data.Common.DbDataReader reader)
         {
             var id = reader.GetFieldValue<string>(0);
             if (_identityMap.TryGetValue(id, out var existing)) return existing;
 
-            snowcoreBlog.Backend.IAM.Entities.ApplicationAdmin document;
-            document = _serializer.FromJson<snowcoreBlog.Backend.IAM.Entities.ApplicationAdmin>(reader, 1);
+            ApplicationAdmin document;
+            document = _serializer.FromJson<ApplicationAdmin>(reader, 1);
             _session.MarkAsDocumentLoaded(id, document);
             _identityMap[id] = document;
             StoreTracker(_session, document);
@@ -380,13 +380,13 @@ namespace Marten.Generated.DocumentStorage
         }
 
 
-        public async System.Threading.Tasks.Task<snowcoreBlog.Backend.IAM.Entities.ApplicationAdmin> ResolveAsync(System.Data.Common.DbDataReader reader, System.Threading.CancellationToken token)
+        public async System.Threading.Tasks.Task<ApplicationAdmin> ResolveAsync(System.Data.Common.DbDataReader reader, System.Threading.CancellationToken token)
         {
             var id = await reader.GetFieldValueAsync<string>(0, token);
             if (_identityMap.TryGetValue(id, out var existing)) return existing;
 
-            snowcoreBlog.Backend.IAM.Entities.ApplicationAdmin document;
-            document = await _serializer.FromJsonAsync<snowcoreBlog.Backend.IAM.Entities.ApplicationAdmin>(reader, 1, token).ConfigureAwait(false);
+            ApplicationAdmin document;
+            document = await _serializer.FromJsonAsync<ApplicationAdmin>(reader, 1, token).ConfigureAwait(false);
             _session.MarkAsDocumentLoaded(id, document);
             _identityMap[id] = document;
             StoreTracker(_session, document);
@@ -396,10 +396,10 @@ namespace Marten.Generated.DocumentStorage
     }
 
     // END: DirtyTrackingApplicationAdminSelector1940053739
-    
-    
+
+
     // START: QueryOnlyApplicationAdminDocumentStorage1940053739
-    public class QueryOnlyApplicationAdminDocumentStorage1940053739 : Marten.Internal.Storage.QueryOnlyDocumentStorage<snowcoreBlog.Backend.IAM.Entities.ApplicationAdmin, string>
+    public class QueryOnlyApplicationAdminDocumentStorage1940053739 : Marten.Internal.Storage.QueryOnlyDocumentStorage<ApplicationAdmin, string>
     {
         private readonly Marten.Schema.DocumentMapping _document;
 
@@ -410,59 +410,59 @@ namespace Marten.Generated.DocumentStorage
 
 
 
-        public override string AssignIdentity(snowcoreBlog.Backend.IAM.Entities.ApplicationAdmin document, string tenantId, Marten.Storage.IMartenDatabase database)
+        public override string AssignIdentity(ApplicationAdmin document, string tenantId, Marten.Storage.IMartenDatabase database)
         {
             if (string.IsNullOrEmpty(document.Id)) throw new InvalidOperationException("Id/id values cannot be null or empty");
             return document.Id;
         }
 
 
-        public override Marten.Internal.Operations.IStorageOperation Update(snowcoreBlog.Backend.IAM.Entities.ApplicationAdmin document, Marten.Internal.IMartenSession session, string tenant)
+        public override Marten.Internal.Operations.IStorageOperation Update(ApplicationAdmin document, Marten.Internal.IMartenSession session, string tenant)
         {
 
             return new Marten.Generated.DocumentStorage.UpdateApplicationAdminOperation1940053739
             (
                 document, Identity(document),
-                session.Versions.ForType<snowcoreBlog.Backend.IAM.Entities.ApplicationAdmin, string>(),
+                session.Versions.ForType<ApplicationAdmin, string>(),
                 _document
-                
+
             );
         }
 
 
-        public override Marten.Internal.Operations.IStorageOperation Insert(snowcoreBlog.Backend.IAM.Entities.ApplicationAdmin document, Marten.Internal.IMartenSession session, string tenant)
+        public override Marten.Internal.Operations.IStorageOperation Insert(ApplicationAdmin document, Marten.Internal.IMartenSession session, string tenant)
         {
 
             return new Marten.Generated.DocumentStorage.InsertApplicationAdminOperation1940053739
             (
                 document, Identity(document),
-                session.Versions.ForType<snowcoreBlog.Backend.IAM.Entities.ApplicationAdmin, string>(),
+                session.Versions.ForType<ApplicationAdmin, string>(),
                 _document
-                
+
             );
         }
 
 
-        public override Marten.Internal.Operations.IStorageOperation Upsert(snowcoreBlog.Backend.IAM.Entities.ApplicationAdmin document, Marten.Internal.IMartenSession session, string tenant)
+        public override Marten.Internal.Operations.IStorageOperation Upsert(ApplicationAdmin document, Marten.Internal.IMartenSession session, string tenant)
         {
 
             return new Marten.Generated.DocumentStorage.UpsertApplicationAdminOperation1940053739
             (
                 document, Identity(document),
-                session.Versions.ForType<snowcoreBlog.Backend.IAM.Entities.ApplicationAdmin, string>(),
+                session.Versions.ForType<ApplicationAdmin, string>(),
                 _document
-                
+
             );
         }
 
 
-        public override Marten.Internal.Operations.IStorageOperation Overwrite(snowcoreBlog.Backend.IAM.Entities.ApplicationAdmin document, Marten.Internal.IMartenSession session, string tenant)
+        public override Marten.Internal.Operations.IStorageOperation Overwrite(ApplicationAdmin document, Marten.Internal.IMartenSession session, string tenant)
         {
             throw new System.NotSupportedException();
         }
 
 
-        public override string Identity(snowcoreBlog.Backend.IAM.Entities.ApplicationAdmin document)
+        public override string Identity(ApplicationAdmin document)
         {
             return document.Id;
         }
@@ -488,10 +488,10 @@ namespace Marten.Generated.DocumentStorage
     }
 
     // END: QueryOnlyApplicationAdminDocumentStorage1940053739
-    
-    
+
+
     // START: LightweightApplicationAdminDocumentStorage1940053739
-    public class LightweightApplicationAdminDocumentStorage1940053739 : Marten.Internal.Storage.LightweightDocumentStorage<snowcoreBlog.Backend.IAM.Entities.ApplicationAdmin, string>
+    public class LightweightApplicationAdminDocumentStorage1940053739 : Marten.Internal.Storage.LightweightDocumentStorage<ApplicationAdmin, string>
     {
         private readonly Marten.Schema.DocumentMapping _document;
 
@@ -502,59 +502,59 @@ namespace Marten.Generated.DocumentStorage
 
 
 
-        public override string AssignIdentity(snowcoreBlog.Backend.IAM.Entities.ApplicationAdmin document, string tenantId, Marten.Storage.IMartenDatabase database)
+        public override string AssignIdentity(ApplicationAdmin document, string tenantId, Marten.Storage.IMartenDatabase database)
         {
             if (string.IsNullOrEmpty(document.Id)) throw new InvalidOperationException("Id/id values cannot be null or empty");
             return document.Id;
         }
 
 
-        public override Marten.Internal.Operations.IStorageOperation Update(snowcoreBlog.Backend.IAM.Entities.ApplicationAdmin document, Marten.Internal.IMartenSession session, string tenant)
+        public override Marten.Internal.Operations.IStorageOperation Update(ApplicationAdmin document, Marten.Internal.IMartenSession session, string tenant)
         {
 
             return new Marten.Generated.DocumentStorage.UpdateApplicationAdminOperation1940053739
             (
                 document, Identity(document),
-                session.Versions.ForType<snowcoreBlog.Backend.IAM.Entities.ApplicationAdmin, string>(),
+                session.Versions.ForType<ApplicationAdmin, string>(),
                 _document
-                
+
             );
         }
 
 
-        public override Marten.Internal.Operations.IStorageOperation Insert(snowcoreBlog.Backend.IAM.Entities.ApplicationAdmin document, Marten.Internal.IMartenSession session, string tenant)
+        public override Marten.Internal.Operations.IStorageOperation Insert(ApplicationAdmin document, Marten.Internal.IMartenSession session, string tenant)
         {
 
             return new Marten.Generated.DocumentStorage.InsertApplicationAdminOperation1940053739
             (
                 document, Identity(document),
-                session.Versions.ForType<snowcoreBlog.Backend.IAM.Entities.ApplicationAdmin, string>(),
+                session.Versions.ForType<ApplicationAdmin, string>(),
                 _document
-                
+
             );
         }
 
 
-        public override Marten.Internal.Operations.IStorageOperation Upsert(snowcoreBlog.Backend.IAM.Entities.ApplicationAdmin document, Marten.Internal.IMartenSession session, string tenant)
+        public override Marten.Internal.Operations.IStorageOperation Upsert(ApplicationAdmin document, Marten.Internal.IMartenSession session, string tenant)
         {
 
             return new Marten.Generated.DocumentStorage.UpsertApplicationAdminOperation1940053739
             (
                 document, Identity(document),
-                session.Versions.ForType<snowcoreBlog.Backend.IAM.Entities.ApplicationAdmin, string>(),
+                session.Versions.ForType<ApplicationAdmin, string>(),
                 _document
-                
+
             );
         }
 
 
-        public override Marten.Internal.Operations.IStorageOperation Overwrite(snowcoreBlog.Backend.IAM.Entities.ApplicationAdmin document, Marten.Internal.IMartenSession session, string tenant)
+        public override Marten.Internal.Operations.IStorageOperation Overwrite(ApplicationAdmin document, Marten.Internal.IMartenSession session, string tenant)
         {
             throw new System.NotSupportedException();
         }
 
 
-        public override string Identity(snowcoreBlog.Backend.IAM.Entities.ApplicationAdmin document)
+        public override string Identity(ApplicationAdmin document)
         {
             return document.Id;
         }
@@ -580,10 +580,10 @@ namespace Marten.Generated.DocumentStorage
     }
 
     // END: LightweightApplicationAdminDocumentStorage1940053739
-    
-    
+
+
     // START: IdentityMapApplicationAdminDocumentStorage1940053739
-    public class IdentityMapApplicationAdminDocumentStorage1940053739 : Marten.Internal.Storage.IdentityMapDocumentStorage<snowcoreBlog.Backend.IAM.Entities.ApplicationAdmin, string>
+    public class IdentityMapApplicationAdminDocumentStorage1940053739 : Marten.Internal.Storage.IdentityMapDocumentStorage<ApplicationAdmin, string>
     {
         private readonly Marten.Schema.DocumentMapping _document;
 
@@ -594,59 +594,59 @@ namespace Marten.Generated.DocumentStorage
 
 
 
-        public override string AssignIdentity(snowcoreBlog.Backend.IAM.Entities.ApplicationAdmin document, string tenantId, Marten.Storage.IMartenDatabase database)
+        public override string AssignIdentity(ApplicationAdmin document, string tenantId, Marten.Storage.IMartenDatabase database)
         {
             if (string.IsNullOrEmpty(document.Id)) throw new InvalidOperationException("Id/id values cannot be null or empty");
             return document.Id;
         }
 
 
-        public override Marten.Internal.Operations.IStorageOperation Update(snowcoreBlog.Backend.IAM.Entities.ApplicationAdmin document, Marten.Internal.IMartenSession session, string tenant)
+        public override Marten.Internal.Operations.IStorageOperation Update(ApplicationAdmin document, Marten.Internal.IMartenSession session, string tenant)
         {
 
             return new Marten.Generated.DocumentStorage.UpdateApplicationAdminOperation1940053739
             (
                 document, Identity(document),
-                session.Versions.ForType<snowcoreBlog.Backend.IAM.Entities.ApplicationAdmin, string>(),
+                session.Versions.ForType<ApplicationAdmin, string>(),
                 _document
-                
+
             );
         }
 
 
-        public override Marten.Internal.Operations.IStorageOperation Insert(snowcoreBlog.Backend.IAM.Entities.ApplicationAdmin document, Marten.Internal.IMartenSession session, string tenant)
+        public override Marten.Internal.Operations.IStorageOperation Insert(ApplicationAdmin document, Marten.Internal.IMartenSession session, string tenant)
         {
 
             return new Marten.Generated.DocumentStorage.InsertApplicationAdminOperation1940053739
             (
                 document, Identity(document),
-                session.Versions.ForType<snowcoreBlog.Backend.IAM.Entities.ApplicationAdmin, string>(),
+                session.Versions.ForType<ApplicationAdmin, string>(),
                 _document
-                
+
             );
         }
 
 
-        public override Marten.Internal.Operations.IStorageOperation Upsert(snowcoreBlog.Backend.IAM.Entities.ApplicationAdmin document, Marten.Internal.IMartenSession session, string tenant)
+        public override Marten.Internal.Operations.IStorageOperation Upsert(ApplicationAdmin document, Marten.Internal.IMartenSession session, string tenant)
         {
 
             return new Marten.Generated.DocumentStorage.UpsertApplicationAdminOperation1940053739
             (
                 document, Identity(document),
-                session.Versions.ForType<snowcoreBlog.Backend.IAM.Entities.ApplicationAdmin, string>(),
+                session.Versions.ForType<ApplicationAdmin, string>(),
                 _document
-                
+
             );
         }
 
 
-        public override Marten.Internal.Operations.IStorageOperation Overwrite(snowcoreBlog.Backend.IAM.Entities.ApplicationAdmin document, Marten.Internal.IMartenSession session, string tenant)
+        public override Marten.Internal.Operations.IStorageOperation Overwrite(ApplicationAdmin document, Marten.Internal.IMartenSession session, string tenant)
         {
             throw new System.NotSupportedException();
         }
 
 
-        public override string Identity(snowcoreBlog.Backend.IAM.Entities.ApplicationAdmin document)
+        public override string Identity(ApplicationAdmin document)
         {
             return document.Id;
         }
@@ -672,10 +672,10 @@ namespace Marten.Generated.DocumentStorage
     }
 
     // END: IdentityMapApplicationAdminDocumentStorage1940053739
-    
-    
+
+
     // START: DirtyTrackingApplicationAdminDocumentStorage1940053739
-    public class DirtyTrackingApplicationAdminDocumentStorage1940053739 : Marten.Internal.Storage.DirtyCheckedDocumentStorage<snowcoreBlog.Backend.IAM.Entities.ApplicationAdmin, string>
+    public class DirtyTrackingApplicationAdminDocumentStorage1940053739 : Marten.Internal.Storage.DirtyCheckedDocumentStorage<ApplicationAdmin, string>
     {
         private readonly Marten.Schema.DocumentMapping _document;
 
@@ -686,59 +686,59 @@ namespace Marten.Generated.DocumentStorage
 
 
 
-        public override string AssignIdentity(snowcoreBlog.Backend.IAM.Entities.ApplicationAdmin document, string tenantId, Marten.Storage.IMartenDatabase database)
+        public override string AssignIdentity(ApplicationAdmin document, string tenantId, Marten.Storage.IMartenDatabase database)
         {
             if (string.IsNullOrEmpty(document.Id)) throw new InvalidOperationException("Id/id values cannot be null or empty");
             return document.Id;
         }
 
 
-        public override Marten.Internal.Operations.IStorageOperation Update(snowcoreBlog.Backend.IAM.Entities.ApplicationAdmin document, Marten.Internal.IMartenSession session, string tenant)
+        public override Marten.Internal.Operations.IStorageOperation Update(ApplicationAdmin document, Marten.Internal.IMartenSession session, string tenant)
         {
 
             return new Marten.Generated.DocumentStorage.UpdateApplicationAdminOperation1940053739
             (
                 document, Identity(document),
-                session.Versions.ForType<snowcoreBlog.Backend.IAM.Entities.ApplicationAdmin, string>(),
+                session.Versions.ForType<ApplicationAdmin, string>(),
                 _document
-                
+
             );
         }
 
 
-        public override Marten.Internal.Operations.IStorageOperation Insert(snowcoreBlog.Backend.IAM.Entities.ApplicationAdmin document, Marten.Internal.IMartenSession session, string tenant)
+        public override Marten.Internal.Operations.IStorageOperation Insert(ApplicationAdmin document, Marten.Internal.IMartenSession session, string tenant)
         {
 
             return new Marten.Generated.DocumentStorage.InsertApplicationAdminOperation1940053739
             (
                 document, Identity(document),
-                session.Versions.ForType<snowcoreBlog.Backend.IAM.Entities.ApplicationAdmin, string>(),
+                session.Versions.ForType<ApplicationAdmin, string>(),
                 _document
-                
+
             );
         }
 
 
-        public override Marten.Internal.Operations.IStorageOperation Upsert(snowcoreBlog.Backend.IAM.Entities.ApplicationAdmin document, Marten.Internal.IMartenSession session, string tenant)
+        public override Marten.Internal.Operations.IStorageOperation Upsert(ApplicationAdmin document, Marten.Internal.IMartenSession session, string tenant)
         {
 
             return new Marten.Generated.DocumentStorage.UpsertApplicationAdminOperation1940053739
             (
                 document, Identity(document),
-                session.Versions.ForType<snowcoreBlog.Backend.IAM.Entities.ApplicationAdmin, string>(),
+                session.Versions.ForType<ApplicationAdmin, string>(),
                 _document
-                
+
             );
         }
 
 
-        public override Marten.Internal.Operations.IStorageOperation Overwrite(snowcoreBlog.Backend.IAM.Entities.ApplicationAdmin document, Marten.Internal.IMartenSession session, string tenant)
+        public override Marten.Internal.Operations.IStorageOperation Overwrite(ApplicationAdmin document, Marten.Internal.IMartenSession session, string tenant)
         {
             throw new System.NotSupportedException();
         }
 
 
-        public override string Identity(snowcoreBlog.Backend.IAM.Entities.ApplicationAdmin document)
+        public override string Identity(ApplicationAdmin document)
         {
             return document.Id;
         }
@@ -764,14 +764,14 @@ namespace Marten.Generated.DocumentStorage
     }
 
     // END: DirtyTrackingApplicationAdminDocumentStorage1940053739
-    
-    
-    // START: ApplicationAdminBulkLoader1940053739
-    public class ApplicationAdminBulkLoader1940053739 : Marten.Internal.CodeGeneration.BulkLoader<snowcoreBlog.Backend.IAM.Entities.ApplicationAdmin, string>
-    {
-        private readonly Marten.Internal.Storage.IDocumentStorage<snowcoreBlog.Backend.IAM.Entities.ApplicationAdmin, string> _storage;
 
-        public ApplicationAdminBulkLoader1940053739(Marten.Internal.Storage.IDocumentStorage<snowcoreBlog.Backend.IAM.Entities.ApplicationAdmin, string> storage) : base(storage)
+
+    // START: ApplicationAdminBulkLoader1940053739
+    public class ApplicationAdminBulkLoader1940053739 : Marten.Internal.CodeGeneration.BulkLoader<ApplicationAdmin, string>
+    {
+        private readonly Marten.Internal.Storage.IDocumentStorage<ApplicationAdmin, string> _storage;
+
+        public ApplicationAdminBulkLoader1940053739(Marten.Internal.Storage.IDocumentStorage<ApplicationAdmin, string> storage) : base(storage)
         {
             _storage = storage;
         }
@@ -806,7 +806,7 @@ namespace Marten.Generated.DocumentStorage
         }
 
 
-        public override void LoadRow(Npgsql.NpgsqlBinaryImporter writer, snowcoreBlog.Backend.IAM.Entities.ApplicationAdmin document, Marten.Storage.Tenant tenant, Marten.ISerializer serializer)
+        public override void LoadRow(Npgsql.NpgsqlBinaryImporter writer, ApplicationAdmin document, Marten.Storage.Tenant tenant, Marten.ISerializer serializer)
         {
             writer.Write(document.GetType().FullName, NpgsqlTypes.NpgsqlDbType.Varchar);
             writer.Write(document.Id, NpgsqlTypes.NpgsqlDbType.Text);
@@ -815,7 +815,7 @@ namespace Marten.Generated.DocumentStorage
         }
 
 
-        public override async System.Threading.Tasks.Task LoadRowAsync(Npgsql.NpgsqlBinaryImporter writer, snowcoreBlog.Backend.IAM.Entities.ApplicationAdmin document, Marten.Storage.Tenant tenant, Marten.ISerializer serializer, System.Threading.CancellationToken cancellation)
+        public override async System.Threading.Tasks.Task LoadRowAsync(Npgsql.NpgsqlBinaryImporter writer, ApplicationAdmin document, Marten.Storage.Tenant tenant, Marten.ISerializer serializer, System.Threading.CancellationToken cancellation)
         {
             await writer.WriteAsync(document.GetType().FullName, NpgsqlTypes.NpgsqlDbType.Varchar, cancellation);
             await writer.WriteAsync(document.Id, NpgsqlTypes.NpgsqlDbType.Text, cancellation);
@@ -838,10 +838,10 @@ namespace Marten.Generated.DocumentStorage
     }
 
     // END: ApplicationAdminBulkLoader1940053739
-    
-    
+
+
     // START: ApplicationAdminProvider1940053739
-    public class ApplicationAdminProvider1940053739 : Marten.Internal.Storage.DocumentProvider<snowcoreBlog.Backend.IAM.Entities.ApplicationAdmin>
+    public class ApplicationAdminProvider1940053739 : Marten.Internal.Storage.DocumentProvider<ApplicationAdmin>
     {
         private readonly Marten.Schema.DocumentMapping _mapping;
 
@@ -854,7 +854,7 @@ namespace Marten.Generated.DocumentStorage
     }
 
     // END: ApplicationAdminProvider1940053739
-    
-    
+
+
 }
 
