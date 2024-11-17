@@ -5,6 +5,7 @@ using MassTransit;
 using MassTransit.Events;
 using Scalar.AspNetCore;
 using snowcoreBlog.Backend.IAM.Core.Contracts;
+using snowcoreBlog.Backend.IAM.Core.Entities;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 using snowcoreBlog.PublicApi.Utilities.Api;
 using snowcoreBlog.PublicApi.Utilities.DataResult;
@@ -14,9 +15,11 @@ namespace snowcoreBlog.Backend.Infrastructure;
 /// <summary>
 /// Defines the serialization context.
 /// </summary>
+[JsonSerializable(typeof(List<string>))]
 [JsonSerializable(typeof(ScalarOptions))]
 [JsonSerializable(typeof(ApiResponse))]
-[JsonSerializable(typeof(IAM.Core.Entities.ApplicationUser))]
+[JsonSerializable(typeof(ApplicationUser))]
+[JsonSerializable(typeof(ApplicationAdmin))]
 [JsonSerializable(typeof(CreateAdmin))]
 [JsonSerializable(typeof(CreateUser))]
 [JsonSerializable(typeof(ValidateUserExists))]
