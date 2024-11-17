@@ -17,7 +17,8 @@ public class GetAltchaChallengeEndpoint : EndpointWithoutRequest<ApiResponse?>
 
     public override void Configure()
     {
-        Post("captcha/challenge");
+        Get("captcha/challenge");
+        Version(1);
         SerializerContext(CoreSerializationContext.Default);
         AllowAnonymous();
     }
