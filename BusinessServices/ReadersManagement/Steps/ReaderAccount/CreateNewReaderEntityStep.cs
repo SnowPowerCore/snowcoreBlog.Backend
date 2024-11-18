@@ -1,10 +1,10 @@
 ﻿using MinimalStepifiedSystem.Interfaces;
 using Results;
+using snowcoreBlog.Backend.Core.Entities.Reader;
 using snowcoreBlog.Backend.IAM.Core.Contracts;
 using snowcoreBlog.Backend.ReadersManagement.Constants;
 using snowcoreBlog.Backend.ReadersManagement.Context;
 using snowcoreBlog.Backend.ReadersManagement.Delegates;
-using snowcoreBlog.Backend.ReadersManagement.Entities.Reader;
 using snowcoreBlog.Backend.ReadersManagement.Interfaces.Repositories.Marten;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 using snowcoreBlog.PublicApi.Constants;

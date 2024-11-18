@@ -1,5 +1,5 @@
-﻿using snowcoreBlog.Backend.Core.Interfaces.Repositories;
-using snowcoreBlog.Backend.ReadersManagement.Entities.Reader;
+﻿using snowcoreBlog.Backend.Core.Entities.Reader;
+using snowcoreBlog.Backend.Core.Interfaces.Repositories;
 
 namespace snowcoreBlog.Backend.ReadersManagement.Interfaces.Repositories.Marten;
 

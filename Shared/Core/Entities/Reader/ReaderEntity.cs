@@ -1,6 +1,6 @@
 ﻿using snowcoreBlog.Backend.Core.Base;
 
-namespace snowcoreBlog.Backend.ReadersManagement.Entities.Reader;
+namespace snowcoreBlog.Backend.Core.Entities.Reader;
 
 public record ReaderEntity : BaseEntity
 {
