@@ -54,8 +54,8 @@ builder.Services.AddMarten(static opts =>
     opts.UseSystemTextJsonForSerialization(configure: o => o.SetJsonSerializationContext());
     opts.Policies.AllDocumentsSoftDeleted();
 })
-    .UseNpgsqlDataSource()
-    .UseLightweightSessions();
+    .UseLightweightSessions()
+    .UseNpgsqlDataSource();
 builder.Services
     .AddIdentityCore<ApplicationUser>()
     .AddRoles<IdentityRole>()

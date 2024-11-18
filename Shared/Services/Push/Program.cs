@@ -40,8 +40,8 @@ builder.Services.AddMarten(opts =>
 {
     opts.Policies.AllDocumentsSoftDeleted();
 })
-    .UseNpgsqlDataSource()
-    .UseLightweightSessions();
+    .UseLightweightSessions()
+    .UseNpgsqlDataSource();
 builder.Services
     .AddIdentityCore<ApplicationUser>()
     .AddRoles<IdentityRole>()

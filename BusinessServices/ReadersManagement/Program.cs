@@ -60,8 +60,8 @@ builder.Services.AddMarten(static opts =>
     opts.UseSystemTextJsonForSerialization(configure: o => o.SetJsonSerializationContext());
     opts.Policies.AllDocumentsSoftDeleted();
 })
-    .UseNpgsqlDataSource()
-    .UseLightweightSessions();
+    .UseLightweightSessions()
+    .UseNpgsqlDataSource();
 builder.Services.AddSingleton(static sp =>
 {
     var key = new byte[64];
