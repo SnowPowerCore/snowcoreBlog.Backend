@@ -12,7 +12,8 @@ builder.Services.AddMarten(static opts =>
 {
     opts.Policies.AllDocumentsSoftDeleted();
 })
-    .UseNpgsqlDataSource();
+    .UseNpgsqlDataSource()
+    .UseLightweightSessions();
 //builder.Services.AddFastEndpoints();
 // builder.Services.AddHostedService(sp =>
 //         new ApplicationLaunchWorker(sp.GetRequiredService<IHostApplicationLifetime>(),
