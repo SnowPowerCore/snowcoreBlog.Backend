@@ -29,6 +29,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Core\snowcoreBlog.Backend.Core.csproj" />
     <ProjectReference Include="..\IAM.Core\snowcoreBlog.Backend.IAM.Core.csproj" />
+    <ProjectReference Include="..\Email.Core\snowcoreBlog.Backend.Email.Core.csproj" />
     <ProjectReference Include="..\..\snowcoreBlog.Universal\PublicApi\snowcoreBlog.PublicApi.csproj" />
   </ItemGroup>
 
