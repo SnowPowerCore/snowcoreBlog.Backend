@@ -6,6 +6,8 @@ public sealed record CreateUser
 
     public string LastName { get; init; } = string.Empty;
 
+    public string NickName { get; init; } = string.Empty;
+
     public required string Email { get; init; } = string.Empty;
 
     public string PhoneNumber { get; init; } = string.Empty;
