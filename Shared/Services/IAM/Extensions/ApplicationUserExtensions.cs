@@ -8,6 +8,7 @@ public static class ApplicationUserExtensions
     public static ApplicationUser ToEntity(this CreateUser createUser) =>
         new()
         {
+            UserName = createUser.NickName,
             FirstName = createUser.FirstName,
             LastName = !string.IsNullOrEmpty(createUser.LastName) ? createUser.LastName : string.Empty,
             Email = createUser.Email,

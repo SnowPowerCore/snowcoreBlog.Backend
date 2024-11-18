@@ -14,6 +14,7 @@ using snowcoreBlog.Backend.Infrastructure.Extensions;
 using snowcoreBlog.Backend.Infrastructure.HttpProcessors;
 using snowcoreBlog.Backend.Infrastructure.Stores;
 using snowcoreBlog.Backend.Infrastructure.Utilities;
+using snowcoreBlog.Backend.ReadersManagement.Entities.Reader;
 using snowcoreBlog.Backend.ReadersManagement.Interfaces.Repositories.Marten;
 using snowcoreBlog.Backend.ReadersManagement.Repositories.Marten;
 using snowcoreBlog.Backend.ReadersManagement.Steps.ReaderAccount;
@@ -51,6 +52,7 @@ builder.Services.AddOpenTelemetry()
 builder.Services.AddNpgsqlDataSource(builder.Configuration.GetConnectionString("db-iam-entities")!);
 builder.Services.AddMarten(static opts =>
 {
+    opts.RegisterDocumentType<ReaderEntity>();
     opts.GeneratedCodeMode = TypeLoadMode.Static;
     opts.Policies.AllDocumentsSoftDeleted();
 })
