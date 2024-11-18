@@ -10,7 +10,8 @@ public class ValidateUserExistsConsumer(IUserStore<ApplicationUser> userStore) :
 {
     public async Task Consume(ConsumeContext<ValidateUserExists> context)
     {
-        var user = await ((IUserEmailStore<ApplicationUser>)userStore).FindByEmailAsync(context.Message.Email, context.CancellationToken);
+        var user = await ((IUserEmailStore<ApplicationUser>)userStore).FindByEmailAsync(
+            context.Message.Email.ToUpper(), context.CancellationToken);
         if (user is not default(ApplicationUser))
         {
             await context.RespondAsync(
