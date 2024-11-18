@@ -9,6 +9,7 @@ using MassTransit;
 using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.AspNetCore.Routing.Constraints;
+using Oakton;
 using Scalar.AspNetCore;
 using snowcoreBlog.Backend.Infrastructure.Extensions;
 using snowcoreBlog.Backend.Infrastructure.HttpProcessors;
@@ -23,6 +24,7 @@ using snowcoreBlog.PublicApi.Validation.Dto;
 using snowcoreBlog.ServiceDefaults.Extensions;
 
 var builder = WebApplication.CreateSlimBuilder(args);
+builder.Host.ApplyOaktonExtensions();
 
 builder.Services.Configure<MassTransitHostOptions>(static options =>
 {
@@ -49,11 +51,13 @@ builder.Services.AddOpenApi();
 builder.Services.AddOpenTelemetry()
     .WithTracing(static tracing => tracing.AddSource("Marten"))
     .WithMetrics(static metrics => metrics.AddMeter("Marten"));
-builder.Services.AddNpgsqlDataSource(builder.Configuration.GetConnectionString("db-iam-entities")!);
+builder.Services.AddNpgsqlDataSource(builder.Configuration.GetConnectionString("db-snowcore-blog-entities")!);
+//builder.Services.AddNpgsqlDataSource("Host=localhost;Port=54523;Username=postgres;Password=xQ6S1zf+)!kTnjFFCtt(Ks");
 builder.Services.AddMarten(static opts =>
 {
     opts.RegisterDocumentType<ReaderEntity>();
     opts.GeneratedCodeMode = TypeLoadMode.Static;
+    opts.UseSystemTextJsonForSerialization(configure: o => o.SetJsonSerializationContext());
     opts.Policies.AllDocumentsSoftDeleted();
 })
     .UseNpgsqlDataSource();
@@ -142,4 +146,4 @@ if (app.Environment.IsDevelopment())
     });
 }
 
-await app.RunAsync();
+await app.RunOaktonCommands(args);
