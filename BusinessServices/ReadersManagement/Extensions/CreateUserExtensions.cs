@@ -1,6 +1,6 @@
 ﻿using Riok.Mapperly.Abstractions;
+using snowcoreBlog.Backend.Core.Entities.Reader;
 using snowcoreBlog.Backend.IAM.Core.Contracts;
-using snowcoreBlog.Backend.ReadersManagement.Entities.Reader;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 
 namespace snowcoreBlog.Backend.ReadersManagement;

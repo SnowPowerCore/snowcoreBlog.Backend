@@ -4,6 +4,7 @@ using Ixnas.AltchaNet;
 using MassTransit;
 using MassTransit.Events;
 using Scalar.AspNetCore;
+using snowcoreBlog.Backend.Core.Entities.Reader;
 using snowcoreBlog.Backend.IAM.Core.Contracts;
 using snowcoreBlog.Backend.IAM.Core.Entities;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
@@ -20,6 +21,7 @@ namespace snowcoreBlog.Backend.Infrastructure;
 [JsonSerializable(typeof(ApiResponse))]
 [JsonSerializable(typeof(ApplicationUser))]
 [JsonSerializable(typeof(ApplicationAdmin))]
+[JsonSerializable(typeof(ReaderEntity))]
 [JsonSerializable(typeof(CreateAdmin))]
 [JsonSerializable(typeof(CreateUser))]
 [JsonSerializable(typeof(ValidateUserExists))]
