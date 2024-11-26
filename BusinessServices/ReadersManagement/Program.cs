@@ -99,6 +99,7 @@ builder.Services.AddScoped<IAltchaChallengeStore, AltchaChallengeStore>();
 builder.Services.AddScoped<IReaderRepository, ReaderRepository>();
 
 builder.Services.AddScoped<ValidateReaderAccountNotExistsStep>();
+builder.Services.AddScoped<ValidateReaderAccountEmailDomainStep>();
 builder.Services.AddScoped<CreateUserForReaderAccountStep>();
 builder.Services.AddScoped<CreateNewReaderEntityStep>();
 builder.Services.AddScoped<SendEmailToNewReaderAccountStep>();

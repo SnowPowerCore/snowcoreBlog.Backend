@@ -28,7 +28,7 @@ public class CheckEmailDomainConsumer(IValidator<CheckEmailDomain> validator) : 
         if (isEmailDomain)
             await context.RespondAsync(
                 new DataResult<EmailDomainChecked>(new()));
-        await context.RespondAsync(
+        else await context.RespondAsync(
                 new DataResult<EmailDomainChecked>(
                     Errors: [new ErrorResultDetail(context.Message.Email, EmailConstants.EmailDomainIsNotValid)]));
     }
@@ -38,7 +38,7 @@ public class CheckEmailDomainConsumer(IValidator<CheckEmailDomain> validator) : 
         try
         {
             var lookup = new LookupClient();
-            var cts = new CancellationTokenSource();
+            using var cts = new CancellationTokenSource();
             cts.CancelAfter(TimeSpan.FromSeconds(5));
             var result = await lookup.QueryAsync(domain, QueryType.ANY, cancellationToken: cts.Token);
             return result.Answers.Where(record =>

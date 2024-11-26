@@ -16,9 +16,10 @@ namespace snowcoreBlog.Backend.ReadersManagement.Endpoints.ReaderAccounts;
 
 public class CreateReaderAccountEndpoint : Endpoint<CreateReaderAccountDto, ApiResponse?>
 {
-    private readonly JsonOptions _jsonOptions;
+    public IOptions<JsonOptions> JsonOptions { get; set; }
 
     [StepifiedProcess(Steps = [
+        typeof(ValidateReaderAccountEmailDomainStep),
         typeof(ValidateReaderAccountNotExistsStep),
         typeof(CreateUserForReaderAccountStep),
         typeof(CreateNewReaderEntityStep),
@@ -37,11 +38,7 @@ public class CreateReaderAccountEndpoint : Endpoint<CreateReaderAccountDto, ApiR
     }
 
     [ServiceProviderSupplier]
-    public CreateReaderAccountEndpoint(IServiceProvider _,
-                                       IOptions<JsonOptions> jsonOptions)
-    {
-        _jsonOptions = jsonOptions.Value;
-    }
+    public CreateReaderAccountEndpoint(IServiceProvider _) { }
 
     public override async Task HandleAsync(CreateReaderAccountDto req, CancellationToken ct)
     {
@@ -50,7 +47,7 @@ public class CreateReaderAccountEndpoint : Endpoint<CreateReaderAccountDto, ApiR
         var result = await CreateReaderAccount(context, ct);
 
         await SendAsync(
-            result?.ToApiResponse(serializerOptions: _jsonOptions.SerializerOptions),
+            result?.ToApiResponse(serializerOptions: JsonOptions.Value.SerializerOptions),
             result?.ToStatusCode() ?? (int)HttpStatusCode.InternalServerError,
             ct);
     }

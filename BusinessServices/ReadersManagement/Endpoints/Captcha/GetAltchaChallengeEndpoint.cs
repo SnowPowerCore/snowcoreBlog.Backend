@@ -8,12 +8,13 @@ using snowcoreBlog.Backend.Infrastructure;
 using snowcoreBlog.PublicApi.Extensions;
 using snowcoreBlog.PublicApi.Utilities.Api;
 
-namespace snowcoreBlog.Backend.ReadersManagement.Endpoints.ReaderAccounts;
+namespace snowcoreBlog.Backend.ReadersManagement.Endpoints.Captcha;
 
 public class GetAltchaChallengeEndpoint : EndpointWithoutRequest<ApiResponse?>
 {
     private readonly AltchaService _altcha;
-    private readonly JsonOptions _jsonOptions;
+
+    public IOptions<JsonOptions> JsonOptions { get; set; }
 
     public override void Configure()
     {
@@ -23,11 +24,9 @@ public class GetAltchaChallengeEndpoint : EndpointWithoutRequest<ApiResponse?>
         AllowAnonymous();
     }
 
-    public GetAltchaChallengeEndpoint(AltchaService altcha,
-                                      IOptions<JsonOptions> jsonOptions)
+    public GetAltchaChallengeEndpoint(AltchaService altcha)
     {
         _altcha = altcha;
-        _jsonOptions = jsonOptions.Value;
     }
 
     public override async Task HandleAsync(CancellationToken ct)
@@ -35,7 +34,7 @@ public class GetAltchaChallengeEndpoint : EndpointWithoutRequest<ApiResponse?>
         var result = Result.Success(_altcha.Generate());
 
         await SendAsync(
-            result?.ToApiResponse(serializerOptions: _jsonOptions.SerializerOptions),
+            result?.ToApiResponse(serializerOptions: JsonOptions.Value.SerializerOptions),
             result?.ToStatusCode() ?? (int)HttpStatusCode.InternalServerError,
             ct);
     }
