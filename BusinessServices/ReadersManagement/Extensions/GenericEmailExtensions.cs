@@ -1,8 +1,10 @@
-﻿using snowcoreBlog.Backend.Email.Core.Contracts;
+﻿using Riok.Mapperly.Abstractions;
+using snowcoreBlog.Backend.Email.Core.Contracts;
 
 namespace snowcoreBlog.Backend.ReadersManagement.Extensions;
 
-public static class GenericEmailExtensions
+[Mapper]
+public static partial class GenericEmailExtensions
 {
     public static SendGenericEmail ToGeneric(
         string senderEmail, string subject, string? content = default) =>

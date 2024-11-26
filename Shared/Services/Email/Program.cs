@@ -20,7 +20,7 @@ builder.Services.ConfigureHttpJsonOptions(options =>
 });
 
 builder.AddServiceDefaults();
-builder.Services.AddSendGrid(options => options.ApiKey = builder.Configuration["SendGrid:Key"]);
+builder.Services.AddSendGrid(options => options.ApiKey = builder.Configuration["SendGrid:ApiKey"]);
 builder.Services.AddMassTransit(busConfigurator =>
 {
     busConfigurator.AddConsumer<SendEmailUsingSendGridConsumer>();

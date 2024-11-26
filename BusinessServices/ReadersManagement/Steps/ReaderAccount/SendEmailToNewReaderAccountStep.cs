@@ -14,7 +14,10 @@ public class SendEmailToNewReaderAccountStep(IPublishEndpoint publishEndpoint) :
     public async Task<IResult<ReaderAccountCreationResultDto>> InvokeAsync(CreateReaderAccountContext context, CreateReaderAccountDelegate next, CancellationToken token = default)
     {
         var sendTask = publishEndpoint.Publish(
-            GenericEmailExtensions.ToGeneric(context.Request.Email, EmailConstants.ReaderAccountCreatedSubject, ""), token);
+            GenericEmailExtensions.ToGeneric(
+                context.Request.Email,
+                EmailConstants.ReaderAccountCreatedSubject,
+                ""), token);
         var continueTask = next(context, token);
         await Task.WhenAll(sendTask, continueTask);
         return await continueTask;
