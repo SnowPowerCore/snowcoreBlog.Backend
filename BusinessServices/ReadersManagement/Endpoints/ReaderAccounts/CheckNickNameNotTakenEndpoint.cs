@@ -6,7 +6,7 @@ using MinimalStepifiedSystem.Attributes;
 using snowcoreBlog.Backend.Infrastructure;
 using snowcoreBlog.Backend.ReadersManagement.Context;
 using snowcoreBlog.Backend.ReadersManagement.Delegates;
-using snowcoreBlog.Backend.ReadersManagement.Steps.ReaderAccount;
+using snowcoreBlog.Backend.ReadersManagement.Steps.NickName;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 using snowcoreBlog.PublicApi.Extensions;
 using snowcoreBlog.PublicApi.Utilities.Api;
@@ -14,36 +14,32 @@ using snowcoreBlog.PublicApi.Validation.Dto;
 
 namespace snowcoreBlog.Backend.ReadersManagement.Endpoints.ReaderAccounts;
 
-public class RequestCreateReaderAccountEndpoint : Endpoint<RequestCreateReaderAccountDto, ApiResponse?>
+public class CheckNickNameNotTakenEndpoint : Endpoint<CheckNickNameNotTakenDto, ApiResponse?>
 {
     public IOptions<JsonOptions> JsonOptions { get; set; }
 
     [StepifiedProcess(Steps = [
-        typeof(ValidateReaderAccountEmailDomainStep),
-        typeof(ValidateReaderAccountNotExistsStep),
-        typeof(ValidateReaderAccountTempRecordNotExistsStep),
-        typeof(ValidateReaderAccountNickNameWasNotTakenStep),
-        typeof(CreateReaderAccountTempUserStep),
+        typeof(ValidateNickNameWasNotTakenStep),
     ])]
-    protected RequestCreateReaderAccountDelegate RequestCreateReaderAccount { get; }
+    protected CheckNickNameNotTakenDelegate CheckNickNameNotTaken { get; }
 
     public override void Configure()
     {
-        Post("readers/create/request");
+        Post("readers/check/nickname");
         Version(1);
         SerializerContext(CoreSerializationContext.Default);
-        Validator<RequestCreateReaderAccountValidation>();
+        Validator<CheckNickNameNotTakenValidation>();
         AllowAnonymous();
     }
 
     [ServiceProviderSupplier]
-    public RequestCreateReaderAccountEndpoint(IServiceProvider _) { }
+    public CheckNickNameNotTakenEndpoint(IServiceProvider _) { }
 
-    public override async Task HandleAsync(RequestCreateReaderAccountDto req, CancellationToken ct)
+    public override async Task HandleAsync(CheckNickNameNotTakenDto req, CancellationToken ct)
     {
-        var context = new RequestCreateReaderAccountContext(req);
+        var context = new CheckNickNameNotTakenContext(req.NickName);
 
-        var result = await RequestCreateReaderAccount(context, ct);
+        var result = await CheckNickNameNotTaken(context, ct);
 
         await SendAsync(
             result?.ToApiResponse(serializerOptions: JsonOptions.Value.SerializerOptions),
