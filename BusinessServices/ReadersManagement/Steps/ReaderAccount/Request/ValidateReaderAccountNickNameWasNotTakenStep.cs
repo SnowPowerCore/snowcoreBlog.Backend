@@ -10,7 +10,7 @@ using snowcoreBlog.PublicApi.Utilities.DataResult;
 
 namespace snowcoreBlog.Backend.ReadersManagement.Steps.ReaderAccount;
 
-public class ValidateReaderAccountNickNameWasNotTaken(IRequestClient<ValidateUserNickNameTaken> requestClient) : IStep<RequestCreateReaderAccountDelegate, RequestCreateReaderAccountContext, IResult<RequestReaderAccountCreationResultDto>>
+public class ValidateReaderAccountNickNameWasNotTakenStep(IRequestClient<ValidateUserNickNameTaken> requestClient) : IStep<RequestCreateReaderAccountDelegate, RequestCreateReaderAccountContext, IResult<RequestReaderAccountCreationResultDto>>
 {
     public async Task<IResult<RequestReaderAccountCreationResultDto>> InvokeAsync(RequestCreateReaderAccountContext context, RequestCreateReaderAccountDelegate next, CancellationToken token = default)
     {
