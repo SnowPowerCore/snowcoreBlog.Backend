@@ -14,4 +14,15 @@ public static class SendGridExtensions
             Subject = genericEmail.Subject,
             HtmlContent = genericEmail.Content
         };
+
+    public static SendGridMessage ToSendGrid(this SendTemplatedEmail templatedEmail) =>
+        MailHelper.CreateSingleTemplateEmail(
+            new EmailAddress(
+                templatedEmail.SenderAddress,
+                templatedEmail.SenderName ?? string.Empty),
+            new EmailAddress(
+                templatedEmail.ReceiverAddress,
+                templatedEmail.ReceiverName ?? string.Empty),
+            templatedEmail.TemplateId,
+            templatedEmail.DynamicTemplateData);
 }

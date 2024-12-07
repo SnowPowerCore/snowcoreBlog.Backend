@@ -10,7 +10,7 @@ using snowcoreBlog.PublicApi.Utilities.DataResult;
 namespace snowcoreBlog.Backend.IAM.Features.User;
 
 public class CreateUserConsumer(IValidator<CreateUser> validator,
-                                UserManager<ApplicationUser> userManager) : IConsumer<CreateUser>
+                                UserManager<ApplicationUserEntity> userManager) : IConsumer<CreateUser>
 {
     public async Task Consume(ConsumeContext<CreateUser> context)
     {
@@ -28,7 +28,11 @@ public class CreateUserConsumer(IValidator<CreateUser> validator,
         if (creationResult.Succeeded)
         {
             await context.RespondAsync(
-                new DataResult<UserCreationResult>(new UserCreationResult { Id = Guid.Parse(userEntity.Id) }));
+                new DataResult<UserCreationResult>(new UserCreationResult
+                {
+                    Id = Guid.Parse(userEntity.Id),
+                    Email = userEntity.Email!
+                }));
         }
         else
         {

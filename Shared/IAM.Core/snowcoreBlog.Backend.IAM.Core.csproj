@@ -18,6 +18,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Core\snowcoreBlog.Backend.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="**/FodyWeavers.*" Visible="false" />
   </ItemGroup>
 

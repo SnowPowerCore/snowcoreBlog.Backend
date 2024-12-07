@@ -2,7 +2,7 @@
 
 public static class ReaderAccountUserConstants
 {
-    public const string CreateUserForReaderAccountResult = nameof(CreateUserForReaderAccountResult);
-    public const string UserForReaderAccountUnableToCreateUpdateError = nameof(UserForReaderAccountUnableToCreateUpdateError);
+    public const string CreateTempUserForReaderAccountResult = nameof(CreateTempUserForReaderAccountResult);
+    public const string TempUserForReaderAccountUnableToCreateUpdateError = nameof(TempUserForReaderAccountUnableToCreateUpdateError);
 
 }

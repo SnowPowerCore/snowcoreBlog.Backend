@@ -748,9 +748,9 @@ namespace Marten.Generated.DocumentStorage
 
         public const string TEMP_LOADER_SQL = "COPY mt_doc_deadletterevent_temp(\"mt_dotnet_type\", \"id\", \"mt_version\", \"data\") FROM STDIN BINARY";
 
-        public const string COPY_NEW_DOCUMENTS_SQL = "insert into public.mt_doc_deadletterevent (\"id\", \"data\", \"mt_version\", \"mt_dotnet_type\", \"mt_deleted\", \"mt_deleted_at\", mt_last_modified) (select mt_doc_deadletterevent_temp.\"id\", mt_doc_deadletterevent_temp.\"data\", mt_doc_deadletterevent_temp.\"mt_version\", mt_doc_deadletterevent_temp.\"mt_dotnet_type\", mt_doc_deadletterevent_temp.\"mt_deleted\", mt_doc_deadletterevent_temp.\"mt_deleted_at\", transaction_timestamp() from mt_doc_deadletterevent_temp left join public.mt_doc_deadletterevent on mt_doc_deadletterevent_temp.id = public.mt_doc_deadletterevent.id where public.mt_doc_deadletterevent.id is null)";
+        public const string COPY_NEW_DOCUMENTS_SQL = "insert into public.mt_doc_deadletterevent (\"id\", \"data\", \"mt_version\", \"mt_dotnet_type\", mt_last_modified) (select mt_doc_deadletterevent_temp.\"id\", mt_doc_deadletterevent_temp.\"data\", mt_doc_deadletterevent_temp.\"mt_version\", mt_doc_deadletterevent_temp.\"mt_dotnet_type\", transaction_timestamp() from mt_doc_deadletterevent_temp left join public.mt_doc_deadletterevent on mt_doc_deadletterevent_temp.id = public.mt_doc_deadletterevent.id where public.mt_doc_deadletterevent.id is null)";
 
-        public const string OVERWRITE_SQL = "update public.mt_doc_deadletterevent target SET data = source.data, mt_version = source.mt_version, mt_dotnet_type = source.mt_dotnet_type, mt_deleted = source.mt_deleted, mt_deleted_at = source.mt_deleted_at, mt_last_modified = transaction_timestamp() FROM mt_doc_deadletterevent_temp source WHERE source.id = target.id";
+        public const string OVERWRITE_SQL = "update public.mt_doc_deadletterevent target SET data = source.data, mt_version = source.mt_version, mt_dotnet_type = source.mt_dotnet_type, mt_last_modified = transaction_timestamp() FROM mt_doc_deadletterevent_temp source WHERE source.id = target.id";
 
         public const string CREATE_TEMP_TABLE_FOR_COPYING_SQL = "create temporary table mt_doc_deadletterevent_temp (like public.mt_doc_deadletterevent including defaults)";
 

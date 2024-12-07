@@ -15,6 +15,9 @@ using snowcoreBlog.Backend.IAM.Services.Password;
 using JasperFx.CodeGeneration;
 using Oakton;
 using Microsoft.AspNetCore.Http.Json;
+using snowcoreBlog.Backend.IAM.Interfaces.Repositories.Marten;
+using snowcoreBlog.Backend.IAM.Repositories.Marten;
+using snowcoreBlog.Backend.IAM.CompiledQueries.Marten;
 using snowcoreBlog.Backend.IAM.Core.Entities;
 
 var builder = WebApplication.CreateSlimBuilder(args);
@@ -44,31 +47,38 @@ builder.AddServiceDefaults();
 builder.Services.AddOpenTelemetry()
     .WithTracing(static tracing => tracing.AddSource("Marten"))
     .WithMetrics(static metrics => metrics.AddMeter("Marten"));
-builder.Services.AddNpgsqlDataSource(builder.Configuration.GetConnectionString("db-iam-entities")!);
-//builder.Services.AddNpgsqlDataSource("Host=localhost;Port=54523;Username=postgres;Password=xQ6S1zf+)!kTnjFFCtt(Ks");
+//builder.Services.AddNpgsqlDataSource(builder.Configuration.GetConnectionString("db-iam-entities")!);
+builder.Services.AddNpgsqlDataSource("Host=localhost;Port=54523;Username=postgres;Password=xQ6S1zf+)!kTnjFFCtt(Ks");
 builder.Services.AddMarten(static opts =>
 {
-    opts.RegisterDocumentType<ApplicationAdmin>();
-    opts.RegisterDocumentType<ApplicationUser>();
+    opts.RegisterDocumentType<ApplicationAdminEntity>();
+    opts.RegisterDocumentType<ApplicationUserEntity>();
+    opts.RegisterDocumentType<ApplicationTempUserEntity>();
+    opts.RegisterCompiledQueryType(typeof(ApplicationTempUserByEmailQuery));
+    opts.RegisterCompiledQueryType(typeof(ApplicationTempUserByNickNameQuery));
     opts.GeneratedCodeMode = TypeLoadMode.Static;
     opts.UseSystemTextJsonForSerialization(configure: o => o.SetJsonSerializationContext());
-    opts.Policies.AllDocumentsSoftDeleted();
+    opts.Schema.For<ApplicationAdminEntity>().SoftDeleted();
+    opts.Schema.For<ApplicationUserEntity>().SoftDeleted();
 })
     .UseLightweightSessions()
     .UseNpgsqlDataSource();
 builder.Services
-    .AddIdentityCore<ApplicationUser>()
+    .AddIdentityCore<ApplicationUserEntity>()
     .AddRoles<IdentityRole>()
-    .AddMartenStores<ApplicationUser, IdentityRole>();
+    .AddMartenStores<ApplicationUserEntity, IdentityRole>();
 builder.Services
-    .AddIdentityCore<ApplicationAdmin>()
+    .AddIdentityCore<ApplicationAdminEntity>()
     .AddRoles<IdentityRole>()
-    .AddMartenStores<ApplicationAdmin, IdentityRole>();
+    .AddMartenStores<ApplicationAdminEntity, IdentityRole>();
+builder.Services.AddScoped<IApplicationTempUserRepository, ApplicationTempUserRepository>();
 builder.Services.AddMassTransit(busConfigurator =>
 {
     busConfigurator.ConfigureHttpJsonOptions(o => o.SerializerOptions.SetJsonSerializationContext());
     busConfigurator.AddConsumer<CreateUserConsumer>();
     busConfigurator.AddConsumer<ValidateUserExistsConsumer>();
+    busConfigurator.AddConsumer<ValidateTempUserExistsConsumer>();
+    busConfigurator.AddConsumer<ValidateUserNickNameWasTakenConsumer>();
     busConfigurator.UsingRabbitMq((context, config) =>
     {
         config.ConfigureJsonSerializerOptions(options => options.SetJsonSerializationContext());
@@ -78,6 +88,7 @@ builder.Services.AddMassTransit(busConfigurator =>
 });
 
 builder.Services.AddSingleton<IValidator<CreateUser>, CreateUserValidator>();
+builder.Services.AddSingleton<IValidator<CreateTempUser>, CreateTempUserValidator>();
 builder.Services.AddSingleton<IPasswordHasher, Argon2PasswordHasher>();
 
 await builder.Build().RunOaktonCommands(args);

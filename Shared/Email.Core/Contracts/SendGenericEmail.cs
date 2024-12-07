@@ -6,11 +6,13 @@ public sealed record SendGenericEmail
 
     public string? SenderName { get; init; } = string.Empty;
 
-    public string NotifiedEntityAddress { get; init; } = string.Empty;
+    public required string ReceiverAddress { get; init; } = string.Empty;
 
-    public string? NotifiedEntityName { get; init; } = string.Empty;
+    public string? ReceiverName { get; init; } = string.Empty;
 
     public required string Subject { get; init; }
+
+    public string PreHeader { get; init; } = string.Empty;
 
     public string? Content { get; init; } = string.Empty;
 }

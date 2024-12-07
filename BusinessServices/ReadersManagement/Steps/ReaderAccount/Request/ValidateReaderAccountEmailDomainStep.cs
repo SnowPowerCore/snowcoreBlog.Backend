@@ -11,9 +11,9 @@ using snowcoreBlog.PublicApi.Utilities.DataResult;
 
 namespace snowcoreBlog.Backend.ReadersManagement.Steps.ReaderAccount;
 
-public class ValidateReaderAccountEmailDomainStep(IRequestClient<CheckEmailDomain> requestClient) : IStep<CreateReaderAccountDelegate, CreateReaderAccountContext, IResult<ReaderAccountCreationResultDto>>
+public class ValidateReaderAccountEmailDomainStep(IRequestClient<CheckEmailDomain> requestClient) : IStep<RequestCreateReaderAccountDelegate, RequestCreateReaderAccountContext, IResult<RequestReaderAccountCreationResultDto>>
 {
-    public async Task<IResult<ReaderAccountCreationResultDto>> InvokeAsync(CreateReaderAccountContext context, CreateReaderAccountDelegate next, CancellationToken token = default)
+    public async Task<IResult<RequestReaderAccountCreationResultDto>> InvokeAsync(RequestCreateReaderAccountContext context, RequestCreateReaderAccountDelegate next, CancellationToken token = default)
     {
         var result = await requestClient.GetResponse<DataResult<EmailDomainChecked>>(context.Request.ToCheckEmailDomain());
         if (result.Message.IsSuccess)
@@ -22,7 +22,7 @@ public class ValidateReaderAccountEmailDomainStep(IRequestClient<CheckEmailDomai
         }
         else
         {
-            return CreateUserForReaderAccountError<ReaderAccountCreationResultDto>.Create(
+            return CreateUserForReaderAccountError<RequestReaderAccountCreationResultDto>.Create(
                 EmailConstants.EmailDomainIsNotValid, result.Message.Errors);
         }
     }

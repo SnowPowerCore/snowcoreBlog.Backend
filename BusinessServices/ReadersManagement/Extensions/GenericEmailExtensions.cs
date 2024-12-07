@@ -1,5 +1,7 @@
-﻿using Riok.Mapperly.Abstractions;
+﻿using System.Diagnostics.CodeAnalysis;
+using Riok.Mapperly.Abstractions;
 using snowcoreBlog.Backend.Email.Core.Contracts;
+using snowcoreBlog.Backend.Email.Core.Options;
 
 namespace snowcoreBlog.Backend.ReadersManagement.Extensions;
 
@@ -7,10 +9,13 @@ namespace snowcoreBlog.Backend.ReadersManagement.Extensions;
 public static partial class GenericEmailExtensions
 {
     public static SendGenericEmail ToGeneric(
-        string senderEmail, string subject, string? content = default) =>
+        [NotNull] SendGridSenderAccountOptions senderOptions,
+        string receiverAddress, string subject, string? content = default) =>
         new()
         {
-            SenderAddress = senderEmail,
+            SenderAddress = senderOptions.SenderAddress,
+            SenderName = senderOptions.SenderName,
+            ReceiverAddress = receiverAddress,
             Subject = subject,
             Content = content
         };
