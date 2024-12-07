@@ -14,37 +14,36 @@ using snowcoreBlog.PublicApi.Validation.Dto;
 
 namespace snowcoreBlog.Backend.ReadersManagement.Endpoints.ReaderAccounts;
 
-public class CreateReaderAccountEndpoint : Endpoint<CreateReaderAccountDto, ApiResponse?>
+public class RequestCreateReaderAccountEndpoint : Endpoint<RequestCreateReaderAccountDto, ApiResponse?>
 {
     public IOptions<JsonOptions> JsonOptions { get; set; }
 
     [StepifiedProcess(Steps = [
         typeof(ValidateReaderAccountEmailDomainStep),
         typeof(ValidateReaderAccountNotExistsStep),
-        typeof(CreateUserForReaderAccountStep),
-        typeof(CreateNewReaderEntityStep),
-        typeof(SendEmailToNewReaderAccountStep),
-        typeof(ReturnCreatedReaderEntityStep),
+        typeof(ValidateReaderAccountTempRecordNotExistsStep),
+        typeof(ValidateReaderAccountNickNameWasNotTaken),
+        typeof(CreateReaderAccountTempUserStep),
     ])]
-    protected CreateReaderAccountDelegate CreateReaderAccount { get; }
+    protected RequestCreateReaderAccountDelegate RequestCreateReaderAccount { get; }
 
     public override void Configure()
     {
-        Post("readers/create");
+        Post("readers/create/request");
         Version(1);
         SerializerContext(CoreSerializationContext.Default);
-        Validator<CreateReaderAccountValidation>();
+        Validator<RequestCreateReaderAccountValidation>();
         AllowAnonymous();
     }
 
     [ServiceProviderSupplier]
-    public CreateReaderAccountEndpoint(IServiceProvider _) { }
+    public RequestCreateReaderAccountEndpoint(IServiceProvider _) { }
 
-    public override async Task HandleAsync(CreateReaderAccountDto req, CancellationToken ct)
+    public override async Task HandleAsync(RequestCreateReaderAccountDto req, CancellationToken ct)
     {
-        var context = new CreateReaderAccountContext(req);
+        var context = new RequestCreateReaderAccountContext(req);
 
-        var result = await CreateReaderAccount(context, ct);
+        var result = await RequestCreateReaderAccount(context, ct);
 
         await SendAsync(
             result?.ToApiResponse(serializerOptions: JsonOptions.Value.SerializerOptions),

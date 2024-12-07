@@ -9,24 +9,23 @@ using snowcoreBlog.PublicApi.Utilities.DataResult;
 
 namespace snowcoreBlog.Backend.Email.Features.SendGrid;
 
-public class SendEmailUsingSendGridConsumer(IValidator<SendGenericEmail> validator,
-                                            ISendGridClient client) : IConsumer<SendGenericEmail>
+public class SendTemplatedEmailUsingSendGridConsumer(IValidator<SendTemplatedEmail> validator,
+                                                     ISendGridClient client) : IConsumer<SendTemplatedEmail>
 {
-    public async Task Consume(ConsumeContext<SendGenericEmail> context)
+    public async Task Consume(ConsumeContext<SendTemplatedEmail> context)
     {
         var result = await validator.ValidateAsync(context.Message, context.CancellationToken);
         if (!result.IsValid)
         {
             await context.RespondAsync(
-                new DataResult<GenericEmailSent>(
+                new DataResult<TemplatedEmailSent>(
                     Errors: result.Errors.Select(e => new ErrorResultDetail(e.PropertyName, e.ErrorMessage)).ToList()));
             return;
         }
 
         var message = context.Message.ToSendGrid();
-        message.AddTo(new EmailAddress(context.Message.NotifiedEntityAddress, context.Message.NotifiedEntityName));
         var response = await client.SendEmailAsync(message, context.CancellationToken);
         if (response.IsSuccessStatusCode)
-            await context.Publish<GenericEmailSent>(new(), context.CancellationToken);
+            await context.Publish<TemplatedEmailSent>(new(), context.CancellationToken);
     }
 }

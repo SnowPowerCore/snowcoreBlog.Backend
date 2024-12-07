@@ -3,7 +3,7 @@ using snowcoreBlog.Backend.IAM.Core.Interfaces.Identity;
 
 namespace snowcoreBlog.Backend.IAM.Core.Entities;
 
-public class ApplicationUser : IdentityUser, IClaimsUser
+public class ApplicationUserEntity : IdentityUser, IClaimsUser
 {
     public IList<string> RoleClaims { get; set; }
 

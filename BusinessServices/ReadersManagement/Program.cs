@@ -12,6 +12,8 @@ using Microsoft.AspNetCore.Routing.Constraints;
 using Oakton;
 using Scalar.AspNetCore;
 using snowcoreBlog.Backend.Core.Entities.Reader;
+using snowcoreBlog.Backend.Email.Core.Options;
+using snowcoreBlog.Backend.Email.Features.SendGrid;
 using snowcoreBlog.Backend.Infrastructure.Extensions;
 using snowcoreBlog.Backend.Infrastructure.HttpProcessors;
 using snowcoreBlog.Backend.Infrastructure.Stores;
@@ -46,6 +48,9 @@ builder.Services.ConfigureHttpJsonOptions(static options =>
     options.SerializerOptions.SetJsonSerializationContext();
 });
 
+builder.Services.Configure<SendGridSenderAccountOptions>(
+    builder.Configuration.GetSection("SendGrid:SenderAccount"));
+
 builder.AddServiceDefaults();
 builder.Services.AddOpenApi();
 builder.Services.AddOpenTelemetry()
@@ -75,6 +80,7 @@ builder.Services.AddSingleton(static sp =>
 builder.Services.AddMassTransit(busConfigurator =>
 {
     busConfigurator.ConfigureHttpJsonOptions(o => o.SerializerOptions.SetJsonSerializationContext());
+    busConfigurator.AddConsumer<ReaderAccountTempUserCreatedConsumer>();
     busConfigurator.UsingRabbitMq((context, config) =>
     {
         config.ConfigureJsonSerializerOptions(options => options.SetJsonSerializationContext());
@@ -93,7 +99,7 @@ builder.Services
     .SwaggerDocument()
     .AddCors();
 
-builder.Services.AddSingleton<IValidator<CreateReaderAccountDto>, CreateReaderAccountValidation>();
+builder.Services.AddSingleton<IValidator<RequestCreateReaderAccountDto>, RequestCreateReaderAccountValidation>();
 
 builder.Services.AddScoped<IAltchaChallengeStore, AltchaChallengeStore>();
 builder.Services.AddScoped<IReaderRepository, ReaderRepository>();
@@ -102,7 +108,6 @@ builder.Services.AddScoped<ValidateReaderAccountNotExistsStep>();
 builder.Services.AddScoped<ValidateReaderAccountEmailDomainStep>();
 builder.Services.AddScoped<CreateUserForReaderAccountStep>();
 builder.Services.AddScoped<CreateNewReaderEntityStep>();
-builder.Services.AddScoped<SendEmailToNewReaderAccountStep>();
 builder.Services.AddScoped<GenerateTokenForNewReaderAccountStep>();
 builder.Services.AddScoped<ReturnCreatedReaderEntityStep>();
 

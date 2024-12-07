@@ -23,7 +23,7 @@ builder.AddServiceDefaults();
 builder.Services.AddSendGrid(options => options.ApiKey = builder.Configuration["SendGrid:ApiKey"]);
 builder.Services.AddMassTransit(busConfigurator =>
 {
-    busConfigurator.AddConsumer<SendEmailUsingSendGridConsumer>();
+    busConfigurator.AddConsumer<SendGenericEmailUsingSendGridConsumer>();
     busConfigurator.AddConsumer<CheckEmailDomainConsumer>();
     busConfigurator.UsingRabbitMq((context, config) =>
     {

@@ -7,5 +7,5 @@ namespace snowcoreBlog.Backend.ReadersManagement.Extensions;
 [Mapper]
 public static partial class EmailDomainExtensions
 {
-    public static partial CheckEmailDomain ToCheckEmailDomain(this CreateReaderAccountDto createReaderAccountDto);
+    public static partial CheckEmailDomain ToCheckEmailDomain(this RequestCreateReaderAccountDto createReaderAccountDto);
 }

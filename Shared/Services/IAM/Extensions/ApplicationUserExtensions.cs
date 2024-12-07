@@ -5,7 +5,7 @@ namespace snowcoreBlog.Backend.IAM.Extensions;
 
 public static class ApplicationUserExtensions
 {
-    public static ApplicationUser ToEntity(this CreateUser createUser) =>
+    public static ApplicationUserEntity ToEntity(this CreateUser createUser) =>
         new()
         {
             UserName = createUser.NickName,

@@ -8,7 +8,7 @@ public class GenericEmailValidator : AbstractValidator<SendGenericEmail>
     public GenericEmailValidator()
     {
         RuleFor(x => x.SenderAddress).EmailAddress();
-        RuleFor(x => x.NotifiedEntityAddress).EmailAddress();
+        RuleFor(x => x.ReceiverAddress).EmailAddress();
         RuleFor(x => x.Subject).NotEmpty();
     }
 }

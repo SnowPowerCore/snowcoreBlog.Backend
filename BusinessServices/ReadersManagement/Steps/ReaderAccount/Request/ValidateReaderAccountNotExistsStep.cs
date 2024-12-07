@@ -10,16 +10,16 @@ using snowcoreBlog.PublicApi.Utilities.DataResult;
 
 namespace snowcoreBlog.Backend.ReadersManagement.Steps.ReaderAccount;
 
-public class ValidateReaderAccountNotExistsStep(IRequestClient<ValidateUserExists> requestClient) : IStep<CreateReaderAccountDelegate, CreateReaderAccountContext, IResult<ReaderAccountCreationResultDto>>
+public class ValidateReaderAccountNotExistsStep(IRequestClient<ValidateUserExists> requestClient) : IStep<RequestCreateReaderAccountDelegate, RequestCreateReaderAccountContext, IResult<RequestReaderAccountCreationResultDto>>
 {
-    public async Task<IResult<ReaderAccountCreationResultDto>> InvokeAsync(CreateReaderAccountContext context, CreateReaderAccountDelegate next, CancellationToken token = default)
+    public async Task<IResult<RequestReaderAccountCreationResultDto>> InvokeAsync(RequestCreateReaderAccountContext context, RequestCreateReaderAccountDelegate next, CancellationToken token = default)
     {
         var result = await requestClient.GetResponse<DataResult<UserExistsValidationResult>>(context.Request.ToValidateUserExists());
         if (result.Message.IsSuccess)
         {
             if (result.Message.Value!.Exists)
             {
-                return ReaderAccountAlreadyExistsError<ReaderAccountCreationResultDto>.Create(
+                return ReaderAccountAlreadyExistsError<RequestReaderAccountCreationResultDto>.Create(
                     ReaderAccountConstants.ReaderAccountAlreadyExistsError);
             }
             else
@@ -29,7 +29,7 @@ public class ValidateReaderAccountNotExistsStep(IRequestClient<ValidateUserExist
         }
         else
         {
-            return CreateUserForReaderAccountError<ReaderAccountCreationResultDto>.Create(
+            return CreateUserForReaderAccountError<RequestReaderAccountCreationResultDto>.Create(
                 ReaderAccountConstants.ReaderAccountUnableToCreateUpdateError);
         }
     }

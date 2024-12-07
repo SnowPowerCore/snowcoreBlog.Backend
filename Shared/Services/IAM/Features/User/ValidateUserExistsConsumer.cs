@@ -6,13 +6,13 @@ using snowcoreBlog.PublicApi.Utilities.DataResult;
 
 namespace snowcoreBlog.Backend.IAM.Features.User;
 
-public class ValidateUserExistsConsumer(IUserStore<ApplicationUser> userStore) : IConsumer<ValidateUserExists>
+public class ValidateUserExistsConsumer(IUserStore<ApplicationUserEntity> userStore) : IConsumer<ValidateUserExists>
 {
     public async Task Consume(ConsumeContext<ValidateUserExists> context)
     {
-        var user = await ((IUserEmailStore<ApplicationUser>)userStore).FindByEmailAsync(
+        var user = await ((IUserEmailStore<ApplicationUserEntity>)userStore).FindByEmailAsync(
             context.Message.Email.ToUpper(), context.CancellationToken);
-        if (user is not default(ApplicationUser))
+        if (user is not default(ApplicationUserEntity))
         {
             await context.RespondAsync(
                 new DataResult<UserExistsValidationResult>(new() { Exists = true }));
