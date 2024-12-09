@@ -9,11 +9,20 @@ using snowcoreBlog.PublicApi.Utilities.DataResult;
 
 namespace snowcoreBlog.Backend.Email.Features.SendGrid;
 
-public class CheckEmailDomainConsumer(IValidator<CheckEmailDomain> validator) : IConsumer<CheckEmailDomain>
+public class CheckEmailDomainConsumer : IConsumer<CheckEmailDomain>
 {
+    private readonly IValidator<CheckEmailDomain> _validator;
+    private readonly LookupClient _lookupClient;
+
+    public CheckEmailDomainConsumer(IValidator<CheckEmailDomain> validator)
+    {
+        _validator = validator;
+        _lookupClient = new LookupClient(new LookupClientOptions { UseCache = true });
+    }
+
     public async Task Consume(ConsumeContext<CheckEmailDomain> context)
     {
-        var result = await validator.ValidateAsync(context.Message, context.CancellationToken);
+        var result = await _validator.ValidateAsync(context.Message, context.CancellationToken);
         if (!result.IsValid)
         {
             await context.RespondAsync(
@@ -33,18 +42,16 @@ public class CheckEmailDomainConsumer(IValidator<CheckEmailDomain> validator) : 
                     Errors: [new ErrorResultDetail(context.Message.Email, EmailConstants.EmailDomainIsNotValid)]));
     }
 
-    private static async Task<bool> CheckDnsEntriesAsync(string domain)
+    private async Task<bool> CheckDnsEntriesAsync(string domain)
     {
         try
         {
-            var lookup = new LookupClient();
             using var cts = new CancellationTokenSource();
             cts.CancelAfter(TimeSpan.FromSeconds(5));
-            var result = await lookup.QueryAsync(domain, QueryType.ANY, cancellationToken: cts.Token);
-            return result.Answers.Where(record =>
-                record.RecordType == DnsClient.Protocol.ResourceRecordType.A ||
-                record.RecordType == DnsClient.Protocol.ResourceRecordType.AAAA ||
-                record.RecordType == DnsClient.Protocol.ResourceRecordType.MX).Any();
+            var result = await _lookupClient.QueryAsync(
+                domain, QueryType.MX, cancellationToken: cts.Token);
+            return result.Answers.Any(record =>
+                record.RecordType == DnsClient.Protocol.ResourceRecordType.MX);
         }
         catch (DnsResponseException)
         {

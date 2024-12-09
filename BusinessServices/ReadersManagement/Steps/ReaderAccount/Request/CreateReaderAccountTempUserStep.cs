@@ -21,16 +21,13 @@ public class CreateReaderAccountTempUserStep(IRequestClient<CreateTempUser> clie
         {
             var responseObj = response!.Message.Value;
 
-            context.SetDataWith(
-                ReaderAccountUserConstants.CreateTempUserForReaderAccountResult, Result.Success(responseObj));
-
             await publishEndpoint.Publish<ReaderAccountTempUserCreated>(
                 new(responseObj!.FirstName,
                     responseObj.Email,
                     responseObj.VerificationToken,
                     responseObj.VerificationTokenExpirationDate.ToLongDateString()), token);
 
-            return await next(context, token);
+            return Result.Success(new RequestReaderAccountCreationResultDto(responseObj.Id));
         }
         else
         {

@@ -2,7 +2,6 @@
 using MassTransit;
 using Results;
 using SendGrid;
-using SendGrid.Helpers.Mail;
 using snowcoreBlog.Backend.Email.Core.Contracts;
 using snowcoreBlog.Backend.Email.Extensions;
 using snowcoreBlog.PublicApi.Utilities.DataResult;

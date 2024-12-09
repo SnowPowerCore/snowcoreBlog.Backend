@@ -79,11 +79,12 @@ builder.Services
 builder.Services.AddScoped<IApplicationTempUserRepository, ApplicationTempUserRepository>();
 builder.Services.AddMassTransit(busConfigurator =>
 {
-    busConfigurator.ConfigureHttpJsonOptions(o => o.SerializerOptions.SetJsonSerializationContext());
     busConfigurator.AddConsumer<CreateUserConsumer>();
+    busConfigurator.AddConsumer<CreateTempUserConsumer>();
     busConfigurator.AddConsumer<ValidateUserExistsConsumer>();
     busConfigurator.AddConsumer<ValidateTempUserExistsConsumer>();
     busConfigurator.AddConsumer<ValidateUserNickNameWasTakenConsumer>();
+    busConfigurator.ConfigureHttpJsonOptions(o => o.SerializerOptions.SetJsonSerializationContext());
     busConfigurator.UsingRabbitMq((context, config) =>
     {
         config.ConfigureJsonSerializerOptions(options => options.SetJsonSerializationContext());
