@@ -1,5 +1,6 @@
 ﻿using SendGrid.Helpers.Mail;
 using snowcoreBlog.Backend.Email.Core.Contracts;
+using snowcoreBlog.Backend.Email.Core.Models.Email;
 
 namespace snowcoreBlog.Backend.Email.Extensions;
 
@@ -15,7 +16,7 @@ public static class SendGridExtensions
             HtmlContent = genericEmail.Content
         };
 
-    public static SendGridMessage ToSendGrid(this SendTemplatedEmail templatedEmail) =>
+    public static SendGridMessage ToSendGrid(this SendTemplatedEmail<ActivateCreatedTempUserData> templatedEmail) =>
         MailHelper.CreateSingleTemplateEmail(
             new EmailAddress(
                 templatedEmail.SenderAddress,

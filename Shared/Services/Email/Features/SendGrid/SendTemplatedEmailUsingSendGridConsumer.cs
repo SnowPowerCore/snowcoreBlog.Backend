@@ -3,15 +3,16 @@ using MassTransit;
 using Results;
 using SendGrid;
 using snowcoreBlog.Backend.Email.Core.Contracts;
+using snowcoreBlog.Backend.Email.Core.Models.Email;
 using snowcoreBlog.Backend.Email.Extensions;
 using snowcoreBlog.PublicApi.Utilities.DataResult;
 
 namespace snowcoreBlog.Backend.Email.Features.SendGrid;
 
-public class SendTemplatedEmailUsingSendGridConsumer(IValidator<SendTemplatedEmail> validator,
-                                                     ISendGridClient client) : IConsumer<SendTemplatedEmail>
+public class SendActivateCreatedTempUserTemplatedEmailUsingSendGridConsumer
+    (IValidator<SendTemplatedEmail<ActivateCreatedTempUserData>> validator, ISendGridClient client) : IConsumer<SendTemplatedEmail<ActivateCreatedTempUserData>>
 {
-    public async Task Consume(ConsumeContext<SendTemplatedEmail> context)
+    public async Task Consume(ConsumeContext<SendTemplatedEmail<ActivateCreatedTempUserData>> context)
     {
         var result = await validator.ValidateAsync(context.Message, context.CancellationToken);
         if (!result.IsValid)

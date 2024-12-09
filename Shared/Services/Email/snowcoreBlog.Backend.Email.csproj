@@ -35,4 +35,8 @@
     <ProjectReference Include="..\..\Email.Core\snowcoreBlog.Backend.Email.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Features\Validation\" />
+  </ItemGroup>
+
 </Project>

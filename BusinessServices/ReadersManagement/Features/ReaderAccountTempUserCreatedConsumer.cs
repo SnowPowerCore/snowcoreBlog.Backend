@@ -12,7 +12,7 @@ public class ReaderAccountTempUserCreatedConsumer(IOptions<SendGridSenderAccount
 {
     public Task Consume(ConsumeContext<ReaderAccountTempUserCreated> context) =>
         context.Publish(
-            TemplatedEmailExtensions.ToTemplated(
+            TemplatedEmailExtensions.ToActivateCreatedTempUserEmail(
                 context.Message,
                 configuration.GetSection("SendGrid:DynamicTemplates")[EmailConstants.ReaderAccountTempUserCreatedTemplateId]!,
                 options.Value,

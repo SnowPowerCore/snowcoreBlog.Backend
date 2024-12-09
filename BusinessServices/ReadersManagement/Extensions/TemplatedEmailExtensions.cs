@@ -1,12 +1,13 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using snowcoreBlog.Backend.Email.Core.Contracts;
+using snowcoreBlog.Backend.Email.Core.Models.Email;
 using snowcoreBlog.Backend.Email.Core.Options;
 
 namespace snowcoreBlog.Backend.ReadersManagement.Extensions;
 
 public static partial class TemplatedEmailExtensions
 {
-    public static SendTemplatedEmail ToTemplated(
+    public static SendTemplatedEmail<ActivateCreatedTempUserData> ToActivateCreatedTempUserEmail(
         [NotNull] ReaderAccountTempUserCreated readerAccountTempUserCreated,
         [NotNull] string templateId,
         [NotNull] SendGridSenderAccountOptions senderOptions,
@@ -17,13 +18,13 @@ public static partial class TemplatedEmailExtensions
             SenderName = senderOptions.SenderName,
             ReceiverAddress = receiverAddress,
             TemplateId = templateId,
-            DynamicTemplateData = new
+            DynamicTemplateData = new()
             {
-                subject,
-                preHeader,
-                userFirstName = readerAccountTempUserCreated.UserFirstName,
-                verificationUrl = readerAccountTempUserCreated.VerificationUrl,
-                verificationTokenUntilThatDate = readerAccountTempUserCreated.VerificationTokenUntilThatDate,
+                Subject = subject,
+                PreHeader = preHeader,
+                UserFirstName = readerAccountTempUserCreated.UserFirstName,
+                VerificationUrl = readerAccountTempUserCreated.VerificationUrl,
+                VerificationTokenUntilThatDate = readerAccountTempUserCreated.VerificationTokenUntilThatDate,
             },
         };
 }
