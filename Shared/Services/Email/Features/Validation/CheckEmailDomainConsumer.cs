@@ -7,7 +7,7 @@ using snowcoreBlog.Backend.Email.Core.Constants;
 using snowcoreBlog.Backend.Email.Core.Contracts;
 using snowcoreBlog.PublicApi.Utilities.DataResult;
 
-namespace snowcoreBlog.Backend.Email.Features.SendGrid;
+namespace snowcoreBlog.Backend.Email.Features.Validation;
 
 public class CheckEmailDomainConsumer : IConsumer<CheckEmailDomain>
 {
