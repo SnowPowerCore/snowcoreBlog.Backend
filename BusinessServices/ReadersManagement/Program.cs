@@ -1,18 +1,19 @@
 using System.Security.Cryptography;
 using FastEndpoints;
-using FastEndpoints.OpenTelemetry;
-using FastEndpoints.OpenTelemetry.Middleware;
 using FastEndpoints.Swagger;
 using FluentValidation;
 using Ixnas.AltchaNet;
 using JasperFx.CodeGeneration;
 using Marten;
 using MassTransit;
+using MassTransit.Logging;
+using MassTransit.Monitoring;
 using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.AspNetCore.Http.Json;
-using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Routing.Constraints;
+using Npgsql;
 using Oakton;
+using OpenTelemetry.Metrics;
 using OpenTelemetry.Trace;
 using Scalar.AspNetCore;
 using snowcoreBlog.Backend.Core.Entities.Reader;
@@ -60,8 +61,21 @@ builder.AddServiceDefaults();
 builder.Services.AddProblemDetails();
 builder.Services.AddOpenApi();
 builder.Services.AddOpenTelemetry()
-    .WithTracing(static tracing => tracing.AddSource("Marten"))
-    .WithMetrics(static metrics => metrics.AddMeter("Marten"));
+    .WithTracing(static tracing =>
+    {
+        tracing.AddRedisInstrumentation();
+        tracing.AddNpgsql();
+        tracing.AddSource(DiagnosticHeaders.DefaultListenerName);
+        tracing.AddSource("Marten");
+    })
+    .WithMetrics(static metrics =>
+    {
+        metrics.AddNpgsqlInstrumentation();
+        metrics.AddMeter("Marten");
+        metrics.AddMeter(InstrumentationOptions.MeterName);
+        metrics.AddMeter("Microsoft.AspNetCore.Hosting");
+        metrics.AddMeter("Microsoft.AspNetCore.Server.Kestrel");
+    });
 builder.Services.AddNpgsqlDataSource(builder.Configuration.GetConnectionString("db-snowcore-blog-entities")!);
 //builder.Services.AddNpgsqlDataSource("Host=localhost;Port=54523;Username=postgres;Password=xQ6S1zf+)!kTnjFFCtt(Ks");
 builder.Services.AddMarten(static opts =>

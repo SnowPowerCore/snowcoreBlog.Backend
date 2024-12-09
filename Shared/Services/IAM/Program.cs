@@ -19,6 +19,11 @@ using snowcoreBlog.Backend.IAM.Interfaces.Repositories.Marten;
 using snowcoreBlog.Backend.IAM.Repositories.Marten;
 using snowcoreBlog.Backend.IAM.CompiledQueries.Marten;
 using snowcoreBlog.Backend.IAM.Core.Entities;
+using OpenTelemetry.Trace;
+using Npgsql;
+using MassTransit.Logging;
+using MassTransit.Monitoring;
+using OpenTelemetry.Metrics;
 
 var builder = WebApplication.CreateSlimBuilder(args);
 builder.Host.ApplyOaktonExtensions();
@@ -46,8 +51,25 @@ builder.Services.ConfigureHttpJsonOptions(static options =>
 builder.AddServiceDefaults();
 builder.Services.AddProblemDetails();
 builder.Services.AddOpenTelemetry()
-    .WithTracing(static tracing => tracing.AddSource("Marten"))
-    .WithMetrics(static metrics => metrics.AddMeter("Marten"));
+    .WithTracing(static tracing =>
+    {
+        tracing.AddAspNetCoreInstrumentation();
+        tracing.AddHttpClientInstrumentation();
+        tracing.AddNpgsql();
+        tracing.AddSource(DiagnosticHeaders.DefaultListenerName);
+        tracing.AddSource("Marten");
+    })
+    .WithMetrics(static metrics =>
+    {
+        metrics.AddAspNetCoreInstrumentation();
+        metrics.AddHttpClientInstrumentation();
+        metrics.AddNpgsqlInstrumentation();
+        metrics.AddMeter("Marten");
+        metrics.AddMeter(InstrumentationOptions.MeterName);
+        metrics.AddMeter("Microsoft.AspNetCore.Hosting");
+        metrics.AddMeter("Microsoft.AspNetCore.Server.Kestrel");
+        metrics.AddRuntimeInstrumentation();
+    });
 builder.Services.AddNpgsqlDataSource(builder.Configuration.GetConnectionString("db-iam-entities")!);
 //builder.Services.AddNpgsqlDataSource("Host=localhost;Port=54523;Username=postgres;Password=xQ6S1zf+)!kTnjFFCtt(Ks");
 builder.Services.AddMarten(static opts =>
