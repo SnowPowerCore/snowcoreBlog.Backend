@@ -8,6 +8,7 @@ using Marten;
 using MassTransit;
 using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.AspNetCore.Http.Json;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Routing.Constraints;
 using Oakton;
 using Scalar.AspNetCore;
@@ -20,6 +21,7 @@ using snowcoreBlog.Backend.Infrastructure.Stores;
 using snowcoreBlog.Backend.Infrastructure.Utilities;
 using snowcoreBlog.Backend.ReadersManagement.Interfaces.Repositories.Marten;
 using snowcoreBlog.Backend.ReadersManagement.Repositories.Marten;
+using snowcoreBlog.Backend.ReadersManagement.Steps.NickName;
 using snowcoreBlog.Backend.ReadersManagement.Steps.ReaderAccount;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 using snowcoreBlog.PublicApi.Validation.Dto;
@@ -104,6 +106,7 @@ builder.Services.AddSingleton<IValidator<RequestCreateReaderAccountDto>, Request
 builder.Services.AddScoped<IAltchaChallengeStore, AltchaChallengeStore>();
 builder.Services.AddScoped<IReaderRepository, ReaderRepository>();
 
+builder.Services.AddScoped<ValidateNickNameWasNotTakenStep>();
 builder.Services.AddScoped<ValidateReaderAccountNotExistsStep>();
 builder.Services.AddScoped<ValidateReaderAccountEmailDomainStep>();
 builder.Services.AddScoped<CreateUserForReaderAccountStep>();
@@ -123,7 +126,7 @@ app.UseCookiePolicy(new()
     .UseAuthorization()
     .UseFastEndpoints(static c =>
     {
-        c.Endpoints.RoutePrefix = "api";
+        c.Endpoints.RoutePrefix = default;
         c.Versioning.Prefix = "v";
         c.Serializer.Options.SetJsonSerializationContext();
         c.Endpoints.Configurator = ep =>
@@ -143,12 +146,15 @@ app.UseCookiePolicy(new()
         };
     });
 
+app.MapDefaultEndpoints();
+
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
     app.MapOpenApi();
     app.MapScalarApiReference(o =>
     {
+        o.Servers = [];
         o.DarkMode = true;
     });
 }

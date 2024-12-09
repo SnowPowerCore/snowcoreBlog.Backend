@@ -47,8 +47,8 @@ builder.AddServiceDefaults();
 builder.Services.AddOpenTelemetry()
     .WithTracing(static tracing => tracing.AddSource("Marten"))
     .WithMetrics(static metrics => metrics.AddMeter("Marten"));
-//builder.Services.AddNpgsqlDataSource(builder.Configuration.GetConnectionString("db-iam-entities")!);
-builder.Services.AddNpgsqlDataSource("Host=localhost;Port=54523;Username=postgres;Password=xQ6S1zf+)!kTnjFFCtt(Ks");
+builder.Services.AddNpgsqlDataSource(builder.Configuration.GetConnectionString("db-iam-entities")!);
+//builder.Services.AddNpgsqlDataSource("Host=localhost;Port=54523;Username=postgres;Password=xQ6S1zf+)!kTnjFFCtt(Ks");
 builder.Services.AddMarten(static opts =>
 {
     opts.RegisterDocumentType<ApplicationAdminEntity>();
@@ -91,4 +91,6 @@ builder.Services.AddSingleton<IValidator<CreateUser>, CreateUserValidator>();
 builder.Services.AddSingleton<IValidator<CreateTempUser>, CreateTempUserValidator>();
 builder.Services.AddSingleton<IPasswordHasher, Argon2PasswordHasher>();
 
-await builder.Build().RunOaktonCommands(args);
+var app = builder.Build();
+app.MapDefaultEndpoints();
+await app.RunOaktonCommands(args);
