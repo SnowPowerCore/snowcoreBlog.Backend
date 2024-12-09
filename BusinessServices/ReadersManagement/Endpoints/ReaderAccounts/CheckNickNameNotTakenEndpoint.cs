@@ -25,7 +25,7 @@ public class CheckNickNameNotTakenEndpoint : Endpoint<CheckNickNameNotTakenDto, 
 
     public override void Configure()
     {
-        Post("readers/check/nickname");
+        Post("check/nickname");
         Version(1);
         SerializerContext(CoreSerializationContext.Default);
         Validator<CheckNickNameNotTakenValidation>();

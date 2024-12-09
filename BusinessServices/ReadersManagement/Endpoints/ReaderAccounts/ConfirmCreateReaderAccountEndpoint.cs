@@ -29,7 +29,7 @@ public class ConfirmCreateReaderAccountEndpoint : Endpoint<RequestCreateReaderAc
 
     public override void Configure()
     {
-        Post("readers/create/confirm");
+        Post("create/confirm");
         Version(1);
         SerializerContext(CoreSerializationContext.Default);
         Validator<RequestCreateReaderAccountValidation>();

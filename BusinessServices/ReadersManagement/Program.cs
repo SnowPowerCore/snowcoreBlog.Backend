@@ -54,6 +54,7 @@ builder.Services.Configure<SendGridSenderAccountOptions>(
     builder.Configuration.GetSection("SendGrid:SenderAccount"));
 
 builder.AddServiceDefaults();
+builder.Services.AddProblemDetails();
 builder.Services.AddOpenApi();
 builder.Services.AddOpenTelemetry()
     .WithTracing(static tracing => tracing.AddSource("Marten"))

@@ -44,6 +44,7 @@ builder.Services.ConfigureHttpJsonOptions(static options =>
 });
 
 builder.AddServiceDefaults();
+builder.Services.AddProblemDetails();
 builder.Services.AddOpenTelemetry()
     .WithTracing(static tracing => tracing.AddSource("Marten"))
     .WithMetrics(static metrics => metrics.AddMeter("Marten"));
