@@ -19,6 +19,7 @@ builder.Services.ConfigureHttpJsonOptions(options =>
     options.SerializerOptions.SetJsonSerializationContext();
 });
 
+builder.WebHost.UseKestrelHttpsConfiguration();
 builder.AddServiceDefaults();
 builder.Services.AddProblemDetails();
 builder.Services.AddSendGrid(options => options.ApiKey = builder.Configuration["SendGrid:ApiKey"]);
@@ -38,5 +39,6 @@ builder.Services.AddSingleton<IValidator<SendGenericEmail>, GenericEmailValidato
 builder.Services.AddSingleton<IValidator<CheckEmailDomain>, CheckEmailDomainValidator>();
 
 var app = builder.Build();
+app.UseHttpsRedirection();
 app.MapDefaultEndpoints();
 await app.RunAsync();

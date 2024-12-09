@@ -1,13 +1,13 @@
 using Marten;
+using snowcoreBlog.Backend.Infrastructure.Extensions;
 using snowcoreBlog.ServiceDefaults.Extensions;
 
 var builder = WebApplication.CreateSlimBuilder(args);
 
+builder.WebHost.UseKestrelHttpsConfiguration();
 builder.AddServiceDefaults();
 builder.Services.AddProblemDetails();
-builder.Services.AddOpenTelemetry()
-    .WithTracing(static tracing => tracing.AddSource("Marten"))
-    .WithMetrics(static metrics => metrics.AddMeter("Marten"));
+builder.Services.AddOpenTelemetry().ConnectBackendServices();
 builder.Services.AddNpgsqlDataSource("db-snowcore-blog-entities");
 builder.Services.AddMarten(static opts =>
 {
@@ -22,6 +22,7 @@ builder.Services.AddMarten(static opts =>
 
 var app = builder.Build();
 
+app.UseHttpsRedirection();
 app.MapDefaultEndpoints();
 // app.UseFastEndpoints();
 

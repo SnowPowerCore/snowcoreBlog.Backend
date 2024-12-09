@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="FastEndpoints" Version="5.31.0" />
+    <PackageReference Include="FastEndpoints.OpenTelemetry" Version="2.3.0" />
     <PackageReference Include="Fody" Version="6.9.0">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
@@ -19,6 +20,9 @@
     <PackageReference Include="MassTransit.RabbitMQ" Version="8.3.1" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.0" />
+    <PackageReference Include="Npgsql.OpenTelemetry" Version="9.0.2" />
+    <PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="1.10.0" />
+    <PackageReference Include="OpenTelemetry.Instrumentation.StackExchangeRedis" Version="1.10.0-beta.1" />
     <PackageReference Include="Scalar.AspNetCore" Version="1.2.37" />
   </ItemGroup>
 

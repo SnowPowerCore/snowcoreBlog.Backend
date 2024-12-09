@@ -1,5 +1,6 @@
 using System.Security.Cryptography;
 using FastEndpoints;
+using FastEndpoints.OpenTelemetry.Middleware;
 using FastEndpoints.Swagger;
 using FluentValidation;
 using Ixnas.AltchaNet;
@@ -57,25 +58,11 @@ builder.Services.ConfigureHttpJsonOptions(static options =>
 builder.Services.Configure<SendGridSenderAccountOptions>(
     builder.Configuration.GetSection("SendGrid:SenderAccount"));
 
+builder.WebHost.UseKestrelHttpsConfiguration();
 builder.AddServiceDefaults();
 builder.Services.AddProblemDetails();
 builder.Services.AddOpenApi();
-builder.Services.AddOpenTelemetry()
-    .WithTracing(static tracing =>
-    {
-        tracing.AddRedisInstrumentation();
-        tracing.AddNpgsql();
-        tracing.AddSource(DiagnosticHeaders.DefaultListenerName);
-        tracing.AddSource("Marten");
-    })
-    .WithMetrics(static metrics =>
-    {
-        metrics.AddNpgsqlInstrumentation();
-        metrics.AddMeter("Marten");
-        metrics.AddMeter(InstrumentationOptions.MeterName);
-        metrics.AddMeter("Microsoft.AspNetCore.Hosting");
-        metrics.AddMeter("Microsoft.AspNetCore.Server.Kestrel");
-    });
+builder.Services.AddOpenTelemetry().ConnectBackendServices();
 builder.Services.AddNpgsqlDataSource(builder.Configuration.GetConnectionString("db-snowcore-blog-entities")!);
 //builder.Services.AddNpgsqlDataSource("Host=localhost;Port=54523;Username=postgres;Password=xQ6S1zf+)!kTnjFFCtt(Ks");
 builder.Services.AddMarten(static opts =>
@@ -134,6 +121,8 @@ builder.Services.AddScoped<ReturnCreatedReaderEntityStep>();
 
 var app = builder.Build();
 
+app.UseHttpsRedirection();
+
 app.UseCookiePolicy(new()
 {
     MinimumSameSitePolicy = SameSiteMode.Strict,
@@ -142,6 +131,7 @@ app.UseCookiePolicy(new()
 })
     .UseAuthentication()
     .UseAuthorization()
+    .UseFastEndpointsDiagnosticsMiddleware()
     .UseFastEndpoints(static c =>
     {
         c.Endpoints.RoutePrefix = default;
