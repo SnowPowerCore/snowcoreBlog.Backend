@@ -1,8 +1,8 @@
 namespace snowcoreBlog.Backend.Email.Core.Options;
 
-public class SendGridSenderAccountOptions
+public record SendGridSenderAccountOptions
 {
-    public required string SenderAddress { get; init; }
+    public string SenderAddress { get; set; }
 
-    public string? SenderName { get; init; } = string.Empty;
+    public string? SenderName { get; set; } = string.Empty;
 }
