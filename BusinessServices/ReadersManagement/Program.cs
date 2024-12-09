@@ -1,5 +1,6 @@
 using System.Security.Cryptography;
 using FastEndpoints;
+using FastEndpoints.OpenTelemetry;
 using FastEndpoints.OpenTelemetry.Middleware;
 using FastEndpoints.Swagger;
 using FluentValidation;
@@ -12,6 +13,7 @@ using Microsoft.AspNetCore.Http.Json;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Routing.Constraints;
 using Oakton;
+using OpenTelemetry.Trace;
 using Scalar.AspNetCore;
 using snowcoreBlog.Backend.Core.Entities.Reader;
 using snowcoreBlog.Backend.Email.Core.Options;
