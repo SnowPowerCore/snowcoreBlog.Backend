@@ -2,7 +2,6 @@
 using MinimalStepifiedSystem.Interfaces;
 using Results;
 using snowcoreBlog.Backend.Core.Entities.Reader;
-using snowcoreBlog.Backend.Email.Core.Contracts;
 using snowcoreBlog.Backend.IAM.Core.Contracts;
 using snowcoreBlog.Backend.ReadersManagement.Constants;
 using snowcoreBlog.Backend.ReadersManagement.Context;
@@ -29,9 +28,6 @@ public class CreateNewReaderEntityStep(IPublishEndpoint publishEndpoint,
             context.SetDataWith(
                 ReaderAccountConstants.CreateReaderAccountResult,
                 Result.Success(new RequestReaderAccountCreationResultDto(newReaderEntity.Id)));
-
-            await publishEndpoint.Publish<ReaderAccountTempUserCreated>(
-                new(newReaderEntity, createUserForReaderAccountResult!.Data.Email), token);
 
             return await next(context, token);
         }

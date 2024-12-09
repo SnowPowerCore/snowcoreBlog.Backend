@@ -21,6 +21,7 @@ builder.Services.AddMarten(static opts =>
 
 var app = builder.Build();
 
+app.MapDefaultEndpoints();
 // app.UseFastEndpoints();
 
 await app.RunAsync();
