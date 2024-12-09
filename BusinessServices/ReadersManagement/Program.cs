@@ -1,5 +1,6 @@
 using System.Security.Cryptography;
 using FastEndpoints;
+using FastEndpoints.OpenTelemetry.Middleware;
 using FastEndpoints.Swagger;
 using FluentValidation;
 using Ixnas.AltchaNet;
