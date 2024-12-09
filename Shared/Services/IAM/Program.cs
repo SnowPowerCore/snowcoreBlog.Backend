@@ -48,28 +48,10 @@ builder.Services.ConfigureHttpJsonOptions(static options =>
     options.SerializerOptions.SetJsonSerializationContext();
 });
 
+builder.WebHost.UseKestrelHttpsConfiguration();
 builder.AddServiceDefaults();
 builder.Services.AddProblemDetails();
-builder.Services.AddOpenTelemetry()
-    .WithTracing(static tracing =>
-    {
-        tracing.AddAspNetCoreInstrumentation();
-        tracing.AddHttpClientInstrumentation();
-        tracing.AddNpgsql();
-        tracing.AddSource(DiagnosticHeaders.DefaultListenerName);
-        tracing.AddSource("Marten");
-    })
-    .WithMetrics(static metrics =>
-    {
-        metrics.AddAspNetCoreInstrumentation();
-        metrics.AddHttpClientInstrumentation();
-        metrics.AddNpgsqlInstrumentation();
-        metrics.AddMeter("Marten");
-        metrics.AddMeter(InstrumentationOptions.MeterName);
-        metrics.AddMeter("Microsoft.AspNetCore.Hosting");
-        metrics.AddMeter("Microsoft.AspNetCore.Server.Kestrel");
-        metrics.AddRuntimeInstrumentation();
-    });
+builder.Services.AddOpenTelemetry().ConnectBackendServices();
 builder.Services.AddNpgsqlDataSource(builder.Configuration.GetConnectionString("db-iam-entities")!);
 //builder.Services.AddNpgsqlDataSource("Host=localhost;Port=54523;Username=postgres;Password=xQ6S1zf+)!kTnjFFCtt(Ks");
 builder.Services.AddMarten(static opts =>
@@ -115,5 +97,6 @@ builder.Services.AddSingleton<IValidator<CreateTempUser>, CreateTempUserValidato
 builder.Services.AddSingleton<IPasswordHasher, Argon2PasswordHasher>();
 
 var app = builder.Build();
+app.UseHttpsRedirection();
 app.MapDefaultEndpoints();
 await app.RunOaktonCommands(args);
