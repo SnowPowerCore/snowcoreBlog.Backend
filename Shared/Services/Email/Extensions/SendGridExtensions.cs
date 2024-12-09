@@ -25,5 +25,12 @@ public static class SendGridExtensions
                 templatedEmail.ReceiverAddress,
                 templatedEmail.ReceiverName ?? string.Empty),
             templatedEmail.TemplateId,
-            templatedEmail.DynamicTemplateData);
+            new
+            {
+                subject = templatedEmail.DynamicTemplateData.Subject,
+                preHeader = templatedEmail.DynamicTemplateData.PreHeader,
+                userFirstName = templatedEmail.DynamicTemplateData.UserFirstName,
+                verificationUrl = templatedEmail.DynamicTemplateData.VerificationUrl,
+                verificationTokenUntilThatDate = templatedEmail.DynamicTemplateData.VerificationTokenUntilThatDate
+            });
 }
