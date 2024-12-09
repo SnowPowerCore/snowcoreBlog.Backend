@@ -65,6 +65,7 @@ namespace snowcoreBlog.Backend.Infrastructure;
 [JsonSerializable(typeof(SendGenericEmail))]
 [JsonSerializable(typeof(ActivateCreatedTempUserData))]
 [JsonSerializable(typeof(SendTemplatedEmail<ActivateCreatedTempUserData>))]
+[JsonSerializable(typeof(TemplatedEmailSent))]
 [JsonSourceGenerationOptions(
     JsonSerializerDefaults.Web,
     UseStringEnumConverter = true,
