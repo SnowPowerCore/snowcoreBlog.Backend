@@ -4,6 +4,7 @@ using snowcoreBlog.ServiceDefaults.Extensions;
 var builder = WebApplication.CreateSlimBuilder(args);
 
 builder.AddServiceDefaults();
+builder.Services.AddProblemDetails();
 builder.Services.AddOpenTelemetry()
     .WithTracing(static tracing => tracing.AddSource("Marten"))
     .WithMetrics(static metrics => metrics.AddMeter("Marten"));
