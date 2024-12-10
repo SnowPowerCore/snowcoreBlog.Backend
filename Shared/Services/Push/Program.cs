@@ -7,7 +7,6 @@ using snowcoreBlog.Backend.IAM.Core.Contracts;
 using FluentValidation;
 using snowcoreBlog.Backend.IAM.Core.Interfaces.Services.Password;
 using snowcoreBlog.Backend.Push.Entities;
-using snowcoreBlog.Backend.Push.Features.User;
 using snowcoreBlog.Backend.Push.Services.Password;
 using snowcoreBlog.Backend.Push.Models;
 using snowcoreBlog.Backend.Push.Options;

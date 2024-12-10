@@ -7,7 +7,6 @@ using snowcoreBlog.Backend.Email.Core.Contracts;
 using snowcoreBlog.Backend.Email.Validation;
 using snowcoreBlog.Backend.Email.Features.SendGrid;
 using snowcoreBlog.Backend.Email.Features.Validation;
-using snowcoreBlog.Backend.Email.Core.Models.Email;
 
 var builder = WebApplication.CreateSlimBuilder(args);
 
@@ -28,7 +27,7 @@ builder.Services.AddSendGrid(options => options.ApiKey = builder.Configuration["
 builder.Services.AddMassTransit(busConfigurator =>
 {
     busConfigurator.AddConsumer<SendGenericEmailUsingSendGridConsumer>();
-    busConfigurator.AddConsumer<SendActivateCreatedTempUserTemplatedEmailUsingSendGridConsumer>();
+    busConfigurator.AddConsumer<SendTemplatedEmailUsingSendGridConsumer>();
     busConfigurator.AddConsumer<CheckEmailDomainConsumer>();
     busConfigurator.ConfigureHttpJsonOptions(o => o.SerializerOptions.SetJsonSerializationContext());
     busConfigurator.UsingRabbitMq((context, config) =>
@@ -40,7 +39,7 @@ builder.Services.AddMassTransit(busConfigurator =>
 });
 
 builder.Services.AddSingleton<IValidator<SendGenericEmail>, GenericEmailValidator>();
-builder.Services.AddSingleton<IValidator<SendTemplatedEmail<ActivateCreatedTempUserData>>, ActivateCreatedTempUserTemplatedEmailValidator>();
+builder.Services.AddSingleton<IValidator<SendTemplatedEmail>, TemplatedEmailValidator>();
 builder.Services.AddSingleton<IValidator<CheckEmailDomain>, CheckEmailDomainValidator>();
 
 var app = builder.Build();

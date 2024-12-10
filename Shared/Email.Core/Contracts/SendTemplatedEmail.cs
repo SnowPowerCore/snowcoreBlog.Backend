@@ -1,6 +1,6 @@
 ﻿namespace snowcoreBlog.Backend.Email.Core.Contracts;
 
-public sealed record SendTemplatedEmail<T> where T : new()
+public sealed record SendTemplatedEmail
 {
     public required string SenderAddress { get; init; }
 
@@ -12,5 +12,5 @@ public sealed record SendTemplatedEmail<T> where T : new()
 
     public required string TemplateId { get; init; }
 
-    public T DynamicTemplateData { get; init; } = new();
+    public Dictionary<string, string> DynamicTemplateData { get; init; } = [];
 }

@@ -19,11 +19,6 @@ using snowcoreBlog.Backend.IAM.Interfaces.Repositories.Marten;
 using snowcoreBlog.Backend.IAM.Repositories.Marten;
 using snowcoreBlog.Backend.IAM.CompiledQueries.Marten;
 using snowcoreBlog.Backend.IAM.Core.Entities;
-using OpenTelemetry.Trace;
-using Npgsql;
-using MassTransit.Logging;
-using MassTransit.Monitoring;
-using OpenTelemetry.Metrics;
 
 var builder = WebApplication.CreateSlimBuilder(args);
 builder.Host.ApplyOaktonExtensions();

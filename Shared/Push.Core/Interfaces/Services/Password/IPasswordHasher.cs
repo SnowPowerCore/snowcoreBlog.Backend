@@ -1,4 +1,4 @@
-﻿using snowcoreBlog.Backend.Push.Core.Contracts;
+﻿using Microsoft.AspNetCore.Identity;
 
 namespace snowcoreBlog.Backend.Push.Core.Interfaces.Services.Password;
 
