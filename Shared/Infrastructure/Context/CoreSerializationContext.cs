@@ -63,8 +63,8 @@ namespace snowcoreBlog.Backend.Infrastructure;
 [JsonSerializable(typeof(AltchaChallenge))]
 [JsonSerializable(typeof(CheckEmailDomain))]
 [JsonSerializable(typeof(SendGenericEmail))]
-[JsonSerializable(typeof(TemplatedEmailSent))]
 [JsonSerializable(typeof(SendTemplatedEmail))]
+[JsonSerializable(typeof(TemplatedEmailSent))]
 [JsonSourceGenerationOptions(
     JsonSerializerDefaults.Web,
     UseStringEnumConverter = true,
