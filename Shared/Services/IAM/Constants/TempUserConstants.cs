@@ -1,5 +1,3 @@
-using System;
-
 namespace snowcoreBlog.Backend.IAM.Constants;
 
 public class TempUserConstants

@@ -6,7 +6,6 @@ using MassTransit.Events;
 using Scalar.AspNetCore;
 using snowcoreBlog.Backend.Core.Entities.Reader;
 using snowcoreBlog.Backend.Email.Core.Contracts;
-using snowcoreBlog.Backend.Email.Core.Models.Email;
 using snowcoreBlog.Backend.IAM.Core.Contracts;
 using snowcoreBlog.Backend.IAM.Core.Entities;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
@@ -19,6 +18,7 @@ namespace snowcoreBlog.Backend.Infrastructure;
 /// Defines the serialization context.
 /// </summary>
 [JsonSerializable(typeof(List<string>))]
+[JsonSerializable(typeof(Dictionary<string, string>))]
 [JsonSerializable(typeof(ScalarOptions))]
 [JsonSerializable(typeof(ApiResponse))]
 [JsonSerializable(typeof(ApplicationAdminEntity))]
@@ -63,9 +63,8 @@ namespace snowcoreBlog.Backend.Infrastructure;
 [JsonSerializable(typeof(AltchaChallenge))]
 [JsonSerializable(typeof(CheckEmailDomain))]
 [JsonSerializable(typeof(SendGenericEmail))]
-[JsonSerializable(typeof(ActivateCreatedTempUserData))]
-[JsonSerializable(typeof(SendTemplatedEmail<ActivateCreatedTempUserData>))]
 [JsonSerializable(typeof(TemplatedEmailSent))]
+[JsonSerializable(typeof(SendTemplatedEmail))]
 [JsonSourceGenerationOptions(
     JsonSerializerDefaults.Web,
     UseStringEnumConverter = true,
