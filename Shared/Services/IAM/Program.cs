@@ -3,15 +3,11 @@ using MassTransit;
 using Microsoft.AspNetCore.Identity;
 using snowcoreBlog.Backend.Infrastructure.Extensions;
 using snowcoreBlog.Backend.IAM.Extensions;
-using snowcoreBlog.Backend.IAM.Models;
-using snowcoreBlog.Backend.IAM.Options;
 using snowcoreBlog.ServiceDefaults.Extensions;
 using snowcoreBlog.Backend.IAM.Features.User;
 using snowcoreBlog.Backend.IAM.Core.Contracts;
 using FluentValidation;
 using snowcoreBlog.Backend.IAM.Validation;
-using snowcoreBlog.Backend.IAM.Core.Interfaces.Services.Password;
-using snowcoreBlog.Backend.IAM.Services.Password;
 using JasperFx.CodeGeneration;
 using Oakton;
 using Microsoft.AspNetCore.Http.Json;
@@ -26,11 +22,6 @@ builder.Host.ApplyOaktonExtensions();
 builder.Services.Configure<MassTransitHostOptions>(options =>
 {
     options.WaitUntilStarted = true;
-});
-
-builder.Services.Configure<Argon2PasswordHasherOptions>(static options =>
-{
-    options.Strength = Argon2HashStrength.Moderate;
 });
 
 builder.Services.Configure<JsonOptions>(static options =>
@@ -90,7 +81,6 @@ builder.Services.AddMassTransit(busConfigurator =>
 
 builder.Services.AddSingleton<IValidator<CreateUser>, CreateUserValidator>();
 builder.Services.AddSingleton<IValidator<CreateTempUser>, CreateTempUserValidator>();
-builder.Services.AddSingleton<IPasswordHasher, Argon2PasswordHasher>();
 
 var app = builder.Build();
 app.UseHttpsRedirection();
