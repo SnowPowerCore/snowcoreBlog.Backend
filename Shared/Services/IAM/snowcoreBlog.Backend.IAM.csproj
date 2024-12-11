@@ -33,6 +33,7 @@
 
   <ItemGroup>
     <Folder Include="Features\Admin\" />
+    <Folder Include="Services\" />
   </ItemGroup>
 
   <ItemGroup>

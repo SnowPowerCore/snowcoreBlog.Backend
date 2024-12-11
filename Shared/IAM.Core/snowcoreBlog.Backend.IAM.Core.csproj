@@ -25,4 +25,8 @@
     <None Update="**/FodyWeavers.*" Visible="false" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Interfaces\Services\" />
+  </ItemGroup>
+
 </Project>

@@ -5,11 +5,7 @@ using snowcoreBlog.Backend.Infrastructure.Extensions;
 using snowcoreBlog.ServiceDefaults.Extensions;
 using snowcoreBlog.Backend.IAM.Core.Contracts;
 using FluentValidation;
-using snowcoreBlog.Backend.IAM.Core.Interfaces.Services.Password;
 using snowcoreBlog.Backend.Push.Entities;
-using snowcoreBlog.Backend.Push.Services.Password;
-using snowcoreBlog.Backend.Push.Models;
-using snowcoreBlog.Backend.Push.Options;
 using snowcoreBlog.Backend.Push.Extensions;
 using snowcoreBlog.Backend.Push.Validation;
 
@@ -18,11 +14,6 @@ var builder = WebApplication.CreateSlimBuilder(args);
 builder.Services.Configure<MassTransitHostOptions>(options =>
 {
     options.WaitUntilStarted = true;
-});
-
-builder.Services.Configure<Argon2PasswordHasherOptions>(options =>
-{
-    options.Strength = Argon2HashStrength.Moderate;
 });
 
 builder.Services.ConfigureHttpJsonOptions(options =>
@@ -51,8 +42,6 @@ builder.Services
     .AddMartenStores<ApplicationAdmin, IdentityRole>();
 builder.Services.AddMassTransit(busConfigurator =>
 {
-    busConfigurator.AddConsumer<CreateUserConsumer>();
-    busConfigurator.AddConsumer<ValidateUserExistsConsumer>();
     busConfigurator.UsingRabbitMq((context, config) =>
     {
         config.ConfigureJsonSerializerOptions(options => options.SetJsonSerializationContext());
@@ -62,6 +51,5 @@ builder.Services.AddMassTransit(busConfigurator =>
 });
 
 builder.Services.AddSingleton<IValidator<CreateUser>, CreateUserValidator>();
-builder.Services.AddSingleton<IPasswordHasher, Argon2PasswordHasher>();
 
 await builder.Build().RunAsync();
