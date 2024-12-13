@@ -24,7 +24,7 @@ public class CreateReaderAccountTempUserStep(IRequestClient<CreateTempUser> clie
             await publishEndpoint.Publish<ReaderAccountTempUserCreated>(
                 new(responseObj!.FirstName,
                     responseObj.Email,
-                    responseObj.VerificationToken,
+                    responseObj.VerificationToken + responseObj.Email,
                     responseObj.VerificationTokenExpirationDate.ToLongDateString()), token);
 
             return Result.Success(new RequestReaderAccountCreationResultDto(responseObj.Id));

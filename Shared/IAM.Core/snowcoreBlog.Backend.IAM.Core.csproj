@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Fido2" Version="4.0.0-beta.16" />
     <PackageReference Include="Marten" Version="7.31.3" />
     <PackageReference Include="Marten.CommandLine" Version="7.31.3" />
     <FrameworkReference Include="Microsoft.AspNetCore.App" />

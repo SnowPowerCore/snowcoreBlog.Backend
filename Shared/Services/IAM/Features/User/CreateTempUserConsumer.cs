@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using MassTransit;
 using Results;
+using snowcoreBlog.Backend.Core.Interfaces.Services;
 using snowcoreBlog.Backend.IAM.Constants;
 using snowcoreBlog.Backend.IAM.Core.Contracts;
 using snowcoreBlog.Backend.IAM.Core.Entities;
@@ -13,6 +14,7 @@ using snowcoreBlog.PublicApi.Utilities.DataResult;
 namespace snowcoreBlog.Backend.IAM.Features.User;
 
 public class CreateTempUserConsumer(IValidator<CreateTempUser> validator,
+                                    IHasher hasher,
                                     IApplicationTempUserRepository applicationTempUserRepository) : IConsumer<CreateTempUser>
 {
     public async Task Consume(ConsumeContext<CreateTempUser> context)
@@ -28,7 +30,9 @@ public class CreateTempUserConsumer(IValidator<CreateTempUser> validator,
 
         var verificationToken = StringExtensions.RandomString(32);
         var verificationTokenExpirationDate = DateTime.UtcNow.AddDays(7);
-        var tempUserEntity = context.Message.ToEntity(verificationToken, verificationTokenExpirationDate);
+        var tempUserEntity = context.Message.ToEntity(
+            hasher.Hash(verificationToken),
+            verificationTokenExpirationDate);
         var tempUserCreationResult = await applicationTempUserRepository.AddOrUpdateAsync(tempUserEntity);
         if (tempUserCreationResult is not default(ApplicationTempUserEntity))
         {
@@ -39,7 +43,7 @@ public class CreateTempUserConsumer(IValidator<CreateTempUser> validator,
                     FirstName = tempUserCreationResult.FirstName,
                     Email = tempUserCreationResult.Email!,
                     InitialEmailConsent = tempUserCreationResult.InitialEmailConsent,
-                    VerificationToken = tempUserCreationResult.ActivationToken,
+                    VerificationToken = verificationToken,
                     VerificationTokenExpirationDate = tempUserCreationResult.ActivationTokenExpirationDate,
                 }));
         }
