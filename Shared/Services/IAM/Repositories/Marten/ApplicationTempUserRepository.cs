@@ -13,6 +13,10 @@ public class ApplicationTempUserRepository(IDocumentSession session) : BaseMarte
         AnyByQueryAsync(MartenCompiledQueryProvider<ApplicationTempUserEntity, bool>
             .Create(new ApplicationTempUserByEmailQuery { Email = email }));
 
+    public Task<ApplicationTempUserEntity?> GetTempUserByEmailAsync(string email) =>
+        GetOneByQueryAsync(MartenCompiledQueryProvider<ApplicationTempUserEntity, ApplicationTempUserEntity>
+            .Create(new ApplicationGetTempUserByEmailQuery { Email = email }));
+
     public Task<bool> CheckTempUserExistsByNickNameAsync(string nickName) =>
         AnyByQueryAsync(MartenCompiledQueryProvider<ApplicationTempUserEntity, bool>
             .Create(new ApplicationTempUserByNickNameQuery { NickName = nickName }));

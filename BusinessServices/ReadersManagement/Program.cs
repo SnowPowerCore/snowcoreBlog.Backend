@@ -9,18 +9,22 @@ using Marten;
 using MassTransit;
 using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.AspNetCore.Http.Json;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Routing.Constraints;
 using Oakton;
 using Scalar.AspNetCore;
 using snowcoreBlog.Backend.Core.Entities.Reader;
+using snowcoreBlog.Backend.Core.Interfaces.Services;
 using snowcoreBlog.Backend.Email.Core.Options;
 using snowcoreBlog.Backend.Infrastructure.Extensions;
 using snowcoreBlog.Backend.Infrastructure.HttpProcessors;
+using snowcoreBlog.Backend.Infrastructure.Services;
 using snowcoreBlog.Backend.Infrastructure.Stores;
 using snowcoreBlog.Backend.Infrastructure.Utilities;
 using snowcoreBlog.Backend.ReadersManagement.Features;
 using snowcoreBlog.Backend.ReadersManagement.Interfaces.Repositories.Marten;
 using snowcoreBlog.Backend.ReadersManagement.Repositories.Marten;
+using snowcoreBlog.Backend.ReadersManagement.Steps.Attestation;
 using snowcoreBlog.Backend.ReadersManagement.Steps.NickName;
 using snowcoreBlog.Backend.ReadersManagement.Steps.ReaderAccount;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
@@ -43,6 +47,24 @@ builder.Services.Configure<RouteOptions>(static options =>
 builder.Services.Configure<JsonOptions>(static options =>
 {
     options.SerializerOptions.SetJsonSerializationContext();
+});
+
+builder.Services.Configure<Argon2StringHasherOptions>(static options =>
+{
+    options.Strength = Argon2HashStrength.Moderate;
+});
+
+builder.Services.Configure<CookiePolicyOptions>(static options =>
+{
+    options.MinimumSameSitePolicy = SameSiteMode.Strict;
+    options.HttpOnly = HttpOnlyPolicy.Always;
+    options.Secure = CookieSecurePolicy.Always;
+});
+
+builder.Services.Configure<ForwardedHeadersOptions>(options =>
+{
+    options.ForwardedHeaders =
+        ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
 });
 
 builder.Services.ConfigureHttpJsonOptions(static options =>
@@ -99,11 +121,13 @@ builder.Services
     {
         o.SourceGeneratorDiscoveredTypes.AddRange(snowcoreBlog.Backend.ReadersManagement.DiscoveredTypes.All);
     })
+    .AddAntiforgery()
     .SwaggerDocument()
     .AddCors();
 
 builder.Services.AddSingleton<IValidator<RequestCreateReaderAccountDto>, RequestCreateReaderAccountValidation>();
 
+builder.Services.AddScoped<IHasher, Argon2Hasher>();
 builder.Services.AddScoped<IAltchaChallengeStore, AltchaChallengeStore>();
 builder.Services.AddScoped<IReaderRepository, ReaderRepository>();
 builder.Services.AddScoped<ValidateNickNameWasNotTakenStep>();
@@ -116,6 +140,7 @@ builder.Services.AddScoped<CreateUserForReaderAccountStep>();
 builder.Services.AddScoped<CreateNewReaderEntityStep>();
 builder.Services.AddScoped<GenerateTokenForNewReaderAccountStep>();
 builder.Services.AddScoped<ReturnCreatedReaderEntityStep>();
+builder.Services.AddScoped<RequestNewAttestationOptionsStep>();
 
 var app = builder.Build();
 
@@ -129,6 +154,7 @@ app.UseCookiePolicy(new()
 })
     .UseAuthentication()
     .UseAuthorization()
+    .UseAntiforgeryFE()
     .UseFastEndpointsDiagnosticsMiddleware()
     .UseFastEndpoints(static c =>
     {

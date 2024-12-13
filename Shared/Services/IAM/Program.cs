@@ -15,6 +15,9 @@ using snowcoreBlog.Backend.IAM.Interfaces.Repositories.Marten;
 using snowcoreBlog.Backend.IAM.Repositories.Marten;
 using snowcoreBlog.Backend.IAM.CompiledQueries.Marten;
 using snowcoreBlog.Backend.IAM.Core.Entities;
+using Fido2NetLib;
+using snowcoreBlog.Backend.Core.Interfaces.Services;
+using snowcoreBlog.Backend.Infrastructure.Services;
 
 var builder = WebApplication.CreateSlimBuilder(args);
 builder.Host.ApplyOaktonExtensions();
@@ -45,12 +48,24 @@ builder.Services.AddMarten(static opts =>
     opts.RegisterDocumentType<ApplicationAdminEntity>();
     opts.RegisterDocumentType<ApplicationUserEntity>();
     opts.RegisterDocumentType<ApplicationTempUserEntity>();
+    opts.RegisterDocumentType<Fido2AuthenticatorTransportEntity>();
+    opts.RegisterDocumentType<Fido2DevicePublicKeyEntity>();
+    opts.RegisterDocumentType<Fido2PublicKeyCredentialEntity>();
     opts.RegisterCompiledQueryType(typeof(ApplicationTempUserByEmailQuery));
     opts.RegisterCompiledQueryType(typeof(ApplicationTempUserByNickNameQuery));
     opts.GeneratedCodeMode = TypeLoadMode.Static;
     opts.UseSystemTextJsonForSerialization(configure: o => o.SetJsonSerializationContext());
     opts.Schema.For<ApplicationAdminEntity>().SoftDeleted();
     opts.Schema.For<ApplicationUserEntity>().SoftDeleted();
+    opts.Schema.For<Fido2AuthenticatorTransportEntity>()
+        .Index(x => new { x.PublicKeyCredentialId, x.Value }, x => x.IsUnique = true)
+        .ForeignKey<Fido2PublicKeyCredentialEntity>(x => x.PublicKeyCredentialId!)
+        .SoftDeleted();
+    opts.Schema.For<Fido2DevicePublicKeyEntity>()
+        .Index(x => new { x.PublicKeyCredentialId, x.Value }, x => x.IsUnique = true)
+        .ForeignKey<Fido2PublicKeyCredentialEntity>(x => x.PublicKeyCredentialId!)
+        .SoftDeleted();
+    opts.Schema.For<Fido2PublicKeyCredentialEntity>().SoftDeleted();
 })
     .UseLightweightSessions()
     .UseNpgsqlDataSource();
@@ -62,6 +77,8 @@ builder.Services
     .AddIdentityCore<ApplicationAdminEntity>()
     .AddRoles<IdentityRole>()
     .AddMartenStores<ApplicationAdminEntity, IdentityRole>();
+
+builder.Services.AddScoped<IHasher, Argon2Hasher>();
 builder.Services.AddScoped<IApplicationTempUserRepository, ApplicationTempUserRepository>();
 builder.Services.AddMassTransit(busConfigurator =>
 {
@@ -70,6 +87,7 @@ builder.Services.AddMassTransit(busConfigurator =>
     busConfigurator.AddConsumer<ValidateUserExistsConsumer>();
     busConfigurator.AddConsumer<ValidateTempUserExistsConsumer>();
     busConfigurator.AddConsumer<ValidateUserNickNameWasTakenConsumer>();
+    busConfigurator.AddConsumer<ValidateAndCreateAttestationOnRegisterConsumer>();
     busConfigurator.ConfigureHttpJsonOptions(o => o.SerializerOptions.SetJsonSerializationContext());
     busConfigurator.UsingRabbitMq((context, config) =>
     {
@@ -78,6 +96,7 @@ builder.Services.AddMassTransit(busConfigurator =>
         config.ConfigureEndpoints(context);
     });
 });
+builder.Services.AddFido2(builder.Configuration.GetSection(nameof(Fido2)));
 
 builder.Services.AddSingleton<IValidator<CreateUser>, CreateUserValidator>();
 builder.Services.AddSingleton<IValidator<CreateTempUser>, CreateTempUserValidator>();

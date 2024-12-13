@@ -9,8 +9,8 @@ public class ValidateTempUserExistsConsumer(IApplicationTempUserRepository appli
 {
     public async Task Consume(ConsumeContext<ValidateTempUserExists> context)
     {
-        var userExists = await applicationTempUserRepository.CheckTempUserExistsByEmailAsync(context.Message.Email);
-        if (userExists)
+        var tempUserExists = await applicationTempUserRepository.CheckTempUserExistsByEmailAsync(context.Message.Email);
+        if (tempUserExists)
         {
             await context.RespondAsync(
                 new DataResult<TempUserExistsValidationResult>(new() { Exists = true }));

@@ -7,5 +7,7 @@ public interface IApplicationTempUserRepository : IRepository<ApplicationTempUse
 {
     Task<bool> CheckTempUserExistsByEmailAsync(string email);
 
+    Task<ApplicationTempUserEntity?> GetTempUserByEmailAsync(string email);
+
     Task<bool> CheckTempUserExistsByNickNameAsync(string nickName);
 }

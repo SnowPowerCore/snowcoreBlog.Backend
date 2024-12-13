@@ -14,7 +14,7 @@ using snowcoreBlog.PublicApi.Validation.Dto;
 
 namespace snowcoreBlog.Backend.ReadersManagement.Endpoints.ReaderAccounts;
 
-public class RequestCreateReaderAccountEndpoint : Endpoint<RequestCreateReaderAccountDto, ApiResponse?>
+public class RequestCreateReaderAccountByEmailEndpoint : Endpoint<RequestCreateReaderAccountDto, ApiResponse?>
 {
     public IOptions<JsonOptions> JsonOptions { get; set; }
 
@@ -29,7 +29,7 @@ public class RequestCreateReaderAccountEndpoint : Endpoint<RequestCreateReaderAc
 
     public override void Configure()
     {
-        Post("create/request");
+        Post("create/request/email");
         Version(1);
         SerializerContext(CoreSerializationContext.Default);
         Validator<RequestCreateReaderAccountValidation>();
@@ -37,7 +37,7 @@ public class RequestCreateReaderAccountEndpoint : Endpoint<RequestCreateReaderAc
     }
 
     [ServiceProviderSupplier]
-    public RequestCreateReaderAccountEndpoint(IServiceProvider _) { }
+    public RequestCreateReaderAccountByEmailEndpoint(IServiceProvider _) { }
 
     public override async Task HandleAsync(RequestCreateReaderAccountDto req, CancellationToken ct)
     {

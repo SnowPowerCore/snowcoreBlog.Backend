@@ -43,17 +43,19 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference
-      Include="..\..\snowcoreBlog.Universal\ServiceDefaults\snowcoreBlog.ServiceDefaults.csproj" />
-    <ProjectReference
-      Include="..\..\Shared\Infrastructure\snowcoreBlog.Backend.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\snowcoreBlog.Universal\ServiceDefaults\snowcoreBlog.ServiceDefaults.csproj" />
+    <ProjectReference Include="..\..\Shared\Infrastructure\snowcoreBlog.Backend.Infrastructure.csproj" />
     <ProjectReference Include="..\..\snowcoreBlog.Universal\PublicApi\snowcoreBlog.PublicApi.csproj" />
-    <ProjectReference Include="..\..\Shared\Email.Core\snowcoreBlog.Backend.Email.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Features\" />
+    <Folder Include="Steps\Attestation\" />
     <Folder Include="Steps\ReaderAccount\Confirm\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Endpoints\ReaderAccounts\RequestCreateReaderAccountByEmailEndpoint.cs" />
   </ItemGroup>
 
 </Project>
