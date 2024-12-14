@@ -8,7 +8,7 @@ using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 using snowcoreBlog.PublicApi.Constants;
 using snowcoreBlog.PublicApi.Utilities.DataResult;
 
-namespace snowcoreBlog.Backend.ReadersManagement.Steps.ReaderAccount;
+namespace snowcoreBlog.Backend.ReadersManagement.Steps.ReaderAccount.Request;
 
 public class ValidateReaderAccountNotExistsStep(IRequestClient<ValidateUserExists> requestClient) : IStep<RequestCreateReaderAccountDelegate, RequestCreateReaderAccountContext, IResult<RequestReaderAccountCreationResultDto>>
 {

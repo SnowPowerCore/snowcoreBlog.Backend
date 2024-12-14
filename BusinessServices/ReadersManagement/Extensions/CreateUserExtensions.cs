@@ -13,6 +13,8 @@ public static partial class CreateUserExtensions
 
     public static partial ValidateUserExists ToValidateUserExists(this RequestCreateReaderAccountDto createReaderAccountDto);
 
+    public static partial ValidateUserExists ToValidateUserExists(this ConfirmCreateReaderAccountDto createReaderAccountDto);
+
     public static partial ValidateTempUserExists ToValidateTempUserExists(this RequestCreateReaderAccountDto createReaderAccountDto);
 
     public static partial ValidateUserNickNameTaken ToValidateUserNickNameTaken(this RequestCreateReaderAccountDto createReaderAccountDto);

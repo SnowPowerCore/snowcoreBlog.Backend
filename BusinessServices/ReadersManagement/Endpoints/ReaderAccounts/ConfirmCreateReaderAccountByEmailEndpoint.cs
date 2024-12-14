@@ -7,6 +7,7 @@ using snowcoreBlog.Backend.Infrastructure;
 using snowcoreBlog.Backend.ReadersManagement.Context;
 using snowcoreBlog.Backend.ReadersManagement.Delegates;
 using snowcoreBlog.Backend.ReadersManagement.Steps.ReaderAccount;
+using snowcoreBlog.Backend.ReadersManagement.Steps.ReaderAccount.Confirm;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 using snowcoreBlog.PublicApi.Extensions;
 using snowcoreBlog.PublicApi.Utilities.Api;
@@ -14,34 +15,33 @@ using snowcoreBlog.PublicApi.Validation.Dto;
 
 namespace snowcoreBlog.Backend.ReadersManagement.Endpoints.ReaderAccounts;
 
-public class ConfirmCreateReaderAccountEndpoint : Endpoint<RequestCreateReaderAccountDto, ApiResponse?>
+public class ConfirmCreateReaderAccountByEmailEndpoint : Endpoint<ConfirmCreateReaderAccountDto, ApiResponse?>
 {
     public IOptions<JsonOptions> JsonOptions { get; set; }
 
     [StepifiedProcess(Steps = [
-        typeof(ValidateReaderAccountEmailDomainStep),
         typeof(ValidateReaderAccountNotExistsStep),
-        typeof(CreateUserForReaderAccountStep),
+        typeof(ValidateAndCreateReaderAccountUserStep),
         typeof(CreateNewReaderEntityStep),
         typeof(ReturnCreatedReaderEntityStep),
     ])]
-    protected RequestCreateReaderAccountDelegate CreateReaderAccount { get; }
+    protected ConfirmCreateReaderAccountDelegate CreateReaderAccount { get; }
 
     public override void Configure()
     {
-        Post("create/confirm");
+        Post("create/confirm/email");
         Version(1);
         SerializerContext(CoreSerializationContext.Default);
-        Validator<RequestCreateReaderAccountValidation>();
+        Validator<ConfirmCreateReaderAccountValidation>();
         AllowAnonymous();
     }
 
     [ServiceProviderSupplier]
-    public ConfirmCreateReaderAccountEndpoint(IServiceProvider _) { }
+    public ConfirmCreateReaderAccountByEmailEndpoint(IServiceProvider _) { }
 
-    public override async Task HandleAsync(RequestCreateReaderAccountDto req, CancellationToken ct)
+    public override async Task HandleAsync(ConfirmCreateReaderAccountDto req, CancellationToken ct)
     {
-        var context = new RequestCreateReaderAccountContext(req);
+        var context = new ConfirmCreateReaderAccountContext(req);
 
         var result = await CreateReaderAccount(context, ct);
 
