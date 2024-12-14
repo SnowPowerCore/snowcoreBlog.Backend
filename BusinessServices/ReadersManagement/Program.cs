@@ -27,6 +27,7 @@ using snowcoreBlog.Backend.ReadersManagement.Repositories.Marten;
 using snowcoreBlog.Backend.ReadersManagement.Steps.Attestation;
 using snowcoreBlog.Backend.ReadersManagement.Steps.NickName;
 using snowcoreBlog.Backend.ReadersManagement.Steps.ReaderAccount;
+using snowcoreBlog.Backend.ReadersManagement.Steps.ReaderAccount.Request;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 using snowcoreBlog.PublicApi.Validation.Dto;
 using snowcoreBlog.ServiceDefaults.Extensions;
@@ -115,6 +116,7 @@ builder.Services.AddMassTransit(busConfigurator =>
 builder.Services.AddMultipleAuthentications(
    builder.Configuration["Security:Signing:User:Key"]!,
    builder.Configuration["Security:Signing:Admin:Key"]!);
+builder.Services.AddAuthentication();
 builder.Services
     .AddAuthorization()
     .AddFastEndpoints(static o =>
@@ -136,7 +138,7 @@ builder.Services.AddScoped<ValidateReaderAccountNotExistsStep>();
 builder.Services.AddScoped<ValidateReaderAccountEmailDomainStep>();
 builder.Services.AddScoped<ValidateReaderAccountNickNameWasNotTakenStep>();
 builder.Services.AddScoped<CreateReaderAccountTempUserStep>();
-builder.Services.AddScoped<CreateUserForReaderAccountStep>();
+builder.Services.AddScoped<ValidateAndCreateReaderAccountUserStep>();
 builder.Services.AddScoped<CreateNewReaderEntityStep>();
 builder.Services.AddScoped<GenerateTokenForNewReaderAccountStep>();
 builder.Services.AddScoped<ReturnCreatedReaderEntityStep>();

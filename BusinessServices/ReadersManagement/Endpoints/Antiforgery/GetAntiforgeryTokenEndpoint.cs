@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.Extensions.Options;
 using Results;
+using snowcoreBlog.Backend.Infrastructure;
 using snowcoreBlog.PublicApi.Extensions;
 
 namespace snowcoreBlog.Backend.ReadersManagement.Endpoints.Antiforgery;
@@ -17,6 +18,9 @@ public class GetAntiforgeryTokenEndpoint : EndpointWithoutRequest
     public override void Configure()
     {
         Get("antiForgeryToken");
+        Version(1);
+        SerializerContext(CoreSerializationContext.Default);
+        AllowAnonymous();
     }
 
     public GetAntiforgeryTokenEndpoint(IAntiforgery antiforgery)

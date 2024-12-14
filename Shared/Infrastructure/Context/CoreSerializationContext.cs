@@ -4,6 +4,7 @@ using Fido2NetLib;
 using Ixnas.AltchaNet;
 using MassTransit;
 using MassTransit.Events;
+using Microsoft.AspNetCore.Antiforgery;
 using Scalar.AspNetCore;
 using snowcoreBlog.Backend.Core.Entities.Reader;
 using snowcoreBlog.Backend.Email.Core.Contracts;
@@ -21,6 +22,7 @@ namespace snowcoreBlog.Backend.Infrastructure;
 [JsonSerializable(typeof(List<string>))]
 [JsonSerializable(typeof(Dictionary<string, string>))]
 [JsonSerializable(typeof(ScalarOptions))]
+[JsonSerializable(typeof(AntiforgeryTokenSet))]
 [JsonSerializable(typeof(ApiResponse))]
 [JsonSerializable(typeof(AltchaChallenge))]
 [JsonSerializable(typeof(ApplicationAdminEntity))]
