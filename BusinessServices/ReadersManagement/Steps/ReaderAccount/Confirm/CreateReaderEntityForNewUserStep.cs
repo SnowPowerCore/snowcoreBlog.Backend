@@ -1,6 +1,7 @@
 ﻿using MassTransit;
 using MinimalStepifiedSystem.Interfaces;
 using Results;
+using snowcoreBlog.Backend.Core.Contracts;
 using snowcoreBlog.Backend.Core.Entities.Reader;
 using snowcoreBlog.Backend.IAM.Core.Contracts;
 using snowcoreBlog.Backend.ReadersManagement.Constants;
@@ -12,28 +13,32 @@ using snowcoreBlog.PublicApi.Constants;
 
 namespace snowcoreBlog.Backend.ReadersManagement.Steps.ReaderAccount;
 
-public class CreateNewReaderEntityStep(IPublishEndpoint publishEndpoint,
-                                       IReaderRepository readerRepository) : IStep<RequestCreateReaderAccountDelegate, RequestCreateReaderAccountContext, IResult<RequestReaderAccountCreationResultDto>>
+public class CreateReaderEntityForNewUserStep(IPublishEndpoint publishEndpoint,
+                                              IReaderRepository readerRepository) : IStep<ConfirmCreateReaderAccountDelegate, ConfirmCreateReaderAccountContext, IResult<ReaderAccountCreatedDto>>
 {
-    public async Task<IResult<RequestReaderAccountCreationResultDto>> InvokeAsync(RequestCreateReaderAccountContext context, RequestCreateReaderAccountDelegate next, CancellationToken token = default)
+    public async Task<IResult<ReaderAccountCreatedDto>> InvokeAsync(ConfirmCreateReaderAccountContext context, ConfirmCreateReaderAccountDelegate next, CancellationToken token = default)
     {
         var createUserForReaderAccountResult = context.GetFromData<SuccessResult<UserCreationResult>>(
             ReaderAccountUserConstants.CreateTempUserForReaderAccountResult);
 
         var newReaderEntity = await readerRepository
-            .AddOrUpdateAsync(context.Request.ToEntity(createUserForReaderAccountResult!.Data.Id), token: token);
+            .AddOrUpdateAsync(createUserForReaderAccountResult!.Data.ToEntity(), token: token);
 
         if (newReaderEntity is not default(ReaderEntity))
         {
+            var readerAccountCreated = new ReaderAccountCreated(newReaderEntity!.Id, newReaderEntity.NickName);
+
             context.SetDataWith(
                 ReaderAccountConstants.CreateReaderAccountResult,
-                Result.Success(new RequestReaderAccountCreationResultDto(newReaderEntity.Id)));
+                Result.Success(readerAccountCreated));
+
+            await publishEndpoint.Publish(readerAccountCreated, token);
 
             return await next(context, token);
         }
         else
         {
-            return CreateReaderAccountError<RequestReaderAccountCreationResultDto>.Create(
+            return CreateReaderAccountError<ReaderAccountCreatedDto>.Create(
                 ReaderAccountConstants.ReaderAccountUnableToCreateUpdateError);
         }
     }

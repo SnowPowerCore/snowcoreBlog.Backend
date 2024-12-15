@@ -21,8 +21,8 @@ public class ConfirmCreateReaderAccountByEmailEndpoint : Endpoint<ConfirmCreateR
 
     [StepifiedProcess(Steps = [
         typeof(ValidateReaderAccountNotExistsStep),
-        typeof(ValidateAndCreateReaderAccountUserStep),
-        typeof(CreateNewReaderEntityStep),
+        typeof(CreateReaderAccountUserStep),
+        typeof(CreateReaderEntityForNewUserStep),
         typeof(ReturnCreatedReaderEntityStep),
     ])]
     protected ConfirmCreateReaderAccountDelegate CreateReaderAccount { get; }

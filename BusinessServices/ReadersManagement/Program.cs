@@ -113,6 +113,7 @@ builder.Services.AddMassTransit(busConfigurator =>
         config.ConfigureEndpoints(context);
     });
 });
+builder.AddRedisDistributedCache(connectionName: "cache");
 builder.Services.AddMultipleAuthentications(
    builder.Configuration["Security:Signing:User:Key"]!,
    builder.Configuration["Security:Signing:Admin:Key"]!);
@@ -138,9 +139,8 @@ builder.Services.AddScoped<ValidateReaderAccountNotExistsStep>();
 builder.Services.AddScoped<ValidateReaderAccountEmailDomainStep>();
 builder.Services.AddScoped<ValidateReaderAccountNickNameWasNotTakenStep>();
 builder.Services.AddScoped<CreateReaderAccountTempUserStep>();
-builder.Services.AddScoped<ValidateAndCreateReaderAccountUserStep>();
-builder.Services.AddScoped<CreateNewReaderEntityStep>();
-builder.Services.AddScoped<GenerateTokenForNewReaderAccountStep>();
+builder.Services.AddScoped<CreateReaderAccountUserStep>();
+builder.Services.AddScoped<CreateReaderEntityForNewUserStep>();
 builder.Services.AddScoped<ReturnCreatedReaderEntityStep>();
 builder.Services.AddScoped<RequestNewAttestationOptionsStep>();
 

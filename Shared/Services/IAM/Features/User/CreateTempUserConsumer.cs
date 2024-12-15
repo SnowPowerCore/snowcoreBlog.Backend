@@ -50,7 +50,7 @@ public class CreateTempUserConsumer(IValidator<CreateTempUser> validator,
         else
         {
             await context.RespondAsync(
-                CreateReaderAccountTempRecordError.Create(TempUserConstants.TempUserUnableToCreateUpdateError));
+                CreateTempUserError.Create(TempUserConstants.TempUserUnableToCreateUpdateError));
         }
     }
 }

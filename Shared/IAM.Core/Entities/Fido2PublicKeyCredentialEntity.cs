@@ -22,7 +22,7 @@ public record Fido2PublicKeyCredentialEntity : BaseEntity
 
     public required Guid UserId { get; init; }
 
-    public ICollection<Fido2AuthenticatorTransportEntity> AuthenticatorTransports { get; } = [];
+    public ICollection<Fido2AuthenticatorTransportEntity> AuthenticatorTransports { get; init; } = [];
 
-    public ICollection<Fido2DevicePublicKeyEntity> DevicePublicKeys { get; } = [];
+    public ICollection<Fido2DevicePublicKeyEntity> DevicePublicKeys { get; init; } = [];
 }

@@ -18,6 +18,8 @@ using snowcoreBlog.Backend.IAM.Core.Entities;
 using Fido2NetLib;
 using snowcoreBlog.Backend.Core.Interfaces.Services;
 using snowcoreBlog.Backend.Infrastructure.Services;
+using snowcoreBlog.Backend.Infrastructure.Utilities;
+using snowcoreBlog.Backend.Core.Utilities;
 
 var builder = WebApplication.CreateSlimBuilder(args);
 builder.Host.ApplyOaktonExtensions();
@@ -37,6 +39,11 @@ builder.Services.ConfigureHttpJsonOptions(static options =>
     options.SerializerOptions.SetJsonSerializationContext();
 });
 
+builder.Services.Configure<ValidStates<HashedStringsVerificationResult>>(static options =>
+{
+    options.States = [HashedStringsVerificationResult.Success, HashedStringsVerificationResult.SuccessRehashNeeded];
+});
+
 builder.WebHost.UseKestrelHttpsConfiguration();
 builder.AddServiceDefaults();
 builder.Services.AddProblemDetails();
@@ -51,6 +58,7 @@ builder.Services.AddMarten(static opts =>
     opts.RegisterDocumentType<Fido2AuthenticatorTransportEntity>();
     opts.RegisterDocumentType<Fido2DevicePublicKeyEntity>();
     opts.RegisterDocumentType<Fido2PublicKeyCredentialEntity>();
+    opts.RegisterCompiledQueryType(typeof(ApplicationGetTempUserByEmailQuery));
     opts.RegisterCompiledQueryType(typeof(ApplicationTempUserByEmailQuery));
     opts.RegisterCompiledQueryType(typeof(ApplicationTempUserByNickNameQuery));
     opts.GeneratedCodeMode = TypeLoadMode.Static;
@@ -82,7 +90,7 @@ builder.Services.AddScoped<IHasher, Argon2Hasher>();
 builder.Services.AddScoped<IApplicationTempUserRepository, ApplicationTempUserRepository>();
 builder.Services.AddMassTransit(busConfigurator =>
 {
-    busConfigurator.AddConsumer<CreateUserConsumer>();
+    busConfigurator.AddConsumer<ValidateAndCreateUserConsumer>();
     busConfigurator.AddConsumer<CreateTempUserConsumer>();
     busConfigurator.AddConsumer<ValidateUserExistsConsumer>();
     busConfigurator.AddConsumer<ValidateTempUserExistsConsumer>();

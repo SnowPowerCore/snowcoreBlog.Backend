@@ -1,4 +1,4 @@
-﻿namespace snowcoreBlog.Backend.Email.Core.Contracts;
+﻿namespace snowcoreBlog.Backend.Core.Contracts;
 
 public sealed record ReaderAccountTempUserCreated(
     string UserFirstName,

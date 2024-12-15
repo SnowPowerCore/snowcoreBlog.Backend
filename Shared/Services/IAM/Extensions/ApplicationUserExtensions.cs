@@ -1,20 +1,21 @@
-﻿using snowcoreBlog.Backend.IAM.Core.Contracts;
+﻿using Riok.Mapperly.Abstractions;
 using snowcoreBlog.Backend.IAM.Core.Entities;
 
 namespace snowcoreBlog.Backend.IAM.Extensions;
 
-public static class ApplicationUserExtensions
+[Mapper]
+public static partial class ApplicationUserExtensions
 {
-    public static ApplicationUserEntity ToEntity(this CreateUser createUser) =>
-        new()
-        {
-            UserName = createUser.NickName,
-            FirstName = createUser.FirstName,
-            LastName = !string.IsNullOrEmpty(createUser.LastName) ? createUser.LastName : string.Empty,
-            Email = createUser.Email,
-            PhoneNumber = createUser.PhoneNumber,
-            AccessFailedCount = 0,
-            PhoneNumberConfirmed = false,
-            EmailConfirmed = false
-        };
+    private static partial ApplicationUserEntity MapperToUserEntity(this ApplicationTempUserEntity tempEntity);
+
+    public static ApplicationUserEntity ToUserEntity(
+        this ApplicationTempUserEntity tempEntity,
+        Fido2PublicKeyCredentialEntity publicKeyCredentialEntity,
+        bool emailConfirmed = true)
+    {
+        var userEntity = MapperToUserEntity(tempEntity);
+        userEntity.PublicKeyCredentials = [publicKeyCredentialEntity];
+        userEntity.EmailConfirmed = emailConfirmed;
+        return userEntity;
+    }
 }

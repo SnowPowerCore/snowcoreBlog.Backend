@@ -6,6 +6,7 @@ using MassTransit;
 using MassTransit.Events;
 using Microsoft.AspNetCore.Antiforgery;
 using Scalar.AspNetCore;
+using snowcoreBlog.Backend.Core.Contracts;
 using snowcoreBlog.Backend.Core.Entities.Reader;
 using snowcoreBlog.Backend.Email.Core.Contracts;
 using snowcoreBlog.Backend.IAM.Core.Contracts;

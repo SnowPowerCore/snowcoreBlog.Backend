@@ -15,4 +15,15 @@ public static class Fido2Extensions
             AuthenticatorSelection = authenticatorSelection,
             Extensions = authenticationExtensionsClientInputs
         };
+
+    public static MakeNewCredentialParams ToMakeNewCredentialParams(
+        AuthenticatorAttestationRawResponse authenticatorAttestation,
+        CredentialCreateOptions credentialCreateOptions,
+        IsCredentialIdUniqueToUserAsyncDelegate isCredentialIdUniqueToUserAsync) =>
+        new()
+        {
+            IsCredentialIdUniqueToUserCallback = isCredentialIdUniqueToUserAsync,
+            AttestationResponse = authenticatorAttestation,
+            OriginalOptions = credentialCreateOptions
+        };
 }

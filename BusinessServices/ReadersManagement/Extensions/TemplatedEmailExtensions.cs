@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using snowcoreBlog.Backend.Core.Contracts;
 using snowcoreBlog.Backend.Email.Core.Contracts;
 using snowcoreBlog.Backend.Email.Core.Options;
 

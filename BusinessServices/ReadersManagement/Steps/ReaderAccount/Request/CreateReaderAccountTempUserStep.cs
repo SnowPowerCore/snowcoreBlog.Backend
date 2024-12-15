@@ -1,7 +1,7 @@
 ﻿using MassTransit;
 using MinimalStepifiedSystem.Interfaces;
 using Results;
-using snowcoreBlog.Backend.Email.Core.Contracts;
+using snowcoreBlog.Backend.Core.Contracts;
 using snowcoreBlog.Backend.IAM.Core.Contracts;
 using snowcoreBlog.Backend.ReadersManagement.Constants;
 using snowcoreBlog.Backend.ReadersManagement.Context;
@@ -16,7 +16,7 @@ public class CreateReaderAccountTempUserStep(IRequestClient<CreateTempUser> clie
 {
     public async Task<IResult<RequestReaderAccountCreationResultDto>> InvokeAsync(RequestCreateReaderAccountContext context, RequestCreateReaderAccountDelegate next, CancellationToken token = default)
     {
-        var response = await client.GetResponse<DataResult<TempUserCreationResult>>(context.Request.ToCreateTempUser(), token);
+        var response = await client.GetResponse<DataResult<TempUserCreationResult>>(context.CreateRequest.ToCreateTempUser(), token);
         if (response.Message.IsSuccess)
         {
             var responseObj = response!.Message.Value;

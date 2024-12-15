@@ -10,4 +10,6 @@ public class ApplicationUserEntity : IdentityUser, IClaimsUser
     public string FirstName { get; set; }
 
     public string LastName { get; set; }
+
+    public ICollection<Fido2PublicKeyCredentialEntity> PublicKeyCredentials { get; set; } = [];
 }

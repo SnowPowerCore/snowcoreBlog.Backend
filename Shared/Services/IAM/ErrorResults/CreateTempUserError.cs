@@ -3,4 +3,4 @@ using Results;
 namespace snowcoreBlog.Backend.IAM.ErrorResults;
 
 [ErrorResult]
-public partial record CreateReaderAccountTempRecordError;
+public partial record CreateTempUserError;
