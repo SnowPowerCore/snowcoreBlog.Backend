@@ -44,6 +44,8 @@ namespace snowcoreBlog.Backend.Infrastructure;
 [JsonSerializable(typeof(CredentialCreateOptions))]
 [JsonSerializable(typeof(RequestCreateReaderAccountDto))]
 [JsonSerializable(typeof(RequestReaderAccountCreationResultDto))]
+[JsonSerializable(typeof(ConfirmCreateReaderAccountDto))]
+[JsonSerializable(typeof(ReaderAccountCreatedDto))]
 [JsonSerializable(typeof(CheckNickNameNotTakenDto))]
 [JsonSerializable(typeof(NickNameNotTakenCheckResultDto))]
 [JsonSerializable(typeof(RequestAttestationOptionsForRegistrationDto))]

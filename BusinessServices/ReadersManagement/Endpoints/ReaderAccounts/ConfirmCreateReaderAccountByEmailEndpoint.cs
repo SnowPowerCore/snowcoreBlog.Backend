@@ -25,7 +25,7 @@ public class ConfirmCreateReaderAccountByEmailEndpoint : Endpoint<ConfirmCreateR
         typeof(CreateReaderEntityForNewUserStep),
         typeof(ReturnCreatedReaderEntityStep),
     ])]
-    protected ConfirmCreateReaderAccountDelegate CreateReaderAccount { get; }
+    protected ConfirmCreateReaderAccountDelegate ConfirmCreateReaderAccount { get; }
 
     public override void Configure()
     {
@@ -43,7 +43,7 @@ public class ConfirmCreateReaderAccountByEmailEndpoint : Endpoint<ConfirmCreateR
     {
         var context = new ConfirmCreateReaderAccountContext(req);
 
-        var result = await CreateReaderAccount(context, ct);
+        var result = await ConfirmCreateReaderAccount(context, ct);
 
         await SendAsync(
             result?.ToApiResponse(serializerOptions: JsonOptions.Value.SerializerOptions),

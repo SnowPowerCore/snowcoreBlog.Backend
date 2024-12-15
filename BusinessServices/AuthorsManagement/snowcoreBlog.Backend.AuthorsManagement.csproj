@@ -18,7 +18,7 @@
     </PackageReference>
     <PackageReference Include="ConfigureAwait.Fody" Version="3.3.2" />
     <PackageReference Include="Marten" Version="7.31.3" />
-    <PackageReference Include="MinimalStepifiedSystem.Core" Version="1.1.1" />
+    <PackageReference Include="MinimalStepifiedSystem.Core" Version="1.1.2" />
     <PackageReference Include="Riok.Mapperly" Version="4.1.0">
       <IncludeAssets>runtime</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
@@ -34,9 +34,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\snowcoreBlog.Universal\ServiceDefaults\snowcoreBlog.ServiceDefaults.csproj" />
-    <ProjectReference Include="..\..\Shared\Infrastructure\snowcoreBlog.Backend.Infrastructure.csproj" />
-    <ProjectReference Include="..\..\snowcoreBlog.Universal\UniversalModules\ApplicationLaunch.Implementations\snowcoreBlog.ApplicationLaunch.Implementations.csproj" />
+    <ProjectReference
+      Include="..\..\snowcoreBlog.Universal\ServiceDefaults\snowcoreBlog.ServiceDefaults.csproj" />
+    <ProjectReference
+      Include="..\..\Shared\Infrastructure\snowcoreBlog.Backend.Infrastructure.csproj" />
+    <ProjectReference
+      Include="..\..\snowcoreBlog.Universal\UniversalModules\ApplicationLaunch.Implementations\snowcoreBlog.ApplicationLaunch.Implementations.csproj" />
     <ProjectReference Include="..\..\snowcoreBlog.Universal\PublicApi\snowcoreBlog.PublicApi.csproj" />
   </ItemGroup>
 
