@@ -8,6 +8,15 @@ namespace snowcoreBlog.Backend.ReadersManagement;
 [Mapper]
 public static partial class CreateUserExtensions
 {
+    public static CreateUser ToCreateUser(this ConfirmCreateReaderAccountDto createReaderAccountDto, string attestationOptionsJson) =>
+        new()
+        {
+            Email = createReaderAccountDto.Email,
+            TempUserVerificationToken = createReaderAccountDto.VerificationToken,
+            AuthenticatorAttestation = createReaderAccountDto.AuthenticatorAttestation,
+            AttestationOptionsJson = attestationOptionsJson
+        };
+
     [MapProperty(nameof(RequestCreateReaderAccountDto.NickName), nameof(CreateTempUser.UserName))]
     public static partial CreateTempUser ToCreateTempUser(this RequestCreateReaderAccountDto createReaderAccountDto);
 
@@ -19,10 +28,7 @@ public static partial class CreateUserExtensions
 
     public static partial ValidateUserNickNameTaken ToValidateUserNickNameTaken(this RequestCreateReaderAccountDto createReaderAccountDto);
 
-    public static ReaderEntity ToEntity(this RequestCreateReaderAccountDto createReaderAccountDto, Guid userId) =>
-        new()
-        {
-            UserId = userId,
-            NickName = createReaderAccountDto.NickName
-        };
+    [MapProperty(nameof(UserCreationResult.Id), nameof(ReaderEntity.UserId))]
+    [MapProperty(nameof(UserCreationResult.UserName), nameof(ReaderEntity.NickName))]
+    public static partial ReaderEntity ToEntity(this UserCreationResult userCreationResult);
 }

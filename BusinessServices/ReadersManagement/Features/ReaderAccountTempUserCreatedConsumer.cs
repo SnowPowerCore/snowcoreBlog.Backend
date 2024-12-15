@@ -1,6 +1,6 @@
 ﻿using MassTransit;
 using Microsoft.Extensions.Options;
-using snowcoreBlog.Backend.Email.Core.Contracts;
+using snowcoreBlog.Backend.Core.Contracts;
 using snowcoreBlog.Backend.Email.Core.Options;
 using snowcoreBlog.Backend.ReadersManagement.Constants;
 using snowcoreBlog.Backend.ReadersManagement.Extensions;

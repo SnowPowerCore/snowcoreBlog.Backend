@@ -1,18 +1,14 @@
-﻿namespace snowcoreBlog.Backend.IAM.Core.Contracts;
+﻿using Fido2NetLib;
+
+namespace snowcoreBlog.Backend.IAM.Core.Contracts;
 
 public sealed record CreateUser
 {
-    public string FirstName { get; init; } = string.Empty;
+    public required string Email { get; init; }
 
-    public string LastName { get; init; } = string.Empty;
+    public required string TempUserVerificationToken { get; init; }
 
-    public string NickName { get; init; } = string.Empty;
+    public required string AttestationOptionsJson { get; init; }
 
-    public required string Email { get; init; } = string.Empty;
-
-    public string PhoneNumber { get; init; } = string.Empty;
-
-    public bool Subscribed { get; init; } = false;
-
-    public required bool ConfirmedAgreement { get; init; } = false;
+    public required AuthenticatorAttestationRawResponse AuthenticatorAttestation { get; init; }
 }

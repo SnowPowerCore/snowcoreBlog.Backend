@@ -4,5 +4,6 @@ public static class ReaderAccountUserConstants
 {
     public const string CreateTempUserForReaderAccountResult = nameof(CreateTempUserForReaderAccountResult);
     public const string TempUserForReaderAccountUnableToCreateUpdateError = nameof(TempUserForReaderAccountUnableToCreateUpdateError);
+    public const string UserForReaderAccountUnableToCreateUpdateError = nameof(UserForReaderAccountUnableToCreateUpdateError);
 
 }

@@ -15,7 +15,7 @@ public class ValidateReaderAccountEmailDomainStep(IRequestClient<CheckEmailDomai
 {
     public async Task<IResult<RequestReaderAccountCreationResultDto>> InvokeAsync(RequestCreateReaderAccountContext context, RequestCreateReaderAccountDelegate next, CancellationToken token = default)
     {
-        var result = await requestClient.GetResponse<DataResult<EmailDomainChecked>>(context.Request.ToCheckEmailDomain());
+        var result = await requestClient.GetResponse<DataResult<EmailDomainChecked>>(context.CreateRequest.ToCheckEmailDomain());
         if (result.Message.IsSuccess)
         {
             return await next(context, token);

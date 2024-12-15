@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <PackageReference Include="Aspire.Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.2.2" />
+    <PackageReference Include="Aspire.StackExchange.Redis.DistributedCaching" Version="9.0.0" />
     <PackageReference Include="FastEndpoints" Version="5.31.0" />
     <PackageReference Include="FastEndpoints.Generator" Version="5.31.0">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -29,8 +30,7 @@
     <PackageReference Include="Marten.CommandLine" Version="7.31.3" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.0" />
     <PackageReference Include="MinimalStepifiedSystem.Core" Version="1.1.1" />
-    <PackageReference Include="OpenTelemetry.Instrumentation.StackExchangeRedis"
-      Version="1.10.0-beta.1" />
+    <PackageReference Include="OpenTelemetry.Instrumentation.StackExchangeRedis" Version="1.10.0-beta.1" />
     <PackageReference Include="Scalar.AspNetCore" Version="1.2.37" />
     <PackageReference Include="Riok.Mapperly" Version="4.1.0">
       <ExcludeAssets>runtime</ExcludeAssets>
@@ -43,17 +43,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference
-      Include="..\..\snowcoreBlog.Universal\ServiceDefaults\snowcoreBlog.ServiceDefaults.csproj" />
-    <ProjectReference
-      Include="..\..\Shared\Infrastructure\snowcoreBlog.Backend.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\snowcoreBlog.Universal\ServiceDefaults\snowcoreBlog.ServiceDefaults.csproj" />
+    <ProjectReference Include="..\..\Shared\Infrastructure\snowcoreBlog.Backend.Infrastructure.csproj" />
     <ProjectReference Include="..\..\snowcoreBlog.Universal\PublicApi\snowcoreBlog.PublicApi.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Features\" />
     <Folder Include="Steps\Attestation\" />
-    <Folder Include="Steps\ReaderAccount\Confirm\" />
   </ItemGroup>
 
   <ItemGroup>

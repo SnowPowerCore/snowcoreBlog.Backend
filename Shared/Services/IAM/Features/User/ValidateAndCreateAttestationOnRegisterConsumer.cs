@@ -1,6 +1,7 @@
 ﻿using Fido2NetLib;
 using Fido2NetLib.Objects;
 using MassTransit;
+using Microsoft.Extensions.Options;
 using Results;
 using snowcoreBlog.Backend.Core.Interfaces.Services;
 using snowcoreBlog.Backend.Core.Utilities;
@@ -10,23 +11,22 @@ using snowcoreBlog.Backend.IAM.Core.Entities;
 using snowcoreBlog.Backend.IAM.ErrorResults;
 using snowcoreBlog.Backend.IAM.Extensions;
 using snowcoreBlog.Backend.IAM.Interfaces.Repositories.Marten;
+using snowcoreBlog.Backend.Infrastructure.Utilities;
 
 namespace snowcoreBlog.Backend.IAM.Features.User;
 
 public class ValidateAndCreateAttestationOnRegisterConsumer(IHasher hasher,
                                                             IFido2 fido2,
+                                                            IOptions<ValidStates<HashedStringsVerificationResult>> validStatesOptions,
                                                             IApplicationTempUserRepository applicationTempUserRepository) : IConsumer<ValidateAndCreateAttestationOnRegister>
 {
-    private readonly List<HashedStringsVerificationResult> _validStates =
-        [HashedStringsVerificationResult.Success, HashedStringsVerificationResult.SuccessRehashNeeded];
-
     public async Task Consume(ConsumeContext<ValidateAndCreateAttestationOnRegister> context)
     {
-        var tempUser = await applicationTempUserRepository.GetTempUserByEmailAsync(context.Message.Email);
+        var tempUser = await applicationTempUserRepository.GetTempUserByEmailAsync(context.Message.Email, context.CancellationToken);
         if (tempUser is not default(ApplicationTempUserEntity))
         {
             var dateTimeNow = DateTime.UtcNow;
-            if (_validStates.Contains(hasher.VerifyHashedStrings(tempUser.ActivationToken, context.Message.VerificationToken))
+            if (validStatesOptions.Value.States.Contains(hasher.VerifyHashedStrings(tempUser.ActivationToken, context.Message.VerificationToken))
                 && tempUser.ActivationTokenExpirationDate > dateTimeNow)
             {
                 // As validation of the token succeeded, we expect that registration process won't take much longer,

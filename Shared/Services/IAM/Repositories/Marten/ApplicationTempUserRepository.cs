@@ -9,15 +9,15 @@ namespace snowcoreBlog.Backend.IAM.Repositories.Marten;
 
 public class ApplicationTempUserRepository(IDocumentSession session) : BaseMartenRepository<ApplicationTempUserEntity>(session), IApplicationTempUserRepository
 {
-    public Task<bool> CheckTempUserExistsByEmailAsync(string email) =>
+    public Task<bool> CheckTempUserExistsByEmailAsync(string email, CancellationToken token = default) =>
         AnyByQueryAsync(MartenCompiledQueryProvider<ApplicationTempUserEntity, bool>
-            .Create(new ApplicationTempUserByEmailQuery { Email = email }));
+            .Create(new ApplicationTempUserByEmailQuery { Email = email }), token);
 
-    public Task<ApplicationTempUserEntity?> GetTempUserByEmailAsync(string email) =>
+    public Task<ApplicationTempUserEntity?> GetTempUserByEmailAsync(string email, CancellationToken token = default) =>
         GetOneByQueryAsync(MartenCompiledQueryProvider<ApplicationTempUserEntity, ApplicationTempUserEntity>
-            .Create(new ApplicationGetTempUserByEmailQuery { Email = email }));
+            .Create(new ApplicationGetTempUserByEmailQuery { Email = email }), token);
 
-    public Task<bool> CheckTempUserExistsByNickNameAsync(string nickName) =>
+    public Task<bool> CheckTempUserExistsByNickNameAsync(string nickName, CancellationToken token = default) =>
         AnyByQueryAsync(MartenCompiledQueryProvider<ApplicationTempUserEntity, bool>
-            .Create(new ApplicationTempUserByNickNameQuery { NickName = nickName }));
+            .Create(new ApplicationTempUserByNickNameQuery { NickName = nickName }), token);
 }
