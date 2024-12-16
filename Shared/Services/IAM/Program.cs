@@ -95,7 +95,8 @@ builder.Services.AddMassTransit(busConfigurator =>
     busConfigurator.AddConsumer<ValidateUserExistsConsumer>();
     busConfigurator.AddConsumer<ValidateTempUserExistsConsumer>();
     busConfigurator.AddConsumer<ValidateUserNickNameWasTakenConsumer>();
-    busConfigurator.AddConsumer<ValidateAndCreateAttestationOnRegisterConsumer>();
+    busConfigurator.AddConsumer<ValidateAndCreateAttestationConsumer>();
+    busConfigurator.AddConsumer<ValidateAndCreateAssertionConsumer>();
     busConfigurator.ConfigureHttpJsonOptions(o => o.SerializerOptions.SetJsonSerializationContext());
     busConfigurator.UsingRabbitMq((context, config) =>
     {

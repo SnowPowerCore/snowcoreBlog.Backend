@@ -5,7 +5,7 @@ using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 namespace snowcoreBlog.Backend.ReadersManagement.Extensions;
 
 [Mapper]
-public static partial class AttestationExtensions
+public static partial class AssertionExtensions
 {
-    public static partial ValidateAndCreateAttestation ToValidate(this RequestAttestationOptionsDto requestAttestationOptions);
+    public static partial ValidateAndCreateAssertion ToValidate(this RequestAssertionOptionsDto requestAssertionOptions);
 }

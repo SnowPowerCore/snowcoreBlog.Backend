@@ -7,13 +7,12 @@ using snowcoreBlog.PublicApi.Utilities.DataResult;
 
 namespace snowcoreBlog.Backend.IAM.Features.User;
 
-public class ValidateUserNickNameWasTakenConsumer(IUserStore<ApplicationUserEntity> userStore,
+public class ValidateUserNickNameWasTakenConsumer(UserManager<ApplicationUserEntity> userManager,
                                                   IApplicationTempUserRepository applicationTempUserRepository) : IConsumer<ValidateUserNickNameTaken>
 {
     public async Task Consume(ConsumeContext<ValidateUserNickNameTaken> context)
     {
-        var user = await ((IUserEmailStore<ApplicationUserEntity>)userStore).FindByNameAsync(
-            context.Message.NickName.ToUpper(), context.CancellationToken);
+        var user = await userManager.FindByNameAsync(userManager.NormalizeName(context.Message.NickName));
         if (user is not default(ApplicationUserEntity))
         {
             await context.RespondAsync(

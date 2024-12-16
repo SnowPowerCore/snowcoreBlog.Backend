@@ -3,11 +3,7 @@ using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 
 namespace snowcoreBlog.Backend.ReadersManagement.Context;
 
-public class RequestAttestationOptionsContext(
-    RequestAttestationOptionsForRegistrationDto requestAttestationOptionsForRegistration = null,
-    RequestAttestationOptionsForLoginDto requestAttestationOptionsForLogin = null) : BaseGenericContext
+public class RequestAttestationOptionsContext(RequestAttestationOptionsDto requestAttestationOptions = null) : BaseGenericContext
 {
-    public RequestAttestationOptionsForRegistrationDto RequestAttestationOptionsForRegistration { get; } = requestAttestationOptionsForRegistration;
-
-    public RequestAttestationOptionsForLoginDto RequestAttestationOptionsForLogin { get; } = requestAttestationOptionsForLogin;
+    public RequestAttestationOptionsDto RequestAttestationOptions { get; } = requestAttestationOptions;
 }
