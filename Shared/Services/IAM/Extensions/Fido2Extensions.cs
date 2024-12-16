@@ -16,6 +16,17 @@ public static class Fido2Extensions
             Extensions = authenticationExtensionsClientInputs
         };
 
+    public static GetAssertionOptionsParams ToGetAssertionOptionsParams(
+        this List<PublicKeyCredentialDescriptor> allowedCredentials,
+        UserVerificationRequirement userVerification,
+        AuthenticationExtensionsClientInputs extensions) =>
+        new()
+        {
+            AllowedCredentials = allowedCredentials,
+            UserVerification = userVerification,
+            Extensions = extensions
+        };
+
     public static MakeNewCredentialParams ToMakeNewCredentialParams(
         AuthenticatorAttestationRawResponse authenticatorAttestation,
         CredentialCreateOptions credentialCreateOptions,

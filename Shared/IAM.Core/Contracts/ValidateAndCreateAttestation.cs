@@ -2,7 +2,7 @@
 
 namespace snowcoreBlog.Backend.IAM.Core.Contracts;
 
-public sealed record ValidateAndCreateAttestationOnRegister
+public sealed record ValidateAndCreateAttestation
 {
     public required string Email { get; init; }
 

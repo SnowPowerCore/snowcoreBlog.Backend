@@ -6,7 +6,7 @@ using MinimalStepifiedSystem.Attributes;
 using snowcoreBlog.Backend.Infrastructure;
 using snowcoreBlog.Backend.ReadersManagement.Context;
 using snowcoreBlog.Backend.ReadersManagement.Delegates;
-using snowcoreBlog.Backend.ReadersManagement.Steps.Attestation;
+using snowcoreBlog.Backend.ReadersManagement.Steps.Assertion;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 using snowcoreBlog.PublicApi.Extensions;
 using snowcoreBlog.PublicApi.Utilities.Api;
@@ -14,32 +14,32 @@ using snowcoreBlog.PublicApi.Validation.Dto;
 
 namespace snowcoreBlog.Backend.ReadersManagement.Endpoints.ReaderAccounts;
 
-public class RequestAttestationOptionsForRegistrationEndpoint : Endpoint<RequestAttestationOptionsForRegistrationDto, ApiResponse?>
+public class RequestAssertionOptionsEndpoint : Endpoint<RequestAssertionOptionsDto, ApiResponse?>
 {
     public IOptions<JsonOptions> JsonOptions { get; set; }
 
     [StepifiedProcess(Steps = [
-        typeof(RequestNewAttestationOptionsStep)
+        typeof(RequestNewAssertionOptionsStep)
     ])]
-    protected RequestAttestationOptionsDelegate RequestReaderAccountAttestationOptions { get; }
+    protected RequestAssertionOptionsDelegate RequestReaderAccountAssertionOptions { get; }
 
     public override void Configure()
     {
-        Post("create/attestation");
+        Post("request/assertion");
         Version(1);
         SerializerContext(CoreSerializationContext.Default);
-        Validator<RequestAttestationOptionsForRegistrationValidation>();
+        Validator<RequestAssertionOptionsValidation>();
         AllowAnonymous();
     }
 
     [ServiceProviderSupplier]
-    public RequestAttestationOptionsForRegistrationEndpoint(IServiceProvider _) { }
+    public RequestAssertionOptionsEndpoint(IServiceProvider _) { }
 
-    public override async Task HandleAsync(RequestAttestationOptionsForRegistrationDto req, CancellationToken ct)
+    public override async Task HandleAsync(RequestAssertionOptionsDto req, CancellationToken ct)
     {
-        var context = new RequestAttestationOptionsContext(requestAttestationOptionsForRegistration: req);
+        var context = new RequestAssertionOptionsContext(requestAssertionOptions: req);
 
-        var result = await RequestReaderAccountAttestationOptions(context, ct);
+        var result = await RequestReaderAccountAssertionOptions(context, ct);
 
         await SendAsync(
             result?.ToApiResponse(serializerOptions: JsonOptions.Value.SerializerOptions),

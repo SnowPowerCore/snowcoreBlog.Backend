@@ -17,7 +17,7 @@ public class GetAntiforgeryTokenEndpoint : EndpointWithoutRequest
 
     public override void Configure()
     {
-        Get("antiForgeryToken");
+        Get("antiforgerytoken");
         Version(1);
         SerializerContext(CoreSerializationContext.Default);
         AllowAnonymous();

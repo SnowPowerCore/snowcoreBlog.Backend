@@ -15,12 +15,12 @@ using snowcoreBlog.Backend.Infrastructure.Utilities;
 
 namespace snowcoreBlog.Backend.IAM.Features.User;
 
-public class ValidateAndCreateAttestationOnRegisterConsumer(IHasher hasher,
-                                                            IFido2 fido2,
-                                                            IOptions<ValidStates<HashedStringsVerificationResult>> validStatesOptions,
-                                                            IApplicationTempUserRepository applicationTempUserRepository) : IConsumer<ValidateAndCreateAttestationOnRegister>
+public class ValidateAndCreateAttestationConsumer(IHasher hasher,
+                                                  IFido2 fido2,
+                                                  IOptions<ValidStates<HashedStringsVerificationResult>> validStatesOptions,
+                                                  IApplicationTempUserRepository applicationTempUserRepository) : IConsumer<ValidateAndCreateAttestation>
 {
-    public async Task Consume(ConsumeContext<ValidateAndCreateAttestationOnRegister> context)
+    public async Task Consume(ConsumeContext<ValidateAndCreateAttestation> context)
     {
         var tempUser = await applicationTempUserRepository.GetTempUserByEmailAsync(context.Message.Email, context.CancellationToken);
         if (tempUser is not default(ApplicationTempUserEntity))
