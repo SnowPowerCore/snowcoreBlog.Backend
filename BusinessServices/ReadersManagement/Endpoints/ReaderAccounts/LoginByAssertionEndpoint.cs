@@ -6,8 +6,7 @@ using MinimalStepifiedSystem.Attributes;
 using snowcoreBlog.Backend.Infrastructure;
 using snowcoreBlog.Backend.ReadersManagement.Context;
 using snowcoreBlog.Backend.ReadersManagement.Delegates;
-using snowcoreBlog.Backend.ReadersManagement.Steps.ReaderAccount;
-using snowcoreBlog.Backend.ReadersManagement.Steps.ReaderAccount.Request;
+using snowcoreBlog.Backend.ReadersManagement.Steps.Assertion;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 using snowcoreBlog.PublicApi.Extensions;
 using snowcoreBlog.PublicApi.Utilities.Api;
@@ -15,36 +14,32 @@ using snowcoreBlog.PublicApi.Validation.Dto;
 
 namespace snowcoreBlog.Backend.ReadersManagement.Endpoints.ReaderAccounts;
 
-public class RequestCreateReaderAccountByEmailEndpoint : Endpoint<RequestCreateReaderAccountDto, ApiResponse?>
+public class LoginByAssertionEndpoint : Endpoint<LoginByAssertionDto, ApiResponse?>
 {
     public IOptions<JsonOptions> JsonOptions { get; set; }
 
     [StepifiedProcess(Steps = [
-        typeof(ValidateReaderAccountEmailDomainStep),
-        typeof(ValidateReaderAccountNotExistsStep),
-        typeof(ValidateReaderAccountTempRecordNotExistsStep),
-        typeof(ValidateReaderAccountNickNameWasNotTakenStep),
-        typeof(CreateReaderAccountTempUserStep),
+        typeof(ValidateReaderAccountExistsStep)
     ])]
-    protected RequestCreateReaderAccountDelegate RequestCreateReaderAccount { get; }
+    protected LoginByAssertionDelegate LoginByAssertion { get; }
 
     public override void Configure()
     {
-        Post("create/request/email");
+        Post("login/assertion");
         Version(1);
         SerializerContext(CoreSerializationContext.Default);
-        Validator<RequestCreateReaderAccountValidation>();
+        Validator<LoginByAssertionValidation>();
         AllowAnonymous();
     }
 
     [ServiceProviderSupplier]
-    public RequestCreateReaderAccountByEmailEndpoint(IServiceProvider _) { }
+    public LoginByAssertionEndpoint(IServiceProvider _) { }
 
-    public override async Task HandleAsync(RequestCreateReaderAccountDto req, CancellationToken ct)
+    public override async Task HandleAsync(LoginByAssertionDto req, CancellationToken ct)
     {
-        var context = new RequestCreateReaderAccountContext(req);
+        var context = new LoginByAssertionContext(req);
 
-        var result = await RequestCreateReaderAccount(context, ct);
+        var result = await LoginByAssertion(context, ct);
 
         await SendAsync(
             result?.ToApiResponse(serializerOptions: JsonOptions.Value.SerializerOptions),

@@ -54,8 +54,4 @@
     <Folder Include="Steps\Attestation\" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Include="Endpoints\ReaderAccounts\RequestCreateReaderAccountByEmailEndpoint.cs" />
-  </ItemGroup>
-
 </Project>

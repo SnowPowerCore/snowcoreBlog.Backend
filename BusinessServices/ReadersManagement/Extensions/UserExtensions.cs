@@ -6,7 +6,7 @@ using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 namespace snowcoreBlog.Backend.ReadersManagement;
 
 [Mapper]
-public static partial class CreateUserExtensions
+public static partial class UserExtensions
 {
     public static CreateUser ToCreateUser(this ConfirmCreateReaderAccountDto createReaderAccountDto, string attestationOptionsJson) =>
         new()
@@ -20,9 +20,19 @@ public static partial class CreateUserExtensions
     [MapProperty(nameof(RequestCreateReaderAccountDto.NickName), nameof(CreateTempUser.UserName))]
     public static partial CreateTempUser ToCreateTempUser(this RequestCreateReaderAccountDto createReaderAccountDto);
 
+    public static LoginUser ToLoginUser(this LoginByAssertionDto loginByAssertionDto, string assertionOptionsJson) =>
+        new()
+        {
+            Email = loginByAssertionDto.Email,
+            AssertionOptionsJson = assertionOptionsJson,
+            AuthenticatorAssertion = loginByAssertionDto.AuthenticatorAssertion
+        };
+
     public static partial ValidateUserExists ToValidateUserExists(this RequestCreateReaderAccountDto createReaderAccountDto);
 
     public static partial ValidateUserExists ToValidateUserExists(this ConfirmCreateReaderAccountDto createReaderAccountDto);
+
+    public static partial ValidateUserExists ToValidateUserExists(this LoginByAssertionDto createReaderAccountDto);
 
     public static partial ValidateTempUserExists ToValidateTempUserExists(this RequestCreateReaderAccountDto createReaderAccountDto);
 

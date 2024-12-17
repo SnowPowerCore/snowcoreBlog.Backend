@@ -24,6 +24,7 @@ using snowcoreBlog.Backend.Infrastructure.Utilities;
 using snowcoreBlog.Backend.ReadersManagement.Features;
 using snowcoreBlog.Backend.ReadersManagement.Interfaces.Repositories.Marten;
 using snowcoreBlog.Backend.ReadersManagement.Repositories.Marten;
+using snowcoreBlog.Backend.ReadersManagement.Steps.Assertion;
 using snowcoreBlog.Backend.ReadersManagement.Steps.Attestation;
 using snowcoreBlog.Backend.ReadersManagement.Steps.NickName;
 using snowcoreBlog.Backend.ReadersManagement.Steps.ReaderAccount;
@@ -129,15 +130,14 @@ builder.Services
     .SwaggerDocument()
     .AddCors();
 
-builder.Services.AddSingleton<IValidator<RequestCreateReaderAccountDto>, RequestCreateReaderAccountValidation>();
-
 builder.Services.AddScoped<IHasher, Argon2Hasher>();
 builder.Services.AddScoped<IAltchaChallengeStore, AltchaChallengeStore>();
 builder.Services.AddScoped<IReaderRepository, ReaderRepository>();
 builder.Services.AddScoped<ValidateNickNameWasNotTakenStep>();
 builder.Services.AddScoped<ValidateReaderAccountTempRecordNotExistsStep>();
-builder.Services.AddScoped<snowcoreBlog.Backend.ReadersManagement.Steps.ReaderAccount.Request.ValidateReaderAccountNotExistsStep>();
-builder.Services.AddScoped<snowcoreBlog.Backend.ReadersManagement.Steps.ReaderAccount.Confirm.ValidateReaderAccountNotExistsStep>();
+builder.Services.AddScoped<ValidateReaderAccountExistsStep>();
+builder.Services.AddScoped<snowcoreBlog.Backend.ReadersManagement.Steps.ReaderAccount.Request.ValidateReaderAccountNotExistStep>();
+builder.Services.AddScoped<snowcoreBlog.Backend.ReadersManagement.Steps.ReaderAccount.Confirm.ValidateReaderAccountNotExistStep>();
 builder.Services.AddScoped<ValidateReaderAccountEmailDomainStep>();
 builder.Services.AddScoped<ValidateReaderAccountNickNameWasNotTakenStep>();
 builder.Services.AddScoped<CreateReaderAccountTempUserStep>();
@@ -145,6 +145,8 @@ builder.Services.AddScoped<CreateReaderAccountUserStep>();
 builder.Services.AddScoped<CreateReaderEntityForNewUserStep>();
 builder.Services.AddScoped<ReturnCreatedReaderEntityStep>();
 builder.Services.AddScoped<RequestNewAttestationOptionsStep>();
+builder.Services.AddScoped<RequestNewAssertionOptionsStep>();
+builder.Services.AddScoped<AttemptLoginByAssertionStep>();
 
 var app = builder.Build();
 
