@@ -28,7 +28,7 @@ public static class Fido2Extensions
         };
 
     public static MakeNewCredentialParams ToMakeNewCredentialParams(
-        AuthenticatorAttestationRawResponse authenticatorAttestation,
+        this AuthenticatorAttestationRawResponse authenticatorAttestation,
         CredentialCreateOptions credentialCreateOptions,
         IsCredentialIdUniqueToUserAsyncDelegate isCredentialIdUniqueToUserAsync) =>
         new()
@@ -36,5 +36,20 @@ public static class Fido2Extensions
             IsCredentialIdUniqueToUserCallback = isCredentialIdUniqueToUserAsync,
             AttestationResponse = authenticatorAttestation,
             OriginalOptions = credentialCreateOptions
+        };
+
+    public static MakeAssertionParams ToMakeAssertionParams(
+        this AuthenticatorAssertionRawResponse authenticatorAssertionRawResponse,
+        AssertionOptions assertionOptions,
+        byte[] storedPublicKey,
+        uint storedSignatureCounter,
+        IsUserHandleOwnerOfCredentialIdAsync isUserHandleOwnerOfCredentialIdCallback) =>
+        new()
+        {
+            AssertionResponse = authenticatorAssertionRawResponse,
+            OriginalOptions = assertionOptions,
+            StoredPublicKey = storedPublicKey,
+            StoredSignatureCounter = storedSignatureCounter,
+            IsUserHandleOwnerOfCredentialIdCallback = isUserHandleOwnerOfCredentialIdCallback
         };
 }

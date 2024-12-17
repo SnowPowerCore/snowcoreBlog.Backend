@@ -1,6 +1,7 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 using Fido2NetLib;
+using Fido2NetLib.Objects;
 using Ixnas.AltchaNet;
 using MassTransit;
 using MassTransit.Events;
@@ -33,6 +34,8 @@ namespace snowcoreBlog.Backend.Infrastructure;
 [JsonSerializable(typeof(CreateAdmin))]
 [JsonSerializable(typeof(CreateUser))]
 [JsonSerializable(typeof(CreateTempUser))]
+[JsonSerializable(typeof(LoginUser))]
+[JsonSerializable(typeof(GenerateUserToken))]
 [JsonSerializable(typeof(ValidateUserExists))]
 [JsonSerializable(typeof(ValidateTempUserExists))]
 [JsonSerializable(typeof(ValidateUserNickNameTaken))]
@@ -41,7 +44,6 @@ namespace snowcoreBlog.Backend.Infrastructure;
 [JsonSerializable(typeof(SendGenericEmail))]
 [JsonSerializable(typeof(SendTemplatedEmail))]
 [JsonSerializable(typeof(TemplatedEmailSent))]
-[JsonSerializable(typeof(CredentialCreateOptions))]
 [JsonSerializable(typeof(RequestCreateReaderAccountDto))]
 [JsonSerializable(typeof(RequestReaderAccountCreationResultDto))]
 [JsonSerializable(typeof(ConfirmCreateReaderAccountDto))]
@@ -49,6 +51,9 @@ namespace snowcoreBlog.Backend.Infrastructure;
 [JsonSerializable(typeof(CheckNickNameNotTakenDto))]
 [JsonSerializable(typeof(NickNameNotTakenCheckResultDto))]
 [JsonSerializable(typeof(RequestAttestationOptionsDto))]
+[JsonSerializable(typeof(RequestAssertionOptionsDto))]
+[JsonSerializable(typeof(LoginByAssertionDto))]
+[JsonSerializable(typeof(LoginByAssertionResultDto))]
 [JsonSerializable(typeof(Fault<UserCreationResult>))]
 [JsonSerializable(typeof(Fault<TempUserCreationResult>))]
 [JsonSerializable(typeof(Fault<UserNickNameTakenValidationResult>))]
@@ -56,7 +61,10 @@ namespace snowcoreBlog.Backend.Infrastructure;
 [JsonSerializable(typeof(Fault<ValidateUserExists>))]
 [JsonSerializable(typeof(Fault<ValidateTempUserExists>))]
 [JsonSerializable(typeof(Fault<ValidateAndCreateAttestation>))]
+[JsonSerializable(typeof(Fault<ValidateAndCreateAssertion>))]
 [JsonSerializable(typeof(Fault<CredentialCreateOptions>))]
+[JsonSerializable(typeof(Fault<AssertionOptions>))]
+[JsonSerializable(typeof(Fault<UserLoginResult>))]
 [JsonSerializable(typeof(Fault<UserExistsValidationResult>))]
 [JsonSerializable(typeof(Fault<TempUserExistsValidationResult>))]
 [JsonSerializable(typeof(FaultEvent<UserCreationResult>))]
@@ -66,7 +74,10 @@ namespace snowcoreBlog.Backend.Infrastructure;
 [JsonSerializable(typeof(FaultEvent<ValidateUserExists>))]
 [JsonSerializable(typeof(FaultEvent<ValidateTempUserExists>))]
 [JsonSerializable(typeof(FaultEvent<ValidateAndCreateAttestation>))]
+[JsonSerializable(typeof(FaultEvent<ValidateAndCreateAssertion>))]
 [JsonSerializable(typeof(FaultEvent<CredentialCreateOptions>))]
+[JsonSerializable(typeof(FaultEvent<AssertionOptions>))]
+[JsonSerializable(typeof(FaultEvent<UserLoginResult>))]
 [JsonSerializable(typeof(FaultEvent<UserExistsValidationResult>))]
 [JsonSerializable(typeof(FaultEvent<TempUserExistsValidationResult>))]
 [JsonSerializable(typeof(DataResult<UserCreationResult>))]
@@ -76,7 +87,10 @@ namespace snowcoreBlog.Backend.Infrastructure;
 [JsonSerializable(typeof(DataResult<ValidateUserExists>))]
 [JsonSerializable(typeof(DataResult<ValidateTempUserExists>))]
 [JsonSerializable(typeof(DataResult<ValidateAndCreateAttestation>))]
+[JsonSerializable(typeof(DataResult<ValidateAndCreateAssertion>))]
 [JsonSerializable(typeof(DataResult<CredentialCreateOptions>))]
+[JsonSerializable(typeof(DataResult<AssertionOptions>))]
+[JsonSerializable(typeof(DataResult<UserLoginResult>))]
 [JsonSerializable(typeof(DataResult<UserExistsValidationResult>))]
 [JsonSerializable(typeof(DataResult<TempUserExistsValidationResult>))]
 [JsonSourceGenerationOptions(

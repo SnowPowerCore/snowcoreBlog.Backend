@@ -59,8 +59,7 @@ public class ValidateAndCreateUserConsumer(IHasher hasher,
             var options = CredentialCreateOptions.FromJson(context.Message.AttestationOptionsJson);
 
             var credentialResult = await fido2.MakeNewCredentialAsync(
-                Fido2Extensions.ToMakeNewCredentialParams(
-                    context.Message.AuthenticatorAttestation,
+                context.Message.AuthenticatorAttestation.ToMakeNewCredentialParams(
                     options,
                     async (@params, cancellationToken) =>
                         await userManager.Users

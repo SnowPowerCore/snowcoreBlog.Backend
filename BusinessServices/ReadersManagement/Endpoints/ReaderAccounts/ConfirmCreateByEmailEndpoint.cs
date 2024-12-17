@@ -15,12 +15,12 @@ using snowcoreBlog.PublicApi.Validation.Dto;
 
 namespace snowcoreBlog.Backend.ReadersManagement.Endpoints.ReaderAccounts;
 
-public class ConfirmCreateReaderAccountByEmailEndpoint : Endpoint<ConfirmCreateReaderAccountDto, ApiResponse?>
+public class ConfirmCreateByEmailEndpoint : Endpoint<ConfirmCreateReaderAccountDto, ApiResponse?>
 {
     public IOptions<JsonOptions> JsonOptions { get; set; }
 
     [StepifiedProcess(Steps = [
-        typeof(ValidateReaderAccountNotExistsStep),
+        typeof(ValidateReaderAccountNotExistStep),
         typeof(CreateReaderAccountUserStep),
         typeof(CreateReaderEntityForNewUserStep),
         typeof(ReturnCreatedReaderEntityStep),
@@ -37,7 +37,7 @@ public class ConfirmCreateReaderAccountByEmailEndpoint : Endpoint<ConfirmCreateR
     }
 
     [ServiceProviderSupplier]
-    public ConfirmCreateReaderAccountByEmailEndpoint(IServiceProvider _) { }
+    public ConfirmCreateByEmailEndpoint(IServiceProvider _) { }
 
     public override async Task HandleAsync(ConfirmCreateReaderAccountDto req, CancellationToken ct)
     {

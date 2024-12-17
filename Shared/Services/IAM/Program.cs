@@ -90,6 +90,7 @@ builder.Services.AddScoped<IHasher, Argon2Hasher>();
 builder.Services.AddScoped<IApplicationTempUserRepository, ApplicationTempUserRepository>();
 builder.Services.AddMassTransit(busConfigurator =>
 {
+    busConfigurator.AddConsumer<CheckAndPerformAssertionConsumer>();
     busConfigurator.AddConsumer<ValidateAndCreateUserConsumer>();
     busConfigurator.AddConsumer<CreateTempUserConsumer>();
     busConfigurator.AddConsumer<ValidateUserExistsConsumer>();
@@ -107,6 +108,7 @@ builder.Services.AddMassTransit(busConfigurator =>
 });
 builder.Services.AddFido2(builder.Configuration.GetSection(nameof(Fido2)));
 
+builder.Services.AddSingleton<IValidator<LoginUser>, LoginUserValidator>();
 builder.Services.AddSingleton<IValidator<CreateUser>, CreateUserValidator>();
 builder.Services.AddSingleton<IValidator<CreateTempUser>, CreateTempUserValidator>();
 
