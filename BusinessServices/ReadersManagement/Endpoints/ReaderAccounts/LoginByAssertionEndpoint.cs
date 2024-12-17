@@ -19,7 +19,8 @@ public class LoginByAssertionEndpoint : Endpoint<LoginByAssertionDto, ApiRespons
     public IOptions<JsonOptions> JsonOptions { get; set; }
 
     [StepifiedProcess(Steps = [
-        typeof(ValidateReaderAccountExistsStep)
+        typeof(ValidateReaderAccountExistsStep),
+        typeof(AttemptLoginByAssertionStep),
     ])]
     protected LoginByAssertionDelegate LoginByAssertion { get; }
 
