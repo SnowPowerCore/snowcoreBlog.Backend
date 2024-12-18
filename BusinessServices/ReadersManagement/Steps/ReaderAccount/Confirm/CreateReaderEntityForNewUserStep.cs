@@ -23,7 +23,6 @@ public class CreateReaderEntityForNewUserStep(IPublishEndpoint publishEndpoint,
 
         var newReaderEntity = await readerRepository
             .AddOrUpdateAsync(createUserForReaderAccountResult!.Data.ToEntity(), token: token);
-
         if (newReaderEntity is not default(ReaderEntity))
         {
             var readerAccountCreated = new ReaderAccountCreated(newReaderEntity!.Id, newReaderEntity.NickName);

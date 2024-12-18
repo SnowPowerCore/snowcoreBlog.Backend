@@ -34,7 +34,8 @@ public class RequestNewAssertionOptionsStep(IRequestClient<ValidateAndCreateAsse
         }
         else
         {
-            return AssertionError<AssertionOptions>.Create(AssertionConstants.Failed);
+            return AssertionError<AssertionOptions>.Create(
+                AssertionConstants.Failed, result.Message.Errors);
         }
     }
 }

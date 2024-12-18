@@ -30,7 +30,7 @@ public class ValidateReaderAccountExistsStep(IRequestClient<ValidateUserExists> 
         else
         {
             return ReaderAccountNotExistError<LoginByAssertionResultDto>.Create(
-                ReaderAccountConstants.ReaderAccountUnableToCheckIfExistsError);
+                ReaderAccountConstants.ReaderAccountUnableToCheckIfExistsError, result.Message.Errors);
         }
     }
 }
