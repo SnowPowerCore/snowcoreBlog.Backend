@@ -20,8 +20,7 @@ public class ValidateNickNameWasNotTakenStep(IRequestClient<ValidateUserNickName
         {
             if (result.Message.Value!.WasTaken)
             {
-                return NickNameError<NickNameNotTakenCheckResultDto>.Create(
-                    UserNickNameConstants.NickNameAlreadyExists);
+                return Result.Success<NickNameNotTakenCheckResultDto>(new(WasTaken: true));
             }
             else
             {
