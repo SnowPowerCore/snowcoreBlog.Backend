@@ -25,7 +25,7 @@ public class ValidateNickNameWasNotTakenStep(IRequestClient<ValidateUserNickName
             }
             else
             {
-                return Result.Success(new NickNameNotTakenCheckResultDto(WasTaken: false));
+                return Result.Success<NickNameNotTakenCheckResultDto>(new(WasTaken: false));
             }
         }
         else

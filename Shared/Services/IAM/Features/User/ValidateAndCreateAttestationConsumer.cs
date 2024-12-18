@@ -2,16 +2,15 @@
 using Fido2NetLib.Objects;
 using MassTransit;
 using Microsoft.Extensions.Options;
-using Results;
 using snowcoreBlog.Backend.Core.Interfaces.Services;
 using snowcoreBlog.Backend.Core.Utilities;
 using snowcoreBlog.Backend.IAM.Constants;
 using snowcoreBlog.Backend.IAM.Core.Contracts;
 using snowcoreBlog.Backend.IAM.Core.Entities;
-using snowcoreBlog.Backend.IAM.ErrorResults;
 using snowcoreBlog.Backend.IAM.Extensions;
 using snowcoreBlog.Backend.IAM.Interfaces.Repositories.Marten;
 using snowcoreBlog.Backend.Infrastructure.Utilities;
+using snowcoreBlog.PublicApi.Utilities.DataResult;
 
 namespace snowcoreBlog.Backend.IAM.Features.User;
 
@@ -60,21 +59,22 @@ public class ValidateAndCreateAttestationConsumer(IHasher hasher,
                     CredProps = true,
                 };
 
-                await context.RespondAsync(Result.Success(fido2.RequestNewCredential(
-                    user.ToRequestNewCredentialParams(attestationPreference, authenticatorSelection, extensions))));
+                await context.RespondAsync(
+                    new DataResult<CredentialCreateOptions>(fido2.RequestNewCredential(
+                        user.ToRequestNewCredentialParams(attestationPreference, authenticatorSelection, extensions))));
             }
             else
             {
                 await context.RespondAsync(
-                    ValidateTokenForAttestationError<CredentialCreateOptions>.Create(
-                        TempUserConstants.TempUserTokenVerificationError));
+                    new DataResult<CredentialCreateOptions>(
+                        Errors: [new(nameof(context.Message.VerificationToken), TempUserConstants.TempUserTokenVerificationError)]));
             }
         }
         else
         {
             await context.RespondAsync(
-                ValidateTokenForAttestationError<CredentialCreateOptions>.Create(
-                    TempUserConstants.TempUserNotFoundError));
+                new DataResult<CredentialCreateOptions>(
+                    Errors: [new(nameof(tempUser), TempUserConstants.TempUserNotFoundError)]));
         }
     }
 }

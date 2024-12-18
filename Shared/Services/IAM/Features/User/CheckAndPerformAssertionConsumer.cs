@@ -7,7 +7,6 @@ using Results;
 using snowcoreBlog.Backend.IAM.Constants;
 using snowcoreBlog.Backend.IAM.Core.Contracts;
 using snowcoreBlog.Backend.IAM.Core.Entities;
-using snowcoreBlog.Backend.IAM.ErrorResults;
 using snowcoreBlog.Backend.IAM.Extensions;
 using snowcoreBlog.Backend.IAM.Interfaces.Repositories.Marten;
 using snowcoreBlog.PublicApi.Utilities.DataResult;
@@ -39,16 +38,18 @@ public class CheckAndPerformAssertionConsumer(IFido2 fido2,
 
         if (credential is default(Fido2PublicKeyCredentialEntity))
         {
-            await context.RespondAsync(AssertionError<UserLoginResult>.Create(
-                AssertionConstants.AuthCredentialNotFoundError));
+            await context.RespondAsync(
+                new DataResult<UserLoginResult>(
+                    Errors: [new(nameof(credential), AssertionConstants.AuthCredentialNotFoundError)]));
             return;
         }
 
         var user = await userManager.FindByIdAsync(credential.UserId.ToString());
         if (user is default(ApplicationUserEntity))
         {
-            await context.RespondAsync(AssertionError<UserLoginResult>.Create(
-                AssertionConstants.UserNotFoundError));
+            await context.RespondAsync(
+                new DataResult<UserLoginResult>(
+                    Errors: [new(nameof(user), AssertionConstants.UserNotFoundError)]));
             return;
         }
 
@@ -68,7 +69,7 @@ public class CheckAndPerformAssertionConsumer(IFido2 fido2,
         var pubKeyCredsUpdateTask = fido2PublicKeyCredentialRepository.AddOrUpdateAsync(
             credential, credential.Id, token: context.CancellationToken);
         var responseTask = context.RespondAsync(
-            Result.Success(new UserLoginResult() { Id = new Guid(user.Id) }));
+            new DataResult<UserLoginResult>(new UserLoginResult() { Id = new Guid(user.Id) }));
 
         await Task.WhenAll(pubKeyCredsUpdateTask, responseTask);
     }

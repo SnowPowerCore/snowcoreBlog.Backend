@@ -1,7 +1,6 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 using Fido2NetLib;
-using Fido2NetLib.Objects;
 using Ixnas.AltchaNet;
 using MassTransit;
 using MassTransit.Events;

@@ -11,7 +11,6 @@ using snowcoreBlog.Backend.Core.Utilities;
 using snowcoreBlog.Backend.IAM.Constants;
 using snowcoreBlog.Backend.IAM.Core.Contracts;
 using snowcoreBlog.Backend.IAM.Core.Entities;
-using snowcoreBlog.Backend.IAM.ErrorResults;
 using snowcoreBlog.Backend.IAM.Extensions;
 using snowcoreBlog.Backend.IAM.Interfaces.Repositories.Marten;
 using snowcoreBlog.Backend.Infrastructure.Utilities;
@@ -45,14 +44,16 @@ public class ValidateAndCreateUserConsumer(IHasher hasher,
                 hasher.VerifyHashedStrings(tempUserEntity.ActivationToken, context.Message.TempUserVerificationToken)))
             {
                 await context.RespondAsync(
-                    CreateUserError<UserCreationResult>.Create(UserConstants.UserTokenVerificationError));
+                    new DataResult<UserCreationResult>(
+                        Errors: [new(nameof(context.Message.TempUserVerificationToken), UserConstants.UserTokenVerificationError)]));
                 return;
             }
 
             if (tempUserEntity.ActivationTokenExpirationDate <= DateTime.UtcNow)
             {
                 await context.RespondAsync(
-                    CreateUserError<UserCreationResult>.Create(UserConstants.UserTokenVerificationError));
+                    new DataResult<UserCreationResult>(
+                        Errors: [new(nameof(tempUserEntity.ActivationTokenExpirationDate), UserConstants.UserTokenVerificationError)]));
                 return;
             }
 
@@ -70,7 +71,8 @@ public class ValidateAndCreateUserConsumer(IHasher hasher,
             if (credentialResult is default(RegisteredPublicKeyCredential))
             {
                 await context.RespondAsync(
-                    CreateUserError<UserCreationResult>.Create(UserConstants.CredentialsVerificationError));
+                    new DataResult<UserCreationResult>(
+                        Errors: [new(nameof(credentialResult), UserConstants.CredentialsVerificationError)]));
                 return;
             }
 
@@ -130,7 +132,8 @@ public class ValidateAndCreateUserConsumer(IHasher hasher,
         else
         {
             await context.RespondAsync(
-                CreateUserError<UserCreationResult>.Create(TempUserConstants.TempUserNotFoundError));
+                    new DataResult<UserCreationResult>(
+                        Errors: [new(nameof(tempUserEntity), TempUserConstants.TempUserNotFoundError)]));
         }
     }
 }
