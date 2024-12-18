@@ -2,7 +2,6 @@ using System.Security.Cryptography;
 using FastEndpoints;
 using FastEndpoints.OpenTelemetry.Middleware;
 using FastEndpoints.Swagger;
-using FluentValidation;
 using Ixnas.AltchaNet;
 using JasperFx.CodeGeneration;
 using Marten;
@@ -28,10 +27,6 @@ using snowcoreBlog.Backend.ReadersManagement.Steps.Assertion;
 using snowcoreBlog.Backend.ReadersManagement.Steps.Attestation;
 using snowcoreBlog.Backend.ReadersManagement.Steps.NickName;
 using snowcoreBlog.Backend.ReadersManagement.Steps.ReaderAccount;
-using snowcoreBlog.Backend.ReadersManagement.Steps.ReaderAccount.Confirm;
-using snowcoreBlog.Backend.ReadersManagement.Steps.ReaderAccount.Request;
-using snowcoreBlog.PublicApi.BusinessObjects.Dto;
-using snowcoreBlog.PublicApi.Validation.Dto;
 using snowcoreBlog.ServiceDefaults.Extensions;
 
 var builder = WebApplication.CreateSlimBuilder(args);

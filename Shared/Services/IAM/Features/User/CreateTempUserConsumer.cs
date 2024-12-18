@@ -5,7 +5,6 @@ using snowcoreBlog.Backend.Core.Interfaces.Services;
 using snowcoreBlog.Backend.IAM.Constants;
 using snowcoreBlog.Backend.IAM.Core.Contracts;
 using snowcoreBlog.Backend.IAM.Core.Entities;
-using snowcoreBlog.Backend.IAM.ErrorResults;
 using snowcoreBlog.Backend.IAM.Extensions;
 using snowcoreBlog.Backend.IAM.Interfaces.Repositories.Marten;
 using snowcoreBlog.Backend.Infrastructure.Extensions;
@@ -50,7 +49,8 @@ public class CreateTempUserConsumer(IValidator<CreateTempUser> validator,
         else
         {
             await context.RespondAsync(
-                CreateTempUserError.Create(TempUserConstants.TempUserUnableToCreateUpdateError));
+                new DataResult<TempUserCreationResult>(
+                    Errors: [new(nameof(CreateTempUser), TempUserConstants.TempUserUnableToCreateUpdateError)]));
         }
     }
 }

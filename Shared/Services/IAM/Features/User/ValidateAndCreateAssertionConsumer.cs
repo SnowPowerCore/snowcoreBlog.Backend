@@ -3,12 +3,11 @@ using Fido2NetLib.Objects;
 using MassTransit;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Results;
 using snowcoreBlog.Backend.IAM.Constants;
 using snowcoreBlog.Backend.IAM.Core.Contracts;
 using snowcoreBlog.Backend.IAM.Core.Entities;
-using snowcoreBlog.Backend.IAM.ErrorResults;
 using snowcoreBlog.Backend.IAM.Extensions;
+using snowcoreBlog.PublicApi.Utilities.DataResult;
 
 namespace snowcoreBlog.Backend.IAM.Features.User;
 
@@ -27,8 +26,9 @@ public class ValidateAndCreateAssertionConsumer(IFido2 fido2,
 
         if (allowedCredentials is default(List<PublicKeyCredentialDescriptor>))
         {
-            await context.RespondAsync(AssertionError<AssertionOptions>.Create(
-                AssertionConstants.AllowedCredentialsNotFoundError));
+            await context.RespondAsync(
+                new DataResult<AssertionOptions>(
+                    Errors: [new(nameof(allowedCredentials), AssertionConstants.AllowedCredentialsNotFoundError)]));
             return;
         }
 
@@ -38,7 +38,7 @@ public class ValidateAndCreateAssertionConsumer(IFido2 fido2,
             UserVerificationMethod = true
         };
 
-        await context.RespondAsync(Result.Success(fido2.GetAssertionOptions(
+        await context.RespondAsync(new DataResult<AssertionOptions>(fido2.GetAssertionOptions(
             allowedCredentials.ToGetAssertionOptionsParams(context.Message.UserVerification, extensions))));
     }
 }
