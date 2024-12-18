@@ -88,6 +88,7 @@ builder.Services
 
 builder.Services.AddScoped<IHasher, Argon2Hasher>();
 builder.Services.AddScoped<IApplicationTempUserRepository, ApplicationTempUserRepository>();
+builder.Services.AddScoped<IFido2PublicKeyCredentialRepository, Fido2PublicKeyCredentialRepository>();
 builder.Services.AddMassTransit(busConfigurator =>
 {
     busConfigurator.AddConsumer<CheckAndPerformAssertionConsumer>();
