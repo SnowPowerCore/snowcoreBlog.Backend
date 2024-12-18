@@ -30,7 +30,7 @@ public class ValidateReaderAccountTempRecordNotExistsStep(IRequestClient<Validat
         else
         {
             return CreateUserForReaderAccountError<RequestReaderAccountCreationResultDto>.Create(
-                ReaderAccountConstants.ReaderAccountUnableToCreateUpdateError);
+                ReaderAccountConstants.ReaderAccountUnableToCreateUpdateError, result.Message.Errors);
         }
     }
 }

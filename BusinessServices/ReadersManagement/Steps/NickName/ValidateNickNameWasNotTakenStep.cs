@@ -31,7 +31,7 @@ public class ValidateNickNameWasNotTakenStep(IRequestClient<ValidateUserNickName
         else
         {
             return NickNameError<NickNameNotTakenCheckResultDto>.Create(
-                UserNickNameConstants.UnknownError);
+                UserNickNameConstants.Failed, result.Message.Errors);
         }
     }
 }

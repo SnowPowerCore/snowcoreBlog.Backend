@@ -3,5 +3,5 @@
 public static class UserNickNameConstants
 {
     public const string NickNameAlreadyExists = nameof(NickNameAlreadyExists);
-    public const string UnknownError = nameof(UnknownError);
+    public const string Failed = nameof(Failed);
 }

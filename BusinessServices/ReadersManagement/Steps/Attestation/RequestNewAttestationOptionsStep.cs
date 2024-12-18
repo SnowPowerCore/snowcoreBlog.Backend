@@ -34,7 +34,8 @@ public class RequestNewAttestationOptionsStep(IRequestClient<ValidateAndCreateAt
         }
         else
         {
-            return AttestationError<CredentialCreateOptions>.Create(AttestationConstants.Failed);
+            return AttestationError<CredentialCreateOptions>.Create(
+                AttestationConstants.Failed, result.Message.Errors);
         }
     }
 }

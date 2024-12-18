@@ -30,7 +30,7 @@ public class ValidateReaderAccountNickNameWasNotTakenStep(IRequestClient<Validat
         else
         {
             return CreateUserForReaderAccountError<RequestReaderAccountCreationResultDto>.Create(
-                ReaderAccountConstants.ReaderAccountUnableToCreateUpdateError);
+                ReaderAccountConstants.ReaderAccountUnableToCreateUpdateError, result.Message.Errors);
         }
     }
 }
