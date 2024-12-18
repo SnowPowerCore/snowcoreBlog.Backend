@@ -1,6 +1,5 @@
 ﻿using System.Text;
 using MassTransit;
-using Microsoft.Extensions.Caching.Distributed;
 using MinimalStepifiedSystem.Interfaces;
 using Results;
 using snowcoreBlog.Backend.Core.Contracts;
@@ -11,19 +10,21 @@ using snowcoreBlog.Backend.ReadersManagement.Delegates;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 using snowcoreBlog.PublicApi.Constants;
 using snowcoreBlog.PublicApi.Utilities.DataResult;
+using StackExchange.Redis;
 
 namespace snowcoreBlog.Backend.ReadersManagement.Steps.ReaderAccount;
 
 public class CreateReaderAccountUserStep(IRequestClient<CreateUser> client,
                                          IPublishEndpoint publishEndpoint,
-                                         IDistributedCache distributedCache) : IStep<ConfirmCreateReaderAccountDelegate, ConfirmCreateReaderAccountContext, IResult<ReaderAccountCreatedDto>>
+                                         IConnectionMultiplexer redis) : IStep<ConfirmCreateReaderAccountDelegate, ConfirmCreateReaderAccountContext, IResult<ReaderAccountCreatedDto>>
 {
     private const string Fido2AttestationOptions = nameof(Fido2AttestationOptions);
 
     public async Task<IResult<ReaderAccountCreatedDto>> InvokeAsync(ConfirmCreateReaderAccountContext context, ConfirmCreateReaderAccountDelegate next, CancellationToken token = default)
     {
-        var attestationOptionsForUser = Encoding.UTF8.GetString(
-            await distributedCache.GetAsync($"{context.ConfirmRequest.Email}{Fido2AttestationOptions}", token) ?? []);
+        var db = redis.GetDatabase();
+        var redisValue = await db.StringGetAsync($"{context.ConfirmRequest.Email}{Fido2AttestationOptions}");
+        var attestationOptionsForUser = Encoding.UTF8.GetString(redisValue != RedisValue.Null ? redisValue! : []);
         if (string.IsNullOrEmpty(attestationOptionsForUser))
         {
             return CreateUserForReaderAccountError<ReaderAccountCreatedDto>.Create(
