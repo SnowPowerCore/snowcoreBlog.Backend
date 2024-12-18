@@ -110,7 +110,7 @@ builder.Services.AddMassTransit(busConfigurator =>
         config.ConfigureEndpoints(context);
     });
 });
-builder.AddRedisDistributedCache(connectionName: "cache");
+builder.AddRedisClient(connectionName: "cache");
 builder.Services.AddMultipleAuthentications(
    builder.Configuration["Security:Signing:User:Key"]!,
    builder.Configuration["Security:Signing:Admin:Key"]!);

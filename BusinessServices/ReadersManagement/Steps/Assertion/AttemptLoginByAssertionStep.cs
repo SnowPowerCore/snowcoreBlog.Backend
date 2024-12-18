@@ -12,19 +12,21 @@ using snowcoreBlog.Backend.ReadersManagement.ErrorResults;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 using snowcoreBlog.PublicApi.Constants;
 using snowcoreBlog.PublicApi.Utilities.DataResult;
+using StackExchange.Redis;
 
 namespace snowcoreBlog.Backend.ReadersManagement.Steps.Assertion;
 
 public class AttemptLoginByAssertionStep(IRequestClient<LoginUser> requestClient,
                                          IPublishEndpoint publishEndpoint,
-                                         IDistributedCache distributedCache) : IStep<LoginByAssertionDelegate, LoginByAssertionContext, IResult<LoginByAssertionResultDto>>
+                                         IConnectionMultiplexer redis) : IStep<LoginByAssertionDelegate, LoginByAssertionContext, IResult<LoginByAssertionResultDto>>
 {
     private const string Fido2AssertionOptions = nameof(Fido2AssertionOptions);
 
     public async Task<IResult<LoginByAssertionResultDto>> InvokeAsync(LoginByAssertionContext context, LoginByAssertionDelegate next, CancellationToken token = default)
     {
-        var assertionOptionsForUser = Encoding.UTF8.GetString(
-            await distributedCache.GetAsync($"{context.LoginByAssertion.Email}{Fido2AssertionOptions}", token) ?? []);
+        var db = redis.GetDatabase();
+        var redisValue = await db.StringGetAsync($"{context.LoginByAssertion.Email}{Fido2AssertionOptions}");
+        var assertionOptionsForUser = Encoding.UTF8.GetString(redisValue != RedisValue.Null ? redisValue! : []);
         if (string.IsNullOrEmpty(assertionOptionsForUser))
         {
             return AssertionError<LoginByAssertionResultDto>.Create(
