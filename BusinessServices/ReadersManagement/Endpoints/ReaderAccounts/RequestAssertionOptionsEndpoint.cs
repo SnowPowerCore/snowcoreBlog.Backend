@@ -32,7 +32,6 @@ public class RequestAssertionOptionsEndpoint : Endpoint<RequestAssertionOptionsD
         AllowAnonymous();
     }
 
-    [ServiceProviderSupplier]
     public RequestAssertionOptionsEndpoint(IServiceProvider _) { }
 
     public override async Task HandleAsync(RequestAssertionOptionsDto req, CancellationToken ct)

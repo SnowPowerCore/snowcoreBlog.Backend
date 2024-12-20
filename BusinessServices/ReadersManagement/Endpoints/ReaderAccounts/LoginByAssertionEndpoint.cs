@@ -33,7 +33,6 @@ public class LoginByAssertionEndpoint : Endpoint<LoginByAssertionDto, ApiRespons
         AllowAnonymous();
     }
 
-    [ServiceProviderSupplier]
     public LoginByAssertionEndpoint(IServiceProvider _) { }
 
     public override async Task HandleAsync(LoginByAssertionDto req, CancellationToken ct)

@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Routing.Constraints;
+using MinimalStepifiedSystem.Core.Extensions;
 using Oakton;
 using Scalar.AspNetCore;
 using snowcoreBlog.Backend.Core.Entities.Reader;
@@ -146,7 +147,7 @@ builder.Services.AddScoped<AttemptLoginByAssertionStep>();
 var app = builder.Build();
 
 app.UseHttpsRedirection();
-
+app.UseStepifiedSystem();
 app.UseCookiePolicy(new()
 {
     MinimumSameSitePolicy = SameSiteMode.Strict,
