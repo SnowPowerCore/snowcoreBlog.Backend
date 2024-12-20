@@ -32,7 +32,6 @@ public class CheckNickNameNotTakenEndpoint : Endpoint<CheckNickNameNotTakenDto, 
         AllowAnonymous();
     }
 
-    [ServiceProviderSupplier]
     public CheckNickNameNotTakenEndpoint(IServiceProvider _) { }
 
     public override async Task HandleAsync(CheckNickNameNotTakenDto req, CancellationToken ct)
