@@ -32,8 +32,6 @@ public class RequestAttestationOptionsEndpoint : Endpoint<RequestAttestationOpti
         AllowAnonymous();
     }
 
-    public RequestAttestationOptionsEndpoint(IServiceProvider _) { }
-
     public override async Task HandleAsync(RequestAttestationOptionsDto req, CancellationToken ct)
     {
         var context = new RequestAttestationOptionsContext(req);

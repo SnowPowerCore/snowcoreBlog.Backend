@@ -37,8 +37,6 @@ public class RequestCreateByEmailEndpoint : Endpoint<RequestCreateReaderAccountD
         AllowAnonymous();
     }
 
-    public RequestCreateByEmailEndpoint(IServiceProvider _) { }
-
     public override async Task HandleAsync(RequestCreateReaderAccountDto req, CancellationToken ct)
     {
         var context = new RequestCreateReaderAccountContext(req);

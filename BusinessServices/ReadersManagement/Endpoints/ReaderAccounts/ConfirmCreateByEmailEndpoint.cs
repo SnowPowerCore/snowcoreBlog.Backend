@@ -36,8 +36,6 @@ public class ConfirmCreateByEmailEndpoint : Endpoint<ConfirmCreateReaderAccountD
         AllowAnonymous();
     }
 
-    public ConfirmCreateByEmailEndpoint(IServiceProvider _) { }
-
     public override async Task HandleAsync(ConfirmCreateReaderAccountDto req, CancellationToken ct)
     {
         var context = new ConfirmCreateReaderAccountContext(req);
