@@ -76,7 +76,6 @@ builder.Services.Configure<SendGridSenderAccountOptions>(
 
 builder.WebHost.UseKestrelHttpsConfiguration();
 builder.AddServiceDefaults();
-builder.Services.AddProblemDetails();
 builder.Services.AddOpenApi();
 builder.Services.AddOpenTelemetry().ConnectBackendServices();
 builder.Services.AddNpgsqlDataSource(builder.Configuration.GetConnectionString("db-snowcore-blog-entities")!);
@@ -167,6 +166,20 @@ app.UseCookiePolicy(new()
         {
             ep.PreProcessor<CookieJsonWebTokenProcessor>(Order.Before);
         };
+        c.Errors.UseProblemDetails(x =>
+        {
+            x.AllowDuplicateErrors = true;  //allows duplicate errors for the same error name
+            x.IndicateErrorCode = true;     //serializes the fluentvalidation error code
+            x.IndicateErrorSeverity = true; //serializes the fluentvalidation error severity
+            x.TypeValue = "https://www.rfc-editor.org/rfc/rfc7231#section-6.5.1";
+            x.TitleValue = "One or more validation errors occurred.";
+            x.TitleTransformer = pd => pd.Status switch
+            {
+                400 => "Validation Error",
+                404 => "Not Found",
+                _ => "One or more errors occurred!"
+            };
+        });
         c.Errors.ResponseBuilder = static (failures, ctx, statusCode) =>
         {
             var failuresDict = failures

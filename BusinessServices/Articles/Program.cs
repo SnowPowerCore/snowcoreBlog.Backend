@@ -19,7 +19,6 @@ builder.Services.Configure<ForwardedHeadersOptions>(options =>
 
 builder.WebHost.UseKestrelHttpsConfiguration();
 builder.AddServiceDefaults();
-builder.Services.AddProblemDetails();
 //builder.Services.AddFastEndpoints();
 
 var app = builder.Build();

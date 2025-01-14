@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 using snowcoreBlog.Backend.IAM.Core.Contracts;
-using snowcoreBlog.Backend.IAM.Extensions;
+using snowcoreBlog.PublicApi.Extensions;
 
 namespace snowcoreBlog.Backend.IAM.Validation;
 
