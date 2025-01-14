@@ -22,7 +22,6 @@ builder.Services.ConfigureHttpJsonOptions(options =>
 
 builder.WebHost.UseKestrelHttpsConfiguration();
 builder.AddServiceDefaults();
-builder.Services.AddProblemDetails();
 builder.Services.AddSendGrid(options => options.ApiKey = builder.Configuration["SendGrid:ApiKey"]);
 builder.Services.AddMassTransit(busConfigurator =>
 {
