@@ -35,6 +35,11 @@ public class RequestCreateByEmailEndpoint : Endpoint<RequestCreateReaderAccountD
         SerializerContext(CoreSerializationContext.Default);
         Validator<RequestCreateReaderAccountValidation>();
         AllowAnonymous();
+        Description(b => b
+            .Accepts<RequestCreateReaderAccountDto>("application/json")
+            .Produces<ApiResponseForOpenApi<RequestReaderAccountCreationResultDto>>((int)HttpStatusCode.OK, "application/json")
+            .Produces<ApiResponse>((int)HttpStatusCode.InternalServerError, "application/json")
+            .ProducesProblemFE((int)HttpStatusCode.BadRequest));
     }
 
     public override async Task HandleAsync(RequestCreateReaderAccountDto req, CancellationToken ct)

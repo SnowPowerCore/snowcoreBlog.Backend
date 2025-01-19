@@ -10,6 +10,7 @@ public class RootEndpoint : EndpointWithoutRequest
         Get(string.Empty);
         SerializerContext(CoreSerializationContext.Default);
         AllowAnonymous();
+        Options(x => x.ExcludeFromDescription());
     }
 
     public override Task HandleAsync(CancellationToken ct) =>

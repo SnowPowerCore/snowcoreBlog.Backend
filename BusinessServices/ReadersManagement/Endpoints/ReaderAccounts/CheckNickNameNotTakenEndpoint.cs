@@ -30,6 +30,11 @@ public class CheckNickNameNotTakenEndpoint : Endpoint<CheckNickNameNotTakenDto, 
         SerializerContext(CoreSerializationContext.Default);
         Validator<CheckNickNameNotTakenValidation>();
         AllowAnonymous();
+        Description(b => b
+            .Accepts<CheckNickNameNotTakenDto>("application/json")
+            .Produces<ApiResponseForOpenApi<NickNameNotTakenCheckResultDto>>((int)HttpStatusCode.OK, "application/json")
+            .Produces<ApiResponse>((int)HttpStatusCode.InternalServerError, "application/json")
+            .ProducesProblemFE((int)HttpStatusCode.BadRequest));
     }
 
     public override async Task HandleAsync(CheckNickNameNotTakenDto req, CancellationToken ct)

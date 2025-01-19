@@ -22,6 +22,10 @@ public class GetAltchaChallengeEndpoint : EndpointWithoutRequest<ApiResponse?>
         Version(1);
         SerializerContext(CoreSerializationContext.Default);
         AllowAnonymous();
+        Description(b => b
+            .Produces<ApiResponseForOpenApi<AltchaChallenge>>((int)HttpStatusCode.OK, "application/json")
+            .Produces<ApiResponse>((int)HttpStatusCode.InternalServerError, "application/json")
+            .ProducesProblemFE((int)HttpStatusCode.BadRequest));
     }
 
     public GetAltchaChallengeEndpoint(AltchaService altcha)

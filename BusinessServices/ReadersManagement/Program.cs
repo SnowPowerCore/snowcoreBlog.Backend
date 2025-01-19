@@ -1,4 +1,6 @@
 using System.Security.Cryptography;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using FastEndpoints;
 using FastEndpoints.OpenTelemetry.Middleware;
 using FastEndpoints.Swagger;
@@ -28,7 +30,10 @@ using snowcoreBlog.Backend.ReadersManagement.Steps.Assertion;
 using snowcoreBlog.Backend.ReadersManagement.Steps.Attestation;
 using snowcoreBlog.Backend.ReadersManagement.Steps.NickName;
 using snowcoreBlog.Backend.ReadersManagement.Steps.ReaderAccount;
+using snowcoreBlog.PublicApi.Extensions;
 using snowcoreBlog.ServiceDefaults.Extensions;
+
+var jsonStringEnumConverter = new JsonStringEnumConverter();
 
 var builder = WebApplication.CreateSlimBuilder(args);
 builder.Host.ApplyOaktonExtensions();
@@ -43,7 +48,7 @@ builder.Services.Configure<RouteOptions>(static options =>
     options.SetParameterPolicy<RegexInlineRouteConstraint>("regex");
 });
 
-builder.Services.Configure<JsonOptions>(static options =>
+builder.Services.Configure<JsonOptions>(options =>
 {
     options.SerializerOptions.SetJsonSerializationContext();
 });
@@ -66,7 +71,7 @@ builder.Services.Configure<ForwardedHeadersOptions>(options =>
         ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
 });
 
-builder.Services.ConfigureHttpJsonOptions(static options =>
+builder.Services.ConfigureHttpJsonOptions(options =>
 {
     options.SerializerOptions.SetJsonSerializationContext();
 });
@@ -76,11 +81,10 @@ builder.Services.Configure<SendGridSenderAccountOptions>(
 
 builder.WebHost.UseKestrelHttpsConfiguration();
 builder.AddServiceDefaults();
-builder.Services.AddOpenApi();
 builder.Services.AddOpenTelemetry().ConnectBackendServices();
 builder.Services.AddNpgsqlDataSource(builder.Configuration.GetConnectionString("db-snowcore-blog-entities")!);
 //builder.Services.AddNpgsqlDataSource("Host=localhost;Port=54523;Username=postgres;Password=xQ6S1zf+)!kTnjFFCtt(Ks");
-builder.Services.AddMarten(static opts =>
+builder.Services.AddMarten(opts =>
 {
     opts.RegisterDocumentType<ReaderEntity>();
     opts.GeneratedCodeMode = TypeLoadMode.Static;
@@ -115,6 +119,9 @@ builder.Services.AddMultipleAuthentications(
    builder.Configuration["Security:Signing:User:Key"]!,
    builder.Configuration["Security:Signing:Admin:Key"]!);
 builder.Services.AddAuthentication();
+
+const int GlobalVersion = 1;
+
 builder.Services
     .AddAuthorization()
     .AddFastEndpoints(static o =>
@@ -122,7 +129,24 @@ builder.Services
         o.SourceGeneratorDiscoveredTypes.AddRange(snowcoreBlog.Backend.ReadersManagement.DiscoveredTypes.All);
     })
     .AddAntiforgery()
-    .SwaggerDocument()
+    .SwaggerDocument(o =>
+    {
+        o.ShortSchemaNames = true;
+        o.MaxEndpointVersion = GlobalVersion;
+        o.DocumentSettings = s =>
+        {
+            s.DocumentName = $"v{GlobalVersion}";
+            s.Version = $"v{GlobalVersion}";
+            s.SchemaSettings.IgnoreObsoleteProperties = true;
+        };
+        o.SerializerSettings = s =>
+        {
+            s.Converters.Add(jsonStringEnumConverter);
+            s.SetJsonSerializationContext();
+            s.PropertyNamingPolicy = null;
+            s.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+        };
+    })
     .AddCors();
 
 builder.Services.AddScoped<IHasher, Argon2Hasher>();
@@ -157,10 +181,18 @@ app.UseCookiePolicy(new()
     .UseAuthorization()
     .UseAntiforgeryFE()
     .UseFastEndpointsDiagnosticsMiddleware()
-    .UseFastEndpoints(static c =>
+    .UseFastEndpoints(c =>
     {
+        c.Endpoints.NameGenerator = ctx =>
+        {
+            var currentName = ctx.EndpointType.Name;
+            return currentName.TrimEnd("Endpoint");
+        };
+        c.Endpoints.ShortNames = true;
         c.Endpoints.RoutePrefix = default;
         c.Versioning.Prefix = "v";
+        c.Serializer.Options.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+        c.Serializer.Options.Converters.Add(jsonStringEnumConverter);
         c.Serializer.Options.SetJsonSerializationContext();
         c.Endpoints.Configurator = ep =>
         {
@@ -198,7 +230,7 @@ app.MapDefaultEndpoints();
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
-    app.MapOpenApi();
+    app.UseOpenApi(c => c.Path = $"/openapi/v{GlobalVersion}.json");
     app.MapScalarApiReference(o =>
     {
         o.Servers = [];
