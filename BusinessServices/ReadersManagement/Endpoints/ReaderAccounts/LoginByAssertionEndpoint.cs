@@ -31,6 +31,11 @@ public class LoginByAssertionEndpoint : Endpoint<LoginByAssertionDto, ApiRespons
         SerializerContext(CoreSerializationContext.Default);
         Validator<LoginByAssertionValidation>();
         AllowAnonymous();
+        Description(b => b
+            .Accepts<LoginByAssertionDto>("application/json")
+            .Produces<ApiResponseForOpenApi<LoginByAssertionResultDto>>((int)HttpStatusCode.OK, "application/json")
+            .Produces<ApiResponse>((int)HttpStatusCode.InternalServerError, "application/json")
+            .ProducesProblemFE((int)HttpStatusCode.BadRequest));
     }
 
     public override async Task HandleAsync(LoginByAssertionDto req, CancellationToken ct)

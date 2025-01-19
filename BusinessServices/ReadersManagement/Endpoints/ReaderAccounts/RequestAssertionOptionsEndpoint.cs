@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using FastEndpoints;
+using Fido2NetLib;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.Extensions.Options;
 using MinimalStepifiedSystem.Attributes;
@@ -30,6 +31,11 @@ public class RequestAssertionOptionsEndpoint : Endpoint<RequestAssertionOptionsD
         SerializerContext(CoreSerializationContext.Default);
         Validator<RequestAssertionOptionsValidation>();
         AllowAnonymous();
+        Description(b => b
+            .Accepts<RequestAssertionOptionsDto>("application/json")
+            .Produces<ApiResponseForOpenApi<AssertionOptions>>((int)HttpStatusCode.OK, "application/json")
+            .Produces<ApiResponse>((int)HttpStatusCode.InternalServerError, "application/json")
+            .ProducesProblemFE((int)HttpStatusCode.BadRequest));
     }
 
     public override async Task HandleAsync(RequestAssertionOptionsDto req, CancellationToken ct)
