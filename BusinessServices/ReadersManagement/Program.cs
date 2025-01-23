@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Routing.Constraints;
 using MinimalStepifiedSystem.Core.Extensions;
 using Oakton;
 using Scalar.AspNetCore;
+using snowcoreBlog.Backend.Core.Constants;
 using snowcoreBlog.Backend.Core.Entities.Reader;
 using snowcoreBlog.Backend.Core.Interfaces.Services;
 using snowcoreBlog.Backend.Email.Core.Options;
@@ -196,6 +197,10 @@ app.UseCookiePolicy(new()
         c.Serializer.Options.SetJsonSerializationContext();
         c.Endpoints.Configurator = ep =>
         {
+            if (ep.EndpointTags?.Contains(EnpointTagConstants.RequireCaptchaVerification) ?? false)
+            {
+                ep.PreProcessor<AltchaVerificationProcessor>(Order.Before);
+            }
             ep.PreProcessor<CookieJsonWebTokenProcessor>(Order.Before);
         };
         c.Errors.UseProblemDetails(x =>
