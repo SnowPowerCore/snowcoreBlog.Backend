@@ -32,7 +32,7 @@ public class CheckNickNameNotTakenEndpoint : Endpoint<CheckNickNameNotTakenDto, 
         Validator<CheckNickNameNotTakenValidation>();
         AllowAnonymous();
         Description(b => b
-            .WithTags(ApiTagConstants.CheckAndRegisterReaderAccount)
+            .WithTags(ApiTagConstants.ReaderAccountManagement)
             .Accepts<CheckNickNameNotTakenDto>("application/json")
             .Produces<ApiResponseForOpenApi<NickNameNotTakenCheckResultDto>>((int)HttpStatusCode.OK, "application/json")
             .Produces<ApiResponse>((int)HttpStatusCode.InternalServerError, "application/json")
