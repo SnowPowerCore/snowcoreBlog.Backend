@@ -33,7 +33,7 @@ public class RequestAttestationOptionsEndpoint : Endpoint<RequestAttestationOpti
         Validator<RequestAttestationOptionsValidation>();
         AllowAnonymous();
         Description(b => b
-            .WithTags(ApiTagConstants.CheckAndRegisterReaderAccount)
+            .WithTags(ApiTagConstants.ReaderAccountManagement)
             .Accepts<RequestAttestationOptionsDto>("application/json")
             .Produces<ApiResponseForOpenApi<CredentialCreateOptions>>((int)HttpStatusCode.OK, "application/json")
             .Produces<ApiResponse>((int)HttpStatusCode.InternalServerError, "application/json")
