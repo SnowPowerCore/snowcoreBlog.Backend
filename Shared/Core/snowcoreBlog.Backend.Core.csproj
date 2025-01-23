@@ -11,4 +11,8 @@
     <PackageReference Include="WTorricos.Results" Version="1.3.4" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Constants\" />
+  </ItemGroup>
+
 </Project>

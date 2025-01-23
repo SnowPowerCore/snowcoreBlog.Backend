@@ -3,6 +3,7 @@ using FastEndpoints;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.Extensions.Options;
 using MinimalStepifiedSystem.Attributes;
+using snowcoreBlog.Backend.Core.Constants;
 using snowcoreBlog.Backend.Infrastructure;
 using snowcoreBlog.Backend.ReadersManagement.Context;
 using snowcoreBlog.Backend.ReadersManagement.Delegates;
@@ -35,6 +36,7 @@ public class RequestCreateByEmailEndpoint : Endpoint<RequestCreateReaderAccountD
         SerializerContext(CoreSerializationContext.Default);
         Validator<RequestCreateReaderAccountValidation>();
         AllowAnonymous();
+        Tags(EnpointTagConstants.RequireCaptchaVerification);
         Description(b => b
             .Accepts<RequestCreateReaderAccountDto>("application/json")
             .Produces<ApiResponseForOpenApi<RequestReaderAccountCreationResultDto>>((int)HttpStatusCode.OK, "application/json")
