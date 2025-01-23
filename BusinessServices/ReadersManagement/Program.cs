@@ -198,7 +198,7 @@ app.UseHttpsRedirection()
         c.Serializer.Options.SetJsonSerializationContext();
         c.Endpoints.Configurator = ep =>
         {
-            if (ep.EndpointTags?.Contains(EnpointTagConstants.RequireCaptchaVerification) ?? false)
+            if (ep.EndpointTags?.Contains(EndpointTagConstants.RequireCaptchaVerification) ?? false)
             {
                 ep.PreProcessor<AltchaVerificationProcessor>(Order.Before);
             }

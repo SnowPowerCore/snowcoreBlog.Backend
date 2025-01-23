@@ -37,7 +37,7 @@ public class RequestCreateByEmailEndpoint : Endpoint<RequestCreateReaderAccountD
         SerializerContext(CoreSerializationContext.Default);
         Validator<RequestCreateReaderAccountValidation>();
         AllowAnonymous();
-        Tags(EnpointTagConstants.RequireCaptchaVerification);
+        Tags(EndpointTagConstants.RequireCaptchaVerification);
         Description(b => b
             .WithTags(ApiTagConstants.ReaderAccountManagement)
             .Accepts<RequestCreateReaderAccountDto>("application/json")
