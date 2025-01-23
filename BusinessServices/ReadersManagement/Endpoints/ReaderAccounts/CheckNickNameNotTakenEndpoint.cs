@@ -8,6 +8,7 @@ using snowcoreBlog.Backend.ReadersManagement.Context;
 using snowcoreBlog.Backend.ReadersManagement.Delegates;
 using snowcoreBlog.Backend.ReadersManagement.Steps.NickName;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
+using snowcoreBlog.PublicApi.Constants;
 using snowcoreBlog.PublicApi.Extensions;
 using snowcoreBlog.PublicApi.Utilities.Api;
 using snowcoreBlog.PublicApi.Validation.Dto;
@@ -31,6 +32,7 @@ public class CheckNickNameNotTakenEndpoint : Endpoint<CheckNickNameNotTakenDto, 
         Validator<CheckNickNameNotTakenValidation>();
         AllowAnonymous();
         Description(b => b
+            .WithTags(ApiTagConstants.CheckAndRegisterReaderAccount)
             .Accepts<CheckNickNameNotTakenDto>("application/json")
             .Produces<ApiResponseForOpenApi<NickNameNotTakenCheckResultDto>>((int)HttpStatusCode.OK, "application/json")
             .Produces<ApiResponse>((int)HttpStatusCode.InternalServerError, "application/json")

@@ -9,6 +9,7 @@ using snowcoreBlog.Backend.ReadersManagement.Delegates;
 using snowcoreBlog.Backend.ReadersManagement.Steps.ReaderAccount;
 using snowcoreBlog.Backend.ReadersManagement.Steps.ReaderAccount.Confirm;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
+using snowcoreBlog.PublicApi.Constants;
 using snowcoreBlog.PublicApi.Extensions;
 using snowcoreBlog.PublicApi.Utilities.Api;
 using snowcoreBlog.PublicApi.Validation.Dto;
@@ -35,6 +36,7 @@ public class ConfirmCreateByEmailEndpoint : Endpoint<ConfirmCreateReaderAccountD
         Validator<ConfirmCreateReaderAccountValidation>();
         AllowAnonymous();
         Description(b => b
+            .WithTags(ApiTagConstants.CheckAndRegisterReaderAccount)
             .Accepts<ConfirmCreateReaderAccountDto>("application/json")
             .Produces<ApiResponseForOpenApi<ReaderAccountCreatedDto>>((int)HttpStatusCode.OK, "application/json")
             .Produces<ApiResponse>((int)HttpStatusCode.InternalServerError, "application/json")
