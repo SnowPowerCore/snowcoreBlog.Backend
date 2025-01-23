@@ -10,6 +10,7 @@ using snowcoreBlog.Backend.ReadersManagement.Delegates;
 using snowcoreBlog.Backend.ReadersManagement.Steps.ReaderAccount;
 using snowcoreBlog.Backend.ReadersManagement.Steps.ReaderAccount.Request;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
+using snowcoreBlog.PublicApi.Constants;
 using snowcoreBlog.PublicApi.Extensions;
 using snowcoreBlog.PublicApi.Utilities.Api;
 using snowcoreBlog.PublicApi.Validation.Dto;
@@ -38,6 +39,7 @@ public class RequestCreateByEmailEndpoint : Endpoint<RequestCreateReaderAccountD
         AllowAnonymous();
         Tags(EnpointTagConstants.RequireCaptchaVerification);
         Description(b => b
+            .WithTags(ApiTagConstants.CheckAndRegisterReaderAccount)
             .Accepts<RequestCreateReaderAccountDto>("application/json")
             .Produces<ApiResponseForOpenApi<RequestReaderAccountCreationResultDto>>((int)HttpStatusCode.OK, "application/json")
             .Produces<ApiResponse>((int)HttpStatusCode.InternalServerError, "application/json")

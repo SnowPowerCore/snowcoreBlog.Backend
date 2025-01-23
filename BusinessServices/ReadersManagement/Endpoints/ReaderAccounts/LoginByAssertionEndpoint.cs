@@ -8,6 +8,7 @@ using snowcoreBlog.Backend.ReadersManagement.Context;
 using snowcoreBlog.Backend.ReadersManagement.Delegates;
 using snowcoreBlog.Backend.ReadersManagement.Steps.Assertion;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
+using snowcoreBlog.PublicApi.Constants;
 using snowcoreBlog.PublicApi.Extensions;
 using snowcoreBlog.PublicApi.Utilities.Api;
 using snowcoreBlog.PublicApi.Validation.Dto;
@@ -32,6 +33,7 @@ public class LoginByAssertionEndpoint : Endpoint<LoginByAssertionDto, ApiRespons
         Validator<LoginByAssertionValidation>();
         AllowAnonymous();
         Description(b => b
+            .WithTags(ApiTagConstants.ReaderAccountManagement)
             .Accepts<LoginByAssertionDto>("application/json")
             .Produces<ApiResponseForOpenApi<LoginByAssertionResultDto>>((int)HttpStatusCode.OK, "application/json")
             .Produces<ApiResponse>((int)HttpStatusCode.InternalServerError, "application/json")

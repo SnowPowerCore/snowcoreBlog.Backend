@@ -9,6 +9,7 @@ using snowcoreBlog.Backend.ReadersManagement.Context;
 using snowcoreBlog.Backend.ReadersManagement.Delegates;
 using snowcoreBlog.Backend.ReadersManagement.Steps.Attestation;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
+using snowcoreBlog.PublicApi.Constants;
 using snowcoreBlog.PublicApi.Extensions;
 using snowcoreBlog.PublicApi.Utilities.Api;
 using snowcoreBlog.PublicApi.Validation.Dto;
@@ -32,6 +33,7 @@ public class RequestAttestationOptionsEndpoint : Endpoint<RequestAttestationOpti
         Validator<RequestAttestationOptionsValidation>();
         AllowAnonymous();
         Description(b => b
+            .WithTags(ApiTagConstants.CheckAndRegisterReaderAccount)
             .Accepts<RequestAttestationOptionsDto>("application/json")
             .Produces<ApiResponseForOpenApi<CredentialCreateOptions>>((int)HttpStatusCode.OK, "application/json")
             .Produces<ApiResponse>((int)HttpStatusCode.InternalServerError, "application/json")

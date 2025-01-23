@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http.Json;
 using Microsoft.Extensions.Options;
 using Results;
 using snowcoreBlog.Backend.Infrastructure;
+using snowcoreBlog.PublicApi.Constants;
 using snowcoreBlog.PublicApi.Extensions;
 using snowcoreBlog.PublicApi.Utilities.Api;
 
@@ -23,6 +24,7 @@ public class GetAltchaChallengeEndpoint : EndpointWithoutRequest<ApiResponse?>
         SerializerContext(CoreSerializationContext.Default);
         AllowAnonymous();
         Description(b => b
+            .WithTags(ApiTagConstants.Tokens)
             .Produces<ApiResponseForOpenApi<AltchaChallenge>>((int)HttpStatusCode.OK, "application/json")
             .Produces<ApiResponse>((int)HttpStatusCode.InternalServerError, "application/json")
             .ProducesProblemFE((int)HttpStatusCode.BadRequest));

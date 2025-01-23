@@ -132,6 +132,7 @@ builder.Services
     .AddAntiforgery()
     .SwaggerDocument(o =>
     {
+        o.AutoTagPathSegmentIndex = 0;
         o.ShortSchemaNames = true;
         o.MaxEndpointVersion = GlobalVersion;
         o.DocumentSettings = s =>
@@ -170,9 +171,9 @@ builder.Services.AddScoped<AttemptLoginByAssertionStep>();
 
 var app = builder.Build();
 
-app.UseHttpsRedirection();
 app.UseStepifiedSystem();
-app.UseCookiePolicy(new()
+app.UseHttpsRedirection()
+    .UseCookiePolicy(new()
 {
     MinimumSameSitePolicy = SameSiteMode.Strict,
     HttpOnly = HttpOnlyPolicy.Always,
