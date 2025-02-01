@@ -3,6 +3,7 @@ using NSwag;
 using NSwag.Generation.Processors;
 using NSwag.Generation.Processors.Contexts;
 using snowcoreBlog.Backend.Core.Constants;
+using snowcoreBlog.PublicApi.Constants;
 
 namespace snowcoreBlog.Backend.Infrastructure.Processors;
 
@@ -14,7 +15,7 @@ public class AltchaHeaderProcessor : IOperationProcessor
         {
             var altchaParam = new OpenApiParameter()
             {
-                Name = EndpointTagConstants.RequireCaptchaVerification,
+                Name = HeaderKeyConstants.AltchaCaptchaHeader,
                 Kind = OpenApiParameterKind.Header,
                 IsRequired = true,
                 Type = JsonObjectType.String,
