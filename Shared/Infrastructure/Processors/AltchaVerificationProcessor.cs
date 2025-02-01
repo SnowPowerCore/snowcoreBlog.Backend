@@ -2,7 +2,7 @@
 using Ixnas.AltchaNet;
 using snowcoreBlog.PublicApi.Constants;
 
-namespace snowcoreBlog.Backend.Infrastructure.HttpProcessors;
+namespace snowcoreBlog.Backend.Infrastructure.Processors;
 
 public class AltchaVerificationProcessor : IGlobalPreProcessor
 {

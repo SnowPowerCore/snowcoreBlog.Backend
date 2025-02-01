@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
 using snowcoreBlog.Backend.IAM.Core.Constants;
 
-namespace snowcoreBlog.Backend.Infrastructure.HttpProcessors;
+namespace snowcoreBlog.Backend.Infrastructure.Processors;
 
 public class CookieJsonWebTokenProcessor : IGlobalPreProcessor
 {
