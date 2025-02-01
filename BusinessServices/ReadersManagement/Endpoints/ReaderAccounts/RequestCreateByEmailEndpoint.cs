@@ -39,7 +39,7 @@ public class RequestCreateByEmailEndpoint : Endpoint<RequestCreateReaderAccountD
         AllowAnonymous();
         Tags(EndpointTagConstants.RequireCaptchaVerification);
         Description(b => b
-            .WithTags(ApiTagConstants.ReaderAccountManagement, EndpointTagConstants.RequireCaptchaVerification)
+            .WithTags(ApiTagConstants.ReaderAccountManagement, ApiTagConstants.Captcha)
             .Accepts<RequestCreateReaderAccountDto>("application/json")
             .Produces<ApiResponseForOpenApi<RequestReaderAccountCreationResultDto>>((int)HttpStatusCode.OK, "application/json")
             .Produces<ApiResponse>((int)HttpStatusCode.InternalServerError, "application/json")
