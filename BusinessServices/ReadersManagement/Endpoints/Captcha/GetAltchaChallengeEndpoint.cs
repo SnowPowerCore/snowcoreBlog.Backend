@@ -3,15 +3,12 @@ using FastEndpoints;
 using Ixnas.AltchaNet;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.Extensions.Options;
-using Results;
 using snowcoreBlog.Backend.Infrastructure;
 using snowcoreBlog.PublicApi.Constants;
-using snowcoreBlog.PublicApi.Extensions;
-using snowcoreBlog.PublicApi.Utilities.Api;
 
 namespace snowcoreBlog.Backend.ReadersManagement.Endpoints.Captcha;
 
-public class GetAltchaChallengeEndpoint : EndpointWithoutRequest<ApiResponse?>
+public class GetAltchaChallengeEndpoint : EndpointWithoutRequest<AltchaChallenge?>
 {
     private readonly AltchaService _altcha;
 
@@ -25,8 +22,7 @@ public class GetAltchaChallengeEndpoint : EndpointWithoutRequest<ApiResponse?>
         AllowAnonymous();
         Description(b => b
             .WithTags(ApiTagConstants.Tokens)
-            .Produces<ApiResponseForOpenApi<AltchaChallenge>>((int)HttpStatusCode.OK, "application/json")
-            .Produces<ApiResponse>((int)HttpStatusCode.InternalServerError, "application/json")
+            .Produces<AltchaChallenge>((int)HttpStatusCode.OK, "application/json")
             .ProducesProblemFE((int)HttpStatusCode.BadRequest));
     }
 
@@ -35,13 +31,6 @@ public class GetAltchaChallengeEndpoint : EndpointWithoutRequest<ApiResponse?>
         _altcha = altcha;
     }
 
-    public override async Task HandleAsync(CancellationToken ct)
-    {
-        var result = Result.Success(_altcha.Generate());
-
-        await SendAsync(
-            result?.ToApiResponse(serializerOptions: JsonOptions.Value.SerializerOptions),
-            result?.ToStatusCode() ?? (int)HttpStatusCode.InternalServerError,
-            ct);
-    }
+    public override Task HandleAsync(CancellationToken ct) =>
+        SendAsync(_altcha.Generate(), (int)HttpStatusCode.OK, ct);
 }

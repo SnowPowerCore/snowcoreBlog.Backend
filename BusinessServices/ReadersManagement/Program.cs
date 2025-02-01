@@ -101,6 +101,7 @@ builder.Services.AddSingleton(static sp =>
     rng.GetBytes(key);
     return Altcha.CreateServiceBuilder()
         .UseSha256(key)
+        .SetExpiryInSeconds(30)
         .UseStore(() => sp.GetRequiredService<IAltchaChallengeStore>())
         .Build();
 });
@@ -150,7 +151,12 @@ builder.Services
             s.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
         };
     })
-    .AddCors();
+    .AddCors(x => x.AddDefaultPolicy(p => p
+        .WithOrigins("https://localhost:*/")
+        .SetIsOriginAllowed(host => true)
+        .AllowAnyMethod()
+        .AllowAnyHeader()
+        .AllowCredentials()));
 
 builder.Services.AddScoped<IHasher, Argon2Hasher>();
 builder.Services.AddScoped<IAltchaChallengeStore, AltchaChallengeStore>();
@@ -174,6 +180,7 @@ var app = builder.Build();
 
 app.UseStepifiedSystem();
 app.UseHttpsRedirection()
+    .UseCors()
     .UseCookiePolicy(new()
     {
         MinimumSameSitePolicy = SameSiteMode.Strict,
