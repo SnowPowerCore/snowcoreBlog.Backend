@@ -141,6 +141,7 @@ builder.Services
             s.DocumentName = $"v{GlobalVersion}";
             s.Version = $"v{GlobalVersion}";
             s.SchemaSettings.IgnoreObsoleteProperties = true;
+            s.OperationProcessors.Add(new AntiforgeryHeaderProcessor());
             s.OperationProcessors.Add(new AltchaHeaderProcessor());
         };
         o.SerializerSettings = s =>

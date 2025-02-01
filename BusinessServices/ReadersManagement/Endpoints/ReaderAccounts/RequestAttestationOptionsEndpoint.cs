@@ -32,6 +32,7 @@ public class RequestAttestationOptionsEndpoint : Endpoint<RequestAttestationOpti
         SerializerContext(CoreSerializationContext.Default);
         Validator<RequestAttestationOptionsValidation>();
         AllowAnonymous();
+        EnableAntiforgery();
         Description(b => b
             .WithTags(ApiTagConstants.ReaderAccountManagement)
             .Accepts<RequestAttestationOptionsDto>("application/json")

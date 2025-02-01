@@ -32,6 +32,7 @@ public class RequestAssertionOptionsEndpoint : Endpoint<RequestAssertionOptionsD
         SerializerContext(CoreSerializationContext.Default);
         Validator<RequestAssertionOptionsValidation>();
         AllowAnonymous();
+        EnableAntiforgery();
         Description(b => b
             .WithTags(ApiTagConstants.ReaderAccountManagement)
             .Accepts<RequestAssertionOptionsDto>("application/json")

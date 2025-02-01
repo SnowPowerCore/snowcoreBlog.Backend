@@ -37,6 +37,7 @@ public class RequestCreateByEmailEndpoint : Endpoint<RequestCreateReaderAccountD
         SerializerContext(CoreSerializationContext.Default);
         Validator<RequestCreateReaderAccountValidation>();
         AllowAnonymous();
+        EnableAntiforgery();
         Tags(EndpointTagConstants.RequireCaptchaVerification);
         Description(b => b
             .WithTags(ApiTagConstants.ReaderAccountManagement, ApiTagConstants.Captcha)
