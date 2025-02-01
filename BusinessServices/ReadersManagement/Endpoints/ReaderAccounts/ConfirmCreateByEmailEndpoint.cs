@@ -35,6 +35,7 @@ public class ConfirmCreateByEmailEndpoint : Endpoint<ConfirmCreateReaderAccountD
         SerializerContext(CoreSerializationContext.Default);
         Validator<ConfirmCreateReaderAccountValidation>();
         AllowAnonymous();
+        EnableAntiforgery();
         Description(b => b
             .WithTags(ApiTagConstants.ReaderAccountManagement)
             .Accepts<ConfirmCreateReaderAccountDto>("application/json")

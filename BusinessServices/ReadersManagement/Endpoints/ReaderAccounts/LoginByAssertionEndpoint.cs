@@ -32,6 +32,7 @@ public class LoginByAssertionEndpoint : Endpoint<LoginByAssertionDto, ApiRespons
         SerializerContext(CoreSerializationContext.Default);
         Validator<LoginByAssertionValidation>();
         AllowAnonymous();
+        EnableAntiforgery();
         Description(b => b
             .WithTags(ApiTagConstants.ReaderAccountManagement)
             .Accepts<LoginByAssertionDto>("application/json")

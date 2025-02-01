@@ -31,6 +31,7 @@ public class CheckNickNameNotTakenEndpoint : Endpoint<CheckNickNameNotTakenDto, 
         SerializerContext(CoreSerializationContext.Default);
         Validator<CheckNickNameNotTakenValidation>();
         AllowAnonymous();
+        EnableAntiforgery();
         Description(b => b
             .WithTags(ApiTagConstants.ReaderAccountManagement)
             .Accepts<CheckNickNameNotTakenDto>("application/json")
