@@ -20,7 +20,7 @@ using snowcoreBlog.Backend.Core.Entities.Reader;
 using snowcoreBlog.Backend.Core.Interfaces.Services;
 using snowcoreBlog.Backend.Email.Core.Options;
 using snowcoreBlog.Backend.Infrastructure.Extensions;
-using snowcoreBlog.Backend.Infrastructure.HttpProcessors;
+using snowcoreBlog.Backend.Infrastructure.Processors;
 using snowcoreBlog.Backend.Infrastructure.Services;
 using snowcoreBlog.Backend.Infrastructure.Stores;
 using snowcoreBlog.Backend.Infrastructure.Utilities;
@@ -140,6 +140,7 @@ builder.Services
             s.DocumentName = $"v{GlobalVersion}";
             s.Version = $"v{GlobalVersion}";
             s.SchemaSettings.IgnoreObsoleteProperties = true;
+            s.OperationProcessors.Add(new AltchaHeaderProcessor());
         };
         o.SerializerSettings = s =>
         {
@@ -174,11 +175,11 @@ var app = builder.Build();
 app.UseStepifiedSystem();
 app.UseHttpsRedirection()
     .UseCookiePolicy(new()
-{
-    MinimumSameSitePolicy = SameSiteMode.Strict,
-    HttpOnly = HttpOnlyPolicy.Always,
-    Secure = CookieSecurePolicy.Always
-})
+    {
+        MinimumSameSitePolicy = SameSiteMode.Strict,
+        HttpOnly = HttpOnlyPolicy.Always,
+        Secure = CookieSecurePolicy.Always
+    })
     .UseAuthentication()
     .UseAuthorization()
     .UseAntiforgeryFE()
