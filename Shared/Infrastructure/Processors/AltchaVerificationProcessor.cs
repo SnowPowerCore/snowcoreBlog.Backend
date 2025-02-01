@@ -15,8 +15,8 @@ public class AltchaVerificationProcessor : IGlobalPreProcessor
 
     public async Task PreProcessAsync(IPreProcessorContext context, CancellationToken ct)
     {
-        var errorMessage = $"The [{HeaderKeyConstants.AltchaCaptchaHeader}] header has to be set!";
-        if (context.HttpContext.Request.Headers.TryGetValue(HeaderKeyConstants.AltchaCaptchaHeader, out var captchaSolution))
+        var errorMessage = $"The [{HeaderKeyConstants.CaptchaHeader}] header has to be set!";
+        if (context.HttpContext.Request.Headers.TryGetValue(HeaderKeyConstants.CaptchaHeader, out var captchaSolution))
         {
             var validationResult = await _altcha.Validate(captchaSolution);
             if (validationResult?.IsValid ?? false)

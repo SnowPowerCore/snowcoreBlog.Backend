@@ -16,10 +16,10 @@ public class AltchaHeaderProcessor : IOperationProcessor
         {
             operation.Parameters.Add(new OpenApiParameter()
             {
-                Name = HeaderKeyConstants.AltchaCaptchaHeader,
+                Name = HeaderKeyConstants.CaptchaHeader,
                 Kind = OpenApiParameterKind.Header,
+                Schema = new JsonSchema { Type = JsonObjectType.String },
                 IsRequired = true,
-                Type = JsonObjectType.String,
                 Description = "A required base64 captcha solution that has to be sent along the request."
             });
         }
