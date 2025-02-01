@@ -2,5 +2,5 @@
 
 public static class EndpointTagConstants
 {
-    public const string RequireCaptchaVerification = "captcha";
+    public const string RequireCaptchaVerification = "Captcha";
 }
