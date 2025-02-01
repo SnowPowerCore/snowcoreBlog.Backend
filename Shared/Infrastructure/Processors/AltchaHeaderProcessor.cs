@@ -11,18 +11,17 @@ public class AltchaHeaderProcessor : IOperationProcessor
 {
     public bool Process(OperationProcessorContext context)
     {
-        if (context.Document.Tags.Any(x => x.Name == EndpointTagConstants.RequireCaptchaVerification))
+        var operation = context.OperationDescription.Operation;
+        if (operation.Tags.Any(x => x == EndpointTagConstants.RequireCaptchaVerification))
         {
-            var altchaParam = new OpenApiParameter()
+            operation.Parameters.Add(new OpenApiParameter()
             {
                 Name = HeaderKeyConstants.AltchaCaptchaHeader,
                 Kind = OpenApiParameterKind.Header,
                 IsRequired = true,
                 Type = JsonObjectType.String,
                 Description = "A required base64 captcha solution that has to be sent along the request."
-            };
-
-            context.OperationDescription.Operation.Parameters.Add(altchaParam);
+            });
         }
 
         return true;
