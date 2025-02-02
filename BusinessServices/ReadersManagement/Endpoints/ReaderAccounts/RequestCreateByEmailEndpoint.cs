@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using System.Net.Mime;
 using FastEndpoints;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.Extensions.Options;
@@ -41,9 +42,9 @@ public class RequestCreateByEmailEndpoint : Endpoint<RequestCreateReaderAccountD
         Tags(EndpointTagConstants.RequireCaptchaVerification);
         Description(b => b
             .WithTags(ApiTagConstants.ReaderAccountManagement, ApiTagConstants.Captcha)
-            .Accepts<RequestCreateReaderAccountDto>("application/json")
-            .Produces<ApiResponseForOpenApi<RequestReaderAccountCreationResultDto>>((int)HttpStatusCode.OK, "application/json")
-            .Produces<ApiResponse>((int)HttpStatusCode.InternalServerError, "application/json")
+            .Accepts<RequestCreateReaderAccountDto>(MediaTypeNames.Application.Json)
+            .Produces<ApiResponseForOpenApi<RequestReaderAccountCreationResultDto>>((int)HttpStatusCode.OK, MediaTypeNames.Application.Json)
+            .Produces<ApiResponse>((int)HttpStatusCode.InternalServerError, MediaTypeNames.Application.Json)
             .ProducesProblemFE((int)HttpStatusCode.BadRequest));
     }
 

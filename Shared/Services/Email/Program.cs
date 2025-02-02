@@ -10,12 +10,12 @@ using snowcoreBlog.Backend.Email.Features.Validation;
 
 var builder = WebApplication.CreateSlimBuilder(args);
 
-builder.Services.Configure<MassTransitHostOptions>(options =>
+builder.Services.Configure<MassTransitHostOptions>(static options =>
 {
     options.WaitUntilStarted = true;
 });
 
-builder.Services.ConfigureHttpJsonOptions(options =>
+builder.Services.ConfigureHttpJsonOptions(static options =>
 {
     options.SerializerOptions.SetJsonSerializationContext();
 });
@@ -28,10 +28,10 @@ builder.Services.AddMassTransit(busConfigurator =>
     busConfigurator.AddConsumer<SendGenericEmailUsingSendGridConsumer>();
     busConfigurator.AddConsumer<SendTemplatedEmailUsingSendGridConsumer>();
     busConfigurator.AddConsumer<CheckEmailDomainConsumer>();
-    busConfigurator.ConfigureHttpJsonOptions(o => o.SerializerOptions.SetJsonSerializationContext());
+    busConfigurator.ConfigureHttpJsonOptions(static o => o.SerializerOptions.SetJsonSerializationContext());
     busConfigurator.UsingRabbitMq((context, config) =>
     {
-        config.ConfigureJsonSerializerOptions(options => options.SetJsonSerializationContext());
+        config.ConfigureJsonSerializerOptions(static options => options.SetJsonSerializationContext());
         config.Host(builder.Configuration.GetConnectionString("rabbitmq"));
         config.ConfigureEndpoints(context);
     });

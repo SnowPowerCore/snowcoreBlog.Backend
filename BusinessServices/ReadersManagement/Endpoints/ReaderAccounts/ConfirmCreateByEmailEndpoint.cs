@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using System.Net.Mime;
 using FastEndpoints;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.Extensions.Options;
@@ -38,9 +39,9 @@ public class ConfirmCreateByEmailEndpoint : Endpoint<ConfirmCreateReaderAccountD
         EnableAntiforgery();
         Description(b => b
             .WithTags(ApiTagConstants.ReaderAccountManagement)
-            .Accepts<ConfirmCreateReaderAccountDto>("application/json")
-            .Produces<ApiResponseForOpenApi<ReaderAccountCreatedDto>>((int)HttpStatusCode.OK, "application/json")
-            .Produces<ApiResponse>((int)HttpStatusCode.InternalServerError, "application/json")
+            .Accepts<ConfirmCreateReaderAccountDto>(MediaTypeNames.Application.Json)
+            .Produces<ApiResponseForOpenApi<ReaderAccountCreatedDto>>((int)HttpStatusCode.OK, MediaTypeNames.Application.Json)
+            .Produces<ApiResponse>((int)HttpStatusCode.InternalServerError, MediaTypeNames.Application.Json)
             .ProducesProblemFE((int)HttpStatusCode.BadRequest));
     }
 

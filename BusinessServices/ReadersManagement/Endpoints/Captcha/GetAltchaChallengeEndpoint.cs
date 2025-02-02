@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using System.Net.Mime;
 using FastEndpoints;
 using Ixnas.AltchaNet;
 using Microsoft.AspNetCore.Http.Json;
@@ -22,7 +23,7 @@ public class GetAltchaChallengeEndpoint : EndpointWithoutRequest<AltchaChallenge
         AllowAnonymous();
         Description(b => b
             .WithTags(ApiTagConstants.Tokens)
-            .Produces<AltchaChallenge>((int)HttpStatusCode.OK, "application/json")
+            .Produces<AltchaChallenge>((int)HttpStatusCode.OK, MediaTypeNames.Application.Json)
             .ProducesProblemFE((int)HttpStatusCode.BadRequest));
     }
 

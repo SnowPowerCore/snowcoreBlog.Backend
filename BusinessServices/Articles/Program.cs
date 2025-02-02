@@ -11,7 +11,7 @@ builder.Services.Configure<CookiePolicyOptions>(static options =>
     options.Secure = CookieSecurePolicy.Always;
 });
 
-builder.Services.Configure<ForwardedHeadersOptions>(options =>
+builder.Services.Configure<ForwardedHeadersOptions>(static options =>
 {
     options.ForwardedHeaders =
         ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;

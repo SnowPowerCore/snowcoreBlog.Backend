@@ -1,3 +1,4 @@
+using System.Net.Mime;
 using System.Security.Cryptography;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -19,6 +20,7 @@ using snowcoreBlog.Backend.Core.Constants;
 using snowcoreBlog.Backend.Core.Entities.Reader;
 using snowcoreBlog.Backend.Core.Interfaces.Services;
 using snowcoreBlog.Backend.Email.Core.Options;
+using snowcoreBlog.Backend.Infrastructure;
 using snowcoreBlog.Backend.Infrastructure.Extensions;
 using snowcoreBlog.Backend.Infrastructure.Processors;
 using snowcoreBlog.Backend.Infrastructure.Services;
@@ -49,7 +51,12 @@ builder.Services.Configure<RouteOptions>(static options =>
     options.SetParameterPolicy<RegexInlineRouteConstraint>("regex");
 });
 
-builder.Services.Configure<JsonOptions>(options =>
+builder.Services.Configure<JsonOptions>(static options =>
+{
+    options.SerializerOptions.SetJsonSerializationContext();
+});
+
+builder.Services.ConfigureHttpJsonOptions(static options =>
 {
     options.SerializerOptions.SetJsonSerializationContext();
 });
@@ -66,15 +73,10 @@ builder.Services.Configure<CookiePolicyOptions>(static options =>
     options.Secure = CookieSecurePolicy.Always;
 });
 
-builder.Services.Configure<ForwardedHeadersOptions>(options =>
+builder.Services.Configure<ForwardedHeadersOptions>(static options =>
 {
     options.ForwardedHeaders =
         ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
-});
-
-builder.Services.ConfigureHttpJsonOptions(options =>
-{
-    options.SerializerOptions.SetJsonSerializationContext();
 });
 
 builder.Services.Configure<SendGridSenderAccountOptions>(
@@ -85,11 +87,11 @@ builder.AddServiceDefaults();
 builder.Services.AddOpenTelemetry().ConnectBackendServices();
 builder.Services.AddNpgsqlDataSource(builder.Configuration.GetConnectionString("db-snowcore-blog-entities")!);
 //builder.Services.AddNpgsqlDataSource("Host=localhost;Port=54523;Username=postgres;Password=xQ6S1zf+)!kTnjFFCtt(Ks");
-builder.Services.AddMarten(opts =>
+builder.Services.AddMarten(static opts =>
 {
     opts.RegisterDocumentType<ReaderEntity>();
     opts.GeneratedCodeMode = TypeLoadMode.Static;
-    opts.UseSystemTextJsonForSerialization(configure: o => o.SetJsonSerializationContext());
+    opts.UseSystemTextJsonForSerialization(configure: static o => o.SetJsonSerializationContext());
     opts.Policies.AllDocumentsSoftDeleted();
 })
     .UseLightweightSessions()
@@ -108,10 +110,10 @@ builder.Services.AddSingleton(static sp =>
 builder.Services.AddMassTransit(busConfigurator =>
 {
     busConfigurator.AddConsumer<ReaderAccountTempUserCreatedConsumer>();
-    busConfigurator.ConfigureHttpJsonOptions(o => o.SerializerOptions.SetJsonSerializationContext());
+    busConfigurator.ConfigureHttpJsonOptions(static o => o.SerializerOptions.SetJsonSerializationContext());
     busConfigurator.UsingRabbitMq((context, config) =>
     {
-        config.ConfigureJsonSerializerOptions(options => options.SetJsonSerializationContext());
+        config.ConfigureJsonSerializerOptions(static options => options.SetJsonSerializationContext());
         config.Host(builder.Configuration.GetConnectionString("rabbitmq"));
         config.ConfigureEndpoints(context);
     });
@@ -125,18 +127,24 @@ builder.Services.AddAuthentication();
 const int GlobalVersion = 1;
 
 builder.Services
+    .AddCors(static x => x.AddDefaultPolicy(static p => p
+        .WithOrigins("https://localhost:*/")
+        .SetIsOriginAllowed(static host => true)
+        .AllowAnyMethod()
+        .AllowAnyHeader()
+        .AllowCredentials()))
     .AddAuthorization()
+    .AddAntiforgery()
     .AddFastEndpoints(static o =>
     {
         o.SourceGeneratorDiscoveredTypes.AddRange(snowcoreBlog.Backend.ReadersManagement.DiscoveredTypes.All);
     })
-    .AddAntiforgery()
     .SwaggerDocument(o =>
     {
         o.AutoTagPathSegmentIndex = 0;
         o.ShortSchemaNames = true;
         o.MaxEndpointVersion = GlobalVersion;
-        o.DocumentSettings = s =>
+        o.DocumentSettings = static s =>
         {
             s.DocumentName = $"v{GlobalVersion}";
             s.Version = $"v{GlobalVersion}";
@@ -151,13 +159,7 @@ builder.Services
             s.PropertyNamingPolicy = null;
             s.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
         };
-    })
-    .AddCors(x => x.AddDefaultPolicy(p => p
-        .WithOrigins("https://localhost:*/")
-        .SetIsOriginAllowed(host => true)
-        .AllowAnyMethod()
-        .AllowAnyHeader()
-        .AllowCredentials()));
+    });
 
 builder.Services.AddScoped<IHasher, Argon2Hasher>();
 builder.Services.AddScoped<IAltchaChallengeStore, AltchaChallengeStore>();
@@ -190,11 +192,11 @@ app.UseHttpsRedirection()
     })
     .UseAuthentication()
     .UseAuthorization()
-    .UseAntiforgeryFE()
+    .UseAntiforgeryFE(additionalContentTypes: [MediaTypeNames.Application.Json])
     .UseFastEndpointsDiagnosticsMiddleware()
     .UseFastEndpoints(c =>
     {
-        c.Endpoints.NameGenerator = ctx =>
+        c.Endpoints.NameGenerator = static ctx =>
         {
             var currentName = ctx.EndpointType.Name;
             return currentName.TrimEnd("Endpoint");
@@ -205,7 +207,18 @@ app.UseHttpsRedirection()
         c.Serializer.Options.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
         c.Serializer.Options.Converters.Add(jsonStringEnumConverter);
         c.Serializer.Options.SetJsonSerializationContext();
-        c.Endpoints.Configurator = ep =>
+        c.Serializer.ResponseSerializer = static (rsp, dto, contentType, _, cancellation) =>
+        {
+            if (dto is null)
+                return Task.CompletedTask;
+            rsp.ContentType = contentType;
+            return rsp.WriteAsJsonAsync(
+                value: dto,
+                type: dto.GetType(),
+                context: CoreSerializationContext.Default,
+                cancellationToken: cancellation);
+        };
+        c.Endpoints.Configurator = static ep =>
         {
             if (ep.EndpointTags?.Contains(EndpointTagConstants.RequireCaptchaVerification) ?? false)
             {
@@ -213,14 +226,14 @@ app.UseHttpsRedirection()
             }
             ep.PreProcessor<CookieJsonWebTokenProcessor>(Order.Before);
         };
-        c.Errors.UseProblemDetails(x =>
+        c.Errors.UseProblemDetails(static x =>
         {
             x.AllowDuplicateErrors = true;  //allows duplicate errors for the same error name
             x.IndicateErrorCode = true;     //serializes the fluentvalidation error code
             x.IndicateErrorSeverity = true; //serializes the fluentvalidation error severity
             x.TypeValue = "https://www.rfc-editor.org/rfc/rfc7231#section-6.5.1";
             x.TitleValue = "One or more validation errors occurred.";
-            x.TitleTransformer = pd => pd.Status switch
+            x.TitleTransformer = static pd => pd.Status switch
             {
                 400 => "Validation Error",
                 404 => "Not Found",
@@ -230,13 +243,13 @@ app.UseHttpsRedirection()
         c.Errors.ResponseBuilder = static (failures, ctx, statusCode) =>
         {
             var failuresDict = failures
-                .GroupBy(f => f.PropertyName)
+                .GroupBy(static f => f.PropertyName)
                 .ToDictionary(
-                    keySelector: e => e.Key,
-                    elementSelector: e => e.Select(m => $"{e.Key}: {m.ErrorMessage}").ToArray());
+                    keySelector: static e => e.Key,
+                    elementSelector: static e => e.Select(m => $"{e.Key}: {m.ErrorMessage}").ToArray());
 
             return ErrorResponseUtilities.ApiResponseWithErrors(
-                failuresDict.Values.SelectMany(x => x.Select(s => s)).ToList(), statusCode);
+                failuresDict.Values.SelectMany(static x => x.Select(static s => s)).ToList(), statusCode);
         };
     });
 
@@ -245,8 +258,8 @@ app.MapDefaultEndpoints();
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
-    app.UseOpenApi(c => c.Path = $"/openapi/v{GlobalVersion}.json");
-    app.MapScalarApiReference(o =>
+    app.UseOpenApi(static c => c.Path = $"/openapi/v{GlobalVersion}.json");
+    app.MapScalarApiReference(static o =>
     {
         o.Servers = [];
         o.DarkMode = true;

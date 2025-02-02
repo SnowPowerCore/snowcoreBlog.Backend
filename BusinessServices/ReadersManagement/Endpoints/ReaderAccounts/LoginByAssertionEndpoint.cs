@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using System.Net.Mime;
 using FastEndpoints;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.Extensions.Options;
@@ -35,9 +36,9 @@ public class LoginByAssertionEndpoint : Endpoint<LoginByAssertionDto, ApiRespons
         EnableAntiforgery();
         Description(b => b
             .WithTags(ApiTagConstants.ReaderAccountManagement)
-            .Accepts<LoginByAssertionDto>("application/json")
-            .Produces<ApiResponseForOpenApi<LoginByAssertionResultDto>>((int)HttpStatusCode.OK, "application/json")
-            .Produces<ApiResponse>((int)HttpStatusCode.InternalServerError, "application/json")
+            .Accepts<LoginByAssertionDto>(MediaTypeNames.Application.Json)
+            .Produces<ApiResponseForOpenApi<LoginByAssertionResultDto>>((int)HttpStatusCode.OK, MediaTypeNames.Application.Json)
+            .Produces<ApiResponse>((int)HttpStatusCode.InternalServerError, MediaTypeNames.Application.Json)
             .ProducesProblemFE((int)HttpStatusCode.BadRequest));
     }
 
