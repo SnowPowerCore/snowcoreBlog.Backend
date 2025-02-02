@@ -17,7 +17,7 @@ public class AntiforgeryHeaderProcessor : IOperationProcessor
     public bool Process(OperationProcessorContext context)
     {
         var operationDesc = context.OperationDescription;
-        if (!_skipMethods.Contains(operationDesc.Method))
+        if (!_skipMethods.Contains(operationDesc.Method, StringComparer.OrdinalIgnoreCase))
         {
             operationDesc.Operation.Parameters.Add(new OpenApiParameter()
             {

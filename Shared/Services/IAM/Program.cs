@@ -24,7 +24,7 @@ using snowcoreBlog.Backend.Core.Utilities;
 var builder = WebApplication.CreateSlimBuilder(args);
 builder.Host.ApplyOaktonExtensions();
 
-builder.Services.Configure<MassTransitHostOptions>(options =>
+builder.Services.Configure<MassTransitHostOptions>(static options =>
 {
     options.WaitUntilStarted = true;
 });
@@ -61,16 +61,16 @@ builder.Services.AddMarten(static opts =>
     opts.RegisterCompiledQueryType(typeof(ApplicationTempUserByEmailQuery));
     opts.RegisterCompiledQueryType(typeof(ApplicationTempUserByNickNameQuery));
     opts.GeneratedCodeMode = TypeLoadMode.Static;
-    opts.UseSystemTextJsonForSerialization(configure: o => o.SetJsonSerializationContext());
+    opts.UseSystemTextJsonForSerialization(configure: static o => o.SetJsonSerializationContext());
     opts.Schema.For<ApplicationAdminEntity>().SoftDeleted();
     opts.Schema.For<ApplicationUserEntity>().SoftDeleted();
     opts.Schema.For<Fido2AuthenticatorTransportEntity>()
-        .Index(x => new { x.PublicKeyCredentialId, x.Value }, x => x.IsUnique = true)
-        .ForeignKey<Fido2PublicKeyCredentialEntity>(x => x.PublicKeyCredentialId!)
+        .Index(static x => new { x.PublicKeyCredentialId, x.Value }, static x => x.IsUnique = true)
+        .ForeignKey<Fido2PublicKeyCredentialEntity>(static x => x.PublicKeyCredentialId!)
         .SoftDeleted();
     opts.Schema.For<Fido2DevicePublicKeyEntity>()
-        .Index(x => new { x.PublicKeyCredentialId, x.Value }, x => x.IsUnique = true)
-        .ForeignKey<Fido2PublicKeyCredentialEntity>(x => x.PublicKeyCredentialId!)
+        .Index(static x => new { x.PublicKeyCredentialId, x.Value }, static x => x.IsUnique = true)
+        .ForeignKey<Fido2PublicKeyCredentialEntity>(static x => x.PublicKeyCredentialId!)
         .SoftDeleted();
     opts.Schema.For<Fido2PublicKeyCredentialEntity>().SoftDeleted();
 })
@@ -98,10 +98,10 @@ builder.Services.AddMassTransit(busConfigurator =>
     busConfigurator.AddConsumer<ValidateUserNickNameWasTakenConsumer>();
     busConfigurator.AddConsumer<ValidateAndCreateAttestationConsumer>();
     busConfigurator.AddConsumer<ValidateAndCreateAssertionConsumer>();
-    busConfigurator.ConfigureHttpJsonOptions(o => o.SerializerOptions.SetJsonSerializationContext());
+    busConfigurator.ConfigureHttpJsonOptions(static o => o.SerializerOptions.SetJsonSerializationContext());
     busConfigurator.UsingRabbitMq((context, config) =>
     {
-        config.ConfigureJsonSerializerOptions(options => options.SetJsonSerializationContext());
+        config.ConfigureJsonSerializerOptions(static options => options.SetJsonSerializationContext());
         config.Host(builder.Configuration.GetConnectionString("rabbitmq"));
         config.ConfigureEndpoints(context);
     });

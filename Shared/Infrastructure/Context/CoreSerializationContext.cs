@@ -1,6 +1,7 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 using Fido2NetLib;
+using FluentValidation.Results;
 using Ixnas.AltchaNet;
 using MassTransit;
 using MassTransit.Events;
@@ -24,6 +25,7 @@ namespace snowcoreBlog.Backend.Infrastructure;
 [JsonSerializable(typeof(Dictionary<string, string>))]
 [JsonSerializable(typeof(ScalarOptions))]
 [JsonSerializable(typeof(AntiforgeryTokenSet))]
+[JsonSerializable(typeof(List<ValidationFailure>))]
 [JsonSerializable(typeof(ApiResponse))]
 [JsonSerializable(typeof(AltchaChallenge))]
 [JsonSerializable(typeof(ApplicationAdminEntity))]

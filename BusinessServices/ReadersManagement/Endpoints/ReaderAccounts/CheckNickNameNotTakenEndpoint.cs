@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using System.Net.Mime;
 using FastEndpoints;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.Extensions.Options;
@@ -34,9 +35,9 @@ public class CheckNickNameNotTakenEndpoint : Endpoint<CheckNickNameNotTakenDto, 
         EnableAntiforgery();
         Description(b => b
             .WithTags(ApiTagConstants.ReaderAccountManagement)
-            .Accepts<CheckNickNameNotTakenDto>("application/json")
-            .Produces<ApiResponseForOpenApi<NickNameNotTakenCheckResultDto>>((int)HttpStatusCode.OK, "application/json")
-            .Produces<ApiResponse>((int)HttpStatusCode.InternalServerError, "application/json")
+            .Accepts<CheckNickNameNotTakenDto>(MediaTypeNames.Application.Json)
+            .Produces<ApiResponseForOpenApi<NickNameNotTakenCheckResultDto>>((int)HttpStatusCode.OK, MediaTypeNames.Application.Json)
+            .Produces<ApiResponse>((int)HttpStatusCode.InternalServerError, MediaTypeNames.Application.Json)
             .ProducesProblemFE((int)HttpStatusCode.BadRequest));
     }
 
