@@ -49,7 +49,7 @@ public class ValidateAndCreateUserConsumer(IHasher hasher,
                 return;
             }
 
-            if (tempUserEntity.ActivationTokenExpirationDate <= DateTime.UtcNow)
+            if (tempUserEntity.ActivationTokenExpirationDate <= DateTimeOffset.UtcNow)
             {
                 await context.RespondAsync(
                     new DataResult<UserCreationResult>(

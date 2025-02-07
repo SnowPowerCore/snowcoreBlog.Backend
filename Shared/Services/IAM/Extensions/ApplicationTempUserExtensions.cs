@@ -6,7 +6,7 @@ namespace snowcoreBlog.Backend.IAM.Extensions;
 public static class ApplicationTempUserExtensions
 {
     public static ApplicationTempUserEntity ToEntity(
-        this CreateTempUser createUser, string activationToken, DateTime activationTokenExpirationDate) =>
+        this CreateTempUser createUser, string activationToken, DateTimeOffset activationTokenExpirationDate) =>
         new()
         {
             UserName = createUser.UserName,

@@ -24,7 +24,7 @@ public class ValidateAndCreateAttestationConsumer(IHasher hasher,
         var tempUser = await applicationTempUserRepository.GetTempUserByEmailAsync(context.Message.Email, context.CancellationToken);
         if (tempUser is not default(ApplicationTempUserEntity))
         {
-            var dateTimeNow = DateTime.UtcNow;
+            var dateTimeNow = DateTimeOffset.UtcNow;
             if (validStatesOptions.Value.States.Contains(hasher.VerifyHashedStrings(tempUser.ActivationToken, context.Message.VerificationToken))
                 && tempUser.ActivationTokenExpirationDate > dateTimeNow)
             {
