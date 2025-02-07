@@ -28,7 +28,7 @@ public class CreateTempUserConsumer(IValidator<CreateTempUser> validator,
         }
 
         var verificationToken = StringExtensions.RandomString(32);
-        var verificationTokenExpirationDate = DateTime.UtcNow.AddDays(7);
+        var verificationTokenExpirationDate = DateTimeOffset.UtcNow.AddDays(7);
         var tempUserEntity = context.Message.ToEntity(
             hasher.Hash(verificationToken),
             verificationTokenExpirationDate);
