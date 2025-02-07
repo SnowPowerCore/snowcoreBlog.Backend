@@ -12,5 +12,5 @@ public sealed record TempUserCreationResult
 
     public required string VerificationToken { get; init; }
 
-    public required DateTime VerificationTokenExpirationDate { get; init; }
+    public required DateTimeOffset VerificationTokenExpirationDate { get; init; }
 }
