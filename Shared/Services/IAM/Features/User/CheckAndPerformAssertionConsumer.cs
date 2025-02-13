@@ -53,15 +53,18 @@ public class CheckAndPerformAssertionConsumer(IFido2 fido2,
             return;
         }
 
+        Task<bool> IsUserHandleOwnerOfCredentialIdCallback(Fido2NetLib.Objects.IsUserHandleOwnerOfCredentialIdParams @params, CancellationToken cancellationToken) =>
+            userManager.Users
+                .Where(user => user.Id == new Guid(@params.UserHandle).ToString())
+                .SelectMany(user => user.PublicKeyCredentials)
+                .AnyAsync(credential => credential.Id == new Guid(@params.CredentialId), context.CancellationToken);
+
         var assertionResult = await fido2.MakeAssertionAsync(
-            context.Message.AuthenticatorAssertion.ToMakeAssertionParams(options,
-            credential.PublicKey,
-            credential.SignatureCounter,
-            async (@params, cancellationToken) =>
-                await userManager.Users
-                    .Where(user => user.Id == new Guid(@params.UserHandle).ToString())
-                    .SelectMany(user => user.PublicKeyCredentials)
-                    .AnyAsync(credential => credential.Id == new Guid(@params.CredentialId), context.CancellationToken)),
+            context.Message.AuthenticatorAssertion.ToMakeAssertionParams(
+                options,
+                credential.PublicKey,
+                credential.SignatureCounter,
+                IsUserHandleOwnerOfCredentialIdCallback),
             context.CancellationToken);
 
         credential = credential with { SignatureCounter = assertionResult.SignCount };
