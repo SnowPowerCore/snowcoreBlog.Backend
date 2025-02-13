@@ -25,7 +25,7 @@ public class CreateReaderAccountTempUserStep(IRequestClient<CreateTempUser> clie
                 new(responseObj!.FirstName,
                     responseObj.Email,
                     responseObj.VerificationToken + responseObj.Email,
-                    responseObj.VerificationTokenExpirationDate.ToLongDateString()), token);
+                    responseObj.VerificationTokenExpirationDate.ToString()), token);
 
             return Result.Success<RequestReaderAccountCreationResultDto>(new(responseObj.Id));
         }
