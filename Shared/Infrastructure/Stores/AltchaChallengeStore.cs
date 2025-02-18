@@ -1,30 +1,46 @@
 using Ixnas.AltchaNet;
 using Marten;
-using snowcoreBlog.Backend.Infrastructure.Models;
+using Microsoft.Extensions.Configuration;
+using snowcoreBlog.Backend.Infrastructure.Entities;
 
 namespace snowcoreBlog.Backend.Infrastructure.Stores;
 
-public class AltchaChallengeStore(IDocumentSession documentSession) : IAltchaChallengeStore
+public class AltchaChallengeStore : IAltchaChallengeStore
 {
-    private readonly IDocumentSession _documentSession = documentSession;
+    private readonly string _connectionString;
 
-    public Task<bool> Exists(string challenge)
+    public AltchaChallengeStore(IConfiguration configuration)
     {
-        _documentSession.DeleteWhere<AltchaStoredChallenge>(storedChallenge =>
+        _connectionString = configuration.GetConnectionString("db-snowcore-blog-entities")!;
+    }
+
+    public async Task<bool> Exists(string challenge)
+    {
+        using var store = DocumentStore.For(opts =>
+        {
+            opts.Connection(_connectionString);
+        });
+        await using var session = store.LightweightSession();
+        session.DeleteWhere<AltchaStoredChallenge>(storedChallenge =>
             storedChallenge.ExpiryUtc <= DateTimeOffset.UtcNow);
-        var exists = _documentSession.Query<AltchaStoredChallenge>().Any(storedChallenge =>
+        var exists = session.Query<AltchaStoredChallenge>().Any(storedChallenge =>
             storedChallenge.Challenge == challenge);
-        return Task.FromResult(exists);
+        return exists;
     }
 
     public async Task Store(string challenge, DateTimeOffset expiryUtc)
     {
+        using var store = DocumentStore.For(opts =>
+        {
+            opts.Connection(_connectionString);
+        });
+        await using var session = store.LightweightSession();
         using var ct = new CancellationTokenSource();
-        _documentSession.Store(new AltchaStoredChallenge()
+        session.Store(new AltchaStoredChallenge()
         {
             Challenge = challenge,
             ExpiryUtc = expiryUtc
         });
-        await _documentSession.SaveChangesAsync(ct.Token);
+        await session.SaveChangesAsync(ct.Token);
     }
 }
