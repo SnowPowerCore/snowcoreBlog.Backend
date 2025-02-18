@@ -21,6 +21,7 @@ using snowcoreBlog.Backend.Core.Entities.Reader;
 using snowcoreBlog.Backend.Core.Interfaces.Services;
 using snowcoreBlog.Backend.Email.Core.Options;
 using snowcoreBlog.Backend.Infrastructure;
+using snowcoreBlog.Backend.Infrastructure.Entities;
 using snowcoreBlog.Backend.Infrastructure.Extensions;
 using snowcoreBlog.Backend.Infrastructure.Processors;
 using snowcoreBlog.Backend.Infrastructure.Services;
@@ -90,6 +91,7 @@ builder.Services.AddNpgsqlDataSource(builder.Configuration.GetConnectionString("
 builder.Services.AddMarten(static opts =>
 {
     opts.RegisterDocumentType<ReaderEntity>();
+    opts.RegisterDocumentType<AltchaStoredChallenge>();
     opts.GeneratedCodeMode = TypeLoadMode.Static;
     opts.UseSystemTextJsonForSerialization(configure: static o => o.SetJsonSerializationContext());
     opts.Policies.AllDocumentsSoftDeleted();
@@ -104,7 +106,11 @@ builder.Services.AddSingleton(static sp =>
     return Altcha.CreateServiceBuilder()
         .UseSha256(key)
         .SetExpiryInSeconds(30)
-        .UseStore(() => sp.GetRequiredService<IAltchaChallengeStore>())
+        .UseStore(() =>
+        {
+            using var scope = sp.CreateScope();
+            return scope.ServiceProvider.GetRequiredService<IAltchaChallengeStore>();
+        })
         .Build();
 });
 builder.Services.AddMassTransit(busConfigurator =>
@@ -220,11 +226,11 @@ app.UseHttpsRedirection()
         };
         c.Endpoints.Configurator = static ep =>
         {
+            ep.PreProcessor<CookieJsonWebTokenProcessor>(Order.Before);
             if (ep.EndpointTags?.Contains(EndpointTagConstants.RequireCaptchaVerification) ?? false)
             {
                 ep.PreProcessor<AltchaVerificationProcessor>(Order.Before);
             }
-            ep.PreProcessor<CookieJsonWebTokenProcessor>(Order.Before);
         };
         c.Errors.UseProblemDetails(static x =>
         {

@@ -5,13 +5,13 @@ using FluentValidation.Results;
 using Ixnas.AltchaNet;
 using MassTransit;
 using MassTransit.Events;
-using Microsoft.AspNetCore.Antiforgery;
 using Scalar.AspNetCore;
 using snowcoreBlog.Backend.Core.Contracts;
 using snowcoreBlog.Backend.Core.Entities.Reader;
 using snowcoreBlog.Backend.Email.Core.Contracts;
 using snowcoreBlog.Backend.IAM.Core.Contracts;
 using snowcoreBlog.Backend.IAM.Core.Entities;
+using snowcoreBlog.Backend.Infrastructure.Entities;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 using snowcoreBlog.PublicApi.Utilities.Api;
 using snowcoreBlog.PublicApi.Utilities.DataResult;
@@ -23,6 +23,7 @@ namespace snowcoreBlog.Backend.Infrastructure;
 /// </summary>
 [JsonSerializable(typeof(List<string>))]
 [JsonSerializable(typeof(Dictionary<string, string>))]
+[JsonSerializable(typeof(JsonElement))]
 [JsonSerializable(typeof(ScalarOptions))]
 [JsonSerializable(typeof(List<ValidationFailure>))]
 [JsonSerializable(typeof(ApiResponse))]
@@ -31,6 +32,7 @@ namespace snowcoreBlog.Backend.Infrastructure;
 [JsonSerializable(typeof(ApplicationUserEntity))]
 [JsonSerializable(typeof(ApplicationTempUserEntity))]
 [JsonSerializable(typeof(ReaderEntity))]
+[JsonSerializable(typeof(AltchaStoredChallenge))]
 [JsonSerializable(typeof(CreateAdmin))]
 [JsonSerializable(typeof(CreateUser))]
 [JsonSerializable(typeof(CreateTempUser))]
