@@ -4,6 +4,7 @@ using FastEndpoints;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.Extensions.Options;
 using MinimalStepifiedSystem.Attributes;
+using snowcoreBlog.Backend.Core.Constants;
 using snowcoreBlog.Backend.Infrastructure;
 using snowcoreBlog.Backend.ReadersManagement.Context;
 using snowcoreBlog.Backend.ReadersManagement.Delegates;
@@ -34,8 +35,9 @@ public class LoginByAssertionEndpoint : Endpoint<LoginByAssertionDto, ApiRespons
         Validator<LoginByAssertionValidation>();
         AllowAnonymous();
         EnableAntiforgery();
+        Tags(EndpointTagConstants.RequireCaptchaVerification);
         Description(b => b
-            .WithTags(ApiTagConstants.ReaderAccountManagement)
+            .WithTags(ApiTagConstants.ReaderAccountManagement, ApiTagConstants.Captcha)
             .Accepts<LoginByAssertionDto>(MediaTypeNames.Application.Json)
             .Produces<ApiResponseForOpenApi<LoginByAssertionResultDto>>((int)HttpStatusCode.OK, MediaTypeNames.Application.Json)
             .Produces<ApiResponse>((int)HttpStatusCode.InternalServerError, MediaTypeNames.Application.Json)

@@ -4,14 +4,9 @@ using snowcoreBlog.PublicApi.Constants;
 
 namespace snowcoreBlog.Backend.Infrastructure.Processors;
 
-public class AltchaVerificationProcessor : IGlobalPreProcessor
+public class AltchaVerificationProcessor(AltchaService altcha) : IGlobalPreProcessor
 {
-    private readonly AltchaService _altcha;
-
-    public AltchaVerificationProcessor(AltchaService altcha)
-    {
-        _altcha = altcha;
-    }
+    private readonly AltchaService _altcha = altcha;
 
     public async Task PreProcessAsync(IPreProcessorContext context, CancellationToken ct)
     {

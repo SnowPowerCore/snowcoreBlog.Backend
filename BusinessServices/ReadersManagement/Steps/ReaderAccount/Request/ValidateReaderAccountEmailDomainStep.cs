@@ -6,6 +6,7 @@ using snowcoreBlog.Backend.Email.Core.Contracts;
 using snowcoreBlog.Backend.ReadersManagement.Context;
 using snowcoreBlog.Backend.ReadersManagement.Delegates;
 using snowcoreBlog.Backend.ReadersManagement.Extensions;
+using snowcoreBlog.Backend.YarpGateway.Core.Constants;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 using snowcoreBlog.PublicApi.Utilities.DataResult;
 
@@ -15,7 +16,8 @@ public class ValidateReaderAccountEmailDomainStep(IRequestClient<CheckEmailDomai
 {
     public async Task<IResult<RequestReaderAccountCreationResultDto>> InvokeAsync(RequestCreateReaderAccountContext context, RequestCreateReaderAccountDelegate next, CancellationToken token = default)
     {
-        var result = await requestClient.GetResponse<DataResult<EmailDomainChecked>>(context.CreateRequest.ToCheckEmailDomain());
+        var result = await requestClient.GetResponse<DataResult<EmailDomainChecked>>(
+            context.CreateRequest.ToCheckEmailDomain(), token);
         if (result.Message.IsSuccess)
         {
             return await next(context, token);

@@ -21,11 +21,10 @@ public class AltchaChallengeStore : IAltchaChallengeStore
             opts.Connection(_connectionString);
         });
         await using var session = store.LightweightSession();
-        session.DeleteWhere<AltchaStoredChallenge>(storedChallenge =>
+        session.DeleteWhere<AltchaStoredChallengeEntity>(storedChallenge =>
             storedChallenge.ExpiryUtc <= DateTimeOffset.UtcNow);
-        var exists = session.Query<AltchaStoredChallenge>().Any(storedChallenge =>
+        return session.Query<AltchaStoredChallengeEntity>().Any(storedChallenge =>
             storedChallenge.Challenge == challenge);
-        return exists;
     }
 
     public async Task Store(string challenge, DateTimeOffset expiryUtc)
@@ -36,7 +35,7 @@ public class AltchaChallengeStore : IAltchaChallengeStore
         });
         await using var session = store.LightweightSession();
         using var ct = new CancellationTokenSource();
-        session.Store(new AltchaStoredChallenge()
+        session.Store(new AltchaStoredChallengeEntity()
         {
             Challenge = challenge,
             ExpiryUtc = expiryUtc

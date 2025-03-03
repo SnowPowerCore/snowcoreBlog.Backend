@@ -37,10 +37,7 @@
     <ProjectReference Include="..\IAM.Core\snowcoreBlog.Backend.IAM.Core.csproj" />
     <ProjectReference Include="..\Email.Core\snowcoreBlog.Backend.Email.Core.csproj" />
     <ProjectReference Include="..\..\snowcoreBlog.Universal\PublicApi\snowcoreBlog.PublicApi.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Models\" />
+    <ProjectReference Include="..\AspireYarpGateway.Core\snowcoreBlog.Backend.AspireYarpGateway.Core.csproj" />
   </ItemGroup>
 
 </Project>

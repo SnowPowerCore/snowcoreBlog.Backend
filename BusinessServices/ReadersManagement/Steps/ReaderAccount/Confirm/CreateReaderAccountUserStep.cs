@@ -31,7 +31,8 @@ public class CreateReaderAccountUserStep(IRequestClient<CreateUser> client,
                 AttestationConstants.NoAttestationOptionsInSession);
         }
 
-        var response = await client.GetResponse<DataResult<UserCreationResult>>(context.ConfirmRequest.ToCreateUser(attestationOptionsForUser!), token);
+        var response = await client.GetResponse<DataResult<UserCreationResult>>(
+            context.ConfirmRequest.ToCreateUser(attestationOptionsForUser!), token);
         if (response.Message.IsSuccess)
         {
             var responseObj = response!.Message.Value;

@@ -14,7 +14,8 @@ public class ValidateReaderAccountExistsStep(IRequestClient<ValidateUserExists> 
 {
     public async Task<IResult<LoginByAssertionResultDto>> InvokeAsync(LoginByAssertionContext context, LoginByAssertionDelegate next, CancellationToken token = default)
     {
-        var result = await requestClient.GetResponse<DataResult<UserExistsValidationResult>>(context.LoginByAssertion.ToValidateUserExists());
+        var result = await requestClient.GetResponse<DataResult<UserExistsValidationResult>>(
+            context.LoginByAssertion.ToValidateUserExists(), token);
         if (result.Message.IsSuccess)
         {
             if (result.Message.Value!.Exists)

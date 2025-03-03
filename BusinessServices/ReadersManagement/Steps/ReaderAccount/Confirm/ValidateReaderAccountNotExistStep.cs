@@ -14,7 +14,8 @@ public class ValidateReaderAccountNotExistStep(IRequestClient<ValidateUserExists
 {
     public async Task<IResult<ReaderAccountCreatedDto>> InvokeAsync(ConfirmCreateReaderAccountContext context, ConfirmCreateReaderAccountDelegate next, CancellationToken token = default)
     {
-        var result = await requestClient.GetResponse<DataResult<UserExistsValidationResult>>(context.ConfirmRequest.ToValidateUserExists());
+        var result = await requestClient.GetResponse<DataResult<UserExistsValidationResult>>(
+            context.ConfirmRequest.ToValidateUserExists(), token);
         if (result.Message.IsSuccess)
         {
             if (result.Message.Value!.Exists)
