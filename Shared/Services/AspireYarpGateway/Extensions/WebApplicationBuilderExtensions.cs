@@ -1,10 +1,10 @@
 ﻿using System.Text;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using snowcoreBlog.Backend.AspireYarpGateway.Constants;
 using snowcoreBlog.Backend.IAM.Core.Constants;
 
-namespace snowcoreBlog.Backend.Infrastructure.Extensions;
+namespace snowcoreBlog.Backend.AspireYarpGateway.Extensions;
 
 public static class WebApplicationBuilderExtensions
 {
@@ -22,7 +22,7 @@ public static class WebApplicationBuilderExtensions
                 options.SaveToken = true;
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    ValidIssuer = "user",
+                    ValidIssuer = SecuritySigningConstants.UserIssuer,
                     ValidateIssuer = true,
                     ValidateAudience = false,
                     ValidateLifetime = true,
@@ -38,8 +38,8 @@ public static class WebApplicationBuilderExtensions
                 options.SaveToken = true;
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
+                    ValidIssuer = SecuritySigningConstants.AdminIssuer,
                     ValidateIssuer = true,
-                    ValidIssuer = "admin",
                     ValidateAudience = false,
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,

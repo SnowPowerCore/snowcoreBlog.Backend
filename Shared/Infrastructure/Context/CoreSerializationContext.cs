@@ -5,6 +5,7 @@ using FluentValidation.Results;
 using Ixnas.AltchaNet;
 using MassTransit;
 using MassTransit.Events;
+using Results;
 using Scalar.AspNetCore;
 using snowcoreBlog.Backend.Core.Contracts;
 using snowcoreBlog.Backend.Core.Entities.Reader;
@@ -32,7 +33,7 @@ namespace snowcoreBlog.Backend.Infrastructure;
 [JsonSerializable(typeof(ApplicationUserEntity))]
 [JsonSerializable(typeof(ApplicationTempUserEntity))]
 [JsonSerializable(typeof(ReaderEntity))]
-[JsonSerializable(typeof(AltchaStoredChallenge))]
+[JsonSerializable(typeof(AltchaStoredChallengeEntity))]
 [JsonSerializable(typeof(CreateAdmin))]
 [JsonSerializable(typeof(CreateUser))]
 [JsonSerializable(typeof(CreateTempUser))]

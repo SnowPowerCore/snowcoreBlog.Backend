@@ -16,7 +16,8 @@ public class CreateReaderAccountTempUserStep(IRequestClient<CreateTempUser> clie
 {
     public async Task<IResult<RequestReaderAccountCreationResultDto>> InvokeAsync(RequestCreateReaderAccountContext context, RequestCreateReaderAccountDelegate next, CancellationToken token = default)
     {
-        var response = await client.GetResponse<DataResult<TempUserCreationResult>>(context.CreateRequest.ToCreateTempUser(), token);
+        var response = await client.GetResponse<DataResult<TempUserCreationResult>>(
+            context.CreateRequest.ToCreateTempUser(), token);
         if (response.Message.IsSuccess)
         {
             var responseObj = response!.Message.Value;

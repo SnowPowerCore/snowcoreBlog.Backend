@@ -91,7 +91,7 @@ builder.Services.AddNpgsqlDataSource(builder.Configuration.GetConnectionString("
 builder.Services.AddMarten(static opts =>
 {
     opts.RegisterDocumentType<ReaderEntity>();
-    opts.RegisterDocumentType<AltchaStoredChallenge>();
+    opts.RegisterDocumentType<AltchaStoredChallengeEntity>();
     opts.GeneratedCodeMode = TypeLoadMode.Static;
     opts.UseSystemTextJsonForSerialization(configure: static o => o.SetJsonSerializationContext());
     opts.Policies.AllDocumentsSoftDeleted();
@@ -125,21 +125,11 @@ builder.Services.AddMassTransit(busConfigurator =>
     });
 });
 builder.AddRedisClient(connectionName: "cache");
-builder.Services.AddMultipleAuthentications(
-   builder.Configuration["Security:Signing:User:Key"]!,
-   builder.Configuration["Security:Signing:Admin:Key"]!);
-builder.Services.AddAuthentication();
 
 const int GlobalVersion = 1;
 
-builder.Services
-    .AddCors(static x => x.AddDefaultPolicy(static p => p
-        .WithOrigins("https://localhost:*/")
-        .SetIsOriginAllowed(static host => true)
-        .AllowAnyMethod()
-        .AllowAnyHeader()
-        .AllowCredentials()))
-    .AddAuthorization()
+builder.Services.AddAuthentication();
+builder.Services.AddAuthorization()
     .AddAntiforgery()
     .AddFastEndpoints(static o =>
     {
@@ -189,7 +179,6 @@ var app = builder.Build();
 
 app.UseStepifiedSystem();
 app.UseHttpsRedirection()
-    .UseCors()
     .UseCookiePolicy(new()
     {
         MinimumSameSitePolicy = SameSiteMode.Strict,

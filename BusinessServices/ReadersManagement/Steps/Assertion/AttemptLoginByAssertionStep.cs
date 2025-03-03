@@ -34,7 +34,7 @@ public class AttemptLoginByAssertionStep(IRequestClient<LoginUser> requestClient
         }
 
         var result = await requestClient.GetResponse<DataResult<UserLoginResult>>(
-            context.LoginByAssertion.ToLoginUser(assertionOptionsForUser));
+            context.LoginByAssertion.ToLoginUser(assertionOptionsForUser), token);
         if (result.Message.IsSuccess)
         {
             await publishEndpoint.Publish<ReaderAccountUserLoggedIn>(

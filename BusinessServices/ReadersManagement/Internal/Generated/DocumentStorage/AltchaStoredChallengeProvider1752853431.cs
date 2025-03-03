@@ -14,14 +14,14 @@ using snowcoreBlog.Backend.Infrastructure.Entities;
 namespace Marten.Generated.DocumentStorage
 {
     // START: UpsertAltchaStoredChallengeOperation1752853431
-    public class UpsertAltchaStoredChallengeOperation1752853431 : Marten.Internal.Operations.StorageOperation<snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallenge, System.Guid>
+    public class UpsertAltchaStoredChallengeOperation1752853431 : Marten.Internal.Operations.StorageOperation<snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallengeEntity, System.Guid>
     {
-        private readonly snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallenge _document;
+        private readonly snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallengeEntity _document;
         private readonly System.Guid _id;
         private readonly System.Collections.Generic.Dictionary<System.Guid, System.Guid> _versions;
         private readonly Marten.Schema.DocumentMapping _mapping;
 
-        public UpsertAltchaStoredChallengeOperation1752853431(snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallenge document, System.Guid id, System.Collections.Generic.Dictionary<System.Guid, System.Guid> versions, Marten.Schema.DocumentMapping mapping) : base(document, id, versions, mapping)
+        public UpsertAltchaStoredChallengeOperation1752853431(snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallengeEntity document, System.Guid id, System.Collections.Generic.Dictionary<System.Guid, System.Guid> versions, Marten.Schema.DocumentMapping mapping) : base(document, id, versions, mapping)
         {
             _document = document;
             _id = id;
@@ -57,7 +57,7 @@ namespace Marten.Generated.DocumentStorage
         }
 
 
-        public override void ConfigureParameters(Weasel.Postgresql.IGroupedParameterBuilder parameterBuilder, Weasel.Postgresql.ICommandBuilder builder, snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallenge document, Marten.Internal.IMartenSession session)
+        public override void ConfigureParameters(Weasel.Postgresql.IGroupedParameterBuilder parameterBuilder, Weasel.Postgresql.ICommandBuilder builder, snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallengeEntity document, Marten.Internal.IMartenSession session)
         {
             builder.Append("select public.mt_upsert_altchastoredchallenge(");
             var parameter0 = parameterBuilder.AppendParameter(session.Serializer.ToJson(_document));
@@ -76,14 +76,14 @@ namespace Marten.Generated.DocumentStorage
     
     
     // START: InsertAltchaStoredChallengeOperation1752853431
-    public class InsertAltchaStoredChallengeOperation1752853431 : Marten.Internal.Operations.StorageOperation<snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallenge, System.Guid>
+    public class InsertAltchaStoredChallengeOperation1752853431 : Marten.Internal.Operations.StorageOperation<snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallengeEntity, System.Guid>
     {
-        private readonly snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallenge _document;
+        private readonly snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallengeEntity _document;
         private readonly System.Guid _id;
         private readonly System.Collections.Generic.Dictionary<System.Guid, System.Guid> _versions;
         private readonly Marten.Schema.DocumentMapping _mapping;
 
-        public InsertAltchaStoredChallengeOperation1752853431(snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallenge document, System.Guid id, System.Collections.Generic.Dictionary<System.Guid, System.Guid> versions, Marten.Schema.DocumentMapping mapping) : base(document, id, versions, mapping)
+        public InsertAltchaStoredChallengeOperation1752853431(snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallengeEntity document, System.Guid id, System.Collections.Generic.Dictionary<System.Guid, System.Guid> versions, Marten.Schema.DocumentMapping mapping) : base(document, id, versions, mapping)
         {
             _document = document;
             _id = id;
@@ -119,7 +119,7 @@ namespace Marten.Generated.DocumentStorage
         }
 
 
-        public override void ConfigureParameters(Weasel.Postgresql.IGroupedParameterBuilder parameterBuilder, Weasel.Postgresql.ICommandBuilder builder, snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallenge document, Marten.Internal.IMartenSession session)
+        public override void ConfigureParameters(Weasel.Postgresql.IGroupedParameterBuilder parameterBuilder, Weasel.Postgresql.ICommandBuilder builder, snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallengeEntity document, Marten.Internal.IMartenSession session)
         {
             builder.Append("select public.mt_insert_altchastoredchallenge(");
             var parameter0 = parameterBuilder.AppendParameter(session.Serializer.ToJson(_document));
@@ -138,14 +138,14 @@ namespace Marten.Generated.DocumentStorage
     
     
     // START: UpdateAltchaStoredChallengeOperation1752853431
-    public class UpdateAltchaStoredChallengeOperation1752853431 : Marten.Internal.Operations.StorageOperation<snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallenge, System.Guid>
+    public class UpdateAltchaStoredChallengeOperation1752853431 : Marten.Internal.Operations.StorageOperation<snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallengeEntity, System.Guid>
     {
-        private readonly snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallenge _document;
+        private readonly snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallengeEntity _document;
         private readonly System.Guid _id;
         private readonly System.Collections.Generic.Dictionary<System.Guid, System.Guid> _versions;
         private readonly Marten.Schema.DocumentMapping _mapping;
 
-        public UpdateAltchaStoredChallengeOperation1752853431(snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallenge document, System.Guid id, System.Collections.Generic.Dictionary<System.Guid, System.Guid> versions, Marten.Schema.DocumentMapping mapping) : base(document, id, versions, mapping)
+        public UpdateAltchaStoredChallengeOperation1752853431(snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallengeEntity document, System.Guid id, System.Collections.Generic.Dictionary<System.Guid, System.Guid> versions, Marten.Schema.DocumentMapping mapping) : base(document, id, versions, mapping)
         {
             _document = document;
             _id = id;
@@ -181,7 +181,7 @@ namespace Marten.Generated.DocumentStorage
         }
 
 
-        public override void ConfigureParameters(Weasel.Postgresql.IGroupedParameterBuilder parameterBuilder, Weasel.Postgresql.ICommandBuilder builder, snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallenge document, Marten.Internal.IMartenSession session)
+        public override void ConfigureParameters(Weasel.Postgresql.IGroupedParameterBuilder parameterBuilder, Weasel.Postgresql.ICommandBuilder builder, snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallengeEntity document, Marten.Internal.IMartenSession session)
         {
             builder.Append("select public.mt_update_altchastoredchallenge(");
             var parameter0 = parameterBuilder.AppendParameter(session.Serializer.ToJson(_document));
@@ -200,7 +200,7 @@ namespace Marten.Generated.DocumentStorage
     
     
     // START: QueryOnlyAltchaStoredChallengeSelector1752853431
-    public class QueryOnlyAltchaStoredChallengeSelector1752853431 : Marten.Internal.CodeGeneration.DocumentSelectorWithOnlySerializer, Marten.Linq.Selectors.ISelector<snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallenge>
+    public class QueryOnlyAltchaStoredChallengeSelector1752853431 : Marten.Internal.CodeGeneration.DocumentSelectorWithOnlySerializer, Marten.Linq.Selectors.ISelector<snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallengeEntity>
     {
         private readonly Marten.Internal.IMartenSession _session;
         private readonly Marten.Schema.DocumentMapping _mapping;
@@ -213,20 +213,20 @@ namespace Marten.Generated.DocumentStorage
 
 
 
-        public snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallenge Resolve(System.Data.Common.DbDataReader reader)
+        public snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallengeEntity Resolve(System.Data.Common.DbDataReader reader)
         {
 
-            snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallenge document;
-            document = _serializer.FromJson<snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallenge>(reader, 0);
+            snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallengeEntity document;
+            document = _serializer.FromJson<snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallengeEntity>(reader, 0);
             return document;
         }
 
 
-        public async System.Threading.Tasks.Task<snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallenge> ResolveAsync(System.Data.Common.DbDataReader reader, System.Threading.CancellationToken token)
+        public async System.Threading.Tasks.Task<snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallengeEntity> ResolveAsync(System.Data.Common.DbDataReader reader, System.Threading.CancellationToken token)
         {
 
-            snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallenge document;
-            document = await _serializer.FromJsonAsync<snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallenge>(reader, 0, token).ConfigureAwait(false);
+            snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallengeEntity document;
+            document = await _serializer.FromJsonAsync<snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallengeEntity>(reader, 0, token).ConfigureAwait(false);
             return document;
         }
 
@@ -236,7 +236,7 @@ namespace Marten.Generated.DocumentStorage
     
     
     // START: LightweightAltchaStoredChallengeSelector1752853431
-    public class LightweightAltchaStoredChallengeSelector1752853431 : Marten.Internal.CodeGeneration.DocumentSelectorWithVersions<snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallenge, System.Guid>, Marten.Linq.Selectors.ISelector<snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallenge>
+    public class LightweightAltchaStoredChallengeSelector1752853431 : Marten.Internal.CodeGeneration.DocumentSelectorWithVersions<snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallengeEntity, System.Guid>, Marten.Linq.Selectors.ISelector<snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallengeEntity>
     {
         private readonly Marten.Internal.IMartenSession _session;
         private readonly Marten.Schema.DocumentMapping _mapping;
@@ -249,23 +249,23 @@ namespace Marten.Generated.DocumentStorage
 
 
 
-        public snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallenge Resolve(System.Data.Common.DbDataReader reader)
+        public snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallengeEntity Resolve(System.Data.Common.DbDataReader reader)
         {
             var id = reader.GetFieldValue<System.Guid>(0);
 
-            snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallenge document;
-            document = _serializer.FromJson<snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallenge>(reader, 1);
+            snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallengeEntity document;
+            document = _serializer.FromJson<snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallengeEntity>(reader, 1);
             _session.MarkAsDocumentLoaded(id, document);
             return document;
         }
 
 
-        public async System.Threading.Tasks.Task<snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallenge> ResolveAsync(System.Data.Common.DbDataReader reader, System.Threading.CancellationToken token)
+        public async System.Threading.Tasks.Task<snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallengeEntity> ResolveAsync(System.Data.Common.DbDataReader reader, System.Threading.CancellationToken token)
         {
             var id = await reader.GetFieldValueAsync<System.Guid>(0, token);
 
-            snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallenge document;
-            document = await _serializer.FromJsonAsync<snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallenge>(reader, 1, token).ConfigureAwait(false);
+            snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallengeEntity document;
+            document = await _serializer.FromJsonAsync<snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallengeEntity>(reader, 1, token).ConfigureAwait(false);
             _session.MarkAsDocumentLoaded(id, document);
             return document;
         }
@@ -276,7 +276,7 @@ namespace Marten.Generated.DocumentStorage
     
     
     // START: IdentityMapAltchaStoredChallengeSelector1752853431
-    public class IdentityMapAltchaStoredChallengeSelector1752853431 : Marten.Internal.CodeGeneration.DocumentSelectorWithIdentityMap<snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallenge, System.Guid>, Marten.Linq.Selectors.ISelector<snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallenge>
+    public class IdentityMapAltchaStoredChallengeSelector1752853431 : Marten.Internal.CodeGeneration.DocumentSelectorWithIdentityMap<snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallengeEntity, System.Guid>, Marten.Linq.Selectors.ISelector<snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallengeEntity>
     {
         private readonly Marten.Internal.IMartenSession _session;
         private readonly Marten.Schema.DocumentMapping _mapping;
@@ -289,26 +289,26 @@ namespace Marten.Generated.DocumentStorage
 
 
 
-        public snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallenge Resolve(System.Data.Common.DbDataReader reader)
+        public snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallengeEntity Resolve(System.Data.Common.DbDataReader reader)
         {
             var id = reader.GetFieldValue<System.Guid>(0);
             if (_identityMap.TryGetValue(id, out var existing)) return existing;
 
-            snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallenge document;
-            document = _serializer.FromJson<snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallenge>(reader, 1);
+            snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallengeEntity document;
+            document = _serializer.FromJson<snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallengeEntity>(reader, 1);
             _session.MarkAsDocumentLoaded(id, document);
             _identityMap[id] = document;
             return document;
         }
 
 
-        public async System.Threading.Tasks.Task<snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallenge> ResolveAsync(System.Data.Common.DbDataReader reader, System.Threading.CancellationToken token)
+        public async System.Threading.Tasks.Task<snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallengeEntity> ResolveAsync(System.Data.Common.DbDataReader reader, System.Threading.CancellationToken token)
         {
             var id = await reader.GetFieldValueAsync<System.Guid>(0, token);
             if (_identityMap.TryGetValue(id, out var existing)) return existing;
 
-            snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallenge document;
-            document = await _serializer.FromJsonAsync<snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallenge>(reader, 1, token).ConfigureAwait(false);
+            snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallengeEntity document;
+            document = await _serializer.FromJsonAsync<snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallengeEntity>(reader, 1, token).ConfigureAwait(false);
             _session.MarkAsDocumentLoaded(id, document);
             _identityMap[id] = document;
             return document;
@@ -320,7 +320,7 @@ namespace Marten.Generated.DocumentStorage
     
     
     // START: DirtyTrackingAltchaStoredChallengeSelector1752853431
-    public class DirtyTrackingAltchaStoredChallengeSelector1752853431 : Marten.Internal.CodeGeneration.DocumentSelectorWithDirtyChecking<snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallenge, System.Guid>, Marten.Linq.Selectors.ISelector<snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallenge>
+    public class DirtyTrackingAltchaStoredChallengeSelector1752853431 : Marten.Internal.CodeGeneration.DocumentSelectorWithDirtyChecking<snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallengeEntity, System.Guid>, Marten.Linq.Selectors.ISelector<snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallengeEntity>
     {
         private readonly Marten.Internal.IMartenSession _session;
         private readonly Marten.Schema.DocumentMapping _mapping;
@@ -333,13 +333,13 @@ namespace Marten.Generated.DocumentStorage
 
 
 
-        public snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallenge Resolve(System.Data.Common.DbDataReader reader)
+        public snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallengeEntity Resolve(System.Data.Common.DbDataReader reader)
         {
             var id = reader.GetFieldValue<System.Guid>(0);
             if (_identityMap.TryGetValue(id, out var existing)) return existing;
 
-            snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallenge document;
-            document = _serializer.FromJson<snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallenge>(reader, 1);
+            snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallengeEntity document;
+            document = _serializer.FromJson<snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallengeEntity>(reader, 1);
             _session.MarkAsDocumentLoaded(id, document);
             _identityMap[id] = document;
             StoreTracker(_session, document);
@@ -347,13 +347,13 @@ namespace Marten.Generated.DocumentStorage
         }
 
 
-        public async System.Threading.Tasks.Task<snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallenge> ResolveAsync(System.Data.Common.DbDataReader reader, System.Threading.CancellationToken token)
+        public async System.Threading.Tasks.Task<snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallengeEntity> ResolveAsync(System.Data.Common.DbDataReader reader, System.Threading.CancellationToken token)
         {
             var id = await reader.GetFieldValueAsync<System.Guid>(0, token);
             if (_identityMap.TryGetValue(id, out var existing)) return existing;
 
-            snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallenge document;
-            document = await _serializer.FromJsonAsync<snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallenge>(reader, 1, token).ConfigureAwait(false);
+            snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallengeEntity document;
+            document = await _serializer.FromJsonAsync<snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallengeEntity>(reader, 1, token).ConfigureAwait(false);
             _session.MarkAsDocumentLoaded(id, document);
             _identityMap[id] = document;
             StoreTracker(_session, document);
@@ -366,7 +366,7 @@ namespace Marten.Generated.DocumentStorage
     
     
     // START: QueryOnlyAltchaStoredChallengeDocumentStorage1752853431
-    public class QueryOnlyAltchaStoredChallengeDocumentStorage1752853431 : Marten.Internal.Storage.QueryOnlyDocumentStorage<snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallenge, System.Guid>
+    public class QueryOnlyAltchaStoredChallengeDocumentStorage1752853431 : Marten.Internal.Storage.QueryOnlyDocumentStorage<snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallengeEntity, System.Guid>
     {
         private readonly Marten.Schema.DocumentMapping _document;
 
@@ -377,59 +377,59 @@ namespace Marten.Generated.DocumentStorage
 
 
 
-        public override System.Guid AssignIdentity(snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallenge document, string tenantId, Marten.Storage.IMartenDatabase database)
+        public override System.Guid AssignIdentity(snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallengeEntity document, string tenantId, Marten.Storage.IMartenDatabase database)
         {
             if (document.Id == Guid.Empty) _setter(document, Marten.Schema.Identity.CombGuidIdGeneration.NewGuid());
             return document.Id;
         }
 
 
-        public override Marten.Internal.Operations.IStorageOperation Update(snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallenge document, Marten.Internal.IMartenSession session, string tenant)
+        public override Marten.Internal.Operations.IStorageOperation Update(snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallengeEntity document, Marten.Internal.IMartenSession session, string tenant)
         {
 
             return new Marten.Generated.DocumentStorage.UpdateAltchaStoredChallengeOperation1752853431
             (
                 document, Identity(document),
-                session.Versions.ForType<snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallenge, System.Guid>(),
+                session.Versions.ForType<snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallengeEntity, System.Guid>(),
                 _document
                 
             );
         }
 
 
-        public override Marten.Internal.Operations.IStorageOperation Insert(snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallenge document, Marten.Internal.IMartenSession session, string tenant)
+        public override Marten.Internal.Operations.IStorageOperation Insert(snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallengeEntity document, Marten.Internal.IMartenSession session, string tenant)
         {
 
             return new Marten.Generated.DocumentStorage.InsertAltchaStoredChallengeOperation1752853431
             (
                 document, Identity(document),
-                session.Versions.ForType<snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallenge, System.Guid>(),
+                session.Versions.ForType<snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallengeEntity, System.Guid>(),
                 _document
                 
             );
         }
 
 
-        public override Marten.Internal.Operations.IStorageOperation Upsert(snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallenge document, Marten.Internal.IMartenSession session, string tenant)
+        public override Marten.Internal.Operations.IStorageOperation Upsert(snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallengeEntity document, Marten.Internal.IMartenSession session, string tenant)
         {
 
             return new Marten.Generated.DocumentStorage.UpsertAltchaStoredChallengeOperation1752853431
             (
                 document, Identity(document),
-                session.Versions.ForType<snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallenge, System.Guid>(),
+                session.Versions.ForType<snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallengeEntity, System.Guid>(),
                 _document
                 
             );
         }
 
 
-        public override Marten.Internal.Operations.IStorageOperation Overwrite(snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallenge document, Marten.Internal.IMartenSession session, string tenant)
+        public override Marten.Internal.Operations.IStorageOperation Overwrite(snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallengeEntity document, Marten.Internal.IMartenSession session, string tenant)
         {
             throw new System.NotSupportedException();
         }
 
 
-        public override System.Guid Identity(snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallenge document)
+        public override System.Guid Identity(snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallengeEntity document)
         {
             return document.Id;
         }
@@ -458,7 +458,7 @@ namespace Marten.Generated.DocumentStorage
     
     
     // START: LightweightAltchaStoredChallengeDocumentStorage1752853431
-    public class LightweightAltchaStoredChallengeDocumentStorage1752853431 : Marten.Internal.Storage.LightweightDocumentStorage<snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallenge, System.Guid>
+    public class LightweightAltchaStoredChallengeDocumentStorage1752853431 : Marten.Internal.Storage.LightweightDocumentStorage<snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallengeEntity, System.Guid>
     {
         private readonly Marten.Schema.DocumentMapping _document;
 
@@ -469,59 +469,59 @@ namespace Marten.Generated.DocumentStorage
 
 
 
-        public override System.Guid AssignIdentity(snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallenge document, string tenantId, Marten.Storage.IMartenDatabase database)
+        public override System.Guid AssignIdentity(snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallengeEntity document, string tenantId, Marten.Storage.IMartenDatabase database)
         {
             if (document.Id == Guid.Empty) _setter(document, Marten.Schema.Identity.CombGuidIdGeneration.NewGuid());
             return document.Id;
         }
 
 
-        public override Marten.Internal.Operations.IStorageOperation Update(snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallenge document, Marten.Internal.IMartenSession session, string tenant)
+        public override Marten.Internal.Operations.IStorageOperation Update(snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallengeEntity document, Marten.Internal.IMartenSession session, string tenant)
         {
 
             return new Marten.Generated.DocumentStorage.UpdateAltchaStoredChallengeOperation1752853431
             (
                 document, Identity(document),
-                session.Versions.ForType<snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallenge, System.Guid>(),
+                session.Versions.ForType<snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallengeEntity, System.Guid>(),
                 _document
                 
             );
         }
 
 
-        public override Marten.Internal.Operations.IStorageOperation Insert(snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallenge document, Marten.Internal.IMartenSession session, string tenant)
+        public override Marten.Internal.Operations.IStorageOperation Insert(snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallengeEntity document, Marten.Internal.IMartenSession session, string tenant)
         {
 
             return new Marten.Generated.DocumentStorage.InsertAltchaStoredChallengeOperation1752853431
             (
                 document, Identity(document),
-                session.Versions.ForType<snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallenge, System.Guid>(),
+                session.Versions.ForType<snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallengeEntity, System.Guid>(),
                 _document
                 
             );
         }
 
 
-        public override Marten.Internal.Operations.IStorageOperation Upsert(snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallenge document, Marten.Internal.IMartenSession session, string tenant)
+        public override Marten.Internal.Operations.IStorageOperation Upsert(snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallengeEntity document, Marten.Internal.IMartenSession session, string tenant)
         {
 
             return new Marten.Generated.DocumentStorage.UpsertAltchaStoredChallengeOperation1752853431
             (
                 document, Identity(document),
-                session.Versions.ForType<snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallenge, System.Guid>(),
+                session.Versions.ForType<snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallengeEntity, System.Guid>(),
                 _document
                 
             );
         }
 
 
-        public override Marten.Internal.Operations.IStorageOperation Overwrite(snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallenge document, Marten.Internal.IMartenSession session, string tenant)
+        public override Marten.Internal.Operations.IStorageOperation Overwrite(snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallengeEntity document, Marten.Internal.IMartenSession session, string tenant)
         {
             throw new System.NotSupportedException();
         }
 
 
-        public override System.Guid Identity(snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallenge document)
+        public override System.Guid Identity(snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallengeEntity document)
         {
             return document.Id;
         }
@@ -550,7 +550,7 @@ namespace Marten.Generated.DocumentStorage
     
     
     // START: IdentityMapAltchaStoredChallengeDocumentStorage1752853431
-    public class IdentityMapAltchaStoredChallengeDocumentStorage1752853431 : Marten.Internal.Storage.IdentityMapDocumentStorage<snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallenge, System.Guid>
+    public class IdentityMapAltchaStoredChallengeDocumentStorage1752853431 : Marten.Internal.Storage.IdentityMapDocumentStorage<snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallengeEntity, System.Guid>
     {
         private readonly Marten.Schema.DocumentMapping _document;
 
@@ -561,59 +561,59 @@ namespace Marten.Generated.DocumentStorage
 
 
 
-        public override System.Guid AssignIdentity(snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallenge document, string tenantId, Marten.Storage.IMartenDatabase database)
+        public override System.Guid AssignIdentity(snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallengeEntity document, string tenantId, Marten.Storage.IMartenDatabase database)
         {
             if (document.Id == Guid.Empty) _setter(document, Marten.Schema.Identity.CombGuidIdGeneration.NewGuid());
             return document.Id;
         }
 
 
-        public override Marten.Internal.Operations.IStorageOperation Update(snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallenge document, Marten.Internal.IMartenSession session, string tenant)
+        public override Marten.Internal.Operations.IStorageOperation Update(snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallengeEntity document, Marten.Internal.IMartenSession session, string tenant)
         {
 
             return new Marten.Generated.DocumentStorage.UpdateAltchaStoredChallengeOperation1752853431
             (
                 document, Identity(document),
-                session.Versions.ForType<snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallenge, System.Guid>(),
+                session.Versions.ForType<snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallengeEntity, System.Guid>(),
                 _document
                 
             );
         }
 
 
-        public override Marten.Internal.Operations.IStorageOperation Insert(snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallenge document, Marten.Internal.IMartenSession session, string tenant)
+        public override Marten.Internal.Operations.IStorageOperation Insert(snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallengeEntity document, Marten.Internal.IMartenSession session, string tenant)
         {
 
             return new Marten.Generated.DocumentStorage.InsertAltchaStoredChallengeOperation1752853431
             (
                 document, Identity(document),
-                session.Versions.ForType<snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallenge, System.Guid>(),
+                session.Versions.ForType<snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallengeEntity, System.Guid>(),
                 _document
                 
             );
         }
 
 
-        public override Marten.Internal.Operations.IStorageOperation Upsert(snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallenge document, Marten.Internal.IMartenSession session, string tenant)
+        public override Marten.Internal.Operations.IStorageOperation Upsert(snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallengeEntity document, Marten.Internal.IMartenSession session, string tenant)
         {
 
             return new Marten.Generated.DocumentStorage.UpsertAltchaStoredChallengeOperation1752853431
             (
                 document, Identity(document),
-                session.Versions.ForType<snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallenge, System.Guid>(),
+                session.Versions.ForType<snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallengeEntity, System.Guid>(),
                 _document
                 
             );
         }
 
 
-        public override Marten.Internal.Operations.IStorageOperation Overwrite(snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallenge document, Marten.Internal.IMartenSession session, string tenant)
+        public override Marten.Internal.Operations.IStorageOperation Overwrite(snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallengeEntity document, Marten.Internal.IMartenSession session, string tenant)
         {
             throw new System.NotSupportedException();
         }
 
 
-        public override System.Guid Identity(snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallenge document)
+        public override System.Guid Identity(snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallengeEntity document)
         {
             return document.Id;
         }
@@ -642,7 +642,7 @@ namespace Marten.Generated.DocumentStorage
     
     
     // START: DirtyTrackingAltchaStoredChallengeDocumentStorage1752853431
-    public class DirtyTrackingAltchaStoredChallengeDocumentStorage1752853431 : Marten.Internal.Storage.DirtyCheckedDocumentStorage<snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallenge, System.Guid>
+    public class DirtyTrackingAltchaStoredChallengeDocumentStorage1752853431 : Marten.Internal.Storage.DirtyCheckedDocumentStorage<snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallengeEntity, System.Guid>
     {
         private readonly Marten.Schema.DocumentMapping _document;
 
@@ -653,59 +653,59 @@ namespace Marten.Generated.DocumentStorage
 
 
 
-        public override System.Guid AssignIdentity(snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallenge document, string tenantId, Marten.Storage.IMartenDatabase database)
+        public override System.Guid AssignIdentity(snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallengeEntity document, string tenantId, Marten.Storage.IMartenDatabase database)
         {
             if (document.Id == Guid.Empty) _setter(document, Marten.Schema.Identity.CombGuidIdGeneration.NewGuid());
             return document.Id;
         }
 
 
-        public override Marten.Internal.Operations.IStorageOperation Update(snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallenge document, Marten.Internal.IMartenSession session, string tenant)
+        public override Marten.Internal.Operations.IStorageOperation Update(snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallengeEntity document, Marten.Internal.IMartenSession session, string tenant)
         {
 
             return new Marten.Generated.DocumentStorage.UpdateAltchaStoredChallengeOperation1752853431
             (
                 document, Identity(document),
-                session.Versions.ForType<snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallenge, System.Guid>(),
+                session.Versions.ForType<snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallengeEntity, System.Guid>(),
                 _document
                 
             );
         }
 
 
-        public override Marten.Internal.Operations.IStorageOperation Insert(snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallenge document, Marten.Internal.IMartenSession session, string tenant)
+        public override Marten.Internal.Operations.IStorageOperation Insert(snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallengeEntity document, Marten.Internal.IMartenSession session, string tenant)
         {
 
             return new Marten.Generated.DocumentStorage.InsertAltchaStoredChallengeOperation1752853431
             (
                 document, Identity(document),
-                session.Versions.ForType<snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallenge, System.Guid>(),
+                session.Versions.ForType<snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallengeEntity, System.Guid>(),
                 _document
                 
             );
         }
 
 
-        public override Marten.Internal.Operations.IStorageOperation Upsert(snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallenge document, Marten.Internal.IMartenSession session, string tenant)
+        public override Marten.Internal.Operations.IStorageOperation Upsert(snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallengeEntity document, Marten.Internal.IMartenSession session, string tenant)
         {
 
             return new Marten.Generated.DocumentStorage.UpsertAltchaStoredChallengeOperation1752853431
             (
                 document, Identity(document),
-                session.Versions.ForType<snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallenge, System.Guid>(),
+                session.Versions.ForType<snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallengeEntity, System.Guid>(),
                 _document
                 
             );
         }
 
 
-        public override Marten.Internal.Operations.IStorageOperation Overwrite(snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallenge document, Marten.Internal.IMartenSession session, string tenant)
+        public override Marten.Internal.Operations.IStorageOperation Overwrite(snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallengeEntity document, Marten.Internal.IMartenSession session, string tenant)
         {
             throw new System.NotSupportedException();
         }
 
 
-        public override System.Guid Identity(snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallenge document)
+        public override System.Guid Identity(snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallengeEntity document)
         {
             return document.Id;
         }
@@ -734,11 +734,11 @@ namespace Marten.Generated.DocumentStorage
     
     
     // START: AltchaStoredChallengeBulkLoader1752853431
-    public class AltchaStoredChallengeBulkLoader1752853431 : Marten.Internal.CodeGeneration.BulkLoader<snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallenge, System.Guid>
+    public class AltchaStoredChallengeBulkLoader1752853431 : Marten.Internal.CodeGeneration.BulkLoader<snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallengeEntity, System.Guid>
     {
-        private readonly Marten.Internal.Storage.IDocumentStorage<snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallenge, System.Guid> _storage;
+        private readonly Marten.Internal.Storage.IDocumentStorage<snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallengeEntity, System.Guid> _storage;
 
-        public AltchaStoredChallengeBulkLoader1752853431(Marten.Internal.Storage.IDocumentStorage<snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallenge, System.Guid> storage) : base(storage)
+        public AltchaStoredChallengeBulkLoader1752853431(Marten.Internal.Storage.IDocumentStorage<snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallengeEntity, System.Guid> storage) : base(storage)
         {
             _storage = storage;
         }
@@ -773,7 +773,7 @@ namespace Marten.Generated.DocumentStorage
         }
 
 
-        public override void LoadRow(Npgsql.NpgsqlBinaryImporter writer, snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallenge document, Marten.Storage.Tenant tenant, Marten.ISerializer serializer)
+        public override void LoadRow(Npgsql.NpgsqlBinaryImporter writer, snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallengeEntity document, Marten.Storage.Tenant tenant, Marten.ISerializer serializer)
         {
             writer.Write(document.GetType().FullName, NpgsqlTypes.NpgsqlDbType.Varchar);
             writer.Write(document.Id, NpgsqlTypes.NpgsqlDbType.Uuid);
@@ -782,7 +782,7 @@ namespace Marten.Generated.DocumentStorage
         }
 
 
-        public override async System.Threading.Tasks.Task LoadRowAsync(Npgsql.NpgsqlBinaryImporter writer, snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallenge document, Marten.Storage.Tenant tenant, Marten.ISerializer serializer, System.Threading.CancellationToken cancellation)
+        public override async System.Threading.Tasks.Task LoadRowAsync(Npgsql.NpgsqlBinaryImporter writer, snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallengeEntity document, Marten.Storage.Tenant tenant, Marten.ISerializer serializer, System.Threading.CancellationToken cancellation)
         {
             await writer.WriteAsync(document.GetType().FullName, NpgsqlTypes.NpgsqlDbType.Varchar, cancellation);
             await writer.WriteAsync(document.Id, NpgsqlTypes.NpgsqlDbType.Uuid, cancellation);
@@ -808,7 +808,7 @@ namespace Marten.Generated.DocumentStorage
     
     
     // START: AltchaStoredChallengeProvider1752853431
-    public class AltchaStoredChallengeProvider1752853431 : Marten.Internal.Storage.DocumentProvider<snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallenge>
+    public class AltchaStoredChallengeProvider1752853431 : Marten.Internal.Storage.DocumentProvider<snowcoreBlog.Backend.Infrastructure.Entities.AltchaStoredChallengeEntity>
     {
         private readonly Marten.Schema.DocumentMapping _mapping;
 
