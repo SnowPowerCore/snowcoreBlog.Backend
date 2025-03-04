@@ -1,8 +1,8 @@
 using Aspire.Hosting.ApplicationModel;
 using Aspire.Hosting.Lifecycle;
-using FastEndpoints.Security;
 using FluentValidation;
 using MassTransit;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Hosting.Server.Features;
@@ -15,6 +15,7 @@ using snowcoreBlog.Backend.AspireYarpGateway.Options;
 using snowcoreBlog.Backend.Email.Validation;
 using snowcoreBlog.Backend.Infrastructure.Extensions;
 using snowcoreBlog.Backend.YarpGateway.Core.Contracts;
+using snowcoreBlog.PublicApi.Utilities.Dictionary;
 using snowcoreBlog.ServiceDefaults.Extensions;
 using Yarp.ReverseProxy.Configuration;
 
@@ -25,8 +26,7 @@ public static class YarpResourceExtensions
     public static IResourceBuilder<YarpResource> AddYarp(this IDistributedApplicationBuilder builder, string name)
     {
         var yarp = builder.Resources.OfType<YarpResource>().SingleOrDefault();
-
-        if (yarp is not null)
+        if (yarp is not default(YarpResource))
         {
             // You only need one yarp resource per application
             throw new InvalidOperationException("A yarp resource has already been added to this application");
@@ -41,6 +41,12 @@ public static class YarpResourceExtensions
     public static IResourceBuilder<YarpResource> LoadFromConfiguration(this IResourceBuilder<YarpResource> builder, string sectionName)
     {
         builder.Resource.ConfigurationSectionName = sectionName;
+        return builder;
+    }
+    
+    public static IResourceBuilder<YarpResource> WithAuthPolicies(this IResourceBuilder<YarpResource> builder, params (string, Action<AuthorizationPolicyBuilder>)[] policies)
+    {
+        builder.Resource.PoliciesConfigs = policies;
         return builder;
     }
 
@@ -58,8 +64,8 @@ public static class YarpResourceExtensions
             Transforms =
             [
                 preservePath || path is null
-                ? []
-                : new Dictionary<string, string>{ ["PathRemovePrefix"] = path }
+                    ? []
+                    : new Dictionary<string, string>{ ["PathRemovePrefix"] = path }
             ]
         };
 
@@ -71,7 +77,7 @@ public static class YarpResourceExtensions
         builder.Resource.ClusterConfigs[target.Resource.Name] = new()
         {
             ClusterId = target.Resource.Name,
-            Destinations = new Dictionary<string, DestinationConfig>
+            Destinations = new DictionaryWithDefault<string, DestinationConfig>(defaultValue: new())
             {
                 [target.Resource.Name] = new() { Address = $"http://{target.Resource.Name}" }
             }
@@ -86,10 +92,11 @@ public static class YarpResourceExtensions
 public class YarpResource(string name) : Resource(name), IResourceWithServiceDiscovery, IResourceWithEnvironment
 {
     // YARP configuration
-    internal Dictionary<string, RouteConfig> RouteConfigs { get; } = [];
-    internal Dictionary<string, ClusterConfig> ClusterConfigs { get; } = [];
+    internal DictionaryWithDefault<string, RouteConfig> RouteConfigs { get; } = new(defaultValue: new());
+    internal DictionaryWithDefault<string, ClusterConfig> ClusterConfigs { get; } = new(defaultValue: new());
     internal List<EndpointAnnotation> Endpoints { get; } = [];
     internal string? ConfigurationSectionName { get; set; }
+    internal (string, Action<AuthorizationPolicyBuilder>)[] PoliciesConfigs { get; set; } = [];
 }
 
 // This starts up the YARP reverse proxy with the configuration from the resource
@@ -108,8 +115,7 @@ internal class YarpResourceLifecyclehook(
         }
 
         var yarpResource = appModel.Resources.OfType<YarpResource>().SingleOrDefault();
-
-        if (yarpResource is null)
+        if (yarpResource is default(YarpResource))
         {
             return;
         }
@@ -138,8 +144,7 @@ internal class YarpResourceLifecyclehook(
         }
 
         var yarpResource = appModel.Resources.OfType<YarpResource>().SingleOrDefault();
-
-        if (yarpResource is null)
+        if (yarpResource is default(YarpResource))
         {
             return;
         }
@@ -159,7 +164,7 @@ internal class YarpResourceLifecyclehook(
                 await cb.Callback(context);
             }
 
-            var dict = new Dictionary<string, string?>();
+            var dict = new DictionaryWithDefault<string, string?>(defaultValue: string.Empty);
             foreach (var (k, v) in context.EnvironmentVariables)
             {
                 var val = v switch
@@ -168,7 +173,6 @@ internal class YarpResourceLifecyclehook(
                     IValueProvider vp => await vp.GetValueAsync(context.CancellationToken),
                     _ => throw new NotSupportedException()
                 };
-
                 if (val is not null)
                 {
                     dict[k.Replace("__", ":")] = val;
@@ -249,7 +253,13 @@ internal class YarpResourceLifecyclehook(
         builder.Services.AddMultipleAuthentications(
             builder.Configuration["Security:Signing:User:SigningKey"]!,
             builder.Configuration["Security:Signing:Admin:SigningKey"]!);
-        builder.Services.AddAuthorization();
+        builder.Services.AddAuthorization(options =>
+        {
+            foreach (var policy in yarpResource.PoliciesConfigs)
+            {
+                options.AddPolicy(policy.Item1, policy.Item2);
+            }
+        });
 
         _app = builder.Build();
 
