@@ -13,6 +13,7 @@ using snowcoreBlog.Backend.Email.Core.Contracts;
 using snowcoreBlog.Backend.IAM.Core.Contracts;
 using snowcoreBlog.Backend.IAM.Core.Entities;
 using snowcoreBlog.Backend.Infrastructure.Entities;
+using snowcoreBlog.Backend.YarpGateway.Core.Contracts;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 using snowcoreBlog.PublicApi.Utilities.Api;
 using snowcoreBlog.PublicApi.Utilities.DataResult;
@@ -38,7 +39,7 @@ namespace snowcoreBlog.Backend.Infrastructure;
 [JsonSerializable(typeof(CreateUser))]
 [JsonSerializable(typeof(CreateTempUser))]
 [JsonSerializable(typeof(LoginUser))]
-[JsonSerializable(typeof(GenerateUserToken))]
+[JsonSerializable(typeof(GetUserTokenPairWithPayload))]
 [JsonSerializable(typeof(ValidateUserExists))]
 [JsonSerializable(typeof(ValidateTempUserExists))]
 [JsonSerializable(typeof(ValidateUserNickNameTaken))]
@@ -71,6 +72,7 @@ namespace snowcoreBlog.Backend.Infrastructure;
 [JsonSerializable(typeof(Fault<UserLoginResult>))]
 [JsonSerializable(typeof(Fault<UserExistsValidationResult>))]
 [JsonSerializable(typeof(Fault<TempUserExistsValidationResult>))]
+[JsonSerializable(typeof(Fault<UserTokenPairWithPayloadGenerated>))]
 [JsonSerializable(typeof(FaultEvent<UserCreationResult>))]
 [JsonSerializable(typeof(FaultEvent<TempUserCreationResult>))]
 [JsonSerializable(typeof(FaultEvent<UserNickNameTakenValidationResult>))]
@@ -84,6 +86,7 @@ namespace snowcoreBlog.Backend.Infrastructure;
 [JsonSerializable(typeof(FaultEvent<UserLoginResult>))]
 [JsonSerializable(typeof(FaultEvent<UserExistsValidationResult>))]
 [JsonSerializable(typeof(FaultEvent<TempUserExistsValidationResult>))]
+[JsonSerializable(typeof(FaultEvent<UserTokenPairWithPayloadGenerated>))]
 [JsonSerializable(typeof(DataResult<UserCreationResult>))]
 [JsonSerializable(typeof(DataResult<TempUserCreationResult>))]
 [JsonSerializable(typeof(DataResult<UserNickNameTakenValidationResult>))]
@@ -97,6 +100,7 @@ namespace snowcoreBlog.Backend.Infrastructure;
 [JsonSerializable(typeof(DataResult<UserLoginResult>))]
 [JsonSerializable(typeof(DataResult<UserExistsValidationResult>))]
 [JsonSerializable(typeof(DataResult<TempUserExistsValidationResult>))]
+[JsonSerializable(typeof(DataResult<UserTokenPairWithPayloadGenerated>))]
 [JsonSourceGenerationOptions(
     JsonSerializerDefaults.Web,
     UseStringEnumConverter = true,

@@ -6,7 +6,6 @@ using snowcoreBlog.Backend.Email.Core.Contracts;
 using snowcoreBlog.Backend.ReadersManagement.Context;
 using snowcoreBlog.Backend.ReadersManagement.Delegates;
 using snowcoreBlog.Backend.ReadersManagement.Extensions;
-using snowcoreBlog.Backend.YarpGateway.Core.Constants;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 using snowcoreBlog.PublicApi.Utilities.DataResult;
 
