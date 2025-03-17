@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Http.Json;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Routing.Constraints;
 using MinimalStepifiedSystem.Core.Extensions;
+using NSwag;
 using Oakton;
 using Scalar.AspNetCore;
 using snowcoreBlog.Backend.Core.Constants;
@@ -253,10 +254,17 @@ app.MapDefaultEndpoints();
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
-    app.UseOpenApi(static c => c.Path = $"/openapi/v{GlobalVersion}.json");
-    app.MapScalarApiReference(static o =>
+    app.UseOpenApi(c =>
     {
-        o.Servers = [];
+        c.Path = "/openapi/{documentName}.json";
+        c.PostProcess = (doc, req) =>
+        {
+            doc.Host = "https://localhost/api/readers";
+            doc.Schemes = [OpenApiSchema.Https];
+        };
+    });
+    app.MapScalarApiReference(o =>
+    {
         o.DarkMode = true;
     });
 }
