@@ -18,11 +18,11 @@ public class CreateReaderEntityForNewUserStep(IPublishEndpoint publishEndpoint,
 {
     public async Task<IMaybe<ReaderAccountCreatedDto>> InvokeAsync(ConfirmCreateReaderAccountContext context, ConfirmCreateReaderAccountDelegate next, CancellationToken token = default)
     {
-        var createUserForReaderAccountResult = context.GetFromData<SuccessResult<UserCreationResult>>(
+        var createUserForReaderAccountResult = context.GetFromData<Some<UserCreationResult>>(
             ReaderAccountUserConstants.CreateTempUserForReaderAccountResult);
 
         var newReaderEntity = await readerRepository
-            .AddOrUpdateAsync(createUserForReaderAccountResult!.Data.ToEntity(), token: token);
+            .AddOrUpdateAsync(createUserForReaderAccountResult!.Value.ToEntity(), token: token);
         if (newReaderEntity is not default(ReaderEntity))
         {
             var readerAccountCreated = new ReaderAccountCreated(newReaderEntity!.Id, newReaderEntity.NickName);
