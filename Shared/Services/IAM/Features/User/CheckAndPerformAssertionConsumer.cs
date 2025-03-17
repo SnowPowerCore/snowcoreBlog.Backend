@@ -3,7 +3,7 @@ using FluentValidation;
 using MassTransit;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Results;
+using MaybeResults;
 using snowcoreBlog.Backend.IAM.Constants;
 using snowcoreBlog.Backend.IAM.Core.Contracts;
 using snowcoreBlog.Backend.IAM.Core.Entities;
@@ -25,7 +25,7 @@ public class CheckAndPerformAssertionConsumer(IFido2 fido2,
         {
             await context.RespondAsync(
                 new DataResult<UserLoginResult>(
-                    Errors: result.Errors.Select(e => new ErrorResultDetail(e.PropertyName, e.ErrorMessage)).ToList()));
+                    Errors: result.Errors.Select(e => new NoneDetail(e.PropertyName, e.ErrorMessage)).ToList()));
             return;
         }
 

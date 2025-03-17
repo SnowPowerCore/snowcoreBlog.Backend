@@ -1,6 +1,6 @@
 ﻿using MassTransit;
 using MinimalStepifiedSystem.Interfaces;
-using Results;
+using MaybeResults;
 using snowcoreBlog.Backend.Core.Contracts;
 using snowcoreBlog.Backend.Core.Entities.Reader;
 using snowcoreBlog.Backend.IAM.Core.Contracts;
@@ -14,9 +14,9 @@ using snowcoreBlog.PublicApi.Constants;
 namespace snowcoreBlog.Backend.ReadersManagement.Steps.ReaderAccount;
 
 public class CreateReaderEntityForNewUserStep(IPublishEndpoint publishEndpoint,
-                                              IReaderRepository readerRepository) : IStep<ConfirmCreateReaderAccountDelegate, ConfirmCreateReaderAccountContext, IResult<ReaderAccountCreatedDto>>
+                                              IReaderRepository readerRepository) : IStep<ConfirmCreateReaderAccountDelegate, ConfirmCreateReaderAccountContext, IMaybe<ReaderAccountCreatedDto>>
 {
-    public async Task<IResult<ReaderAccountCreatedDto>> InvokeAsync(ConfirmCreateReaderAccountContext context, ConfirmCreateReaderAccountDelegate next, CancellationToken token = default)
+    public async Task<IMaybe<ReaderAccountCreatedDto>> InvokeAsync(ConfirmCreateReaderAccountContext context, ConfirmCreateReaderAccountDelegate next, CancellationToken token = default)
     {
         var createUserForReaderAccountResult = context.GetFromData<SuccessResult<UserCreationResult>>(
             ReaderAccountUserConstants.CreateTempUserForReaderAccountResult);
@@ -29,7 +29,7 @@ public class CreateReaderEntityForNewUserStep(IPublishEndpoint publishEndpoint,
 
             context.SetDataWith(
                 ReaderAccountConstants.CreateReaderAccountResult,
-                Result.Success(readerAccountCreated));
+                Maybe.Create(readerAccountCreated));
 
             await publishEndpoint.Publish(readerAccountCreated, token);
 

@@ -5,7 +5,7 @@ using MassTransit;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using Results;
+using MaybeResults;
 using snowcoreBlog.Backend.Core.Interfaces.Services;
 using snowcoreBlog.Backend.Core.Utilities;
 using snowcoreBlog.Backend.IAM.Constants;
@@ -32,7 +32,7 @@ public class ValidateAndCreateUserConsumer(IHasher hasher,
         {
             await context.RespondAsync(
                 new DataResult<UserCreationResult>(
-                    Errors: result.Errors.Select(e => new ErrorResultDetail(e.PropertyName, e.ErrorMessage)).ToList()));
+                    Errors: result.Errors.Select(e => new NoneDetail(e.PropertyName, e.ErrorMessage)).ToList()));
             return;
         }
 
@@ -128,7 +128,7 @@ public class ValidateAndCreateUserConsumer(IHasher hasher,
             {
                 await context.RespondAsync(
                     new DataResult<UserCreationResult>(
-                        Errors: creationResult.Errors.Select(e => new ErrorResultDetail(e.Code, e.Description)).ToList()));
+                        Errors: creationResult.Errors.Select(e => new NoneDetail(e.Code, e.Description)).ToList()));
             }
         }
         else

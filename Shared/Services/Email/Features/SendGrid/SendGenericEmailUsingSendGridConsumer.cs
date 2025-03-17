@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 using MassTransit;
-using Results;
+using MaybeResults;
 using SendGrid;
 using SendGrid.Helpers.Mail;
 using snowcoreBlog.Backend.Email.Core.Contracts;
@@ -19,7 +19,7 @@ public class SendGenericEmailUsingSendGridConsumer(IValidator<SendGenericEmail> 
         {
             await context.RespondAsync(
                 new DataResult<GenericEmailSent>(
-                    Errors: result.Errors.Select(e => new ErrorResultDetail(e.PropertyName, e.ErrorMessage)).ToList()));
+                    Errors: result.Errors.Select(e => new NoneDetail(e.PropertyName, e.ErrorMessage)).ToList()));
             return;
         }
 

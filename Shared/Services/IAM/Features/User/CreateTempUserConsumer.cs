@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 using MassTransit;
-using Results;
+using MaybeResults;
 using snowcoreBlog.Backend.Core.Interfaces.Services;
 using snowcoreBlog.Backend.IAM.Constants;
 using snowcoreBlog.Backend.IAM.Core.Contracts;
@@ -23,7 +23,7 @@ public class CreateTempUserConsumer(IValidator<CreateTempUser> validator,
         {
             await context.RespondAsync(
                 new DataResult<TempUserCreationResult>(
-                    Errors: result.Errors.Select(e => new ErrorResultDetail(e.PropertyName, e.ErrorMessage)).ToList()));
+                    Errors: result.Errors.Select(e => new NoneDetail(e.PropertyName, e.ErrorMessage)).ToList()));
             return;
         }
 

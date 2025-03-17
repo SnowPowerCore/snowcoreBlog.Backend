@@ -1,5 +1,5 @@
 ﻿using MinimalStepifiedSystem.Interfaces;
-using Results;
+using MaybeResults;
 using snowcoreBlog.Backend.Core.Contracts;
 using snowcoreBlog.Backend.ReadersManagement.Context;
 using snowcoreBlog.Backend.ReadersManagement.Delegates;
@@ -8,21 +8,21 @@ using snowcoreBlog.PublicApi.Constants;
 
 namespace snowcoreBlog.Backend.ReadersManagement.Steps.ReaderAccount;
 
-public class ReturnCreatedReaderEntityStep() : IStep<ConfirmCreateReaderAccountDelegate, ConfirmCreateReaderAccountContext, IResult<ReaderAccountCreatedDto>>
+public class ReturnCreatedReaderEntityStep() : IStep<ConfirmCreateReaderAccountDelegate, ConfirmCreateReaderAccountContext, IMaybe<ReaderAccountCreatedDto>>
 {
-    public Task<IResult<ReaderAccountCreatedDto>> InvokeAsync(ConfirmCreateReaderAccountContext context, ConfirmCreateReaderAccountDelegate next, CancellationToken token = default)
+    public Task<IMaybe<ReaderAccountCreatedDto>> InvokeAsync(ConfirmCreateReaderAccountContext context, ConfirmCreateReaderAccountDelegate next, CancellationToken token = default)
     {
-        var readerAccountUserCreated = context.GetFromData<IResult<ReaderAccountUserCreated>>(
+        var readerAccountUserCreated = context.GetFromData<IMaybe<ReaderAccountUserCreated>>(
             ReaderAccountConstants.CreateReaderAccountUserResult);
-        var readerAccountCreated = context.GetFromData<IResult<ReaderAccountCreated>>(
+        var readerAccountCreated = context.GetFromData<IMaybe<ReaderAccountCreated>>(
             ReaderAccountConstants.CreateReaderAccountResult);
 
-        if (readerAccountUserCreated is SuccessResult<ReaderAccountUserCreated> successReaderAccountUserCreated
-            && readerAccountCreated is SuccessResult<ReaderAccountCreated> successReaderAccountCreated)
+        if (readerAccountUserCreated is Some<ReaderAccountUserCreated> successReaderAccountUserCreated
+            && readerAccountCreated is Some<ReaderAccountCreated> successReaderAccountCreated)
         {
-            return Task.FromResult(Result.Success(new ReaderAccountCreatedDto(
-                successReaderAccountCreated.Data.Id,
-                successReaderAccountUserCreated.Data.UserEmail)));
+            return Task.FromResult(Maybe.Create(new ReaderAccountCreatedDto(
+                successReaderAccountCreated.Value.Id,
+                successReaderAccountUserCreated.Value.UserEmail)));
         }
 
         return Task.FromResult(CreateReaderAccountError<ReaderAccountCreatedDto>

@@ -1,7 +1,7 @@
 ﻿using System.Text;
 using MassTransit;
 using MinimalStepifiedSystem.Interfaces;
-using Results;
+using MaybeResults;
 using snowcoreBlog.Backend.Core.Contracts;
 using snowcoreBlog.Backend.IAM.Core.Contracts;
 using snowcoreBlog.Backend.ReadersManagement.Constants;
@@ -16,11 +16,11 @@ namespace snowcoreBlog.Backend.ReadersManagement.Steps.ReaderAccount;
 
 public class CreateReaderAccountUserStep(IRequestClient<CreateUser> client,
                                          IPublishEndpoint publishEndpoint,
-                                         IConnectionMultiplexer redis) : IStep<ConfirmCreateReaderAccountDelegate, ConfirmCreateReaderAccountContext, IResult<ReaderAccountCreatedDto>>
+                                         IConnectionMultiplexer redis) : IStep<ConfirmCreateReaderAccountDelegate, ConfirmCreateReaderAccountContext, IMaybe<ReaderAccountCreatedDto>>
 {
     private const string Fido2AttestationOptions = nameof(Fido2AttestationOptions);
 
-    public async Task<IResult<ReaderAccountCreatedDto>> InvokeAsync(ConfirmCreateReaderAccountContext context, ConfirmCreateReaderAccountDelegate next, CancellationToken token = default)
+    public async Task<IMaybe<ReaderAccountCreatedDto>> InvokeAsync(ConfirmCreateReaderAccountContext context, ConfirmCreateReaderAccountDelegate next, CancellationToken token = default)
     {
         var db = redis.GetDatabase();
         var redisValue = await db.StringGetAsync($"{context.ConfirmRequest.Email}{Fido2AttestationOptions}");
@@ -40,7 +40,7 @@ public class CreateReaderAccountUserStep(IRequestClient<CreateUser> client,
 
             context.SetDataWith(
                 ReaderAccountConstants.CreateReaderAccountUserResult,
-                Result.Success(readerAccountUserCreated));
+                Maybe.Create(readerAccountUserCreated));
 
             await publishEndpoint.Publish(readerAccountUserCreated, token);
 

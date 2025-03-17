@@ -1,6 +1,6 @@
 ﻿using MassTransit;
 using MinimalStepifiedSystem.Interfaces;
-using Results;
+using MaybeResults;
 using snowcoreBlog.Backend.IAM.Core.Contracts;
 using snowcoreBlog.Backend.ReadersManagement.Constants;
 using snowcoreBlog.Backend.ReadersManagement.Context;
@@ -10,9 +10,9 @@ using snowcoreBlog.PublicApi.Utilities.DataResult;
 
 namespace snowcoreBlog.Backend.ReadersManagement.Steps.NickName;
 
-public class ValidateNickNameWasNotTakenStep(IRequestClient<ValidateUserNickNameTaken> requestClient) : IStep<CheckNickNameNotTakenDelegate, CheckNickNameNotTakenContext, IResult<NickNameNotTakenCheckResultDto>>
+public class ValidateNickNameWasNotTakenStep(IRequestClient<ValidateUserNickNameTaken> requestClient) : IStep<CheckNickNameNotTakenDelegate, CheckNickNameNotTakenContext, IMaybe<NickNameNotTakenCheckResultDto>>
 {
-    public async Task<IResult<NickNameNotTakenCheckResultDto>> InvokeAsync(CheckNickNameNotTakenContext context, CheckNickNameNotTakenDelegate next, CancellationToken token = default)
+    public async Task<IMaybe<NickNameNotTakenCheckResultDto>> InvokeAsync(CheckNickNameNotTakenContext context, CheckNickNameNotTakenDelegate next, CancellationToken token = default)
     {
         var result = await requestClient.GetResponse<DataResult<UserNickNameTakenValidationResult>>(
             new ValidateUserNickNameTaken() { NickName = context.NickName }, token);
@@ -20,11 +20,11 @@ public class ValidateNickNameWasNotTakenStep(IRequestClient<ValidateUserNickName
         {
             if (result.Message.Value!.WasTaken)
             {
-                return Result.Success<NickNameNotTakenCheckResultDto>(new(WasTaken: true));
+                return Maybe.Create<NickNameNotTakenCheckResultDto>(new(WasTaken: true));
             }
             else
             {
-                return Result.Success<NickNameNotTakenCheckResultDto>(new(WasTaken: false));
+                return Maybe.Create<NickNameNotTakenCheckResultDto>(new(WasTaken: false));
             }
         }
         else

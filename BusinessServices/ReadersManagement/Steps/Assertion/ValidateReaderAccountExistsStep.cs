@@ -1,6 +1,6 @@
 ﻿using MassTransit;
 using MinimalStepifiedSystem.Interfaces;
-using Results;
+using MaybeResults;
 using snowcoreBlog.Backend.IAM.Core.Contracts;
 using snowcoreBlog.Backend.ReadersManagement.Context;
 using snowcoreBlog.Backend.ReadersManagement.Delegates;
@@ -10,9 +10,9 @@ using snowcoreBlog.PublicApi.Utilities.DataResult;
 
 namespace snowcoreBlog.Backend.ReadersManagement.Steps.Assertion;
 
-public class ValidateReaderAccountExistsStep(IRequestClient<ValidateUserExists> requestClient) : IStep<LoginByAssertionDelegate, LoginByAssertionContext, IResult<LoginByAssertionResultDto>>
+public class ValidateReaderAccountExistsStep(IRequestClient<ValidateUserExists> requestClient) : IStep<LoginByAssertionDelegate, LoginByAssertionContext, IMaybe<LoginByAssertionResultDto>>
 {
-    public async Task<IResult<LoginByAssertionResultDto>> InvokeAsync(LoginByAssertionContext context, LoginByAssertionDelegate next, CancellationToken token = default)
+    public async Task<IMaybe<LoginByAssertionResultDto>> InvokeAsync(LoginByAssertionContext context, LoginByAssertionDelegate next, CancellationToken token = default)
     {
         var result = await requestClient.GetResponse<DataResult<UserExistsValidationResult>>(
             context.LoginByAssertion.ToValidateUserExists(), token);
