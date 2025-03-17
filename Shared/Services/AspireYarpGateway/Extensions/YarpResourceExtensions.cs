@@ -262,6 +262,7 @@ internal class YarpResourceLifecyclehook(
         _app = builder.Build();
 
         _app.UseHttpsRedirection()
+            .UseCors()
             .UseCookiePolicy(new()
             {
                 MinimumSameSitePolicy = SameSiteMode.Strict,
