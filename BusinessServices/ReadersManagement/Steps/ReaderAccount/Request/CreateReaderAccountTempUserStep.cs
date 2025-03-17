@@ -1,6 +1,6 @@
 ﻿using MassTransit;
 using MinimalStepifiedSystem.Interfaces;
-using Results;
+using MaybeResults;
 using snowcoreBlog.Backend.Core.Contracts;
 using snowcoreBlog.Backend.IAM.Core.Contracts;
 using snowcoreBlog.Backend.ReadersManagement.Constants;
@@ -12,9 +12,9 @@ using snowcoreBlog.PublicApi.Utilities.DataResult;
 namespace snowcoreBlog.Backend.ReadersManagement.Steps.ReaderAccount;
 
 public class CreateReaderAccountTempUserStep(IRequestClient<CreateTempUser> client,
-                                             IPublishEndpoint publishEndpoint) : IStep<RequestCreateReaderAccountDelegate, RequestCreateReaderAccountContext, IResult<RequestReaderAccountCreationResultDto>>
+                                             IPublishEndpoint publishEndpoint) : IStep<RequestCreateReaderAccountDelegate, RequestCreateReaderAccountContext, IMaybe<RequestReaderAccountCreationResultDto>>
 {
-    public async Task<IResult<RequestReaderAccountCreationResultDto>> InvokeAsync(RequestCreateReaderAccountContext context, RequestCreateReaderAccountDelegate next, CancellationToken token = default)
+    public async Task<IMaybe<RequestReaderAccountCreationResultDto>> InvokeAsync(RequestCreateReaderAccountContext context, RequestCreateReaderAccountDelegate next, CancellationToken token = default)
     {
         var response = await client.GetResponse<DataResult<TempUserCreationResult>>(
             context.CreateRequest.ToCreateTempUser(), token);
@@ -28,7 +28,7 @@ public class CreateReaderAccountTempUserStep(IRequestClient<CreateTempUser> clie
                     responseObj.VerificationToken + responseObj.Email,
                     responseObj.VerificationTokenExpirationDate.ToString()), token);
 
-            return Result.Success<RequestReaderAccountCreationResultDto>(new(responseObj.Id));
+            return Maybe.Create<RequestReaderAccountCreationResultDto>(new(responseObj.Id));
         }
         else
         {

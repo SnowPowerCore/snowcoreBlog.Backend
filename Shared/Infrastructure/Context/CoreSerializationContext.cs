@@ -5,7 +5,7 @@ using FluentValidation.Results;
 using Ixnas.AltchaNet;
 using MassTransit;
 using MassTransit.Events;
-using Results;
+using MaybeResults;
 using Scalar.AspNetCore;
 using snowcoreBlog.Backend.Core.Contracts;
 using snowcoreBlog.Backend.Core.Entities.Reader;

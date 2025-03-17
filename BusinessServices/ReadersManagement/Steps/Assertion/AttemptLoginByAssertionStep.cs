@@ -2,7 +2,7 @@
 using MassTransit;
 using Microsoft.Extensions.Caching.Distributed;
 using MinimalStepifiedSystem.Interfaces;
-using Results;
+using MaybeResults;
 using snowcoreBlog.Backend.Core.Contracts;
 using snowcoreBlog.Backend.IAM.Core.Contracts;
 using snowcoreBlog.Backend.ReadersManagement.Constants;
@@ -18,11 +18,11 @@ namespace snowcoreBlog.Backend.ReadersManagement.Steps.Assertion;
 
 public class AttemptLoginByAssertionStep(IRequestClient<LoginUser> requestClient,
                                          IPublishEndpoint publishEndpoint,
-                                         IConnectionMultiplexer redis) : IStep<LoginByAssertionDelegate, LoginByAssertionContext, IResult<LoginByAssertionResultDto>>
+                                         IConnectionMultiplexer redis) : IStep<LoginByAssertionDelegate, LoginByAssertionContext, IMaybe<LoginByAssertionResultDto>>
 {
     private const string Fido2AssertionOptions = nameof(Fido2AssertionOptions);
 
-    public async Task<IResult<LoginByAssertionResultDto>> InvokeAsync(LoginByAssertionContext context, LoginByAssertionDelegate next, CancellationToken token = default)
+    public async Task<IMaybe<LoginByAssertionResultDto>> InvokeAsync(LoginByAssertionContext context, LoginByAssertionDelegate next, CancellationToken token = default)
     {
         var db = redis.GetDatabase();
         var redisValue = await db.StringGetAsync($"{context.LoginByAssertion.Email}{Fido2AssertionOptions}");
@@ -40,7 +40,7 @@ public class AttemptLoginByAssertionStep(IRequestClient<LoginUser> requestClient
             await publishEndpoint.Publish<ReaderAccountUserLoggedIn>(
                 new(result.Message.Value!.Id, context.LoginByAssertion.Email), token);
 
-            return Result.Success<LoginByAssertionResultDto>(new());
+            return Maybe.Create<LoginByAssertionResultDto>(new());
         }
         else
         {

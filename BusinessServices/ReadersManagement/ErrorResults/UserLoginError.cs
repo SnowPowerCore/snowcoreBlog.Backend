@@ -1,6 +1,6 @@
-using Results;
+using MaybeResults;
 
 namespace snowcoreBlog.Backend.ReadersManagement.ErrorResults;
 
-[ErrorResult]
+[None]
 public partial record UserLoginError;

@@ -2,7 +2,7 @@
 using Fido2NetLib;
 using MassTransit;
 using MinimalStepifiedSystem.Interfaces;
-using Results;
+using MaybeResults;
 using snowcoreBlog.Backend.IAM.Core.Contracts;
 using snowcoreBlog.Backend.ReadersManagement.Constants;
 using snowcoreBlog.Backend.ReadersManagement.Context;
@@ -14,11 +14,11 @@ using StackExchange.Redis;
 namespace snowcoreBlog.Backend.ReadersManagement.Steps.Attestation;
 
 public class RequestNewAttestationOptionsStep(IRequestClient<ValidateAndCreateAttestation> requestClientOnRegister,
-                                              IConnectionMultiplexer redis) : IStep<RequestAttestationOptionsDelegate, RequestAttestationOptionsContext, IResult<CredentialCreateOptions>>
+                                              IConnectionMultiplexer redis) : IStep<RequestAttestationOptionsDelegate, RequestAttestationOptionsContext, IMaybe<CredentialCreateOptions>>
 {
     private const string Fido2AttestationOptions = nameof(Fido2AttestationOptions);
 
-    public async Task<IResult<CredentialCreateOptions>> InvokeAsync(RequestAttestationOptionsContext context, RequestAttestationOptionsDelegate next, CancellationToken token = default)
+    public async Task<IMaybe<CredentialCreateOptions>> InvokeAsync(RequestAttestationOptionsContext context, RequestAttestationOptionsDelegate next, CancellationToken token = default)
     {
         var result = await requestClientOnRegister.GetResponse<DataResult<CredentialCreateOptions>>(
             context.RequestAttestationOptions.ToValidate(), token);
@@ -30,7 +30,7 @@ public class RequestNewAttestationOptionsStep(IRequestClient<ValidateAndCreateAt
                 Encoding.UTF8.GetBytes(result.Message.Value!.ToJson()),
                 TimeSpan.FromMinutes(5));
 
-            return Result.Success(result.Message.Value)!;
+            return Maybe.Create(result.Message.Value)!;
         }
         else
         {

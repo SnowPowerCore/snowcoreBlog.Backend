@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using MassTransit;
 using ntfy;
-using Results;
+using MaybeResults;
 using snowcoreBlog.Backend.Push.Core.Contracts;
 using snowcoreBlog.PublicApi.Utilities.DataResult;
 
@@ -17,7 +17,7 @@ public class SendPushUsingNtfyConsumer(IValidator<SendGenericPush> validator,
         {
             await context.RespondAsync(
                 new DataResult<GenericPushSent>(
-                    Errors: result.Errors.Select(e => new ErrorResultDetail(e.PropertyName, e.ErrorMessage)).ToList()));
+                    Errors: result.Errors.Select(e => new NoneDetail(e.PropertyName, e.ErrorMessage)).ToList()));
             return;
         }
 

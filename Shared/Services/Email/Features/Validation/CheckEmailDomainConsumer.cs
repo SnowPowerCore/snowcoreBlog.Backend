@@ -2,7 +2,7 @@
 using DnsClient;
 using FluentValidation;
 using MassTransit;
-using Results;
+using MaybeResults;
 using snowcoreBlog.Backend.Email.Core.Constants;
 using snowcoreBlog.Backend.Email.Core.Contracts;
 using snowcoreBlog.PublicApi.Utilities.DataResult;
@@ -27,7 +27,7 @@ public class CheckEmailDomainConsumer : IConsumer<CheckEmailDomain>
         {
             await context.RespondAsync(
                 new DataResult<EmailDomainChecked>(
-                    Errors: result.Errors.Select(e => new ErrorResultDetail(e.PropertyName, e.ErrorMessage)).ToList()));
+                    Errors: result.Errors.Select(e => new NoneDetail(e.PropertyName, e.ErrorMessage)).ToList()));
             return;
         }
 
@@ -39,7 +39,7 @@ public class CheckEmailDomainConsumer : IConsumer<CheckEmailDomain>
                 new DataResult<EmailDomainChecked>(new()));
         else await context.RespondAsync(
                 new DataResult<EmailDomainChecked>(
-                    Errors: [new ErrorResultDetail(context.Message.Email, EmailConstants.EmailDomainIsNotValid)]));
+                    Errors: [new NoneDetail(context.Message.Email, EmailConstants.EmailDomainIsNotValid)]));
     }
 
     private async Task<bool> CheckDnsEntriesAsync(string domain)

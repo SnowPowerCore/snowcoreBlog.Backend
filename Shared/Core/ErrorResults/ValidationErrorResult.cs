@@ -1,9 +1,9 @@
 ﻿using FluentValidation.Results;
-using Results;
+using MaybeResults;
 
 namespace snowcoreBlog.Backend.Core;
 
-[ErrorResult]
+[None]
 public sealed partial record ValidationErrorResult<T>
 {
     // Add a custom constructor to create a ValidationErrorResult<T> from a FluentValidation ValidationResult
@@ -16,9 +16,9 @@ public sealed partial record ValidationErrorResult<T>
 
         Message = typeof(T).Name;
 
-        var errorList = new List<ErrorResultDetail>(validationResult.Errors.Count);
-        errorList.AddRange(validationResult.Errors.Select(e => new ErrorResultDetail(e.PropertyName, e.ErrorMessage)));
-        Errors = errorList;
+        var errorList = new List<NoneDetail>(validationResult.Errors.Count);
+        errorList.AddRange(validationResult.Errors.Select(e => new NoneDetail(e.PropertyName, e.ErrorMessage)));
+        Details = errorList;
     }
 }
 

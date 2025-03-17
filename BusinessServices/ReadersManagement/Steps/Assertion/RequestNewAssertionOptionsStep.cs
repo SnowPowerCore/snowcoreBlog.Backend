@@ -2,7 +2,7 @@
 using Fido2NetLib;
 using MassTransit;
 using MinimalStepifiedSystem.Interfaces;
-using Results;
+using MaybeResults;
 using snowcoreBlog.Backend.IAM.Core.Contracts;
 using snowcoreBlog.Backend.ReadersManagement.Constants;
 using snowcoreBlog.Backend.ReadersManagement.Context;
@@ -14,11 +14,11 @@ using StackExchange.Redis;
 namespace snowcoreBlog.Backend.ReadersManagement.Steps.Assertion;
 
 public class RequestNewAssertionOptionsStep(IRequestClient<ValidateAndCreateAssertion> requestClientOnRegister,
-                                            IConnectionMultiplexer redis) : IStep<RequestAssertionOptionsDelegate, RequestAssertionOptionsContext, IResult<AssertionOptions>>
+                                            IConnectionMultiplexer redis) : IStep<RequestAssertionOptionsDelegate, RequestAssertionOptionsContext, IMaybe<AssertionOptions>>
 {
     private const string Fido2AssertionOptions = nameof(Fido2AssertionOptions);
 
-    public async Task<IResult<AssertionOptions>> InvokeAsync(RequestAssertionOptionsContext context, RequestAssertionOptionsDelegate next, CancellationToken token = default)
+    public async Task<IMaybe<AssertionOptions>> InvokeAsync(RequestAssertionOptionsContext context, RequestAssertionOptionsDelegate next, CancellationToken token = default)
     {
         var result = await requestClientOnRegister.GetResponse<DataResult<AssertionOptions>>(
             context.RequestAssertionOptions.ToValidate(), token);
@@ -30,7 +30,7 @@ public class RequestNewAssertionOptionsStep(IRequestClient<ValidateAndCreateAsse
                 Encoding.UTF8.GetBytes(result.Message.Value!.ToJson()),
                 TimeSpan.FromMinutes(5));
 
-            return Result.Success(result.Message.Value)!;
+            return Maybe.Create(result.Message.Value)!;
         }
         else
         {

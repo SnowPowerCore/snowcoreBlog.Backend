@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 using MassTransit;
-using Results;
+using MaybeResults;
 using SendGrid;
 using snowcoreBlog.Backend.Email.Core.Contracts;
 using snowcoreBlog.Backend.Email.Extensions;
@@ -17,7 +17,7 @@ public class SendTemplatedEmailUsingSendGridConsumer(IValidator<SendTemplatedEma
         {
             await context.RespondAsync(
                 new DataResult<TemplatedEmailSent>(
-                    Errors: result.Errors.Select(e => new ErrorResultDetail(e.PropertyName, e.ErrorMessage)).ToList()));
+                    Errors: result.Errors.Select(e => new NoneDetail(e.PropertyName, e.ErrorMessage)).ToList()));
             return;
         }
 

@@ -3,7 +3,7 @@ using FastEndpoints.Security;
 using FluentValidation;
 using MassTransit;
 using Microsoft.Extensions.Options;
-using Results;
+using MaybeResults;
 using snowcoreBlog.Backend.AspireYarpGateway.Constants;
 using snowcoreBlog.Backend.AspireYarpGateway.Options;
 using snowcoreBlog.Backend.YarpGateway.Core.Contracts;
@@ -38,7 +38,7 @@ public class GetUserTokenPairWithPayloadConsumer : IConsumer<GetUserTokenPairWit
         {
             await context.RespondAsync(
                 new DataResult<UserTokenPairWithPayloadGenerated>(
-                    Errors: result.Errors.Select(e => new ErrorResultDetail(e.PropertyName, e.ErrorMessage)).ToList()));
+                    Errors: result.Errors.Select(e => new NoneDetail(e.PropertyName, e.ErrorMessage)).ToList()));
             return;
         }
 

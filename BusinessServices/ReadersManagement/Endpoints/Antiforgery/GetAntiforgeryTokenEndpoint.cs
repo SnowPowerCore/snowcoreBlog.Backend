@@ -3,7 +3,7 @@ using FastEndpoints;
 using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.Extensions.Options;
-using Results;
+using MaybeResults;
 using snowcoreBlog.Backend.Infrastructure;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 using snowcoreBlog.PublicApi.Constants;
@@ -34,7 +34,7 @@ public class GetAntiforgeryTokenEndpoint : EndpointWithoutRequest
     public override async Task HandleAsync(CancellationToken ct)
     {
         var tokenSet = _antiforgery.GetAndStoreTokens(HttpContext);
-        var result = Result.Success(new AntiforgeryResultDto(tokenSet.RequestToken, tokenSet.HeaderName));
+        var result = Maybe.Create(new AntiforgeryResultDto(tokenSet.RequestToken, tokenSet.HeaderName));
         await SendAsync(
             result?.ToApiResponse(serializerOptions: JsonOptions.Value.SerializerOptions),
             result?.ToStatusCode() ?? (int)HttpStatusCode.InternalServerError,
