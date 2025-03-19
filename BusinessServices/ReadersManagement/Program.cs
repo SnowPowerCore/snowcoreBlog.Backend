@@ -110,7 +110,7 @@ builder.Services.AddSingleton(static sp =>
         .UseStore(() =>
         {
             using var scope = sp.CreateScope();
-            return scope.ServiceProvider.GetRequiredService<IAltchaChallengeStore>();
+            return scope.ServiceProvider.GetRequiredService<IAltchaCancellableChallengeStore>();
         })
         .Build();
 });
@@ -159,7 +159,7 @@ builder.Services.AddAuthorization()
     });
 
 builder.Services.AddScoped<IHasher, Argon2Hasher>();
-builder.Services.AddScoped<IAltchaChallengeStore, AltchaChallengeStore>();
+builder.Services.AddScoped<IAltchaCancellableChallengeStore, AltchaChallengeStore>();
 builder.Services.AddScoped<IReaderRepository, ReaderRepository>();
 builder.Services.AddScoped<ValidateNickNameWasNotTakenStep>();
 builder.Services.AddScoped<ValidateReaderAccountTempRecordNotExistsStep>();
