@@ -9,6 +9,11 @@ using snowcoreBlog.Backend.Email.Features.SendGrid;
 using snowcoreBlog.Backend.Email.Features.Validation;
 
 var builder = WebApplication.CreateSlimBuilder(args);
+builder.Host.UseDefaultServiceProvider(static (c, opts) =>
+{
+    opts.ValidateScopes = true;
+    opts.ValidateOnBuild = true;
+});
 
 builder.Services.Configure<MassTransitHostOptions>(static options =>
 {

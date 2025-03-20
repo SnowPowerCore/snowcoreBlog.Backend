@@ -3,6 +3,11 @@ using Microsoft.AspNetCore.HttpOverrides;
 using snowcoreBlog.ServiceDefaults.Extensions;
 
 var builder = WebApplication.CreateSlimBuilder(args);
+builder.Host.UseDefaultServiceProvider(static (c, opts) =>
+{
+    opts.ValidateScopes = true;
+    opts.ValidateOnBuild = true;
+});
 
 builder.Services.Configure<CookiePolicyOptions>(static options =>
 {
