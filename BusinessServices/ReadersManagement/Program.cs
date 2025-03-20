@@ -41,6 +41,11 @@ using snowcoreBlog.ServiceDefaults.Extensions;
 var jsonStringEnumConverter = new JsonStringEnumConverter();
 
 var builder = WebApplication.CreateSlimBuilder(args);
+builder.Host.UseDefaultServiceProvider(static (c, opts) =>
+{
+    opts.ValidateScopes = true;
+    opts.ValidateOnBuild = true;
+});
 builder.Host.ApplyOaktonExtensions();
 
 builder.Services.Configure<MassTransitHostOptions>(static options =>
