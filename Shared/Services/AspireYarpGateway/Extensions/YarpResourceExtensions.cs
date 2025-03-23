@@ -19,6 +19,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using snowcoreBlog.Backend.AspireYarpGateway.Extensions;
 using snowcoreBlog.Backend.AspireYarpGateway.Features;
+using snowcoreBlog.Backend.AspireYarpGateway.Middleware;
 using snowcoreBlog.Backend.AspireYarpGateway.Options;
 using snowcoreBlog.Backend.Email.Validation;
 using snowcoreBlog.Backend.Infrastructure.Extensions;
@@ -269,6 +270,7 @@ internal class YarpResourceLifecyclehook(
                 HttpOnly = HttpOnlyPolicy.Always,
                 Secure = CookieSecurePolicy.Always
             })
+            .UseMiddleware<CookieJsonWebTokenMiddleware>()
             .UseAuthentication()
             .UseAuthorization();
 
