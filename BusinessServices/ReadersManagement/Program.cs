@@ -30,6 +30,7 @@ using snowcoreBlog.Backend.Infrastructure.Stores;
 using snowcoreBlog.Backend.Infrastructure.Utilities;
 using snowcoreBlog.Backend.ReadersManagement.Features;
 using snowcoreBlog.Backend.ReadersManagement.Interfaces.Repositories.Marten;
+using snowcoreBlog.Backend.ReadersManagement.Options;
 using snowcoreBlog.Backend.ReadersManagement.Repositories.Marten;
 using snowcoreBlog.Backend.ReadersManagement.Steps.Assertion;
 using snowcoreBlog.Backend.ReadersManagement.Steps.Attestation;
@@ -85,6 +86,9 @@ builder.Services.Configure<ForwardedHeadersOptions>(static options =>
     options.ForwardedHeaders =
         ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
 });
+
+builder.Services.Configure<ReaderAccountTokenRequirements>(
+    builder.Configuration.GetSection("Security:ReaderAccountTokenRequirements"));
 
 builder.Services.Configure<SendGridSenderAccountOptions>(
     builder.Configuration.GetSection("SendGrid:SenderAccount"));

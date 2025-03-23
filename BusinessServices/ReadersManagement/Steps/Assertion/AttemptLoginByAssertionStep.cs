@@ -1,6 +1,5 @@
 ﻿using System.Text;
 using MassTransit;
-using Microsoft.Extensions.Caching.Distributed;
 using MinimalStepifiedSystem.Interfaces;
 using MaybeResults;
 using snowcoreBlog.Backend.Core.Contracts;
@@ -40,7 +39,7 @@ public class AttemptLoginByAssertionStep(IRequestClient<LoginUser> requestClient
             await publishEndpoint.Publish<ReaderAccountUserLoggedIn>(
                 new(result.Message.Value!.Id, context.LoginByAssertion.Email), token);
 
-            return Maybe.Create<LoginByAssertionResultDto>(new());
+            return await next(context, token);
         }
         else
         {
