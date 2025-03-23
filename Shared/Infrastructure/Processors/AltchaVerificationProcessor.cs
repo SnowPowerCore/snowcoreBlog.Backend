@@ -13,7 +13,7 @@ public class AltchaVerificationProcessor(AltchaService altcha) : IGlobalPreProce
         var errorMessage = $"The [{HeaderKeyConstants.CaptchaHeader}] header has to be set!";
         if (context.HttpContext.Request.Headers.TryGetValue(HeaderKeyConstants.CaptchaHeader, out var captchaSolution))
         {
-            var validationResult = await _altcha.Validate(captchaSolution);
+            var validationResult = await _altcha.Validate(captchaSolution, ct);
             if (validationResult?.IsValid ?? false)
             {
                 return;

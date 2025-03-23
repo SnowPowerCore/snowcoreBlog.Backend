@@ -2,7 +2,7 @@ using FastEndpoints.Security;
 
 namespace snowcoreBlog.Backend.AspireYarpGateway.Options;
 
-public class SecuritySigningOptions
+public record SecuritySigningOptions
 {
     public JwtCreationOptions User { get; set; }
 
