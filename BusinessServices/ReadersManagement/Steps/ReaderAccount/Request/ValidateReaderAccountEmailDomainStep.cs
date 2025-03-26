@@ -9,7 +9,7 @@ using snowcoreBlog.Backend.ReadersManagement.Extensions;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 using snowcoreBlog.PublicApi.Utilities.DataResult;
 
-namespace snowcoreBlog.Backend.ReadersManagement.Steps.ReaderAccount;
+namespace snowcoreBlog.Backend.ReadersManagement.Steps.ReaderAccount.Request;
 
 public class ValidateReaderAccountEmailDomainStep(IRequestClient<CheckEmailDomain> requestClient) : IStep<RequestCreateReaderAccountDelegate, RequestCreateReaderAccountContext, IMaybe<RequestReaderAccountCreationResultDto>>
 {

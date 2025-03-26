@@ -11,7 +11,7 @@ using snowcoreBlog.Backend.ReadersManagement.Interfaces.Repositories.Marten;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 using snowcoreBlog.PublicApi.Constants;
 
-namespace snowcoreBlog.Backend.ReadersManagement.Steps.ReaderAccount;
+namespace snowcoreBlog.Backend.ReadersManagement.Steps.ReaderAccount.Confirm;
 
 public class CreateReaderEntityForNewUserStep(IPublishEndpoint publishEndpoint,
                                               IReaderRepository readerRepository) : IStep<ConfirmCreateReaderAccountDelegate, ConfirmCreateReaderAccountContext, IMaybe<ReaderAccountCreatedDto>>

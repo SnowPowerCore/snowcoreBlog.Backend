@@ -24,6 +24,7 @@ public class LoginByAssertionEndpoint : Endpoint<LoginByAssertionDto, ApiRespons
     [StepifiedProcess(Steps = [
         typeof(ValidateReaderAccountExistsStep),
         typeof(AttemptLoginByAssertionStep),
+        typeof(GetTokenForReaderAccountStep),
     ])]
     protected LoginByAssertionDelegate LoginByAssertion { get; }
 

@@ -4,7 +4,7 @@ using snowcoreBlog.Backend.Core.Constants;
 
 namespace snowcoreBlog.Backend.AspireYarpGateway.Middleware;
 
-public class CookieJsonWebTokenMiddleware : IMiddleware
+public class UserCookieJsonWebTokenMiddleware : IMiddleware
 {
     private const string XContentTypeOptionsHeader = "X-Content-Type-Options";
     private const string XContentTypeOptionsHeaderValue = "nosniff";

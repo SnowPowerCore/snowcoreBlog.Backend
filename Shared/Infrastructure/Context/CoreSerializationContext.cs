@@ -104,6 +104,5 @@ namespace snowcoreBlog.Backend.Infrastructure;
     JsonSerializerDefaults.Web,
     UseStringEnumConverter = true,
     WriteIndented = true,
-    DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
-    PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase)]
+    DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull)]
 public partial class CoreSerializationContext : JsonSerializerContext { }

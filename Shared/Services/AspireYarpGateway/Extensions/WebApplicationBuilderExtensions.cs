@@ -12,17 +12,17 @@ public static class WebApplicationBuilderExtensions
         services
             .AddAuthentication(options =>
             {
-                options.DefaultAuthenticateScheme = AuthConstants.UserAuthSchemeName;
-                options.DefaultSignInScheme = AuthConstants.UserAuthSchemeName;
-                options.DefaultChallengeScheme = AuthConstants.UserAuthSchemeName;
+                options.DefaultAuthenticateScheme = SecurityConstants.UserSchemeName;
+                options.DefaultSignInScheme = SecurityConstants.UserSchemeName;
+                options.DefaultChallengeScheme = SecurityConstants.UserSchemeName;
             })
-            .AddJwtBearer(AuthConstants.UserAuthSchemeName, options =>
+            .AddJwtBearer(SecurityConstants.UserSchemeName, options =>
             {
                 options.RequireHttpsMetadata = true;
                 options.SaveToken = true;
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    ValidIssuer = SecuritySigningConstants.UserIssuer,
+                    ValidIssuer = SecurityConstants.UserIssuer,
                     ValidateIssuer = true,
                     ValidateAudience = false,
                     ValidateLifetime = true,
@@ -32,13 +32,13 @@ public static class WebApplicationBuilderExtensions
                     )
                 };
             })
-            .AddJwtBearer(AuthConstants.AdminAuthSchemeName, options =>
+            .AddJwtBearer(SecurityConstants.AdminSchemeName, options =>
             {
                 options.RequireHttpsMetadata = true;
                 options.SaveToken = true;
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    ValidIssuer = SecuritySigningConstants.AdminIssuer,
+                    ValidIssuer = SecurityConstants.AdminIssuer,
                     ValidateIssuer = true,
                     ValidateAudience = false,
                     ValidateLifetime = true,

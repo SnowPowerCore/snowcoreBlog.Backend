@@ -10,27 +10,33 @@ using snowcoreBlog.Backend.YarpGateway.Core.Contracts;
 using Microsoft.Extensions.Options;
 using snowcoreBlog.Backend.ReadersManagement.Options;
 using snowcoreBlog.Backend.ReadersManagement.Extensions;
-using snowcoreBlog.Backend.IAM.Core.Constants;
+using snowcoreBlog.Backend.Core.Constants;
+using snowcoreBlog.Backend.ReadersManagement.Constants;
 
 namespace snowcoreBlog.Backend.ReadersManagement.Steps.Assertion;
 
 public class GetTokenForReaderAccountStep(IRequestClient<GetUserTokenPairWithPayload> requestClient,
-                                          IOptions<ReaderAccountTokenRequirements> tokenReqOpts,
+                                          IOptions<ReaderAccountTokenRequirementOptions> tokenReqOpts,
                                           IHttpContextAccessor httpContextAccessor) : IStep<LoginByAssertionDelegate, LoginByAssertionContext, IMaybe<LoginByAssertionResultDto>>
 {
     public async Task<IMaybe<LoginByAssertionResultDto>> InvokeAsync(LoginByAssertionContext context, LoginByAssertionDelegate next, CancellationToken token = default)
     {
+        var currentUserId = context.GetFromData<Guid>(ReaderAccountUserConstants.CurrentUserId);
+
+        var readerTokenReq = tokenReqOpts.Value.ToGetUserTokenPairWithPayload();
+        readerTokenReq.Claims.Add(ReaderAccountClaimConstants.ReaderAccountEmailClaimKey, context.LoginByAssertion.Email);
+        readerTokenReq.Claims.Add(ReaderAccountClaimConstants.ReaderAccountUserIdClaimKey, currentUserId.ToString());
         var result = await requestClient.GetResponse<DataResult<UserTokenPairWithPayloadGenerated>>(
-            tokenReqOpts.Value.ToGetUserTokenPairWithPayload(), token);
+            readerTokenReq, token);
         if (result.Message.IsSuccess)
         {
             var curPair = result.Message.Value;
             if (!string.IsNullOrEmpty(curPair!.AccessToken))
             {
                 var currentCookies = httpContextAccessor.HttpContext?.Response.Cookies;
-                currentCookies?.Append(AuthConstants.TokenCookieName, curPair.AccessToken,
+                currentCookies?.Append(AuthCookieConstants.UserAccessTokenCookieName, curPair.AccessToken,
                     new() { Expires = curPair.AccessTokenExpiresAt });
-                currentCookies?.Append("refreshToken", curPair.RefreshToken,
+                currentCookies?.Append(AuthCookieConstants.UserRefreshTokenCookieName, curPair.RefreshToken,
                     new() { Expires = curPair.RefreshTokenExpiresAt });
                 return Maybe.Create<LoginByAssertionResultDto>(new());
             }

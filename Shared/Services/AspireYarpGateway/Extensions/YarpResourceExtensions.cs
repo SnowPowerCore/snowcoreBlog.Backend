@@ -1,4 +1,5 @@
 using System.Collections.Immutable;
+using Aspire.Hosting;
 using Aspire.Hosting.ApplicationModel;
 using Aspire.Hosting.Lifecycle;
 using FluentValidation;
@@ -17,18 +18,17 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using snowcoreBlog.Backend.AspireYarpGateway.Extensions;
 using snowcoreBlog.Backend.AspireYarpGateway.Features;
 using snowcoreBlog.Backend.AspireYarpGateway.Middleware;
 using snowcoreBlog.Backend.AspireYarpGateway.Options;
-using snowcoreBlog.Backend.Email.Validation;
+using snowcoreBlog.Backend.AspireYarpGateway.Validation;
 using snowcoreBlog.Backend.Infrastructure.Extensions;
 using snowcoreBlog.Backend.YarpGateway.Core.Contracts;
 using snowcoreBlog.PublicApi.Utilities.Dictionary;
 using snowcoreBlog.ServiceDefaults.Extensions;
 using Yarp.ReverseProxy.Configuration;
 
-namespace Aspire.Hosting;
+namespace snowcoreBlog.Backend.AspireYarpGateway.Extensions;
 
 public static class YarpResourceExtensions
 {
@@ -241,6 +241,7 @@ internal class YarpResourceLifecyclehook(
             });
         });
 
+        builder.Services.AddSingleton<UserCookieJsonWebTokenMiddleware>();
         builder.Services.AddSingleton<IValidator<GetUserTokenPairWithPayload>, GetUserTokenPairWithPayloadValidator>();
 
         builder.Services.AddCors(static x => x.AddDefaultPolicy(static p => p
@@ -270,7 +271,7 @@ internal class YarpResourceLifecyclehook(
                 HttpOnly = HttpOnlyPolicy.Always,
                 Secure = CookieSecurePolicy.Always
             })
-            .UseMiddleware<CookieJsonWebTokenMiddleware>()
+            .UseMiddleware<UserCookieJsonWebTokenMiddleware>()
             .UseAuthentication()
             .UseAuthorization();
 
