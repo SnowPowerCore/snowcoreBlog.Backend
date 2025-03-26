@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using snowcoreBlog.Backend.YarpGateway.Core.Contracts;
 
-namespace snowcoreBlog.Backend.Email.Validation;
+namespace snowcoreBlog.Backend.AspireYarpGateway.Validation;
 
 public class GetUserTokenPairWithPayloadValidator : AbstractValidator<GetUserTokenPairWithPayload>
 {

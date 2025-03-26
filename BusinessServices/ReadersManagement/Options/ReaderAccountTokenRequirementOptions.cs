@@ -2,7 +2,7 @@ using MinimalStepifiedSystem.Utils;
 
 namespace snowcoreBlog.Backend.ReadersManagement.Options;
 
-public record ReaderAccountTokenRequirements
+public record ReaderAccountTokenRequirementOptions
 {
     public List<string> Permissions { get; set; } = [];
 

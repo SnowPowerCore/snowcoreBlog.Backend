@@ -9,7 +9,7 @@ using snowcoreBlog.Backend.ReadersManagement.Delegates;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 using snowcoreBlog.PublicApi.Utilities.DataResult;
 
-namespace snowcoreBlog.Backend.ReadersManagement.Steps.ReaderAccount;
+namespace snowcoreBlog.Backend.ReadersManagement.Steps.ReaderAccount.Request;
 
 public class CreateReaderAccountTempUserStep(IRequestClient<CreateTempUser> client,
                                              IPublishEndpoint publishEndpoint) : IStep<RequestCreateReaderAccountDelegate, RequestCreateReaderAccountContext, IMaybe<RequestReaderAccountCreationResultDto>>

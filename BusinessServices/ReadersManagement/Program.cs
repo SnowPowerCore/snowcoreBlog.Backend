@@ -35,7 +35,8 @@ using snowcoreBlog.Backend.ReadersManagement.Repositories.Marten;
 using snowcoreBlog.Backend.ReadersManagement.Steps.Assertion;
 using snowcoreBlog.Backend.ReadersManagement.Steps.Attestation;
 using snowcoreBlog.Backend.ReadersManagement.Steps.NickName;
-using snowcoreBlog.Backend.ReadersManagement.Steps.ReaderAccount;
+using snowcoreBlog.Backend.ReadersManagement.Steps.ReaderAccount.Confirm;
+using snowcoreBlog.Backend.ReadersManagement.Steps.ReaderAccount.Request;
 using snowcoreBlog.PublicApi.Extensions;
 using snowcoreBlog.ServiceDefaults.Extensions;
 
@@ -87,7 +88,7 @@ builder.Services.Configure<ForwardedHeadersOptions>(static options =>
         ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
 });
 
-builder.Services.Configure<ReaderAccountTokenRequirements>(
+builder.Services.Configure<ReaderAccountTokenRequirementOptions>(
     builder.Configuration.GetSection("Security:ReaderAccountTokenRequirements"));
 
 builder.Services.Configure<SendGridSenderAccountOptions>(
@@ -95,6 +96,7 @@ builder.Services.Configure<SendGridSenderAccountOptions>(
 
 builder.WebHost.UseKestrelHttpsConfiguration();
 builder.AddServiceDefaults();
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddOpenTelemetry().ConnectBackendServices();
 builder.Services.AddNpgsqlDataSource(builder.Configuration.GetConnectionString("db-snowcore-blog-entities")!);
 //builder.Services.AddNpgsqlDataSource("Host=localhost;Port=54523;Username=postgres;Password=xQ6S1zf+)!kTnjFFCtt(Ks");
@@ -184,6 +186,7 @@ builder.Services.AddScoped<ReturnCreatedReaderEntityStep>();
 builder.Services.AddScoped<RequestNewAttestationOptionsStep>();
 builder.Services.AddScoped<RequestNewAssertionOptionsStep>();
 builder.Services.AddScoped<AttemptLoginByAssertionStep>();
+builder.Services.AddScoped<GetTokenForReaderAccountStep>();
 
 var app = builder.Build();
 
@@ -225,7 +228,6 @@ app.UseHttpsRedirection()
         };
         c.Endpoints.Configurator = static ep =>
         {
-            ep.PreProcessor<CookieJsonWebTokenProcessor>(Order.Before);
             if (ep.EndpointTags?.Contains(EndpointTagConstants.RequireCaptchaVerification) ?? false)
             {
                 ep.PreProcessor<AltchaVerificationProcessor>(Order.Before);

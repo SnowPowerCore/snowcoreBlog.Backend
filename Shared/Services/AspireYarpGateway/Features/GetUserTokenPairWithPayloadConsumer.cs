@@ -50,7 +50,7 @@ public class GetUserTokenPairWithPayloadConsumer : IConsumer<GetUserTokenPairWit
         {
             AccessToken = JwtBearer.CreateToken(jwt =>
             {
-                jwt.Issuer = SecuritySigningConstants.UserIssuer;
+                jwt.Issuer = SecurityConstants.UserIssuer;
                 jwt.SigningKey = _currentSecuritySigningOptions.User.SigningKey;
                 jwt.SigningStyle = _currentSecuritySigningOptions.User.SigningStyle;
                 jwt.SigningAlgorithm = _currentSecuritySigningOptions.User.SigningAlgorithm;

@@ -12,7 +12,7 @@ using snowcoreBlog.PublicApi.Constants;
 using snowcoreBlog.PublicApi.Utilities.DataResult;
 using StackExchange.Redis;
 
-namespace snowcoreBlog.Backend.ReadersManagement.Steps.ReaderAccount;
+namespace snowcoreBlog.Backend.ReadersManagement.Steps.ReaderAccount.Confirm;
 
 public class CreateReaderAccountUserStep(IRequestClient<CreateUser> client,
                                          IPublishEndpoint publishEndpoint,

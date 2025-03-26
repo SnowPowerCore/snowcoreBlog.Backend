@@ -39,6 +39,8 @@ public class AttemptLoginByAssertionStep(IRequestClient<LoginUser> requestClient
             await publishEndpoint.Publish<ReaderAccountUserLoggedIn>(
                 new(result.Message.Value!.Id, context.LoginByAssertion.Email), token);
 
+            context.SetDataWith(ReaderAccountUserConstants.CurrentUserId, result.Message.Value.Id);
+
             return await next(context, token);
         }
         else

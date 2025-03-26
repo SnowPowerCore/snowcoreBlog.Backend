@@ -24,7 +24,7 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="ConfigureAwait.Fody" Version="3.3.2" />
-    <PackageReference Include="Ixnas.AltchaNet" Version="1.0.0" />
+    <PackageReference Include="Ixnas.AltchaNet" Version="1.1.0" />
     <PackageReference Include="MassTransit.RabbitMQ" Version="8.3.7" />
     <PackageReference Include="Marten" Version="7.39.1" />
     <PackageReference Include="Marten.CommandLine" Version="7.39.1" />
