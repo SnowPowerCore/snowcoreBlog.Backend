@@ -1,5 +1,4 @@
 using System.Collections.Immutable;
-using Aspire.Hosting;
 using Aspire.Hosting.ApplicationModel;
 using Aspire.Hosting.Lifecycle;
 using FluentValidation;
@@ -18,6 +17,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using snowcoreBlog.Backend.AspireYarpGateway.Extensions;
 using snowcoreBlog.Backend.AspireYarpGateway.Features;
 using snowcoreBlog.Backend.AspireYarpGateway.Middleware;
 using snowcoreBlog.Backend.AspireYarpGateway.Options;
@@ -28,7 +28,7 @@ using snowcoreBlog.PublicApi.Utilities.Dictionary;
 using snowcoreBlog.ServiceDefaults.Extensions;
 using Yarp.ReverseProxy.Configuration;
 
-namespace snowcoreBlog.Backend.AspireYarpGateway.Extensions;
+namespace Aspire.Hosting;
 
 public static class YarpResourceExtensions
 {
