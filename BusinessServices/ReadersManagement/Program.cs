@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Net.Mime;
 using System.Security.Cryptography;
 using System.Text.Json;
@@ -12,6 +13,7 @@ using MassTransit;
 using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Routing.Constraints;
 using MinimalStepifiedSystem.Core.Extensions;
 using NSwag;
@@ -43,10 +45,10 @@ using snowcoreBlog.ServiceDefaults.Extensions;
 var jsonStringEnumConverter = new JsonStringEnumConverter();
 
 var builder = WebApplication.CreateSlimBuilder(args);
-builder.Host.UseDefaultServiceProvider(static (c, opts) =>
+builder.Host.UseDefaultServiceProvider(static (c, options) =>
 {
-    opts.ValidateScopes = true;
-    opts.ValidateOnBuild = true;
+    options.ValidateScopes = true;
+    options.ValidateOnBuild = true;
 });
 builder.Host.ApplyOaktonExtensions();
 
@@ -92,7 +94,7 @@ builder.Services.Configure<ReaderAccountTokenRequirementOptions>(
     builder.Configuration.GetSection("Security:ReaderAccountTokenRequirements"));
 
 builder.Services.Configure<SendGridSenderAccountOptions>(
-    builder.Configuration.GetSection("SendGrid:SenderAccount"));
+    builder.Configuration.GetSection("Integrations:SendGrid:SenderAccount"));
 
 builder.WebHost.UseKestrelHttpsConfiguration();
 builder.AddServiceDefaults();
@@ -100,13 +102,13 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddOpenTelemetry().ConnectBackendServices();
 builder.Services.AddNpgsqlDataSource(builder.Configuration.GetConnectionString("db-snowcore-blog-entities")!);
 //builder.Services.AddNpgsqlDataSource("Host=localhost;Port=54523;Username=postgres;Password=xQ6S1zf+)!kTnjFFCtt(Ks");
-builder.Services.AddMarten(static opts =>
+builder.Services.AddMarten(static options =>
 {
-    opts.RegisterDocumentType<ReaderEntity>();
-    opts.RegisterDocumentType<AltchaStoredChallengeEntity>();
-    opts.GeneratedCodeMode = TypeLoadMode.Static;
-    opts.UseSystemTextJsonForSerialization(configure: static o => o.SetJsonSerializationContext());
-    opts.Policies.AllDocumentsSoftDeleted();
+    options.RegisterDocumentType<ReaderEntity>();
+    options.RegisterDocumentType<AltchaStoredChallengeEntity>();
+    options.GeneratedCodeMode = TypeLoadMode.Static;
+    options.UseSystemTextJsonForSerialization(configure: static o => o.SetJsonSerializationContext());
+    options.Policies.AllDocumentsSoftDeleted();
 })
     .UseLightweightSessions()
     .UseNpgsqlDataSource();
@@ -143,16 +145,16 @@ const int GlobalVersion = 1;
 builder.Services.AddAuthentication();
 builder.Services.AddAuthorization()
     .AddAntiforgery()
-    .AddFastEndpoints(static o =>
+    .AddFastEndpoints(static options =>
     {
-        o.SourceGeneratorDiscoveredTypes.AddRange(snowcoreBlog.Backend.ReadersManagement.DiscoveredTypes.All);
+        options.SourceGeneratorDiscoveredTypes.AddRange(snowcoreBlog.Backend.ReadersManagement.DiscoveredTypes.All);
     })
-    .SwaggerDocument(o =>
+    .SwaggerDocument(options =>
     {
-        o.AutoTagPathSegmentIndex = 0;
-        o.ShortSchemaNames = true;
-        o.MaxEndpointVersion = GlobalVersion;
-        o.DocumentSettings = static s =>
+        options.AutoTagPathSegmentIndex = 0;
+        options.ShortSchemaNames = true;
+        options.MaxEndpointVersion = GlobalVersion;
+        options.DocumentSettings = static s =>
         {
             s.DocumentName = $"v{GlobalVersion}";
             s.Version = $"v{GlobalVersion}";
@@ -160,7 +162,7 @@ builder.Services.AddAuthorization()
             s.OperationProcessors.Add(new AntiforgeryHeaderProcessor());
             s.OperationProcessors.Add(new AltchaHeaderProcessor());
         };
-        o.SerializerSettings = s =>
+        options.SerializerSettings = s =>
         {
             s.Converters.Add(jsonStringEnumConverter);
             s.SetJsonSerializationContext();
@@ -190,6 +192,13 @@ builder.Services.AddScoped<GetTokenForReaderAccountStep>();
 
 var app = builder.Build();
 
+const string DefaultCulture = "en";
+var supportedCultures = new[]
+{
+    new CultureInfo(DefaultCulture),
+    new CultureInfo("tr")
+};
+
 app.UseStepifiedSystem();
 app.UseHttpsRedirection()
     .UseCookiePolicy(new()
@@ -197,6 +206,15 @@ app.UseHttpsRedirection()
         MinimumSameSitePolicy = SameSiteMode.Strict,
         HttpOnly = HttpOnlyPolicy.Always,
         Secure = CookieSecurePolicy.Always
+    })
+    .UseRequestLocalization(options =>
+    {
+        options.DefaultRequestCulture = new RequestCulture(DefaultCulture);
+        options.SupportedCultures = supportedCultures;
+        options.SupportedUICultures = supportedCultures;
+        options.RequestCultureProviders = [
+            new AcceptLanguageHeaderRequestCultureProvider()
+        ];
     })
     .UseAuthentication()
     .UseAuthorization()

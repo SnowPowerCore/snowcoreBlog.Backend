@@ -17,7 +17,7 @@ public static class Fido2Extensions
         };
 
     public static GetAssertionOptionsParams ToGetAssertionOptionsParams(
-        this List<PublicKeyCredentialDescriptor> allowedCredentials,
+        this IReadOnlyList<PublicKeyCredentialDescriptor> allowedCredentials,
         UserVerificationRequirement userVerification,
         AuthenticationExtensionsClientInputs extensions) =>
         new()

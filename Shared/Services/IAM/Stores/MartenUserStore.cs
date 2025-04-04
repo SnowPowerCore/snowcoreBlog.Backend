@@ -303,11 +303,11 @@ namespace snowcoreBlog.Backend.IAM.Stores
 
         public void Dispose() { }
 
-        public void Wipe()
+        public async Task Wipe()
         {
             using IDocumentSession session = _documentStore.IdentitySession();
             session.DeleteWhere<TUser>(x => true);
-            session.SaveChanges();
+            await session.SaveChangesAsync();
         }
     }
 }

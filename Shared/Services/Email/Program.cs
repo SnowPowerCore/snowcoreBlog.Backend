@@ -27,7 +27,7 @@ builder.Services.ConfigureHttpJsonOptions(static options =>
 
 builder.WebHost.UseKestrelHttpsConfiguration();
 builder.AddServiceDefaults();
-builder.Services.AddSendGrid(options => options.ApiKey = builder.Configuration["SendGrid:ApiKey"]);
+builder.Services.AddSendGrid(options => options.ApiKey = builder.Configuration["Integrations:SendGrid:ApiKey"]);
 builder.Services.AddMassTransit(busConfigurator =>
 {
     busConfigurator.AddConsumer<SendGenericEmailUsingSendGridConsumer>();

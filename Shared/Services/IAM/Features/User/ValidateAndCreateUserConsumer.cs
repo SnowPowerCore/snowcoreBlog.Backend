@@ -1,9 +1,9 @@
 ﻿using Fido2NetLib;
 using Fido2NetLib.Objects;
 using FluentValidation;
+using Marten;
 using MassTransit;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using MaybeResults;
 using snowcoreBlog.Backend.Core.Interfaces.Services;
@@ -59,10 +59,10 @@ public class ValidateAndCreateUserConsumer(IHasher hasher,
 
             var options = CredentialCreateOptions.FromJson(context.Message.AttestationOptionsJson);
 
-            Task<bool> IsCredentialIdUniqueToUserAsync(IsCredentialIdUniqueToUserParams @params, CancellationToken cancellationToken) =>
-                userManager.Users
+            async Task<bool> IsCredentialIdUniqueToUserAsync(IsCredentialIdUniqueToUserParams @params, CancellationToken cancellationToken) =>
+                !await userManager.Users
                     .SelectMany(user => user.PublicKeyCredentials)
-                    .AllAsync(credential => credential.Id != new Guid(@params.CredentialId), context.CancellationToken);
+                    .AnyAsync(credential => credential.Id == new Guid(@params.CredentialId), context.CancellationToken);
 
             var credentialResult = await fido2.MakeNewCredentialAsync(
                 context.Message.AuthenticatorAttestation.ToMakeNewCredentialParams(

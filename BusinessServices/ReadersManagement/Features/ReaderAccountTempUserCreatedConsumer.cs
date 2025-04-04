@@ -14,7 +14,7 @@ public class ReaderAccountTempUserCreatedConsumer(IOptions<SendGridSenderAccount
         context.Publish(
             TemplatedEmailExtensions.ToActivateCreatedTempUserEmail(
                 context.Message,
-                configuration.GetSection("SendGrid:DynamicTemplates")[EmailConstants.ReaderAccountTempUserCreatedTemplateId]!,
+                configuration.GetSection("Integrations:SendGrid:DynamicTemplates")[EmailConstants.ReaderAccountTempUserCreatedTemplateId]!,
                 options.Value,
                 context.Message.UserEmail,
                 EmailConstants.ReaderAccountTempUserCreatedSubject,

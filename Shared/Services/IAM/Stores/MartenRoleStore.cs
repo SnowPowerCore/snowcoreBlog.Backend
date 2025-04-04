@@ -76,7 +76,7 @@ namespace snowcoreBlog.Backend.IAM.Stores
         }
 
         public Task<string> GetRoleIdAsync(TRole role, CancellationToken cancellationToken) =>
-        Task.FromResult(role.Id);
+            Task.FromResult(role.Id);
 
         public Task<string?> GetRoleNameAsync(TRole role, CancellationToken cancellationToken) =>
             Task.FromResult(role.Name);
