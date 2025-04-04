@@ -1,8 +1,8 @@
 ﻿using Fido2NetLib;
 using FluentValidation;
+using Marten;
 using MassTransit;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using MaybeResults;
 using snowcoreBlog.Backend.IAM.Constants;
 using snowcoreBlog.Backend.IAM.Core.Contracts;
@@ -36,9 +36,11 @@ public class CheckAndPerformAssertionConsumer(IFido2 fido2,
 
         var options = AssertionOptions.FromJson(loginMsg.AssertionOptionsJson);
 
+        IList<Fido2DevicePublicKeyEntity> currentDevicePublicKeys = [];
+
         var credential = await userManager.Users
             .SelectMany(user => user.PublicKeyCredentials)
-            .Include(credential => credential.DevicePublicKeys)
+            .Include(credential => credential.DevicePublicKeys, currentDevicePublicKeys)
             .SingleOrDefaultAsync(credential => credential.Id == new Guid(loginMsgAuthAssertion.Id), ctxCancellationToken);
 
         if (credential is default(Fido2PublicKeyCredentialEntity))
@@ -72,7 +74,11 @@ public class CheckAndPerformAssertionConsumer(IFido2 fido2,
                 IsUserHandleOwnerOfCredentialIdCallback),
             ctxCancellationToken);
 
-        credential = credential with { SignatureCounter = assertionResult.SignCount };
+        credential = credential with
+        {
+            SignatureCounter = assertionResult.SignCount,
+            DevicePublicKeys = currentDevicePublicKeys
+        };
 
         var pubKeyCredsUpdateTask = fido2PublicKeyCredentialRepository.AddOrUpdateAsync(
             credential, credential.Id, token: ctxCancellationToken);
