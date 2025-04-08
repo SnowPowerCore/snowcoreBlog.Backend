@@ -33,7 +33,7 @@ public class ConfirmCreateByEmailEndpoint : Endpoint<ConfirmCreateReaderAccountD
         Post("create/confirm/email");
         Version(1);
         SerializerContext(CoreSerializationContext.Default);
-        Validator<ConfirmCreateReaderAccountValidation>();
+        Validator<ConfirmCreateReaderAccountValidator>();
         AllowAnonymous();
         EnableAntiforgery();
         Description(b => b

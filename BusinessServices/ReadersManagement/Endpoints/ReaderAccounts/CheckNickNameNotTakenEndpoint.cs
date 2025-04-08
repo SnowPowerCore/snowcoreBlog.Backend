@@ -30,7 +30,7 @@ public class CheckNickNameNotTakenEndpoint : Endpoint<CheckNickNameNotTakenDto, 
         Post("check/nickname");
         Version(1);
         SerializerContext(CoreSerializationContext.Default);
-        Validator<CheckNickNameNotTakenValidation>();
+        Validator<CheckNickNameNotTakenValidator>();
         AllowAnonymous();
         EnableAntiforgery();
         Description(b => b

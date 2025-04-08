@@ -35,7 +35,7 @@ public class RequestCreateByEmailEndpoint : Endpoint<RequestCreateReaderAccountD
         Post("create/request/email");
         Version(1);
         SerializerContext(CoreSerializationContext.Default);
-        Validator<RequestCreateReaderAccountValidation>();
+        Validator<RequestCreateReaderAccountValidator>();
         AllowAnonymous();
         EnableAntiforgery();
         Tags(EndpointTagConstants.RequireCaptchaVerification);

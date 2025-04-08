@@ -33,7 +33,7 @@ public class LoginByAssertionEndpoint : Endpoint<LoginByAssertionDto, ApiRespons
         Post("login/assertion");
         Version(1);
         SerializerContext(CoreSerializationContext.Default);
-        Validator<LoginByAssertionValidation>();
+        Validator<LoginByAssertionValidator>();
         AllowAnonymous();
         EnableAntiforgery();
         Tags(EndpointTagConstants.RequireCaptchaVerification);

@@ -31,7 +31,7 @@ public class RequestAssertionOptionsEndpoint : Endpoint<RequestAssertionOptionsD
         Post("request/assertion");
         Version(1);
         SerializerContext(CoreSerializationContext.Default);
-        Validator<RequestAssertionOptionsValidation>();
+        Validator<RequestAssertionOptionsValidator>();
         AllowAnonymous();
         EnableAntiforgery();
         Description(b => b
