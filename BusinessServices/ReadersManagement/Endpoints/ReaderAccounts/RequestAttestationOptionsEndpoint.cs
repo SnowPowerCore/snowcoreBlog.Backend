@@ -31,7 +31,7 @@ public class RequestAttestationOptionsEndpoint : Endpoint<RequestAttestationOpti
         Post("create/attestation");
         Version(1);
         SerializerContext(CoreSerializationContext.Default);
-        Validator<RequestAttestationOptionsValidation>();
+        Validator<RequestAttestationOptionsValidator>();
         AllowAnonymous();
         EnableAntiforgery();
         Description(b => b

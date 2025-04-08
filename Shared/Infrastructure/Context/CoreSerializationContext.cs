@@ -29,6 +29,7 @@ namespace snowcoreBlog.Backend.Infrastructure;
 [JsonSerializable(typeof(List<ValidationFailure>))]
 [JsonSerializable(typeof(ApiResponse))]
 [JsonSerializable(typeof(AltchaChallenge))]
+[JsonSerializable(typeof(AltchaResponse))]
 [JsonSerializable(typeof(ApplicationAdminEntity))]
 [JsonSerializable(typeof(ApplicationUserEntity))]
 [JsonSerializable(typeof(ApplicationTempUserEntity))]
