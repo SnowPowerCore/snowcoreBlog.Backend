@@ -16,10 +16,10 @@
     <PackageReference Include="Aspire.StackExchange.Redis" Version="9.1.0" />
     <PackageReference Include="FastEndpoints.Security" Version="5.35.0" />
     <PackageReference Include="ConfigureAwait.Fody" Version="3.3.2" />
-    <PackageReference Include="MassTransit.RabbitMQ" Version="8.3.7" />
+    <PackageReference Include="MassTransit.RabbitMQ" Version="8.4.0" />
     <PackageReference Include="Microsoft.Extensions.ServiceDiscovery.Yarp" Version="9.1.0" />
     <PackageReference Include="OpenTelemetry.Instrumentation.StackExchangeRedis" Version="1.10.0-beta.1" />
-    <PackageReference Include="Riok.Mapperly" Version="4.1.1">
+    <PackageReference Include="Riok.Mapperly" Version="4.2.0">
       <ExcludeAssets>runtime</ExcludeAssets>
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>compile; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
