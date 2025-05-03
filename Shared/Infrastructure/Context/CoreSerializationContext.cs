@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Security.Claims;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 using Fido2NetLib;
 using FluentValidation.Results;
@@ -27,6 +28,9 @@ namespace snowcoreBlog.Backend.Infrastructure;
 [JsonSerializable(typeof(JsonElement))]
 [JsonSerializable(typeof(ScalarOptions))]
 [JsonSerializable(typeof(List<ValidationFailure>))]
+[JsonSerializable(typeof(ClaimsPrincipal))]
+[JsonSerializable(typeof(ClaimsIdentity))]
+[JsonSerializable(typeof(Claim))]
 [JsonSerializable(typeof(ApiResponse))]
 [JsonSerializable(typeof(AltchaChallenge))]
 [JsonSerializable(typeof(AltchaResponse))]
@@ -59,10 +63,13 @@ namespace snowcoreBlog.Backend.Infrastructure;
 [JsonSerializable(typeof(RequestAssertionOptionsDto))]
 [JsonSerializable(typeof(LoginByAssertionDto))]
 [JsonSerializable(typeof(LoginByAssertionResultDto))]
+[JsonSerializable(typeof(AuthenticationStateDto))]
 [JsonSerializable(typeof(Fault<UserCreationResult>))]
 [JsonSerializable(typeof(Fault<TempUserCreationResult>))]
 [JsonSerializable(typeof(Fault<UserNickNameTakenValidationResult>))]
 [JsonSerializable(typeof(Fault<EmailDomainChecked>))]
+[JsonSerializable(typeof(Fault<GenericEmailSent>))]
+[JsonSerializable(typeof(Fault<TemplatedEmailSent>))]
 [JsonSerializable(typeof(Fault<ValidateUserExists>))]
 [JsonSerializable(typeof(Fault<ValidateTempUserExists>))]
 [JsonSerializable(typeof(Fault<ValidateAndCreateAttestation>))]
@@ -77,6 +84,8 @@ namespace snowcoreBlog.Backend.Infrastructure;
 [JsonSerializable(typeof(FaultEvent<TempUserCreationResult>))]
 [JsonSerializable(typeof(FaultEvent<UserNickNameTakenValidationResult>))]
 [JsonSerializable(typeof(FaultEvent<EmailDomainChecked>))]
+[JsonSerializable(typeof(FaultEvent<GenericEmailSent>))]
+[JsonSerializable(typeof(FaultEvent<TemplatedEmailSent>))]
 [JsonSerializable(typeof(FaultEvent<ValidateUserExists>))]
 [JsonSerializable(typeof(FaultEvent<ValidateTempUserExists>))]
 [JsonSerializable(typeof(FaultEvent<ValidateAndCreateAttestation>))]
@@ -91,6 +100,8 @@ namespace snowcoreBlog.Backend.Infrastructure;
 [JsonSerializable(typeof(DataResult<TempUserCreationResult>))]
 [JsonSerializable(typeof(DataResult<UserNickNameTakenValidationResult>))]
 [JsonSerializable(typeof(DataResult<EmailDomainChecked>))]
+[JsonSerializable(typeof(DataResult<GenericEmailSent>))]
+[JsonSerializable(typeof(DataResult<TemplatedEmailSent>))]
 [JsonSerializable(typeof(DataResult<ValidateUserExists>))]
 [JsonSerializable(typeof(DataResult<ValidateTempUserExists>))]
 [JsonSerializable(typeof(DataResult<ValidateAndCreateAttestation>))]
