@@ -8,6 +8,8 @@ using snowcoreBlog.Backend.Infrastructure;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 using snowcoreBlog.PublicApi.Constants;
 using snowcoreBlog.PublicApi.Extensions;
+using snowcoreBlog.PublicApi.Utilities.Api;
+using System.Net.Mime;
 
 namespace snowcoreBlog.Backend.ReadersManagement.Endpoints.Antiforgery;
 
@@ -23,7 +25,11 @@ public class GetAntiforgeryTokenEndpoint : EndpointWithoutRequest
         Version(1);
         SerializerContext(CoreSerializationContext.Default);
         AllowAnonymous();
-        Description(b => b.WithTags(ApiTagConstants.Tokens));
+        Description(b => b
+            .WithTags(ApiTagConstants.Tokens)
+            .Produces<ApiResponseForOpenApi<AntiforgeryResultDto>>((int)HttpStatusCode.OK, MediaTypeNames.Application.Json)
+            .Produces<ApiResponse>((int)HttpStatusCode.InternalServerError, MediaTypeNames.Application.Json)
+            .ProducesProblemFE((int)HttpStatusCode.BadRequest));
     }
 
     public GetAntiforgeryTokenEndpoint(IAntiforgery antiforgery)

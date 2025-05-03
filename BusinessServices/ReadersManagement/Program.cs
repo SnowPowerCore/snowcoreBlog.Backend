@@ -1,4 +1,5 @@
 using System.Globalization;
+using System.IdentityModel.Tokens.Jwt;
 using System.Net.Mime;
 using System.Security.Cryptography;
 using System.Text.Json;
@@ -144,7 +145,7 @@ const int GlobalVersion = 1;
 
 builder.Services.AddAuthentication();
 builder.Services.AddAuthorization()
-    .AddAntiforgery()
+    .AddAntiforgery(options => options.Cookie.Expiration = TimeSpan.Zero)
     .AddFastEndpoints(static options =>
     {
         options.SourceGeneratorDiscoveredTypes.AddRange(snowcoreBlog.Backend.ReadersManagement.DiscoveredTypes.All);
@@ -172,6 +173,7 @@ builder.Services.AddAuthorization()
     });
 
 builder.Services.AddScoped<IHasher, Argon2Hasher>();
+builder.Services.AddScoped<JwtSecurityTokenHandler>();
 builder.Services.AddScoped<IAltchaCancellableChallengeStore, AltchaChallengeStore>();
 builder.Services.AddScoped<IReaderRepository, ReaderRepository>();
 builder.Services.AddScoped<ValidateNickNameWasNotTakenStep>();

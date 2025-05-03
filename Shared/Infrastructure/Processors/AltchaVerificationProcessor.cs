@@ -2,16 +2,17 @@
 using System.Text.Json;
 using FastEndpoints;
 using Ixnas.AltchaNet;
+using snowcoreBlog.Backend.Infrastructure.Extensions;
 using snowcoreBlog.PublicApi.Constants;
 
 namespace snowcoreBlog.Backend.Infrastructure.Processors;
 
 public class AltchaVerificationProcessor(AltchaService altcha) : IGlobalPreProcessor
 {
-    private readonly static JsonSerializerOptions _serializerOptions = new()
+    private readonly static JsonSerializerOptions _serializerOptions = new JsonSerializerOptions()
     {
         PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-    };
+    }.SetJsonSerializationContext();
 
     private readonly AltchaService _altcha = altcha;
 

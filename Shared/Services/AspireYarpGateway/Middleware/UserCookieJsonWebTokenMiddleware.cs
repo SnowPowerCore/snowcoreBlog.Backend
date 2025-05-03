@@ -1,28 +1,25 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Net.Http.Headers;
 using snowcoreBlog.Backend.Core.Constants;
 
 namespace snowcoreBlog.Backend.AspireYarpGateway.Middleware;
 
 public class UserCookieJsonWebTokenMiddleware : IMiddleware
 {
-    private const string XContentTypeOptionsHeader = "X-Content-Type-Options";
     private const string XContentTypeOptionsHeaderValue = "nosniff";
-    private const string XXSSProtectionHeader = "X-Xss-Protection";
     private const string XXSSProtectionHeaderValue = "1";
-    private const string XFrameOptionsHeader = "X-Frame-Options";
     private const string XFrameOptionsHeaderValue = "DENY";
-    private const string AuthorizationHeader = "Authorization";
 
     public Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
-        context.Response.Headers.Append(XContentTypeOptionsHeader, XContentTypeOptionsHeaderValue);
-        context.Response.Headers.Append(XXSSProtectionHeader, XXSSProtectionHeaderValue);
-        context.Response.Headers.Append(XFrameOptionsHeader, XFrameOptionsHeaderValue);
+        context.Response.Headers.Append(HeaderNames.XContentTypeOptions, XContentTypeOptionsHeaderValue);
+        context.Response.Headers.Append(HeaderNames.XXSSProtection, XXSSProtectionHeaderValue);
+        context.Response.Headers.Append(HeaderNames.XFrameOptions, XFrameOptionsHeaderValue);
 
         var token = context.Request.Cookies[AuthCookieConstants.UserAccessTokenCookieName];
         if (!string.IsNullOrEmpty(token))
-            context.Request.Headers.Append(AuthorizationHeader, $"{JwtBearerDefaults.AuthenticationScheme} {token}");
+            context.Request.Headers.Append(HeaderNames.Authorization, $"{JwtBearerDefaults.AuthenticationScheme} {token}");
 
         return next(context);
     }
