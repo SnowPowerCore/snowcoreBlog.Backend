@@ -64,7 +64,7 @@ namespace Marten.Generated.DocumentStorage
             if (document.PublicKeyCredentialId != null)
             {
                 var parameter0 = parameterBuilder.AppendParameter(document.PublicKeyCredentialId);
-                parameter0.NpgsqlDbType = NpgsqlTypes.NpgsqlDbType.Uuid;
+                parameter0.NpgsqlDbType = NpgsqlTypes.NpgsqlDbType.Array | NpgsqlTypes.NpgsqlDbType.Smallint;
             }
 
             else
@@ -138,7 +138,7 @@ namespace Marten.Generated.DocumentStorage
             if (document.PublicKeyCredentialId != null)
             {
                 var parameter0 = parameterBuilder.AppendParameter(document.PublicKeyCredentialId);
-                parameter0.NpgsqlDbType = NpgsqlTypes.NpgsqlDbType.Uuid;
+                parameter0.NpgsqlDbType = NpgsqlTypes.NpgsqlDbType.Array | NpgsqlTypes.NpgsqlDbType.Smallint;
             }
 
             else
@@ -212,7 +212,7 @@ namespace Marten.Generated.DocumentStorage
             if (document.PublicKeyCredentialId != null)
             {
                 var parameter0 = parameterBuilder.AppendParameter(document.PublicKeyCredentialId);
-                parameter0.NpgsqlDbType = NpgsqlTypes.NpgsqlDbType.Uuid;
+                parameter0.NpgsqlDbType = NpgsqlTypes.NpgsqlDbType.Array | NpgsqlTypes.NpgsqlDbType.Smallint;
             }
 
             else
@@ -811,7 +811,7 @@ namespace Marten.Generated.DocumentStorage
 
         public override void LoadRow(Npgsql.NpgsqlBinaryImporter writer, snowcoreBlog.Backend.IAM.Core.Entities.Fido2AuthenticatorTransportEntity document, Marten.Storage.Tenant tenant, Marten.ISerializer serializer)
         {
-            writer.Write(GetNullable<System.Guid>(document.PublicKeyCredentialId), NpgsqlTypes.NpgsqlDbType.Uuid);
+            writer.Write(document.PublicKeyCredentialId, NpgsqlTypes.NpgsqlDbType.Array | NpgsqlTypes.NpgsqlDbType.Smallint);
             writer.Write(document.GetType().FullName, NpgsqlTypes.NpgsqlDbType.Varchar);
             writer.Write(document.Id, NpgsqlTypes.NpgsqlDbType.Uuid);
             writer.Write(Marten.Schema.Identity.CombGuidIdGeneration.NewGuid(), NpgsqlTypes.NpgsqlDbType.Uuid);
@@ -821,7 +821,7 @@ namespace Marten.Generated.DocumentStorage
 
         public override async System.Threading.Tasks.Task LoadRowAsync(Npgsql.NpgsqlBinaryImporter writer, snowcoreBlog.Backend.IAM.Core.Entities.Fido2AuthenticatorTransportEntity document, Marten.Storage.Tenant tenant, Marten.ISerializer serializer, System.Threading.CancellationToken cancellation)
         {
-            await writer.WriteAsync(GetNullable<System.Guid>(document.PublicKeyCredentialId), NpgsqlTypes.NpgsqlDbType.Uuid, cancellation);
+            await writer.WriteAsync(document.PublicKeyCredentialId, NpgsqlTypes.NpgsqlDbType.Array | NpgsqlTypes.NpgsqlDbType.Smallint, cancellation);
             await writer.WriteAsync(document.GetType().FullName, NpgsqlTypes.NpgsqlDbType.Varchar, cancellation);
             await writer.WriteAsync(document.Id, NpgsqlTypes.NpgsqlDbType.Uuid, cancellation);
             await writer.WriteAsync(Marten.Schema.Identity.CombGuidIdGeneration.NewGuid(), NpgsqlTypes.NpgsqlDbType.Uuid, cancellation);

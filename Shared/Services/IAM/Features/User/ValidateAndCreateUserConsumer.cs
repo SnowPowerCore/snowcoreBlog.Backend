@@ -62,7 +62,7 @@ public class ValidateAndCreateUserConsumer(IHasher hasher,
             async Task<bool> IsCredentialIdUniqueToUserAsync(IsCredentialIdUniqueToUserParams @params, CancellationToken cancellationToken) =>
                 !await userManager.Users
                     .SelectMany(user => user.PublicKeyCredentials)
-                    .AnyAsync(credential => credential.Id == new Guid(@params.CredentialId), context.CancellationToken);
+                    .AnyAsync(credential => credential.PublicKeyCredentialId == @params.CredentialId, context.CancellationToken);
 
             var credentialResult = await fido2.MakeNewCredentialAsync(
                 context.Message.AuthenticatorAttestation.ToMakeNewCredentialParams(
@@ -80,7 +80,7 @@ public class ValidateAndCreateUserConsumer(IHasher hasher,
 
             var credential = new Fido2PublicKeyCredentialEntity
             {
-                Id = new Guid(credentialResult.Id),
+                PublicKeyCredentialId = credentialResult.Id,
                 PublicKey = credentialResult.PublicKey,
                 SignatureCounter = credentialResult.SignCount,
                 IsBackupEligible = credentialResult.IsBackupEligible,
@@ -96,7 +96,7 @@ public class ValidateAndCreateUserConsumer(IHasher hasher,
             {
                 credential.AuthenticatorTransports.Add(new Fido2AuthenticatorTransportEntity
                 {
-                    PublicKeyCredentialId = new Guid(credentialResult.Id),
+                    PublicKeyCredentialId = credentialResult.Id,
                     Value = authenticatorTransport
                 });
             }
@@ -105,7 +105,7 @@ public class ValidateAndCreateUserConsumer(IHasher hasher,
             {
                 credential.DevicePublicKeys.Add(new Fido2DevicePublicKeyEntity
                 {
-                    PublicKeyCredentialId = new Guid(credentialResult.Id),
+                    PublicKeyCredentialId = credentialResult.Id,
                     Value = credentialResult.PublicKey
                 });
             }

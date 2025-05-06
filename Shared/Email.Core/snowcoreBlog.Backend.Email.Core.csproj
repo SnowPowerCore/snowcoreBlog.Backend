@@ -18,9 +18,4 @@
     <None Update="**/FodyWeavers.*" Visible="false" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Constants\" />
-    <Folder Include="Contracts\" />
-  </ItemGroup>
-
 </Project>

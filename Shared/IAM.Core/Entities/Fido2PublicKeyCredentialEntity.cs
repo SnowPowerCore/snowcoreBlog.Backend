@@ -4,6 +4,8 @@ namespace snowcoreBlog.Backend.IAM.Core.Entities;
 
 public record Fido2PublicKeyCredentialEntity : BaseEntity
 {
+    public required byte[] PublicKeyCredentialId { get; init; }
+
     public required byte[] PublicKey { get; init; }
 
     public required uint SignatureCounter { get; init; }
