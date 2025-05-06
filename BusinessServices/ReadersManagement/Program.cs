@@ -7,6 +7,7 @@ using System.Text.Json.Serialization;
 using FastEndpoints;
 using FastEndpoints.OpenTelemetry.Middleware;
 using FastEndpoints.Swagger;
+using Fido2NetLib;
 using Ixnas.AltchaNet;
 using JasperFx.CodeGeneration;
 using Marten;
