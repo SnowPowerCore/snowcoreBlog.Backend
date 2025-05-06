@@ -35,8 +35,4 @@
     <ProjectReference Include="..\..\Push.Core\snowcoreBlog.Backend.Push.Core.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Services\" />
-  </ItemGroup>
-
 </Project>

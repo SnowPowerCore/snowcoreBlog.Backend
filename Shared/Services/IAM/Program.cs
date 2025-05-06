@@ -77,7 +77,9 @@ builder.Services.AddMarten(static opts =>
         .Index(static x => new { x.PublicKeyCredentialId, x.Value }, static x => x.IsUnique = true)
         .ForeignKey<Fido2PublicKeyCredentialEntity>(static x => x.PublicKeyCredentialId!)
         .SoftDeleted();
-    opts.Schema.For<Fido2PublicKeyCredentialEntity>().SoftDeleted();
+    opts.Schema.For<Fido2PublicKeyCredentialEntity>()
+        .Index(static x => x.PublicKeyCredentialId, static x => x.IsUnique = true)
+        .SoftDeleted();
 })
     .UseLightweightSessions()
     .UseNpgsqlDataSource();
