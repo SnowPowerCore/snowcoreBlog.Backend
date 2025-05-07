@@ -18,11 +18,14 @@ public class ValidateAndCreateAssertionConsumer(IFido2 fido2,
     {
         var normalizedEmail = userManager.NormalizeEmail(context.Message.Email);
 
-        var allowedCredentials = await userManager.Users
+        var sourceCredentials = await userManager.Users
             .Where(user => user.NormalizedEmail == normalizedEmail)
             .SelectMany(user => user.PublicKeyCredentials)
-            .Select(credential => new PublicKeyCredentialDescriptor(credential.PublicKeyCredentialId))
             .ToListAsync(context.CancellationToken);
+
+        var allowedCredentials = sourceCredentials
+            .Select(credential => new PublicKeyCredentialDescriptor(credential.PublicKeyCredentialId))
+            .ToList();
 
         if (allowedCredentials is default(List<PublicKeyCredentialDescriptor>))
         {
@@ -35,7 +38,7 @@ public class ValidateAndCreateAssertionConsumer(IFido2 fido2,
         var extensions = new AuthenticationExtensionsClientInputs
         {
             Extensions = true,
-            UserVerificationMethod = true
+            UserVerificationMethod = true,
         };
 
         await context.RespondAsync(new DataResult<AssertionOptions>(fido2.GetAssertionOptions(
