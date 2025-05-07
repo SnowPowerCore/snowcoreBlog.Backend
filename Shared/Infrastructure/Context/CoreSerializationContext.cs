@@ -48,6 +48,8 @@ namespace snowcoreBlog.Backend.Infrastructure;
 [JsonSerializable(typeof(ValidateTempUserExists))]
 [JsonSerializable(typeof(ValidateUserNickNameTaken))]
 [JsonSerializable(typeof(ReaderAccountTempUserCreated))]
+[JsonSerializable(typeof(ReaderAccountUserCreated))]
+[JsonSerializable(typeof(ReaderAccountCreated))]
 [JsonSerializable(typeof(CheckEmailDomain))]
 [JsonSerializable(typeof(SendGenericEmail))]
 [JsonSerializable(typeof(SendTemplatedEmail))]

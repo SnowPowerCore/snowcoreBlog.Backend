@@ -10,6 +10,7 @@ using snowcoreBlog.Backend.ReadersManagement.Delegates;
 using snowcoreBlog.Backend.ReadersManagement.Interfaces.Repositories.Marten;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 using snowcoreBlog.PublicApi.Constants;
+using snowcoreBlog.PublicApi.Utilities.DataResult;
 
 namespace snowcoreBlog.Backend.ReadersManagement.Steps.ReaderAccount.Confirm;
 
@@ -18,11 +19,11 @@ public class CreateReaderEntityForNewUserStep(IPublishEndpoint publishEndpoint,
 {
     public async Task<IMaybe<ReaderAccountCreatedDto>> InvokeAsync(ConfirmCreateReaderAccountContext context, ConfirmCreateReaderAccountDelegate next, CancellationToken token = default)
     {
-        var createUserForReaderAccountResult = context.GetFromData<Some<UserCreationResult>>(
-            ReaderAccountUserConstants.CreateTempUserForReaderAccountResult);
+        var createUserForReaderAccountResult = context.GetFromData<DataResult<UserCreationResult>>(
+            ReaderAccountUserConstants.CreateUserForReaderAccountResult);
 
         var newReaderEntity = await readerRepository
-            .AddOrUpdateAsync(createUserForReaderAccountResult!.Value.ToEntity(), token: token);
+            .AddOrUpdateAsync(createUserForReaderAccountResult!.Value!.ToEntity(), token: token);
         if (newReaderEntity is not default(ReaderEntity))
         {
             var readerAccountCreated = new ReaderAccountCreated(newReaderEntity!.Id, newReaderEntity.NickName);

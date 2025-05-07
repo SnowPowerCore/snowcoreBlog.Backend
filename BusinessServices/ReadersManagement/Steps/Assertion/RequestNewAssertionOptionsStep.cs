@@ -13,14 +13,14 @@ using StackExchange.Redis;
 
 namespace snowcoreBlog.Backend.ReadersManagement.Steps.Assertion;
 
-public class RequestNewAssertionOptionsStep(IRequestClient<ValidateAndCreateAssertion> requestClientOnRegister,
+public class RequestNewAssertionOptionsStep(IRequestClient<ValidateAndCreateAssertion> requestClientOnLogin,
                                             IConnectionMultiplexer redis) : IStep<RequestAssertionOptionsDelegate, RequestAssertionOptionsContext, IMaybe<AssertionOptions>>
 {
     private const string Fido2AssertionOptions = nameof(Fido2AssertionOptions);
 
     public async Task<IMaybe<AssertionOptions>> InvokeAsync(RequestAssertionOptionsContext context, RequestAssertionOptionsDelegate next, CancellationToken token = default)
     {
-        var result = await requestClientOnRegister.GetResponse<DataResult<AssertionOptions>>(
+        var result = await requestClientOnLogin.GetResponse<DataResult<AssertionOptions>>(
             context.RequestAssertionOptions.ToValidate(), token);
         if (result.Message.IsSuccess)
         {

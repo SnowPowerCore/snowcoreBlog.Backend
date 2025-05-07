@@ -80,6 +80,7 @@ public class ValidateAndCreateUserConsumer(IHasher hasher,
 
             var credential = new Fido2PublicKeyCredentialEntity
             {
+                Id = Guid.CreateVersion7(),
                 PublicKeyCredentialId = credentialResult.Id,
                 PublicKey = credentialResult.PublicKey,
                 SignatureCounter = credentialResult.SignCount,
@@ -96,6 +97,7 @@ public class ValidateAndCreateUserConsumer(IHasher hasher,
             {
                 credential.AuthenticatorTransports.Add(new Fido2AuthenticatorTransportEntity
                 {
+                    Id = Guid.CreateVersion7(),
                     PublicKeyCredentialId = credentialResult.Id,
                     Value = authenticatorTransport
                 });
@@ -105,6 +107,7 @@ public class ValidateAndCreateUserConsumer(IHasher hasher,
             {
                 credential.DevicePublicKeys.Add(new Fido2DevicePublicKeyEntity
                 {
+                    Id = Guid.CreateVersion7(),
                     PublicKeyCredentialId = credentialResult.Id,
                     Value = credentialResult.PublicKey
                 });

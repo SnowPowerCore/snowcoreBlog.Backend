@@ -35,9 +35,13 @@ public class CreateReaderAccountUserStep(IRequestClient<CreateUser> client,
             context.ConfirmRequest.ToCreateUser(attestationOptionsForUser!), token);
         if (response.Message.IsSuccess)
         {
-            var responseObj = response!.Message.Value;
-            var readerAccountUserCreated = new ReaderAccountUserCreated(responseObj!.Id, responseObj.Email);
+            var responseObj = response.Message;
+            var userCreationResult = responseObj.Value;
+            var readerAccountUserCreated = new ReaderAccountUserCreated(userCreationResult!.Id, userCreationResult.Email);
 
+            context.SetDataWith(
+                ReaderAccountUserConstants.CreateUserForReaderAccountResult,
+                responseObj);
             context.SetDataWith(
                 ReaderAccountConstants.CreateReaderAccountUserResult,
                 Maybe.Create(readerAccountUserCreated));
