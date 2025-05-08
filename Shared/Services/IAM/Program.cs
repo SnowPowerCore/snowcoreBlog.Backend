@@ -52,7 +52,7 @@ builder.Services.Configure<ValidStates<HashedStringsVerificationResult>>(static 
 builder.WebHost.UseKestrelHttpsConfiguration();
 builder.AddServiceDefaults();
 builder.Services.AddOpenTelemetry().ConnectBackendServices();
-builder.Services.AddNpgsqlDataSource(builder.Configuration.GetConnectionString("db-iam-entities")!);
+builder.AddNpgsqlDataSource(connectionName: "db-iam-entities");
 //builder.Services.AddNpgsqlDataSource("Host=localhost;Port=54523;Username=postgres;Password=xQ6S1zf+)!kTnjFFCtt(Ks");
 builder.Services.AddMarten(static opts =>
 {

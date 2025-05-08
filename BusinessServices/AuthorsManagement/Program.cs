@@ -27,7 +27,7 @@ builder.Services.Configure<ForwardedHeadersOptions>(static options =>
 builder.WebHost.UseKestrelHttpsConfiguration();
 builder.AddServiceDefaults();
 builder.Services.AddOpenTelemetry().ConnectBackendServices();
-builder.Services.AddNpgsqlDataSource("db-snowcore-blog-entities");
+builder.AddNpgsqlDataSource(connectionName: "db-snowcore-blog-entities");
 builder.Services.AddMarten(static opts =>
 {
     opts.Policies.AllDocumentsSoftDeleted();
