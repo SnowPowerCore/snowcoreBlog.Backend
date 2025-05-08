@@ -8,8 +8,8 @@
 
   <ItemGroup>
     <PackageReference Include="Fido2" Version="4.0.0-beta.16" />
-    <PackageReference Include="Marten" Version="7.39.6" />
-    <PackageReference Include="Marten.CommandLine" Version="7.39.6" />
+    <PackageReference Include="Marten" Version="7.40.3" />
+    <PackageReference Include="Marten.CommandLine" Version="7.40.3" />
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Fody" Version="6.9.2">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

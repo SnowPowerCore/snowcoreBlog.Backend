@@ -25,7 +25,7 @@ builder.AddServiceDefaults();
 builder.Services.AddOpenTelemetry()
     .WithTracing(tracing => tracing.AddSource("Marten"))
     .WithMetrics(metrics => metrics.AddMeter("Marten"));
-builder.Services.AddNpgsqlDataSource(builder.Configuration.GetConnectionString("db-iam-entities"));
+builder.AddNpgsqlDataSource(connectionName: "db-iam-entities");
 builder.Services.AddMarten(opts =>
 {
     opts.Policies.AllDocumentsSoftDeleted();
