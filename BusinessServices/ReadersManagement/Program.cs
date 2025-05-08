@@ -7,7 +7,6 @@ using System.Text.Json.Serialization;
 using FastEndpoints;
 using FastEndpoints.OpenTelemetry.Middleware;
 using FastEndpoints.Swagger;
-using Fido2NetLib;
 using Ixnas.AltchaNet;
 using JasperFx.CodeGeneration;
 using Marten;
@@ -102,7 +101,7 @@ builder.WebHost.UseKestrelHttpsConfiguration();
 builder.AddServiceDefaults();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddOpenTelemetry().ConnectBackendServices();
-builder.Services.AddNpgsqlDataSource(builder.Configuration.GetConnectionString("db-snowcore-blog-entities")!);
+builder.AddNpgsqlDataSource(connectionName: "db-snowcore-blog-entities");
 //builder.Services.AddNpgsqlDataSource("Host=localhost;Port=54523;Username=postgres;Password=xQ6S1zf+)!kTnjFFCtt(Ks");
 builder.Services.AddMarten(static options =>
 {

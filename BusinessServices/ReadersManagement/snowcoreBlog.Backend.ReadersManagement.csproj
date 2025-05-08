@@ -10,7 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Aspire.Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.1.0" />
+    <PackageReference Include="Aspire.Npgsql" Version="9.1.0" />
     <PackageReference Include="Aspire.StackExchange.Redis" Version="9.1.0" />
     <PackageReference Include="FastEndpoints" Version="6.0.0" />
     <PackageReference Include="FastEndpoints.Generator" Version="6.0.0">

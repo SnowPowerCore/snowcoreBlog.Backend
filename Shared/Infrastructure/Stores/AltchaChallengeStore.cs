@@ -1,24 +1,24 @@
 using Ixnas.AltchaNet;
 using Marten;
-using Microsoft.Extensions.Configuration;
+using Npgsql;
 using snowcoreBlog.Backend.Infrastructure.Entities;
 
 namespace snowcoreBlog.Backend.Infrastructure.Stores;
 
 public class AltchaChallengeStore : IAltchaCancellableChallengeStore
 {
-    private readonly string _connectionString;
+    private readonly NpgsqlDataSource _dataSource;
 
-    public AltchaChallengeStore(IConfiguration configuration)
+    public AltchaChallengeStore(NpgsqlDataSource dataSource)
     {
-        _connectionString = configuration.GetConnectionString("db-snowcore-blog-entities")!;
+        _dataSource = dataSource;
     }
 
     public async Task<bool> Exists(string challenge, CancellationToken cancellationToken)
     {
         using var store = DocumentStore.For(opts =>
         {
-            opts.Connection(_connectionString);
+            opts.Connection(_dataSource);
         });
         await using var session = store.LightweightSession();
         session.DeleteWhere<AltchaStoredChallengeEntity>(storedChallenge =>
@@ -32,7 +32,7 @@ public class AltchaChallengeStore : IAltchaCancellableChallengeStore
     {
         using var store = DocumentStore.For(opts =>
         {
-            opts.Connection(_connectionString);
+            opts.Connection(_dataSource);
         });
         await using var session = store.LightweightSession();
         session.Store(new AltchaStoredChallengeEntity()
