@@ -10,10 +10,12 @@ public static partial class ApplicationUserExtensions
 
     public static ApplicationUserEntity ToUserEntity(
         this ApplicationTempUserEntity tempEntity,
+        Guid userId,
         Fido2PublicKeyCredentialEntity publicKeyCredentialEntity,
         bool emailConfirmed = true)
     {
         var userEntity = MapperToUserEntity(tempEntity);
+        userEntity.Id = userId.ToString();
         userEntity.PublicKeyCredentials = [publicKeyCredentialEntity];
         userEntity.EmailConfirmed = emailConfirmed;
         return userEntity;

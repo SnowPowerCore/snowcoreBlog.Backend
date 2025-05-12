@@ -59,10 +59,13 @@ public class ValidateAndCreateUserConsumer(IHasher hasher,
 
             var options = CredentialCreateOptions.FromJson(context.Message.AttestationOptionsJson);
 
-            async Task<bool> IsCredentialIdUniqueToUserAsync(IsCredentialIdUniqueToUserParams @params, CancellationToken cancellationToken) =>
-                !await userManager.Users
+            async Task<bool> IsCredentialIdUniqueToUserAsync(IsCredentialIdUniqueToUserParams @params, CancellationToken cancellationToken)
+            {
+                var creds = await userManager.Users
                     .SelectMany(user => user.PublicKeyCredentials)
-                    .AnyAsync(credential => credential.PublicKeyCredentialId == @params.CredentialId, context.CancellationToken);
+                    .ToListAsync(context.CancellationToken);
+                return !creds.Any(credential => credential.PublicKeyCredentialId.SequenceEqual(@params.CredentialId));
+            }
 
             var credentialResult = await fido2.MakeNewCredentialAsync(
                 context.Message.AuthenticatorAttestation.ToMakeNewCredentialParams(
@@ -78,6 +81,8 @@ public class ValidateAndCreateUserConsumer(IHasher hasher,
                 return;
             }
 
+            var userId = new Guid(credentialResult.User.Id);
+
             var credential = new Fido2PublicKeyCredentialEntity
             {
                 Id = Guid.CreateVersion7(),
@@ -90,7 +95,7 @@ public class ValidateAndCreateUserConsumer(IHasher hasher,
                 AttestationClientDataJson = credentialResult.AttestationClientDataJson,
                 AttestationFormat = credentialResult.AttestationFormat,
                 AaGuid = credentialResult.AaGuid,
-                UserId = new Guid(credentialResult.User.Id)
+                UserId = userId
             };
 
             foreach (var authenticatorTransport in credentialResult.Transports)
@@ -113,16 +118,16 @@ public class ValidateAndCreateUserConsumer(IHasher hasher,
                 });
             }
 
-            var userEntity = tempUserEntity.ToUserEntity(credential);
+            var userEntity = tempUserEntity.ToUserEntity(userId, credential);
             var creationResult = await userManager.CreateAsync(userEntity);
             if (creationResult.Succeeded)
             {
-                await applicationTempUserRepository.RemoveAsync(tempUserEntity, token: context.CancellationToken);
+                await applicationTempUserRepository.RemoveAsync(tempUserEntity, token: CancellationToken.None);
 
                 await context.RespondAsync(
                     new DataResult<UserCreationResult>(new UserCreationResult
                     {
-                        Id = Guid.Parse(userEntity.Id),
+                        Id = userId,
                         Email = userEntity.Email!,
                         UserName = userEntity.UserName!
                     }));

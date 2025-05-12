@@ -32,7 +32,7 @@ public class ValidateAndCreateAttestationConsumer(IHasher hasher,
                 // so we change the token expiration date to be significantly closer: 5 mins from the current time.
                 var updatedTempUser = await applicationTempUserRepository
                     .AddOrUpdateAsync(tempUser with { ActivationTokenExpirationDate = dateTimeNow.AddMinutes(5) }, tempUser.Id,
-                        token: context.CancellationToken);
+                        token: CancellationToken.None);
 
                 var user = new Fido2User
                 {

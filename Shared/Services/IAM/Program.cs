@@ -70,16 +70,28 @@ builder.Services.AddMarten(static opts =>
     opts.Schema.For<ApplicationAdminEntity>().SoftDeleted();
     opts.Schema.For<ApplicationUserEntity>().SoftDeleted();
     opts.Schema.For<Fido2AuthenticatorTransportEntity>()
-        .Index(static x => new { x.PublicKeyCredentialId, x.Value }, static x => x.IsUnique = true)
-        .ForeignKey<Fido2PublicKeyCredentialEntity>(static x => x.PublicKeyCredentialId!)
-        .SoftDeleted();
+        .Index(static x => new { x.PublicKeyCredentialId, x.Value }, static x =>
+        {
+            x.Name = "iam_uq_fido2_auth_trnsprt_cred_id_val_idx";
+            x.IsUnique = true;
+        })
+        .ForeignKey<Fido2PublicKeyCredentialEntity>(static x => x.PublicKeyCredentialId!, x => x.Name = "iam_fk_fido2_auth_trnsprt_pub_key_cred_idx")
+        .SoftDeletedWithIndex(static x => x.Name = "iam_del_fido2_auth_trnsprt_idx");
     opts.Schema.For<Fido2DevicePublicKeyEntity>()
-        .Index(static x => new { x.PublicKeyCredentialId, x.Value }, static x => x.IsUnique = true)
-        .ForeignKey<Fido2PublicKeyCredentialEntity>(static x => x.PublicKeyCredentialId!)
-        .SoftDeleted();
+        .Index(static x => new { x.PublicKeyCredentialId, x.Value }, static x =>
+        {
+            x.Name = "iam_uq_fido2_dev_pub_key_cred_id_val_idx";
+            x.IsUnique = true;
+        })
+        .ForeignKey<Fido2PublicKeyCredentialEntity>(static x => x.PublicKeyCredentialId!, x => x.Name = "iam_fk_fido2_dev_pub_key_pub_key_cred_idx")
+        .SoftDeletedWithIndex(static x => x.Name = "iam_del_fido2_dev_pub_key_idx");
     opts.Schema.For<Fido2PublicKeyCredentialEntity>()
-        .Index(static x => x.PublicKeyCredentialId, static x => x.IsUnique = true)
-        .SoftDeleted();
+        .Index(static x => x.PublicKeyCredentialId, static x =>
+        {
+            x.Name = "iam_pk_fido2_pub_key_cred_idx";
+            x.IsUnique = true;
+        })
+        .SoftDeletedWithIndex(static x => x.Name = "iam_del_fido2_pub_key_cred_idx");
 })
     .UseLightweightSessions()
     .UseNpgsqlDataSource();
