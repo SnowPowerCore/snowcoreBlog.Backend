@@ -60,18 +60,7 @@ namespace Marten.Generated.DocumentStorage
         public override void ConfigureParameters(Weasel.Postgresql.IGroupedParameterBuilder parameterBuilder, Weasel.Postgresql.ICommandBuilder builder, snowcoreBlog.Backend.IAM.Core.Entities.Fido2DevicePublicKeyEntity document, Marten.Internal.IMartenSession session)
         {
             builder.Append("select public.mt_upsert_fido2devicepublickeyentity(");
-
-            if (document.PublicKeyCredentialId != null)
-            {
-                var parameter0 = parameterBuilder.AppendParameter(document.PublicKeyCredentialId);
-                parameter0.NpgsqlDbType = NpgsqlTypes.NpgsqlDbType.Array | NpgsqlTypes.NpgsqlDbType.Smallint;
-            }
-
-            else
-            {
-                var parameter0 = parameterBuilder.AppendParameter<object>(System.DBNull.Value);
-            }
-
+            var parameter0 = parameterBuilder.AppendParameter(document.PublicKeyId);
             var parameter1 = parameterBuilder.AppendParameter(session.Serializer.ToJson(_document));
             parameter1.NpgsqlDbType = NpgsqlTypes.NpgsqlDbType.Jsonb;
             // .Net Class Type
@@ -134,18 +123,7 @@ namespace Marten.Generated.DocumentStorage
         public override void ConfigureParameters(Weasel.Postgresql.IGroupedParameterBuilder parameterBuilder, Weasel.Postgresql.ICommandBuilder builder, snowcoreBlog.Backend.IAM.Core.Entities.Fido2DevicePublicKeyEntity document, Marten.Internal.IMartenSession session)
         {
             builder.Append("select public.mt_insert_fido2devicepublickeyentity(");
-
-            if (document.PublicKeyCredentialId != null)
-            {
-                var parameter0 = parameterBuilder.AppendParameter(document.PublicKeyCredentialId);
-                parameter0.NpgsqlDbType = NpgsqlTypes.NpgsqlDbType.Array | NpgsqlTypes.NpgsqlDbType.Smallint;
-            }
-
-            else
-            {
-                var parameter0 = parameterBuilder.AppendParameter<object>(System.DBNull.Value);
-            }
-
+            var parameter0 = parameterBuilder.AppendParameter(document.PublicKeyId);
             var parameter1 = parameterBuilder.AppendParameter(session.Serializer.ToJson(_document));
             parameter1.NpgsqlDbType = NpgsqlTypes.NpgsqlDbType.Jsonb;
             // .Net Class Type
@@ -208,18 +186,7 @@ namespace Marten.Generated.DocumentStorage
         public override void ConfigureParameters(Weasel.Postgresql.IGroupedParameterBuilder parameterBuilder, Weasel.Postgresql.ICommandBuilder builder, snowcoreBlog.Backend.IAM.Core.Entities.Fido2DevicePublicKeyEntity document, Marten.Internal.IMartenSession session)
         {
             builder.Append("select public.mt_update_fido2devicepublickeyentity(");
-
-            if (document.PublicKeyCredentialId != null)
-            {
-                var parameter0 = parameterBuilder.AppendParameter(document.PublicKeyCredentialId);
-                parameter0.NpgsqlDbType = NpgsqlTypes.NpgsqlDbType.Array | NpgsqlTypes.NpgsqlDbType.Smallint;
-            }
-
-            else
-            {
-                var parameter0 = parameterBuilder.AppendParameter<object>(System.DBNull.Value);
-            }
-
+            var parameter0 = parameterBuilder.AppendParameter(document.PublicKeyId);
             var parameter1 = parameterBuilder.AppendParameter(session.Serializer.ToJson(_document));
             parameter1.NpgsqlDbType = NpgsqlTypes.NpgsqlDbType.Jsonb;
             // .Net Class Type
@@ -780,13 +747,13 @@ namespace Marten.Generated.DocumentStorage
         }
 
 
-        public const string MAIN_LOADER_SQL = "COPY public.mt_doc_fido2devicepublickeyentity(\"public_key_credential_id\", \"mt_dotnet_type\", \"id\", \"mt_version\", \"data\") FROM STDIN BINARY";
+        public const string MAIN_LOADER_SQL = "COPY public.mt_doc_fido2devicepublickeyentity(\"public_key_id\", \"mt_dotnet_type\", \"id\", \"mt_version\", \"data\") FROM STDIN BINARY";
 
-        public const string TEMP_LOADER_SQL = "COPY mt_doc_fido2devicepublickeyentity_temp(\"public_key_credential_id\", \"mt_dotnet_type\", \"id\", \"mt_version\", \"data\") FROM STDIN BINARY";
+        public const string TEMP_LOADER_SQL = "COPY mt_doc_fido2devicepublickeyentity_temp(\"public_key_id\", \"mt_dotnet_type\", \"id\", \"mt_version\", \"data\") FROM STDIN BINARY";
 
-        public const string COPY_NEW_DOCUMENTS_SQL = "insert into public.mt_doc_fido2devicepublickeyentity (\"id\", \"data\", \"mt_version\", \"mt_dotnet_type\", \"public_key_credential_id\", \"mt_deleted\", \"mt_deleted_at\", mt_last_modified) (select mt_doc_fido2devicepublickeyentity_temp.\"id\", mt_doc_fido2devicepublickeyentity_temp.\"data\", mt_doc_fido2devicepublickeyentity_temp.\"mt_version\", mt_doc_fido2devicepublickeyentity_temp.\"mt_dotnet_type\", mt_doc_fido2devicepublickeyentity_temp.\"public_key_credential_id\", mt_doc_fido2devicepublickeyentity_temp.\"mt_deleted\", mt_doc_fido2devicepublickeyentity_temp.\"mt_deleted_at\", transaction_timestamp() from mt_doc_fido2devicepublickeyentity_temp left join public.mt_doc_fido2devicepublickeyentity on mt_doc_fido2devicepublickeyentity_temp.id = public.mt_doc_fido2devicepublickeyentity.id where public.mt_doc_fido2devicepublickeyentity.id is null)";
+        public const string COPY_NEW_DOCUMENTS_SQL = "insert into public.mt_doc_fido2devicepublickeyentity (\"id\", \"data\", \"mt_version\", \"mt_dotnet_type\", \"public_key_id\", \"mt_deleted\", \"mt_deleted_at\", mt_last_modified) (select mt_doc_fido2devicepublickeyentity_temp.\"id\", mt_doc_fido2devicepublickeyentity_temp.\"data\", mt_doc_fido2devicepublickeyentity_temp.\"mt_version\", mt_doc_fido2devicepublickeyentity_temp.\"mt_dotnet_type\", mt_doc_fido2devicepublickeyentity_temp.\"public_key_id\", mt_doc_fido2devicepublickeyentity_temp.\"mt_deleted\", mt_doc_fido2devicepublickeyentity_temp.\"mt_deleted_at\", transaction_timestamp() from mt_doc_fido2devicepublickeyentity_temp left join public.mt_doc_fido2devicepublickeyentity on mt_doc_fido2devicepublickeyentity_temp.id = public.mt_doc_fido2devicepublickeyentity.id where public.mt_doc_fido2devicepublickeyentity.id is null)";
 
-        public const string OVERWRITE_SQL = "update public.mt_doc_fido2devicepublickeyentity target SET data = source.data, mt_version = source.mt_version, mt_dotnet_type = source.mt_dotnet_type, public_key_credential_id = source.public_key_credential_id, mt_deleted = source.mt_deleted, mt_deleted_at = source.mt_deleted_at, mt_last_modified = transaction_timestamp() FROM mt_doc_fido2devicepublickeyentity_temp source WHERE source.id = target.id";
+        public const string OVERWRITE_SQL = "update public.mt_doc_fido2devicepublickeyentity target SET data = source.data, mt_version = source.mt_version, mt_dotnet_type = source.mt_dotnet_type, public_key_id = source.public_key_id, mt_deleted = source.mt_deleted, mt_deleted_at = source.mt_deleted_at, mt_last_modified = transaction_timestamp() FROM mt_doc_fido2devicepublickeyentity_temp source WHERE source.id = target.id";
 
         public const string CREATE_TEMP_TABLE_FOR_COPYING_SQL = "create temporary table mt_doc_fido2devicepublickeyentity_temp (like public.mt_doc_fido2devicepublickeyentity including defaults)";
 
@@ -811,7 +778,7 @@ namespace Marten.Generated.DocumentStorage
 
         public override void LoadRow(Npgsql.NpgsqlBinaryImporter writer, snowcoreBlog.Backend.IAM.Core.Entities.Fido2DevicePublicKeyEntity document, Marten.Storage.Tenant tenant, Marten.ISerializer serializer)
         {
-            writer.Write(document.PublicKeyCredentialId, NpgsqlTypes.NpgsqlDbType.Array | NpgsqlTypes.NpgsqlDbType.Smallint);
+            writer.Write(document.PublicKeyId, NpgsqlTypes.NpgsqlDbType.Uuid);
             writer.Write(document.GetType().FullName, NpgsqlTypes.NpgsqlDbType.Varchar);
             writer.Write(document.Id, NpgsqlTypes.NpgsqlDbType.Uuid);
             writer.Write(Marten.Schema.Identity.CombGuidIdGeneration.NewGuid(), NpgsqlTypes.NpgsqlDbType.Uuid);
@@ -821,7 +788,7 @@ namespace Marten.Generated.DocumentStorage
 
         public override async System.Threading.Tasks.Task LoadRowAsync(Npgsql.NpgsqlBinaryImporter writer, snowcoreBlog.Backend.IAM.Core.Entities.Fido2DevicePublicKeyEntity document, Marten.Storage.Tenant tenant, Marten.ISerializer serializer, System.Threading.CancellationToken cancellation)
         {
-            await writer.WriteAsync(document.PublicKeyCredentialId, NpgsqlTypes.NpgsqlDbType.Array | NpgsqlTypes.NpgsqlDbType.Smallint, cancellation);
+            await writer.WriteAsync(document.PublicKeyId, NpgsqlTypes.NpgsqlDbType.Uuid, cancellation);
             await writer.WriteAsync(document.GetType().FullName, NpgsqlTypes.NpgsqlDbType.Varchar, cancellation);
             await writer.WriteAsync(document.Id, NpgsqlTypes.NpgsqlDbType.Uuid, cancellation);
             await writer.WriteAsync(Marten.Schema.Identity.CombGuidIdGeneration.NewGuid(), NpgsqlTypes.NpgsqlDbType.Uuid, cancellation);
