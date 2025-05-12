@@ -24,6 +24,7 @@ namespace snowcoreBlog.Backend.Infrastructure;
 /// Defines the serialization context.
 /// </summary>
 [JsonSerializable(typeof(List<string>))]
+[JsonSerializable(typeof(List<byte>))]
 [JsonSerializable(typeof(Dictionary<string, string>))]
 [JsonSerializable(typeof(JsonElement))]
 [JsonSerializable(typeof(ScalarOptions))]

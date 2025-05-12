@@ -25,7 +25,7 @@ public class ValidateAndCreateAssertionConsumer(IFido2 fido2,
             .ToListAsync(context.CancellationToken);
 
         var allowedCredentials = creds
-            .Select(credential => new PublicKeyCredentialDescriptor(credential.Value.PublicKeyCredentialId))
+            .Select(credential => new PublicKeyCredentialDescriptor(credential.Value.PublicKeyCredentialId.ToArray()))
             .ToList();
 
         if (allowedCredentials is default(List<PublicKeyCredentialDescriptor>))

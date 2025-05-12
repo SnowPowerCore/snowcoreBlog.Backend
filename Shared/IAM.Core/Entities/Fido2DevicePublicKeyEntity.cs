@@ -6,7 +6,7 @@ public record Fido2DevicePublicKeyEntity : BaseEntity
 {
     public required Guid PublicKeyId { get; init; }
 
-    public required byte[] PublicKeyCredentialId { get; init; }
+    public required IList<byte> PublicKeyCredentialId { get; init; }
 
-    public required byte[] Value { get; init; }
+    public required IList<byte> Value { get; init; }
 }

@@ -70,7 +70,7 @@ public class CheckAndPerformAssertionConsumer(IFido2 fido2,
         var assertionResult = await fido2.MakeAssertionAsync(
             loginMsgAuthAssertion.ToMakeAssertionParams(
                 options,
-                targetCredential.PublicKey,
+                targetCredential.PublicKey.ToArray(),
                 targetCredential.SignatureCounter,
                 IsUserHandleOwnerOfCredentialIdCallback),
             ctxCancellationToken);
