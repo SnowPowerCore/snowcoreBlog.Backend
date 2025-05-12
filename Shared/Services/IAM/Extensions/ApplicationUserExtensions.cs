@@ -16,7 +16,10 @@ public static partial class ApplicationUserExtensions
     {
         var userEntity = MapperToUserEntity(tempEntity);
         userEntity.Id = userId.ToString();
-        userEntity.PublicKeyCredentials = [publicKeyCredentialEntity.Id];
+        if (userEntity.PublicKeyCredentials is not default(ICollection<Guid>))
+            userEntity.PublicKeyCredentials.Add(publicKeyCredentialEntity.Id);
+        else
+            userEntity.PublicKeyCredentials = [publicKeyCredentialEntity.Id];
         userEntity.EmailConfirmed = emailConfirmed;
         return userEntity;
     }

@@ -128,7 +128,6 @@ public class ValidateAndCreateUserConsumer(IHasher hasher,
             var creationResult = await userManager.CreateAsync(userEntity);
             if (creationResult.Succeeded)
             {
-
                 await applicationTempUserRepository.RemoveAsync(tempUserEntity, token: CancellationToken.None);
                 await fido2PublicKeyCredentialRepository.AddOrUpdateAsync(credential, token: CancellationToken.None);
                 
