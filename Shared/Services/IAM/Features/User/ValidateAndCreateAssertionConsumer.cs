@@ -18,13 +18,14 @@ public class ValidateAndCreateAssertionConsumer(IFido2 fido2,
     {
         var normalizedEmail = userManager.NormalizeEmail(context.Message.Email);
 
+        var creds = new Dictionary<Guid, Fido2PublicKeyCredentialEntity>();
         var sourceCredentials = await userManager.Users
             .Where(user => user.NormalizedEmail == normalizedEmail)
-            .SelectMany(user => user.PublicKeyCredentials)
+            .Include(creds).On(x => x.PublicKeyCredentials)
             .ToListAsync(context.CancellationToken);
 
-        var allowedCredentials = sourceCredentials
-            .Select(credential => new PublicKeyCredentialDescriptor(credential.PublicKeyCredentialId))
+        var allowedCredentials = creds
+            .Select(credential => new PublicKeyCredentialDescriptor(credential.Value.PublicKeyCredentialId))
             .ToList();
 
         if (allowedCredentials is default(List<PublicKeyCredentialDescriptor>))

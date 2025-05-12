@@ -23,6 +23,7 @@ public class ValidateAndCreateUserConsumer(IHasher hasher,
                                            IValidator<CreateUser> validator,
                                            IOptions<ValidStates<HashedStringsVerificationResult>> validStatesOptions,
                                            UserManager<ApplicationUserEntity> userManager,
+                                           IFido2PublicKeyCredentialRepository fido2PublicKeyCredentialRepository,
                                            IApplicationTempUserRepository applicationTempUserRepository) : IConsumer<CreateUser>
 {
     public async Task Consume(ConsumeContext<CreateUser> context)
@@ -61,10 +62,13 @@ public class ValidateAndCreateUserConsumer(IHasher hasher,
 
             async Task<bool> IsCredentialIdUniqueToUserAsync(IsCredentialIdUniqueToUserParams @params, CancellationToken cancellationToken)
             {
+                var userId = new Guid(@params.User.Id).ToString();
                 var creds = await userManager.Users
+                    .Where(user => user.Id == userId)
                     .SelectMany(user => user.PublicKeyCredentials)
                     .ToListAsync(context.CancellationToken);
-                return !creds.Any(credential => credential.PublicKeyCredentialId.SequenceEqual(@params.CredentialId));
+                return !await fido2PublicKeyCredentialRepository
+                    .CheckPublicKeyCredExistsAsync(creds.ToArray(), @params.CredentialId, cancellationToken);
             }
 
             var credentialResult = await fido2.MakeNewCredentialAsync(
@@ -124,8 +128,10 @@ public class ValidateAndCreateUserConsumer(IHasher hasher,
             var creationResult = await userManager.CreateAsync(userEntity);
             if (creationResult.Succeeded)
             {
-                await applicationTempUserRepository.RemoveAsync(tempUserEntity, token: CancellationToken.None);
 
+                await applicationTempUserRepository.RemoveAsync(tempUserEntity, token: CancellationToken.None);
+                await fido2PublicKeyCredentialRepository.AddOrUpdateAsync(credential, token: CancellationToken.None);
+                
                 await context.RespondAsync(
                     new DataResult<UserCreationResult>(new UserCreationResult
                     {
