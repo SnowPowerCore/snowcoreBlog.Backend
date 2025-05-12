@@ -11,5 +11,5 @@ public class ApplicationUserEntity : IdentityUser, IClaimsUser
 
     public string LastName { get; set; }
 
-    public ICollection<Fido2PublicKeyCredentialEntity> PublicKeyCredentials { get; set; } = [];
+    public ICollection<Guid> PublicKeyCredentials { get; set; } = [];
 }

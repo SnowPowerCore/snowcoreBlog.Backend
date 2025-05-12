@@ -65,6 +65,9 @@ builder.Services.AddMarten(static opts =>
     opts.RegisterCompiledQueryType(typeof(ApplicationGetTempUserByEmailQuery));
     opts.RegisterCompiledQueryType(typeof(ApplicationTempUserByEmailQuery));
     opts.RegisterCompiledQueryType(typeof(ApplicationTempUserByNickNameQuery));
+    opts.RegisterCompiledQueryType(typeof(PublicKeyCredentialByIdsAndCredIdQuery));
+    opts.RegisterCompiledQueryType(typeof(PublicKeyCredentialGetByUserIdAndCredIdQuery));
+    opts.RegisterCompiledQueryType(typeof(PublicKeyCredentialsGetByUserIdQuery));
     opts.GeneratedCodeMode = TypeLoadMode.Static;
     opts.UseSystemTextJsonForSerialization(configure: static o => o.SetJsonSerializationContext());
     opts.Schema.For<ApplicationAdminEntity>().SoftDeleted();
