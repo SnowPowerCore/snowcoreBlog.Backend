@@ -36,11 +36,8 @@ public class CheckAndPerformAssertionConsumer(IFido2 fido2,
 
         var options = AssertionOptions.FromJson(loginMsg.AssertionOptionsJson);
 
-        IList<Fido2DevicePublicKeyEntity> currentDevicePublicKeys = [];
-
         var credentials = await userManager.Users
             .SelectMany(user => user.PublicKeyCredentials)
-            .Include(credential => credential.DevicePublicKeys, currentDevicePublicKeys)
             .ToListAsync(ctxCancellationToken);
 
         var targetCredential = credentials.SingleOrDefault(credential =>
@@ -84,7 +81,7 @@ public class CheckAndPerformAssertionConsumer(IFido2 fido2,
         targetCredential = targetCredential with
         {
             SignatureCounter = assertionResult.SignCount,
-            DevicePublicKeys = currentDevicePublicKeys
+            DevicePublicKeys = credentials.SelectMany(x => x.DevicePublicKeys).ToList()
         };
 
         var pubKeyCredsUpdateTask = fido2PublicKeyCredentialRepository.AddOrUpdateAsync(
