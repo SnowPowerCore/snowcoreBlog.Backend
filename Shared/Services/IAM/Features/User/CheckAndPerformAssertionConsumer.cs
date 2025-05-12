@@ -35,8 +35,10 @@ public class CheckAndPerformAssertionConsumer(IFido2 fido2,
         var loginMsgAuthAssertion = loginMsg.AuthenticatorAssertion;
 
         var options = AssertionOptions.FromJson(loginMsg.AssertionOptionsJson);
-
+        
+        var normalizedEmail = userManager.NormalizeEmail(context.Message.Email);
         var credentials = await userManager.Users
+            .Where(user => user.NormalizedEmail == normalizedEmail)
             .SelectMany(user => user.PublicKeyCredentials)
             .ToListAsync(ctxCancellationToken);
 
@@ -62,8 +64,10 @@ public class CheckAndPerformAssertionConsumer(IFido2 fido2,
 
         async Task<bool> IsUserHandleOwnerOfCredentialIdCallback(Fido2NetLib.Objects.IsUserHandleOwnerOfCredentialIdParams @params, CancellationToken cancellationToken)
         {
+            var requestedUserId = new Guid(@params.UserHandle).ToString();
+
             var creds = await userManager.Users
-                .Where(user => user.Id == new Guid(@params.UserHandle).ToString())
+                .Where(user => user.Id == requestedUserId)
                 .SelectMany(user => user.PublicKeyCredentials)
                 .ToListAsync(ctxCancellationToken);
 
@@ -84,8 +88,7 @@ public class CheckAndPerformAssertionConsumer(IFido2 fido2,
             DevicePublicKeys = credentials.SelectMany(x => x.DevicePublicKeys).ToList()
         };
 
-        var pubKeyCredsUpdateTask = fido2PublicKeyCredentialRepository.AddOrUpdateAsync(
-            targetCredential, targetCredential.Id, token: ctxCancellationToken);
+        var pubKeyCredsUpdateTask = userManager.UpdateAsync(user);
         var responseTask = context.RespondAsync(
             new DataResult<UserLoginResult>(new() { Id = new Guid(user.Id) }));
 
