@@ -4,14 +4,14 @@ using snowcoreBlog.Backend.IAM.Core.Entities;
 
 namespace snowcoreBlog.Backend.IAM.CompiledQueries.Marten;
 
-public class PublicKeyCredentialByIdsAndCredIdQuery : ICompiledQuery<Fido2PublicKeyCredentialEntity, bool>
+public class PublicKeyCredentialByIdAndCredIdQuery : ICompiledQuery<Fido2PublicKeyCredentialEntity, bool>
 {
-    public required Guid[] Ids { get; set; }
+    public required Guid Id { get; set; }
 
     public required byte[] PublicKeyCredentialId { get; set; }
 
     public Expression<Func<IMartenQueryable<Fido2PublicKeyCredentialEntity>, bool>> QueryIs()
     {
-        return q => q.Any(x => Ids.Contains(x.Id) && x.PublicKeyCredentialId == PublicKeyCredentialId);
+        return q => q.Any(x => x.Id == Id && x.PublicKeyCredentialId == PublicKeyCredentialId);
     }
 }

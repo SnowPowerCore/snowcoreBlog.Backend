@@ -52,8 +52,8 @@ builder.Services.Configure<ValidStates<HashedStringsVerificationResult>>(static 
 builder.WebHost.UseKestrelHttpsConfiguration();
 builder.AddServiceDefaults();
 builder.Services.AddOpenTelemetry().ConnectBackendServices();
-builder.AddNpgsqlDataSource(connectionName: "db-iam-entities");
-//builder.Services.AddNpgsqlDataSource("Host=localhost;Port=54523;Username=postgres;Password=xQ6S1zf+)!kTnjFFCtt(Ks");
+//builder.AddNpgsqlDataSource(connectionName: "db-iam-entities");
+builder.Services.AddNpgsqlDataSource("Host=localhost;Port=54523;Username=postgres;Password=xQ6S1zf+)!kTnjFFCtt(Ks");
 builder.Services.AddMarten(static opts =>
 {
     opts.RegisterDocumentType<ApplicationAdminEntity>();
@@ -65,7 +65,7 @@ builder.Services.AddMarten(static opts =>
     opts.RegisterCompiledQueryType(typeof(ApplicationGetTempUserByEmailQuery));
     opts.RegisterCompiledQueryType(typeof(ApplicationTempUserByEmailQuery));
     opts.RegisterCompiledQueryType(typeof(ApplicationTempUserByNickNameQuery));
-    opts.RegisterCompiledQueryType(typeof(PublicKeyCredentialByIdsAndCredIdQuery));
+    opts.RegisterCompiledQueryType(typeof(PublicKeyCredentialByIdAndCredIdQuery));
     opts.RegisterCompiledQueryType(typeof(PublicKeyCredentialGetByUserIdAndCredIdQuery));
     opts.RegisterCompiledQueryType(typeof(PublicKeyCredentialsGetByUserIdQuery));
     opts.GeneratedCodeMode = TypeLoadMode.Static;
@@ -110,24 +110,24 @@ builder.Services
 builder.Services.AddScoped<IHasher, Argon2Hasher>();
 builder.Services.AddScoped<IApplicationTempUserRepository, ApplicationTempUserRepository>();
 builder.Services.AddScoped<IFido2PublicKeyCredentialRepository, Fido2PublicKeyCredentialRepository>();
-builder.Services.AddMassTransit(busConfigurator =>
-{
-    busConfigurator.AddConsumer<CheckAndPerformAssertionConsumer>();
-    busConfigurator.AddConsumer<ValidateAndCreateUserConsumer>();
-    busConfigurator.AddConsumer<CreateTempUserConsumer>();
-    busConfigurator.AddConsumer<ValidateUserExistsConsumer>();
-    busConfigurator.AddConsumer<ValidateTempUserExistsConsumer>();
-    busConfigurator.AddConsumer<ValidateUserNickNameWasTakenConsumer>();
-    busConfigurator.AddConsumer<ValidateAndCreateAttestationConsumer>();
-    busConfigurator.AddConsumer<ValidateAndCreateAssertionConsumer>();
-    busConfigurator.ConfigureHttpJsonOptions(static o => o.SerializerOptions.SetJsonSerializationContext());
-    busConfigurator.UsingRabbitMq((context, config) =>
-    {
-        config.ConfigureJsonSerializerOptions(static options => options.SetJsonSerializationContext());
-        config.Host(builder.Configuration.GetConnectionString("rabbitmq"));
-        config.ConfigureEndpoints(context);
-    });
-});
+// builder.Services.AddMassTransit(busConfigurator =>
+// {
+//     busConfigurator.AddConsumer<CheckAndPerformAssertionConsumer>();
+//     busConfigurator.AddConsumer<ValidateAndCreateUserConsumer>();
+//     busConfigurator.AddConsumer<CreateTempUserConsumer>();
+//     busConfigurator.AddConsumer<ValidateUserExistsConsumer>();
+//     busConfigurator.AddConsumer<ValidateTempUserExistsConsumer>();
+//     busConfigurator.AddConsumer<ValidateUserNickNameWasTakenConsumer>();
+//     busConfigurator.AddConsumer<ValidateAndCreateAttestationConsumer>();
+//     busConfigurator.AddConsumer<ValidateAndCreateAssertionConsumer>();
+//     busConfigurator.ConfigureHttpJsonOptions(static o => o.SerializerOptions.SetJsonSerializationContext());
+//     busConfigurator.UsingRabbitMq((context, config) =>
+//     {
+//         config.ConfigureJsonSerializerOptions(static options => options.SetJsonSerializationContext());
+//         config.Host(builder.Configuration.GetConnectionString("rabbitmq"));
+//         config.ConfigureEndpoints(context);
+//     });
+// });
 builder.Services.AddFido2(builder.Configuration.GetSection(nameof(Fido2)));
 
 builder.Services.AddSingleton<IValidator<LoginUser>, LoginUserValidator>();
