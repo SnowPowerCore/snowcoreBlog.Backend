@@ -38,20 +38,23 @@ public class CheckAndPerformAssertionConsumer(IFido2 fido2,
 
         IList<Fido2DevicePublicKeyEntity> currentDevicePublicKeys = [];
 
-        var credential = await userManager.Users
+        var credentials = await userManager.Users
             .SelectMany(user => user.PublicKeyCredentials)
             .Include(credential => credential.DevicePublicKeys, currentDevicePublicKeys)
-            .SingleOrDefaultAsync(credential => credential.Id == new Guid(loginMsgAuthAssertion.Id), ctxCancellationToken);
+            .ToListAsync(ctxCancellationToken);
 
-        if (credential is default(Fido2PublicKeyCredentialEntity))
+        var targetCredential = credentials.SingleOrDefault(credential =>
+            credential.PublicKeyCredentialId.SequenceEqual(loginMsgAuthAssertion.Id));
+
+        if (targetCredential is default(Fido2PublicKeyCredentialEntity))
         {
             await context.RespondAsync(
                 new DataResult<UserLoginResult>(
-                    Errors: [new(nameof(credential), AssertionConstants.AuthCredentialNotFoundError)]));
+                    Errors: [new(nameof(targetCredential), AssertionConstants.AuthCredentialNotFoundError)]));
             return;
         }
 
-        var user = await userManager.FindByIdAsync(credential.UserId.ToString());
+        var user = await userManager.FindByIdAsync(targetCredential.UserId.ToString());
         if (user is default(ApplicationUserEntity))
         {
             await context.RespondAsync(
@@ -60,28 +63,32 @@ public class CheckAndPerformAssertionConsumer(IFido2 fido2,
             return;
         }
 
-        Task<bool> IsUserHandleOwnerOfCredentialIdCallback(Fido2NetLib.Objects.IsUserHandleOwnerOfCredentialIdParams @params, CancellationToken cancellationToken) =>
-            userManager.Users
+        async Task<bool> IsUserHandleOwnerOfCredentialIdCallback(Fido2NetLib.Objects.IsUserHandleOwnerOfCredentialIdParams @params, CancellationToken cancellationToken)
+        {
+            var creds = await userManager.Users
                 .Where(user => user.Id == new Guid(@params.UserHandle).ToString())
                 .SelectMany(user => user.PublicKeyCredentials)
-                .AnyAsync(credential => credential.Id == new Guid(@params.CredentialId), ctxCancellationToken);
+                .ToListAsync(ctxCancellationToken);
+
+            return creds.Any(credential => credential.PublicKeyCredentialId.SequenceEqual(@params.CredentialId));
+        }
 
         var assertionResult = await fido2.MakeAssertionAsync(
             loginMsgAuthAssertion.ToMakeAssertionParams(
                 options,
-                credential.PublicKey,
-                credential.SignatureCounter,
+                targetCredential.PublicKey,
+                targetCredential.SignatureCounter,
                 IsUserHandleOwnerOfCredentialIdCallback),
             ctxCancellationToken);
 
-        credential = credential with
+        targetCredential = targetCredential with
         {
             SignatureCounter = assertionResult.SignCount,
             DevicePublicKeys = currentDevicePublicKeys
         };
 
         var pubKeyCredsUpdateTask = fido2PublicKeyCredentialRepository.AddOrUpdateAsync(
-            credential, credential.Id, token: ctxCancellationToken);
+            targetCredential, targetCredential.Id, token: ctxCancellationToken);
         var responseTask = context.RespondAsync(
             new DataResult<UserLoginResult>(new() { Id = new Guid(user.Id) }));
 
