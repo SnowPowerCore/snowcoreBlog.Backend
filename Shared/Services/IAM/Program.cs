@@ -52,8 +52,8 @@ builder.Services.Configure<ValidStates<HashedStringsVerificationResult>>(static 
 builder.WebHost.UseKestrelHttpsConfiguration();
 builder.AddServiceDefaults();
 builder.Services.AddOpenTelemetry().ConnectBackendServices();
-builder.AddNpgsqlDataSource(connectionName: "db-iam-entities");
-//builder.Services.AddNpgsqlDataSource("Host=localhost;Port=54523;Username=postgres;Password=xQ6S1zf+)!kTnjFFCtt(Ks");
+//builder.AddNpgsqlDataSource(connectionName: "db-iam-entities");
+builder.Services.AddNpgsqlDataSource("Host=localhost;Port=54523;Username=postgres;Password=xQ6S1zf+)!kTnjFFCtt(Ks");
 builder.Services.AddMarten(static opts =>
 {
     opts.RegisterDocumentType<ApplicationAdminEntity>();
@@ -70,20 +70,20 @@ builder.Services.AddMarten(static opts =>
     opts.Schema.For<ApplicationAdminEntity>().SoftDeleted();
     opts.Schema.For<ApplicationUserEntity>().SoftDeleted();
     opts.Schema.For<Fido2AuthenticatorTransportEntity>()
-        .Index(static x => new { x.PublicKeyCredentialId, x.Value }, static x =>
+        .Index(static x => new { x.PublicKeyId, x.Value }, static x =>
         {
             x.Name = "iam_uq_fido2_auth_trnsprt_cred_id_val_idx";
             x.IsUnique = true;
         })
-        .ForeignKey<Fido2PublicKeyCredentialEntity>(static x => x.PublicKeyCredentialId!, x => x.Name = "iam_fk_fido2_auth_trnsprt_pub_key_cred_idx")
+        .ForeignKey<Fido2PublicKeyCredentialEntity>(static x => x.PublicKeyId!, x => x.Name = "iam_fk_fido2_auth_trnsprt_pub_key_cred_idx")
         .SoftDeletedWithIndex(static x => x.Name = "iam_del_fido2_auth_trnsprt_idx");
     opts.Schema.For<Fido2DevicePublicKeyEntity>()
-        .Index(static x => new { x.PublicKeyCredentialId, x.Value }, static x =>
+        .Index(static x => new { x.PublicKeyId, x.Value }, static x =>
         {
             x.Name = "iam_uq_fido2_dev_pub_key_cred_id_val_idx";
             x.IsUnique = true;
         })
-        .ForeignKey<Fido2PublicKeyCredentialEntity>(static x => x.PublicKeyCredentialId!, x => x.Name = "iam_fk_fido2_dev_pub_key_pub_key_cred_idx")
+        .ForeignKey<Fido2PublicKeyCredentialEntity>(static x => x.PublicKeyId!, x => x.Name = "iam_fk_fido2_dev_pub_key_pub_key_cred_idx")
         .SoftDeletedWithIndex(static x => x.Name = "iam_del_fido2_dev_pub_key_idx");
     opts.Schema.For<Fido2PublicKeyCredentialEntity>()
         .Index(static x => x.PublicKeyCredentialId, static x =>
@@ -107,24 +107,24 @@ builder.Services
 builder.Services.AddScoped<IHasher, Argon2Hasher>();
 builder.Services.AddScoped<IApplicationTempUserRepository, ApplicationTempUserRepository>();
 builder.Services.AddScoped<IFido2PublicKeyCredentialRepository, Fido2PublicKeyCredentialRepository>();
-builder.Services.AddMassTransit(busConfigurator =>
-{
-    busConfigurator.AddConsumer<CheckAndPerformAssertionConsumer>();
-    busConfigurator.AddConsumer<ValidateAndCreateUserConsumer>();
-    busConfigurator.AddConsumer<CreateTempUserConsumer>();
-    busConfigurator.AddConsumer<ValidateUserExistsConsumer>();
-    busConfigurator.AddConsumer<ValidateTempUserExistsConsumer>();
-    busConfigurator.AddConsumer<ValidateUserNickNameWasTakenConsumer>();
-    busConfigurator.AddConsumer<ValidateAndCreateAttestationConsumer>();
-    busConfigurator.AddConsumer<ValidateAndCreateAssertionConsumer>();
-    busConfigurator.ConfigureHttpJsonOptions(static o => o.SerializerOptions.SetJsonSerializationContext());
-    busConfigurator.UsingRabbitMq((context, config) =>
-    {
-        config.ConfigureJsonSerializerOptions(static options => options.SetJsonSerializationContext());
-        config.Host(builder.Configuration.GetConnectionString("rabbitmq"));
-        config.ConfigureEndpoints(context);
-    });
-});
+// builder.Services.AddMassTransit(busConfigurator =>
+// {
+//     busConfigurator.AddConsumer<CheckAndPerformAssertionConsumer>();
+//     busConfigurator.AddConsumer<ValidateAndCreateUserConsumer>();
+//     busConfigurator.AddConsumer<CreateTempUserConsumer>();
+//     busConfigurator.AddConsumer<ValidateUserExistsConsumer>();
+//     busConfigurator.AddConsumer<ValidateTempUserExistsConsumer>();
+//     busConfigurator.AddConsumer<ValidateUserNickNameWasTakenConsumer>();
+//     busConfigurator.AddConsumer<ValidateAndCreateAttestationConsumer>();
+//     busConfigurator.AddConsumer<ValidateAndCreateAssertionConsumer>();
+//     busConfigurator.ConfigureHttpJsonOptions(static o => o.SerializerOptions.SetJsonSerializationContext());
+//     busConfigurator.UsingRabbitMq((context, config) =>
+//     {
+//         config.ConfigureJsonSerializerOptions(static options => options.SetJsonSerializationContext());
+//         config.Host(builder.Configuration.GetConnectionString("rabbitmq"));
+//         config.ConfigureEndpoints(context);
+//     });
+// });
 builder.Services.AddFido2(builder.Configuration.GetSection(nameof(Fido2)));
 
 builder.Services.AddSingleton<IValidator<LoginUser>, LoginUserValidator>();
