@@ -10,7 +10,7 @@ using snowcoreBlog.Backend.IAM.Core.Entities;
 using snowcoreBlog.Backend.IAM.Extensions;
 using snowcoreBlog.Backend.IAM.Interfaces.Repositories.Marten;
 using snowcoreBlog.PublicApi.Utilities.DataResult;
-using Microsoft.IdentityModel.Tokens;
+using snowcoreBlog.Backend.Infrastructure.Utilities;
 
 namespace snowcoreBlog.Backend.IAM.Features.User;
 

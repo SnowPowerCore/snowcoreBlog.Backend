@@ -15,7 +15,6 @@ using snowcoreBlog.Backend.IAM.Extensions;
 using snowcoreBlog.Backend.IAM.Interfaces.Repositories.Marten;
 using snowcoreBlog.Backend.Infrastructure.Utilities;
 using snowcoreBlog.PublicApi.Utilities.DataResult;
-using Microsoft.IdentityModel.Tokens;
 
 namespace snowcoreBlog.Backend.IAM.Features.User;
 
