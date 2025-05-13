@@ -4,7 +4,7 @@ using snowcoreBlog.Backend.IAM.Core.Entities;
 
 namespace snowcoreBlog.Backend.IAM.CompiledQueries.Marten;
 
-public class PublicKeyCredentialsGetByUserIdQuery : ICompiledQuery<Fido2PublicKeyCredentialEntity, IEnumerable<Fido2PublicKeyCredentialEntity>>
+public class PublicKeyCredentialsGetByUserIdQuery : ICompiledListQuery<Fido2PublicKeyCredentialEntity, Fido2PublicKeyCredentialEntity>
 {
     public required Guid UserId { get; set; }
 

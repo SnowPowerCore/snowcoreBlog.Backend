@@ -1,9 +1,9 @@
-﻿using System.Text;
-using Fido2NetLib;
+﻿using Fido2NetLib;
 using Fido2NetLib.Objects;
 using Marten;
 using MassTransit;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
 using snowcoreBlog.Backend.IAM.Constants;
 using snowcoreBlog.Backend.IAM.Core.Contracts;
 using snowcoreBlog.Backend.IAM.Core.Entities;
@@ -26,7 +26,7 @@ public class ValidateAndCreateAssertionConsumer(IFido2 fido2,
             .ToListAsync(context.CancellationToken);
 
         var allowedCredentials = creds
-            .Select(credential => new PublicKeyCredentialDescriptor(Encoding.UTF8.GetBytes(credential.Value.PublicKeyCredentialId)))
+            .Select(credential => new PublicKeyCredentialDescriptor(Base64UrlEncoder.DecodeBytes(credential.Value.PublicKeyCredentialId)))
             .ToList();
 
         if (allowedCredentials is default(List<PublicKeyCredentialDescriptor>))
