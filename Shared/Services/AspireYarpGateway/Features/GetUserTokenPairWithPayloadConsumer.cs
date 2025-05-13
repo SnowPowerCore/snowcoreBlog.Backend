@@ -6,8 +6,8 @@ using Microsoft.Extensions.Options;
 using MaybeResults;
 using snowcoreBlog.Backend.AspireYarpGateway.Constants;
 using snowcoreBlog.Backend.AspireYarpGateway.Options;
-using snowcoreBlog.Backend.YarpGateway.Core.Contracts;
 using snowcoreBlog.PublicApi.Utilities.DataResult;
+using snowcoreBlog.Backend.AspireYarpGateway.Core.Contracts;
 
 namespace snowcoreBlog.Backend.AspireYarpGateway.Features;
 
