@@ -8,10 +8,10 @@ public class PublicKeyCredentialByIdAndCredIdQuery : ICompiledQuery<Fido2PublicK
 {
     public required Guid Id { get; set; }
 
-    public required List<byte> PublicKeyCredentialId { get; set; } = [];
+    public required string PublicKeyCredentialId { get; set; }
 
     public Expression<Func<IMartenQueryable<Fido2PublicKeyCredentialEntity>, bool>> QueryIs()
     {
-        return q => q.Any(x => x.Id == Id && x.PublicKeyCredentialId == PublicKeyCredentialId);
+        return q => q.Any(x => x.Id == Id && x.PublicKeyCredentialId.Equals(PublicKeyCredentialId, StringComparison.Ordinal));
     }
 }

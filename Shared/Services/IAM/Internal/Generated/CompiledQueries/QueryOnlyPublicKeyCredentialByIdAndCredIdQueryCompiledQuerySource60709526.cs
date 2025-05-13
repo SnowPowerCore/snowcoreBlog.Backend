@@ -7,12 +7,12 @@ using snowcoreBlog.Backend.IAM.CompiledQueries.Marten;
 namespace Marten.Generated.CompiledQueries
 {
     // START: QueryOnlyPublicKeyCredentialByIdAndCredIdQueryCompiledQuery60709526
-    public class QueryOnlyPublicKeyCredentialByIdAndCredIdQueryCompiledQuery60709526 : Marten.Internal.CompiledQueries.ComplexCompiledQuery<bool, snowcoreBlog.Backend.IAM.CompiledQueries.Marten.PublicKeyCredentialByIdAndCredIdQuery>
+    public class QueryOnlyPublicKeyCredentialByIdAndCredIdQueryCompiledQuery60709526 : Marten.Internal.CompiledQueries.StatelessCompiledQuery<bool, snowcoreBlog.Backend.IAM.CompiledQueries.Marten.PublicKeyCredentialByIdAndCredIdQuery>
     {
-        private readonly Marten.Linq.QueryHandlers.IMaybeStatefulHandler _inner;
+        private readonly Marten.Linq.QueryHandlers.IQueryHandler<bool> _inner;
         private readonly snowcoreBlog.Backend.IAM.CompiledQueries.Marten.PublicKeyCredentialByIdAndCredIdQuery _query;
 
-        public QueryOnlyPublicKeyCredentialByIdAndCredIdQueryCompiledQuery60709526(Marten.Linq.QueryHandlers.IMaybeStatefulHandler inner, snowcoreBlog.Backend.IAM.CompiledQueries.Marten.PublicKeyCredentialByIdAndCredIdQuery query) : base(inner, query)
+        public QueryOnlyPublicKeyCredentialByIdAndCredIdQueryCompiledQuery60709526(Marten.Linq.QueryHandlers.IQueryHandler<bool> inner, snowcoreBlog.Backend.IAM.CompiledQueries.Marten.PublicKeyCredentialByIdAndCredIdQuery query) : base(inner, query)
         {
             _inner = inner;
             _query = query;
@@ -22,20 +22,15 @@ namespace Marten.Generated.CompiledQueries
 
         public override void ConfigureCommand(Weasel.Postgresql.ICommandBuilder builder, Marten.Internal.IMartenSession session)
         {
-            var parameters1 = builder.AppendWithParameters(@"select TRUE as result from public.mt_doc_fido2publickeycredentialentity as d where (d.mt_deleted = False and d.id = ^ and CAST(d.data ->> 'PublicKeyCredentialId' as jsonb) is null) LIMIT ^;", '^');
+            var parameters1 = builder.AppendWithParameters(@"select TRUE as result from public.mt_doc_fido2publickeycredentialentity as d where (d.mt_deleted = False and d.id = ^ and d.data ->> 'PublicKeyCredentialId' = ^) LIMIT ^;", '^');
 
             parameters1[0].NpgsqlDbType = NpgsqlTypes.NpgsqlDbType.Uuid;
             parameters1[0].Value = _query.Id;
-            parameters1[1].Value = 1;
-            parameters1[1].NpgsqlDbType = NpgsqlTypes.NpgsqlDbType.Integer;
-        }
 
-
-        public override Marten.Linq.QueryHandlers.IQueryHandler<bool> BuildHandler(Marten.Internal.IMartenSession session)
-        {
-            var includeWriters = new Marten.Linq.Includes.IIncludeReader[]{Marten.Linq.Includes.Include.ReaderToList(session, _query.PublicKeyCredentialId)};
-            var included = new Marten.Linq.Includes.IncludeQueryHandler<bool>((Marten.Linq.QueryHandlers.IQueryHandler<bool>)_inner, includeWriters);
-            return included;
+            parameters1[1].NpgsqlDbType = NpgsqlTypes.NpgsqlDbType.Text;
+            parameters1[1].Value = _query.PublicKeyCredentialId;
+            parameters1[2].Value = 1;
+            parameters1[2].NpgsqlDbType = NpgsqlTypes.NpgsqlDbType.Integer;
         }
 
     }
@@ -46,18 +41,18 @@ namespace Marten.Generated.CompiledQueries
     // START: QueryOnlyPublicKeyCredentialByIdAndCredIdQueryCompiledQuerySource60709526
     public class QueryOnlyPublicKeyCredentialByIdAndCredIdQueryCompiledQuerySource60709526 : Marten.Internal.CompiledQueries.CompiledQuerySource<bool, snowcoreBlog.Backend.IAM.CompiledQueries.Marten.PublicKeyCredentialByIdAndCredIdQuery>
     {
-        private readonly Marten.Linq.QueryHandlers.IMaybeStatefulHandler _maybeStatefulHandler;
+        private readonly Marten.Linq.QueryHandlers.IQueryHandler<bool> _queryHandler;
 
-        public QueryOnlyPublicKeyCredentialByIdAndCredIdQueryCompiledQuerySource60709526(Marten.Linq.QueryHandlers.IMaybeStatefulHandler maybeStatefulHandler)
+        public QueryOnlyPublicKeyCredentialByIdAndCredIdQueryCompiledQuerySource60709526(Marten.Linq.QueryHandlers.IQueryHandler<bool> queryHandler)
         {
-            _maybeStatefulHandler = maybeStatefulHandler;
+            _queryHandler = queryHandler;
         }
 
 
 
         public override Marten.Linq.QueryHandlers.IQueryHandler<bool> BuildHandler(snowcoreBlog.Backend.IAM.CompiledQueries.Marten.PublicKeyCredentialByIdAndCredIdQuery query, Marten.Internal.IMartenSession session)
         {
-            return new Marten.Generated.CompiledQueries.QueryOnlyPublicKeyCredentialByIdAndCredIdQueryCompiledQuery60709526(_maybeStatefulHandler, query);
+            return new Marten.Generated.CompiledQueries.QueryOnlyPublicKeyCredentialByIdAndCredIdQueryCompiledQuery60709526(_queryHandler, query);
         }
 
     }
