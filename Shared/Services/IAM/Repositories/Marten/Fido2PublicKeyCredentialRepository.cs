@@ -16,7 +16,7 @@ public class Fido2PublicKeyCredentialRepository(IDocumentSession session) : Base
         var tasks = new List<Task<bool>>();
         foreach (var id in ids)
         {
-            tasks.Add(batch.Query(new PublicKeyCredentialByIdAndCredIdQuery { Id = id, PublicKeyCredentialId = publicKeyCredentialId }));
+            tasks.Add(batch.Query(new PublicKeyCredentialByIdAndCredIdQuery { Id = id, PublicKeyCredentialId = publicKeyCredentialId.ToList() }));
         }
         await batch.Execute(token);
         foreach (var task in tasks)
@@ -34,5 +34,5 @@ public class Fido2PublicKeyCredentialRepository(IDocumentSession session) : Base
 
     public Task<Fido2PublicKeyCredentialEntity> GetByUserIdAndPubKeyCredIdAsync(Guid userId, byte[] publicKeyCredentialId, CancellationToken token = default) =>
         GetOneByQueryAsync(MartenCompiledQueryProvider<Fido2PublicKeyCredentialEntity, Fido2PublicKeyCredentialEntity>
-            .Create(new PublicKeyCredentialGetByUserIdAndCredIdQuery { UserId = userId, PublicKeyCredentialId = publicKeyCredentialId }), token);
+            .Create(new PublicKeyCredentialGetByUserIdAndCredIdQuery { UserId = userId, PublicKeyCredentialId = publicKeyCredentialId.ToList() }), token);
 }
