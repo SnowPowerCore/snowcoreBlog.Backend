@@ -272,6 +272,7 @@ internal class YarpResourceLifecyclehook(
                 Secure = CookieSecurePolicy.Always
             })
             .UseMiddleware<UserCookieJsonWebTokenMiddleware>()
+            .UseForwardedHeaders()
             .UseAuthentication()
             .UseAuthorization();
 

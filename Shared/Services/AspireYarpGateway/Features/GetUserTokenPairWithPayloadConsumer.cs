@@ -43,8 +43,8 @@ public class GetUserTokenPairWithPayloadConsumer : IConsumer<GetUserTokenPairWit
         }
 
         var now = DateTimeOffset.UtcNow;
-        var accessTokenExpiresAt = now.AddMinutes(request.AccessTokenValidityDurationInMinutes).DateTime;
-        var refreshTokenExpiresAt = now.AddMinutes(request.RefreshTokenValidityDurationInMinutes).DateTime;
+        var accessTokenExpiresAt = now.AddMinutes(request.AccessTokenValidityDurationInMinutes).UtcDateTime;
+        var refreshTokenExpiresAt = now.AddMinutes(request.RefreshTokenValidityDurationInMinutes).UtcDateTime;
 
         await context.RespondAsync(new DataResult<UserTokenPairWithPayloadGenerated>(new()
         {
