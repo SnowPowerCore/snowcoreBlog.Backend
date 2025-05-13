@@ -10,7 +10,7 @@ using snowcoreBlog.Backend.IAM.Core.Entities;
 using snowcoreBlog.Backend.IAM.Extensions;
 using snowcoreBlog.Backend.IAM.Interfaces.Repositories.Marten;
 using snowcoreBlog.PublicApi.Utilities.DataResult;
-using System.Text;
+using Microsoft.IdentityModel.Tokens;
 
 namespace snowcoreBlog.Backend.IAM.Features.User;
 
@@ -44,11 +44,12 @@ public class CheckAndPerformAssertionConsumer(IFido2 fido2,
             return;
         }
 
+        var userIdGuid = new Guid(user.Id);
+
         var options = AssertionOptions.FromJson(loginMsg.AssertionOptionsJson);
         
         var targetCredential = await fido2PublicKeyCredentialRepository
-            .GetByUserIdAndPubKeyCredIdAsync(new Guid(user.Id), Encoding.UTF8.GetString(loginMsgAuthAssertion.Id));
-
+            .GetByUserIdAndPubKeyCredIdAsync(userIdGuid, Base64UrlEncoder.Encode(loginMsgAuthAssertion.Id));
         if (targetCredential is default(Fido2PublicKeyCredentialEntity))
         {
             await context.RespondAsync(
@@ -65,19 +66,19 @@ public class CheckAndPerformAssertionConsumer(IFido2 fido2,
                 .SelectMany(user => user.PublicKeyCredentials)
                 .ToListAsync(context.CancellationToken);
             return await fido2PublicKeyCredentialRepository
-                .CheckPublicKeyCredExistsAsync(creds.ToArray(), Encoding.UTF8.GetString(@params.CredentialId), cancellationToken);
+                .CheckPublicKeyCredExistsAsync(creds.ToArray(), Base64UrlEncoder.Encode(@params.CredentialId), cancellationToken);
         }
 
         var assertionResult = await fido2.MakeAssertionAsync(
             loginMsgAuthAssertion.ToMakeAssertionParams(
                 options,
-                Encoding.UTF8.GetBytes(targetCredential.PublicKey),
+                Base64UrlEncoder.DecodeBytes(targetCredential.PublicKey),
                 targetCredential.SignatureCounter,
                 IsUserHandleOwnerOfCredentialIdCallback),
             ctxCancellationToken);
 
         var credentialsByUserId = await fido2PublicKeyCredentialRepository
-            .GetAllByUserIdAsync(new Guid(user.Id));
+            .GetAllByUserIdAsync(userIdGuid);
 
         targetCredential = targetCredential with
         {
@@ -85,9 +86,10 @@ public class CheckAndPerformAssertionConsumer(IFido2 fido2,
             DevicePublicKeys = credentialsByUserId.SelectMany(x => x.DevicePublicKeys).ToList()
         };
 
-        var pubKeyCredsUpdateTask = userManager.UpdateAsync(user);
+        var pubKeyCredsUpdateTask = fido2PublicKeyCredentialRepository
+            .AddOrUpdateAsync(targetCredential, targetCredential.Id, token: ctxCancellationToken);
         var responseTask = context.RespondAsync(
-            new DataResult<UserLoginResult>(new() { Id = new Guid(user.Id) }));
+            new DataResult<UserLoginResult>(new() { Id = userIdGuid }));
 
         await Task.WhenAll(pubKeyCredsUpdateTask, responseTask);
     }

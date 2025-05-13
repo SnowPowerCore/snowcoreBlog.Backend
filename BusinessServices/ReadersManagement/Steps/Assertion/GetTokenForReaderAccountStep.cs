@@ -26,7 +26,6 @@ public class GetTokenForReaderAccountStep(IRequestClient<GetUserTokenPairWithPay
         var readerTokenReq = tokenReqOpts.Value.ToGetUserTokenPairWithPayload();
         readerTokenReq.Claims.Add(ReaderAccountClaimConstants.ReaderAccountEmailClaimKey, context.LoginByAssertion.Email);
         readerTokenReq.Claims.Add(ReaderAccountClaimConstants.ReaderAccountUserIdClaimKey, currentUserId.ToString());
-        readerTokenReq.Claims.Add(ReaderAccountClaimConstants.ReaderAccountReaderAccountClaimKey, true.ToString());
         var result = await requestClient.GetResponse<DataResult<UserTokenPairWithPayloadGenerated>>(
             readerTokenReq, token);
         if (result.Message.IsSuccess)

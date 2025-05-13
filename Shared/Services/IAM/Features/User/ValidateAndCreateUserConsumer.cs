@@ -15,7 +15,7 @@ using snowcoreBlog.Backend.IAM.Extensions;
 using snowcoreBlog.Backend.IAM.Interfaces.Repositories.Marten;
 using snowcoreBlog.Backend.Infrastructure.Utilities;
 using snowcoreBlog.PublicApi.Utilities.DataResult;
-using System.Text;
+using Microsoft.IdentityModel.Tokens;
 
 namespace snowcoreBlog.Backend.IAM.Features.User;
 
@@ -69,7 +69,7 @@ public class ValidateAndCreateUserConsumer(IHasher hasher,
                     .SelectMany(user => user.PublicKeyCredentials)
                     .ToListAsync(context.CancellationToken);
                 return !await fido2PublicKeyCredentialRepository
-                    .CheckPublicKeyCredExistsAsync(creds.ToArray(), Encoding.UTF8.GetString(@params.CredentialId), cancellationToken);
+                    .CheckPublicKeyCredExistsAsync(creds.ToArray(), Base64UrlEncoder.Encode(@params.CredentialId), cancellationToken);
             }
 
             var credentialResult = await fido2.MakeNewCredentialAsync(
@@ -91,13 +91,13 @@ public class ValidateAndCreateUserConsumer(IHasher hasher,
             var credential = new Fido2PublicKeyCredentialEntity
             {
                 Id = Guid.CreateVersion7(),
-                PublicKeyCredentialId = Encoding.UTF8.GetString(credentialResult.Id),
-                PublicKey = Encoding.UTF8.GetString(credentialResult.PublicKey),
+                PublicKeyCredentialId = Base64UrlEncoder.Encode(credentialResult.Id),
+                PublicKey = Base64UrlEncoder.Encode(credentialResult.PublicKey),
                 SignatureCounter = credentialResult.SignCount,
                 IsBackupEligible = credentialResult.IsBackupEligible,
                 IsBackedUp = credentialResult.IsBackedUp,
-                AttestationObject = Encoding.UTF8.GetString(credentialResult.AttestationObject),
-                AttestationClientDataJson = Encoding.UTF8.GetString(credentialResult.AttestationClientDataJson),
+                AttestationObject = Base64UrlEncoder.Encode(credentialResult.AttestationObject),
+                AttestationClientDataJson = Base64UrlEncoder.Encode(credentialResult.AttestationClientDataJson),
                 AttestationFormat = credentialResult.AttestationFormat,
                 AaGuid = credentialResult.AaGuid,
                 UserId = userId
@@ -109,7 +109,7 @@ public class ValidateAndCreateUserConsumer(IHasher hasher,
                 {
                     Id = Guid.CreateVersion7(),
                     PublicKeyId = credential.Id,
-                    PublicKeyCredentialId = Encoding.UTF8.GetString(credentialResult.Id),
+                    PublicKeyCredentialId = Base64UrlEncoder.Encode(credentialResult.Id),
                     Value = authenticatorTransport
                 });
             }
@@ -120,8 +120,8 @@ public class ValidateAndCreateUserConsumer(IHasher hasher,
                 {
                     Id = Guid.CreateVersion7(),
                     PublicKeyId = credential.Id,
-                    PublicKeyCredentialId = Encoding.UTF8.GetString(credentialResult.Id),
-                    Value = Encoding.UTF8.GetString(credentialResult.PublicKey)
+                    PublicKeyCredentialId = Base64UrlEncoder.Encode(credentialResult.Id),
+                    Value = Base64UrlEncoder.Encode(credentialResult.PublicKey)
                 });
             }
 
