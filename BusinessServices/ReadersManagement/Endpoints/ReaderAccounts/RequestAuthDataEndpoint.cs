@@ -50,7 +50,7 @@ public class RequestAuthDataEndpoint : EndpointWithoutRequest<ApiResponse>
             var accessToken = HttpContext.Request.Headers[HeaderNames.Authorization].ToString().Replace($"{JwtBearerDefaults.AuthenticationScheme} ", string.Empty);
             var decodedToken = _securityTokenHandler.ReadJwtToken(accessToken);
             return SendAsync(
-                Maybe.Create(new AuthenticationStateDto(new(new ClaimsIdentity(decodedToken.Claims, JwtBearerDefaults.AuthenticationScheme))))
+                Maybe.Create(new AuthenticationStateDto(decodedToken.Claims.ToDictionary(x => x.Type, x => x.Value)))
                     .ToApiResponse(JsonOptions.Value.SerializerOptions), (int)HttpStatusCode.OK, ct);
         }
         catch (Exception)
