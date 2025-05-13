@@ -1,5 +1,4 @@
 using System.Security.Claims;
-using FastEndpoints.Security;
 using FluentValidation;
 using MassTransit;
 using Microsoft.Extensions.Options;
@@ -8,6 +7,7 @@ using snowcoreBlog.Backend.AspireYarpGateway.Constants;
 using snowcoreBlog.Backend.AspireYarpGateway.Options;
 using snowcoreBlog.PublicApi.Utilities.DataResult;
 using snowcoreBlog.Backend.AspireYarpGateway.Core.Contracts;
+using snowcoreBlog.Backend.AspireYarpGateway.Utilities;
 
 namespace snowcoreBlog.Backend.AspireYarpGateway.Features;
 
@@ -48,7 +48,7 @@ public class GetUserTokenPairWithPayloadConsumer : IConsumer<GetUserTokenPairWit
 
         await context.RespondAsync(new DataResult<UserTokenPairWithPayloadGenerated>(new()
         {
-            AccessToken = JwtBearer.CreateToken(jwt =>
+            AccessToken = JwtTokenCreator.CreateToken(jwt =>
             {
                 jwt.Issuer = SecurityConstants.UserIssuer;
                 jwt.SigningKey = _currentSecuritySigningOptions.User.SigningKey;
