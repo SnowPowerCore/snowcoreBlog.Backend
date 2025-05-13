@@ -1,4 +1,4 @@
-namespace snowcoreBlog.Backend.YarpGateway.Core.Contracts;
+namespace snowcoreBlog.Backend.AspireYarpGateway.Core.Contracts;
 
 public sealed record UserTokenPairWithPayloadGenerated
 {

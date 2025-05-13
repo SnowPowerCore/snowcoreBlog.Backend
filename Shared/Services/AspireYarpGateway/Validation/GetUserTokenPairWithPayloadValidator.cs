@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using snowcoreBlog.Backend.YarpGateway.Core.Contracts;
+using snowcoreBlog.Backend.AspireYarpGateway.Core.Contracts;
 
 namespace snowcoreBlog.Backend.AspireYarpGateway.Validation;
 

@@ -6,12 +6,12 @@ using snowcoreBlog.Backend.ReadersManagement.Delegates;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 using snowcoreBlog.PublicApi.Constants;
 using snowcoreBlog.PublicApi.Utilities.DataResult;
-using snowcoreBlog.Backend.YarpGateway.Core.Contracts;
 using Microsoft.Extensions.Options;
 using snowcoreBlog.Backend.ReadersManagement.Options;
 using snowcoreBlog.Backend.ReadersManagement.Extensions;
 using snowcoreBlog.Backend.Core.Constants;
 using snowcoreBlog.Backend.ReadersManagement.Constants;
+using snowcoreBlog.Backend.AspireYarpGateway.Core.Contracts;
 
 namespace snowcoreBlog.Backend.ReadersManagement.Steps.Assertion;
 

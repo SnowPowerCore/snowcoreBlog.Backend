@@ -1,6 +1,6 @@
 using Riok.Mapperly.Abstractions;
+using snowcoreBlog.Backend.AspireYarpGateway.Core.Contracts;
 using snowcoreBlog.Backend.ReadersManagement.Options;
-using snowcoreBlog.Backend.YarpGateway.Core.Contracts;
 
 namespace snowcoreBlog.Backend.ReadersManagement.Extensions;
 

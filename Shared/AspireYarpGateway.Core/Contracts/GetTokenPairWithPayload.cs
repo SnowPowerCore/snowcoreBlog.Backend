@@ -1,6 +1,6 @@
 using snowcoreBlog.PublicApi.Utilities.Dictionary;
 
-namespace snowcoreBlog.Backend.YarpGateway.Core.Contracts;
+namespace snowcoreBlog.Backend.AspireYarpGateway.Core.Contracts;
 
 public record GetTokenPairWithPayload
 {
@@ -8,7 +8,7 @@ public record GetTokenPairWithPayload
     
     public required List<string> Roles { get; init; } = [];
     
-    public required DictionaryWithDefault<string, string> Claims { get; init; } = new(defaultValue: string.Empty);
+    public required Dictionary<string, string> Claims { get; init; } = new DictionaryWithDefault<string, string>(defaultValue: string.Empty);
 
     public required uint AccessTokenValidityDurationInMinutes { get; init; } = 1;
     

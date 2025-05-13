@@ -8,7 +8,7 @@ public record ReaderAccountTokenRequirementOptions
 
     public List<string> Roles { get; set; } = [];
 
-    public DictionaryWithDefault<string, string> Claims { get; set; } = [];
+    public Dictionary<string, string> Claims { get; set; } = new DictionaryWithDefault<string, string>(defaultValue: string.Empty);
 
     public required uint AccessTokenValidityDurationInMinutes { get; set; }
 
