@@ -8,7 +8,7 @@ public class PublicKeyCredentialByIdAndCredIdQuery : ICompiledQuery<Fido2PublicK
 {
     public required Guid Id { get; set; }
 
-    public required IList<byte> PublicKeyCredentialId { get; set; }
+    public required IList<byte> PublicKeyCredentialId { get; set; } = [];
 
     public Expression<Func<IMartenQueryable<Fido2PublicKeyCredentialEntity>, bool>> QueryIs()
     {
