@@ -35,9 +35,9 @@ public class GetTokenForReaderAccountStep(IRequestClient<GetUserTokenPairWithPay
             {
                 var currentCookies = httpContextAccessor.HttpContext?.Response.Cookies;
                 currentCookies?.Append(AuthCookieConstants.UserAccessTokenCookieName, curPair.AccessToken,
-                    new() { Expires = curPair.AccessTokenExpiresAt });
+                    new() { MaxAge = TimeSpan.FromMinutes(tokenReqOpts.Value.AccessTokenValidityDurationInMinutes) });
                 currentCookies?.Append(AuthCookieConstants.UserRefreshTokenCookieName, curPair.RefreshToken,
-                    new() { Expires = curPair.RefreshTokenExpiresAt });
+                    new() { MaxAge = TimeSpan.FromMinutes(tokenReqOpts.Value.RefreshTokenValidityDurationInMinutes) });
                 return Maybe.Create<LoginByAssertionResultDto>(new());
             }
             else

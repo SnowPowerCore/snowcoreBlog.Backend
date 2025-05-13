@@ -6,6 +6,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using FastEndpoints;
 using FastEndpoints.OpenTelemetry.Middleware;
+using FastEndpoints.Security;
 using FastEndpoints.Swagger;
 using Ixnas.AltchaNet;
 using JasperFx.CodeGeneration;
@@ -143,7 +144,7 @@ builder.AddRedisClient(connectionName: "cache");
 
 const int GlobalVersion = 1;
 
-builder.Services.AddAuthentication();
+builder.Services.AddAuthenticationJwtBearer(s => s.SigningKey = builder.Configuration["Security:Signing:User:SigningKey"]);
 builder.Services.AddAuthorization()
     .AddAntiforgery(options => options.Cookie.Expiration = TimeSpan.Zero)
     .AddFastEndpoints(static options =>
