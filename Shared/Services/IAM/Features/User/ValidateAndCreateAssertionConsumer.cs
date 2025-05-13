@@ -1,4 +1,5 @@
-﻿using Fido2NetLib;
+﻿using System.Text;
+using Fido2NetLib;
 using Fido2NetLib.Objects;
 using Marten;
 using MassTransit;
@@ -25,7 +26,7 @@ public class ValidateAndCreateAssertionConsumer(IFido2 fido2,
             .ToListAsync(context.CancellationToken);
 
         var allowedCredentials = creds
-            .Select(credential => new PublicKeyCredentialDescriptor(credential.Value.PublicKeyCredentialId.ToArray()))
+            .Select(credential => new PublicKeyCredentialDescriptor(Encoding.UTF8.GetBytes(credential.Value.PublicKeyCredentialId)))
             .ToList();
 
         if (allowedCredentials is default(List<PublicKeyCredentialDescriptor>))

@@ -10,6 +10,7 @@ using snowcoreBlog.Backend.IAM.Core.Entities;
 using snowcoreBlog.Backend.IAM.Extensions;
 using snowcoreBlog.Backend.IAM.Interfaces.Repositories.Marten;
 using snowcoreBlog.PublicApi.Utilities.DataResult;
+using System.Text;
 
 namespace snowcoreBlog.Backend.IAM.Features.User;
 
@@ -46,7 +47,7 @@ public class CheckAndPerformAssertionConsumer(IFido2 fido2,
         var options = AssertionOptions.FromJson(loginMsg.AssertionOptionsJson);
         
         var targetCredential = await fido2PublicKeyCredentialRepository
-            .GetByUserIdAndPubKeyCredIdAsync(new Guid(user.Id), loginMsgAuthAssertion.Id);
+            .GetByUserIdAndPubKeyCredIdAsync(new Guid(user.Id), Encoding.UTF8.GetString(loginMsgAuthAssertion.Id));
 
         if (targetCredential is default(Fido2PublicKeyCredentialEntity))
         {
@@ -64,13 +65,13 @@ public class CheckAndPerformAssertionConsumer(IFido2 fido2,
                 .SelectMany(user => user.PublicKeyCredentials)
                 .ToListAsync(context.CancellationToken);
             return await fido2PublicKeyCredentialRepository
-                .CheckPublicKeyCredExistsAsync(creds.ToArray(), @params.CredentialId, cancellationToken);
+                .CheckPublicKeyCredExistsAsync(creds.ToArray(), Encoding.UTF8.GetString(@params.CredentialId), cancellationToken);
         }
 
         var assertionResult = await fido2.MakeAssertionAsync(
             loginMsgAuthAssertion.ToMakeAssertionParams(
                 options,
-                targetCredential.PublicKey.ToArray(),
+                Encoding.UTF8.GetBytes(targetCredential.PublicKey),
                 targetCredential.SignatureCounter,
                 IsUserHandleOwnerOfCredentialIdCallback),
             ctxCancellationToken);

@@ -9,14 +9,14 @@ namespace snowcoreBlog.Backend.IAM.Repositories.Marten;
 
 public class Fido2PublicKeyCredentialRepository(IDocumentSession session) : BaseMartenRepository<Fido2PublicKeyCredentialEntity>(session), IFido2PublicKeyCredentialRepository
 {
-    public async Task<bool> CheckPublicKeyCredExistsAsync(Guid[] ids, byte[] publicKeyCredentialId, CancellationToken token = default)
+    public async Task<bool> CheckPublicKeyCredExistsAsync(Guid[] ids, string publicKeyCredentialId, CancellationToken token = default)
     {
         var batch = session.CreateBatchQuery();
         var exists = false;
         var tasks = new List<Task<bool>>();
         foreach (var id in ids)
         {
-            tasks.Add(batch.Query(new PublicKeyCredentialByIdAndCredIdQuery { Id = id, PublicKeyCredentialId = publicKeyCredentialId.ToList() }));
+            tasks.Add(batch.Query(new PublicKeyCredentialByIdAndCredIdQuery { Id = id, PublicKeyCredentialId = publicKeyCredentialId }));
         }
         await batch.Execute(token);
         foreach (var task in tasks)
@@ -32,7 +32,7 @@ public class Fido2PublicKeyCredentialRepository(IDocumentSession session) : Base
         GetAllByQueryAsync(MartenCompiledQueryProvider<Fido2PublicKeyCredentialEntity, IEnumerable<Fido2PublicKeyCredentialEntity>>
             .Create(new PublicKeyCredentialsGetByUserIdQuery { UserId = userId }), token);
 
-    public Task<Fido2PublicKeyCredentialEntity> GetByUserIdAndPubKeyCredIdAsync(Guid userId, byte[] publicKeyCredentialId, CancellationToken token = default) =>
+    public Task<Fido2PublicKeyCredentialEntity> GetByUserIdAndPubKeyCredIdAsync(Guid userId, string publicKeyCredentialId, CancellationToken token = default) =>
         GetOneByQueryAsync(MartenCompiledQueryProvider<Fido2PublicKeyCredentialEntity, Fido2PublicKeyCredentialEntity>
-            .Create(new PublicKeyCredentialGetByUserIdAndCredIdQuery { UserId = userId, PublicKeyCredentialId = publicKeyCredentialId.ToList() }), token);
+            .Create(new PublicKeyCredentialGetByUserIdAndCredIdQuery { UserId = userId, PublicKeyCredentialId = publicKeyCredentialId }), token);
 }
