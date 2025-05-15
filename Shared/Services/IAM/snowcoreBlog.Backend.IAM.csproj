@@ -20,7 +20,7 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="ConfigureAwait.Fody" Version="3.3.2" />
-    <PackageReference Include="MassTransit.RabbitMQ" Version="8.4.0" />
+    <PackageReference Include="MassTransit.RabbitMQ" Version="8.4.1" />
     <PackageReference Include="Sodium.Core" Version="1.4.0" />
     <PackageReference Include="Riok.Mapperly" Version="4.2.1">
       <ExcludeAssets>runtime</ExcludeAssets>
