@@ -1,47 +1,38 @@
-using Marten;
 using MassTransit;
-using Microsoft.AspNetCore.Identity;
 using snowcoreBlog.Backend.Infrastructure.Extensions;
 using snowcoreBlog.ServiceDefaults.Extensions;
-using snowcoreBlog.Backend.IAM.Core.Contracts;
 using FluentValidation;
-using snowcoreBlog.Backend.Push.Entities;
-using snowcoreBlog.Backend.Push.Extensions;
 using snowcoreBlog.Backend.Push.Validation;
+using snowcoreBlog.Backend.Push.Core.Contracts;
+using snowcoreBlog.Backend.Push.Features.Ntfy;
 
 var builder = WebApplication.CreateSlimBuilder(args);
+builder.Host.UseDefaultServiceProvider(static (c, opts) =>
+{
+    opts.ValidateScopes = true;
+    opts.ValidateOnBuild = true;
+});
 
-builder.Services.Configure<MassTransitHostOptions>(options =>
+builder.Services.Configure<MassTransitHostOptions>(static options =>
 {
     options.WaitUntilStarted = true;
 });
 
-builder.Services.ConfigureHttpJsonOptions(options =>
+builder.Services.ConfigureHttpJsonOptions(static options =>
 {
     options.SerializerOptions.SetJsonSerializationContext();
 });
 
+builder.WebHost.UseKestrelHttpsConfiguration();
 builder.AddServiceDefaults();
-builder.Services.AddOpenTelemetry()
-    .WithTracing(tracing => tracing.AddSource("Marten"))
-    .WithMetrics(metrics => metrics.AddMeter("Marten"));
-builder.AddNpgsqlDataSource(connectionName: "db-iam-entities");
-builder.Services.AddMarten(opts =>
+builder.Services.AddNtfyCator(options =>
 {
-    opts.Policies.AllDocumentsSoftDeleted();
-})
-    .UseLightweightSessions()
-    .UseNpgsqlDataSource();
-builder.Services
-    .AddIdentityCore<ApplicationUser>()
-    .AddRoles<IdentityRole>()
-    .AddMartenStores<ApplicationUser, IdentityRole>();
-builder.Services
-    .AddIdentityCore<ApplicationAdmin>()
-    .AddRoles<IdentityRole>()
-    .AddMartenStores<ApplicationAdmin, IdentityRole>();
+    options.Uri = "http://localhost:4010";
+});
 builder.Services.AddMassTransit(busConfigurator =>
 {
+    busConfigurator.AddConsumer<SendPushUsingNtfyConsumer>();
+    busConfigurator.ConfigureHttpJsonOptions(static o => o.SerializerOptions.SetJsonSerializationContext());
     busConfigurator.UsingRabbitMq((context, config) =>
     {
         config.ConfigureJsonSerializerOptions(options => options.SetJsonSerializationContext());
@@ -50,6 +41,6 @@ builder.Services.AddMassTransit(busConfigurator =>
     });
 });
 
-builder.Services.AddSingleton<IValidator<CreateUser>, CreateUserValidator>();
+builder.Services.AddSingleton<IValidator<SendGenericPush>, GenericPushValidator>();
 
 await builder.Build().RunAsync();

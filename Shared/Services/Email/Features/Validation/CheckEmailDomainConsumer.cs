@@ -35,11 +35,11 @@ public class CheckEmailDomainConsumer : IConsumer<CheckEmailDomain>
         var host = mailAddress.Host;
         var isEmailDomain = await CheckDnsEntriesAsync(host);
         if (isEmailDomain)
+            await context.RespondAsync(new DataResult<EmailDomainChecked>(new()));
+        else
             await context.RespondAsync(
-                new DataResult<EmailDomainChecked>(new()));
-        else await context.RespondAsync(
-                new DataResult<EmailDomainChecked>(
-                    Errors: [new NoneDetail(context.Message.Email, EmailConstants.EmailDomainIsNotValid)]));
+                    new DataResult<EmailDomainChecked>(
+                        Errors: [new NoneDetail(context.Message.Email, EmailConstants.EmailDomainIsNotValid)]));
     }
 
     private async Task<bool> CheckDnsEntriesAsync(string domain)
