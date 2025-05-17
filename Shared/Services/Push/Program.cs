@@ -25,7 +25,7 @@ builder.Services.ConfigureHttpJsonOptions(static options =>
 
 builder.WebHost.UseKestrelHttpsConfiguration();
 builder.AddServiceDefaults();
-builder.Services.AddNtfyCator(options =>
+builder.Services.AddNtfyCator(static options =>
 {
     options.Uri = "http://localhost:4010";
 });
@@ -35,7 +35,7 @@ builder.Services.AddMassTransit(busConfigurator =>
     busConfigurator.ConfigureHttpJsonOptions(static o => o.SerializerOptions.SetJsonSerializationContext());
     busConfigurator.UsingRabbitMq((context, config) =>
     {
-        config.ConfigureJsonSerializerOptions(options => options.SetJsonSerializationContext());
+        config.ConfigureJsonSerializerOptions(static options => options.SetJsonSerializationContext());
         config.Host(builder.Configuration.GetConnectionString("rabbitmq"));
         config.ConfigureEndpoints(context);
     });
