@@ -7,9 +7,6 @@ namespace snowcoreBlog.Backend.ReadersManagement.Extensions;
 [Mapper]
 public static partial class UserTokenExtensions
 {
-    [MapperIgnoreTarget(nameof(GetUserTokenPairWithPayload.Roles))]
-    [MapperIgnoreTarget(nameof(GetUserTokenPairWithPayload.Permissions))]
-    [MapperIgnoreTarget(nameof(GetUserTokenPairWithPayload.Claims))]
     private static partial GetUserTokenPairWithPayload MapperToGetUserTokenPairWithPayload(
         this ReaderAccountTokenRequirementOptions readerAccountTokenRequirements);
 
