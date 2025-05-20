@@ -7,6 +7,11 @@ using snowcoreBlog.Backend.Email.Core.Contracts;
 using snowcoreBlog.Backend.Email.Validation;
 using snowcoreBlog.Backend.Email.Features.SendGrid;
 using snowcoreBlog.Backend.Email.Features.Validation;
+using Amazon.SimpleEmailV2;
+using Amazon.Extensions.NETCore.Setup;
+using Amazon.Runtime;
+using Amazon;
+using snowcoreBlog.Backend.Email.Features.AmazonSimpleEmail;
 
 var builder = WebApplication.CreateSlimBuilder(args);
 builder.Host.UseDefaultServiceProvider(static (c, opts) =>
@@ -28,9 +33,14 @@ builder.Services.ConfigureHttpJsonOptions(static options =>
 builder.WebHost.UseKestrelHttpsConfiguration();
 builder.AddServiceDefaults();
 builder.Services.AddSendGrid(options => options.ApiKey = builder.Configuration["Integrations:SendGrid:ApiKey"]);
+builder.Services.AddAWSService<IAmazonSimpleEmailServiceV2>(new AWSOptions
+{
+    Credentials = new BasicAWSCredentials(string.Empty, string.Empty),
+    Region = RegionEndpoint.EUNorth1
+});
 builder.Services.AddMassTransit(busConfigurator =>
 {
-    busConfigurator.AddConsumer<SendGenericEmailUsingSendGridConsumer>();
+    busConfigurator.AddConsumer<SendGenericEmailUsingAmazonSimpleEmailConsumer>();
     busConfigurator.AddConsumer<SendTemplatedEmailUsingSendGridConsumer>();
     busConfigurator.AddConsumer<CheckEmailDomainConsumer>();
     busConfigurator.ConfigureHttpJsonOptions(static o => o.SerializerOptions.SetJsonSerializationContext());
