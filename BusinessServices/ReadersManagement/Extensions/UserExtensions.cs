@@ -8,25 +8,13 @@ namespace snowcoreBlog.Backend.ReadersManagement;
 [Mapper]
 public static partial class UserExtensions
 {
-    public static CreateUser ToCreateUser(this ConfirmCreateReaderAccountDto createReaderAccountDto, string attestationOptionsJson) =>
-        new()
-        {
-            Email = createReaderAccountDto.Email,
-            TempUserVerificationToken = createReaderAccountDto.VerificationToken,
-            AuthenticatorAttestation = createReaderAccountDto.AuthenticatorAttestation,
-            AttestationOptionsJson = attestationOptionsJson
-        };
+    [MapProperty(nameof(ConfirmCreateReaderAccountDto.VerificationToken), nameof(CreateUser.TempUserVerificationToken))]
+    public static partial CreateUser ToCreateUser(this ConfirmCreateReaderAccountDto createReaderAccountDto, string attestationOptionsJson);
 
     [MapProperty(nameof(RequestCreateReaderAccountDto.NickName), nameof(CreateTempUser.UserName))]
     public static partial CreateTempUser ToCreateTempUser(this RequestCreateReaderAccountDto createReaderAccountDto);
 
-    public static LoginUser ToLoginUser(this LoginByAssertionDto loginByAssertionDto, string assertionOptionsJson) =>
-        new()
-        {
-            Email = loginByAssertionDto.Email,
-            AssertionOptionsJson = assertionOptionsJson,
-            AuthenticatorAssertion = loginByAssertionDto.AuthenticatorAssertion
-        };
+    public static partial LoginUser ToLoginUser(this LoginByAssertionDto loginByAssertionDto, string assertionOptionsJson);
 
     public static partial ValidateUserExists ToValidateUserExists(this RequestCreateReaderAccountDto createReaderAccountDto);
 

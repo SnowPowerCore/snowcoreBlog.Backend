@@ -1,19 +1,16 @@
-﻿using SendGrid.Helpers.Mail;
+﻿using Riok.Mapperly.Abstractions;
+using SendGrid.Helpers.Mail;
 using snowcoreBlog.Backend.Email.Core.Contracts;
 
 namespace snowcoreBlog.Backend.Email.Extensions;
 
-public static class SendGridExtensions
+[Mapper]
+public static partial class SendGridExtensions
 {
-    public static SendGridMessage ToSendGrid(this SendGenericEmail genericEmail) =>
-        new()
-        {
-            From = new EmailAddress(
-                genericEmail.SenderAddress,
-                genericEmail.SenderName ?? string.Empty),
-            Subject = genericEmail.Subject,
-            HtmlContent = genericEmail.Content
-        };
+    [MapProperty(nameof(SendGenericEmail.Content), nameof(SendGridMessage.HtmlContent))]
+    [MapProperty(nameof(SendGenericEmail.SenderAddress), nameof(SendGridMessage.From.Email))]
+    [MapProperty(nameof(SendGenericEmail.SenderName), nameof(SendGridMessage.From.Name))]
+    public static partial SendGridMessage ToSendGrid(this SendGenericEmail genericEmail);
 
     public static SendGridMessage ToSendGrid(this SendTemplatedEmail templatedEmail) =>
         MailHelper.CreateSingleTemplateEmail(

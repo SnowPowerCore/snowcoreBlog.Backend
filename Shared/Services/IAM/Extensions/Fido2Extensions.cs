@@ -1,55 +1,34 @@
 ﻿using Fido2NetLib;
 using Fido2NetLib.Objects;
+using Riok.Mapperly.Abstractions;
 
 namespace snowcoreBlog.Backend.IAM.Extensions;
 
-public static class Fido2Extensions
+[Mapper]
+public static partial class Fido2Extensions
 {
-    public static RequestNewCredentialParams ToRequestNewCredentialParams(
-        this Fido2User user, AttestationConveyancePreference attestationConveyancePreference,
-        AuthenticatorSelection authenticatorSelection, AuthenticationExtensionsClientInputs authenticationExtensionsClientInputs) =>
-        new()
-        {
-            User = user,
-            AttestationPreference = attestationConveyancePreference,
-            AuthenticatorSelection = authenticatorSelection,
-            Extensions = authenticationExtensionsClientInputs
-        };
+    [MapPropertyFromSource(nameof(RequestNewCredentialParams.User))]
+    public static partial RequestNewCredentialParams ToRequestNewCredentialParams(
+        this Fido2User user, AttestationConveyancePreference AttestationPreference,
+        AuthenticatorSelection authenticatorSelection, AuthenticationExtensionsClientInputs extensions);
 
-    public static GetAssertionOptionsParams ToGetAssertionOptionsParams(
+    [MapPropertyFromSource(nameof(GetAssertionOptionsParams.AllowedCredentials))]
+    public static partial GetAssertionOptionsParams ToGetAssertionOptionsParams(
         this IReadOnlyList<PublicKeyCredentialDescriptor> allowedCredentials,
         UserVerificationRequirement userVerification,
-        AuthenticationExtensionsClientInputs extensions) =>
-        new()
-        {
-            AllowedCredentials = allowedCredentials,
-            UserVerification = userVerification,
-            Extensions = extensions
-        };
+        AuthenticationExtensionsClientInputs extensions);
 
-    public static MakeNewCredentialParams ToMakeNewCredentialParams(
-        this AuthenticatorAttestationRawResponse authenticatorAttestation,
-        CredentialCreateOptions credentialCreateOptions,
-        IsCredentialIdUniqueToUserAsyncDelegate isCredentialIdUniqueToUserAsync) =>
-        new()
-        {
-            IsCredentialIdUniqueToUserCallback = isCredentialIdUniqueToUserAsync,
-            AttestationResponse = authenticatorAttestation,
-            OriginalOptions = credentialCreateOptions
-        };
+    [MapPropertyFromSource(nameof(MakeNewCredentialParams.AttestationResponse))]
+    public static partial MakeNewCredentialParams ToMakeNewCredentialParams(
+        this AuthenticatorAttestationRawResponse attestationResponse,
+        CredentialCreateOptions originalOptions,
+        IsCredentialIdUniqueToUserAsyncDelegate IsCredentialIdUniqueToUserCallback);
 
-    public static MakeAssertionParams ToMakeAssertionParams(
-        this AuthenticatorAssertionRawResponse authenticatorAssertionRawResponse,
-        AssertionOptions assertionOptions,
+    [MapPropertyFromSource(nameof(MakeAssertionParams.AssertionResponse))]
+    public static partial MakeAssertionParams ToMakeAssertionParams(
+        this AuthenticatorAssertionRawResponse assertionResponse,
+        AssertionOptions originalOptions,
         byte[] storedPublicKey,
         uint storedSignatureCounter,
-        IsUserHandleOwnerOfCredentialIdAsync isUserHandleOwnerOfCredentialIdCallback) =>
-        new()
-        {
-            AssertionResponse = authenticatorAssertionRawResponse,
-            OriginalOptions = assertionOptions,
-            StoredPublicKey = storedPublicKey,
-            StoredSignatureCounter = storedSignatureCounter,
-            IsUserHandleOwnerOfCredentialIdCallback = isUserHandleOwnerOfCredentialIdCallback
-        };
+        IsUserHandleOwnerOfCredentialIdAsync isUserHandleOwnerOfCredentialIdCallback);
 }
