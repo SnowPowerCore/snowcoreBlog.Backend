@@ -49,9 +49,9 @@ public class CheckEmailDomainConsumer : IConsumer<CheckEmailDomain>
             using var cts = new CancellationTokenSource();
             cts.CancelAfter(TimeSpan.FromSeconds(5));
             var result = await _lookupClient.QueryAsync(
-                domain, QueryType.MX, cancellationToken: cts.Token);
+                domain, QueryType.TXT, cancellationToken: cts.Token);
             return result.Answers.Any(record =>
-                record.RecordType == DnsClient.Protocol.ResourceRecordType.MX);
+                record.RecordType == DnsClient.Protocol.ResourceRecordType.TXT);
         }
         catch (DnsResponseException)
         {
