@@ -96,7 +96,7 @@ builder.Services.Configure<ReaderAccountTokenRequirementOptions>(
     builder.Configuration.GetSection("Security:ReaderAccountTokenRequirements"));
 
 builder.Services.Configure<SendGridSenderAccountOptions>(
-    builder.Configuration.GetSection("Integrations:SendGrid:SenderAccount"));
+    builder.Configuration.GetSection("Integrations:Email:SenderAccount"));
 
 builder.WebHost.UseKestrelHttpsConfiguration();
 builder.AddServiceDefaults();
