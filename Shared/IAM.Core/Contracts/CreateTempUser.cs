@@ -6,7 +6,7 @@ public sealed record CreateTempUser
 
     public required string Email { get; init; }
 
-    public string? PhoneNumber { get; set; }
+    public string? PhoneNumber { get; init; }
 
     public required string FirstName { get; init; }
 

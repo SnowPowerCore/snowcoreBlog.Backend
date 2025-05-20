@@ -1,30 +1,36 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using Riok.Mapperly.Abstractions;
 using snowcoreBlog.Backend.Core.Contracts;
 using snowcoreBlog.Backend.Email.Core.Contracts;
 using snowcoreBlog.Backend.Email.Core.Options;
 
 namespace snowcoreBlog.Backend.ReadersManagement.Extensions;
 
+[Mapper]
 public static partial class TemplatedEmailExtensions
 {
+    private static partial SendTemplatedEmail MapperToSendTemplatedEmail(
+        this SendGridSenderAccountOptions senderOptions,
+        string templateId,
+        string receiverAddress);
+
     public static SendTemplatedEmail ToActivateCreatedTempUserEmail(
-        [NotNull] ReaderAccountTempUserCreated readerAccountTempUserCreated,
-        [NotNull] string templateId,
-        [NotNull] SendGridSenderAccountOptions senderOptions,
-        [NotNull] string receiverAddress, [NotNull] string subject, string preHeader = "") =>
-        new()
+        ReaderAccountTempUserCreated readerAccountTempUserCreated,
+        string templateId,
+        SendGridSenderAccountOptions senderOptions,
+        string receiverAddress, string subject, string preHeader = "")
+    {
+        var sendTemplatedEmail = MapperToSendTemplatedEmail(senderOptions, templateId, receiverAddress);
+        sendTemplatedEmail = sendTemplatedEmail with
         {
-            SenderAddress = senderOptions.SenderAddress,
-            SenderName = senderOptions.SenderName,
-            ReceiverAddress = receiverAddress,
-            TemplateId = templateId,
-            DynamicTemplateData = new()
+            DynamicTemplateData = new Dictionary<string, string>()
             {
                 [nameof(subject)] = subject,
                 [nameof(preHeader)] = preHeader,
                 ["userFirstName"] = readerAccountTempUserCreated.UserFirstName,
                 ["verificationUrl"] = readerAccountTempUserCreated.VerificationUrl,
                 ["verificationTokenUntilThatDate"] = readerAccountTempUserCreated.VerificationTokenUntilThatDate
-            },
+            }
         };
+        return sendTemplatedEmail;
+    }
 }

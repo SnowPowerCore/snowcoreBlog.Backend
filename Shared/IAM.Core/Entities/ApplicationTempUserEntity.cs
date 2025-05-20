@@ -12,7 +12,7 @@ public record ApplicationTempUserEntity : BaseEntity
 
     public required DateTimeOffset ActivationTokenExpirationDate { get; init; }
 
-    public string? PhoneNumber { get; set; }
+    public string? PhoneNumber { get; init; }
 
     public required string FirstName { get; init; }
 

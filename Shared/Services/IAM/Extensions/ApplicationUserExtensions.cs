@@ -6,7 +6,7 @@ namespace snowcoreBlog.Backend.IAM.Extensions;
 [Mapper]
 public static partial class ApplicationUserExtensions
 {
-    private static partial ApplicationUserEntity MapperToUserEntity(this ApplicationTempUserEntity tempEntity);
+    private static partial ApplicationUserEntity MapperToUserEntity(this ApplicationTempUserEntity tempEntity, string id, bool emailConfirmed);
 
     public static ApplicationUserEntity ToUserEntity(
         this ApplicationTempUserEntity tempEntity,
@@ -14,13 +14,11 @@ public static partial class ApplicationUserExtensions
         Fido2PublicKeyCredentialEntity publicKeyCredentialEntity,
         bool emailConfirmed = true)
     {
-        var userEntity = MapperToUserEntity(tempEntity);
-        userEntity.Id = userId.ToString();
+        var userEntity = MapperToUserEntity(tempEntity, userId.ToString(), emailConfirmed);
         if (userEntity.PublicKeyCredentials is not default(ICollection<Guid>))
             userEntity.PublicKeyCredentials.Add(publicKeyCredentialEntity.Id);
         else
             userEntity.PublicKeyCredentials = [publicKeyCredentialEntity.Id];
-        userEntity.EmailConfirmed = emailConfirmed;
         return userEntity;
     }
 }
