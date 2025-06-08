@@ -21,6 +21,7 @@ using snowcoreBlog.Backend.Infrastructure.Services;
 using snowcoreBlog.Backend.Infrastructure.Utilities;
 using snowcoreBlog.Backend.Core.Utilities;
 using Weasel.Core;
+using snowcoreBlog.Backend.IAM.Features.Admin;
 
 var builder = WebApplication.CreateSlimBuilder(args);
 builder.Host.UseDefaultServiceProvider(static (c, opts) =>
@@ -122,6 +123,8 @@ builder.Services.AddMassTransit(busConfigurator =>
     busConfigurator.AddConsumer<ValidateUserNickNameWasTakenConsumer>();
     busConfigurator.AddConsumer<ValidateAndCreateAttestationConsumer>();
     busConfigurator.AddConsumer<ValidateAndCreateAssertionConsumer>();
+    busConfigurator.AddConsumer<ValidateAdminExistsConsumer>();
+    busConfigurator.AddConsumer<InviteAndCreateAdminConsumer>();
     busConfigurator.ConfigureHttpJsonOptions(static o => o.SerializerOptions.SetJsonSerializationContext());
     busConfigurator.UsingRabbitMq((context, config) =>
     {

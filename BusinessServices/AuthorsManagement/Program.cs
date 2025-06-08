@@ -1,6 +1,12 @@
 using Marten;
+using MassTransit;
 using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.AspNetCore.HttpOverrides;
+using snowcoreBlog.Backend.Core.Entities.Author;
+using snowcoreBlog.Backend.AuthorsManagement.Interfaces.Repositories.Marten;
+using snowcoreBlog.Backend.AuthorsManagement.Repositories.Marten;
+using snowcoreBlog.Backend.BusinessServices.AuthorsManagement.Features;
+using snowcoreBlog.Backend.BusinessServices.AuthorsManagement.Steps;
 using snowcoreBlog.Backend.Infrastructure.Extensions;
 using snowcoreBlog.ServiceDefaults.Extensions;
 
@@ -34,6 +40,19 @@ builder.Services.AddMarten(static opts =>
 })
     .UseLightweightSessions()
     .UseNpgsqlDataSource();
+
+builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
+builder.Services.AddScoped<CreateAuthorEntityForExistingUserStep>();
+builder.Services.AddMassTransit(busConfigurator =>
+{
+    busConfigurator.AddConsumer<CheckAuthorExistsConsumer>();
+    busConfigurator.UsingRabbitMq((context, config) =>
+    {
+        config.Host(builder.Configuration.GetConnectionString("rabbitmq"));
+        config.ConfigureEndpoints(context);
+    });
+});
+
 //builder.Services.AddFastEndpoints();
 // builder.Services.AddHostedService(sp =>
 //         new ApplicationLaunchWorker(sp.GetRequiredService<IHostApplicationLifetime>(),
