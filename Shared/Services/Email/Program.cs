@@ -12,6 +12,10 @@ using Amazon.Extensions.NETCore.Setup;
 using Amazon.Runtime;
 using Amazon;
 using snowcoreBlog.Backend.Email.Features.AmazonSimpleEmail;
+using Apizr;
+using snowcoreBlog.Backend.Email.Api;
+using Apizr.Extending.Configuring.Common;
+using Microsoft.Extensions.Http.Resilience;
 
 var builder = WebApplication.CreateSlimBuilder(args);
 builder.Host.UseDefaultServiceProvider(static (c, opts) =>
@@ -55,6 +59,29 @@ builder.Services.AddMassTransit(busConfigurator =>
 builder.Services.AddSingleton<IValidator<SendGenericEmail>, GenericEmailValidator>();
 builder.Services.AddSingleton<IValidator<SendTemplatedEmail>, TemplatedEmailValidator>();
 builder.Services.AddSingleton<IValidator<CheckEmailDomain>, CheckEmailDomainValidator>();
+
+Action<IApizrExtendedCommonOptionsBuilder> optionsBuilder = options =>
+{
+    options.ConfigureHttpClientBuilder(builder => builder
+        .AddStandardResilienceHandler(config =>
+        {
+            config.Retry = new HttpRetryStrategyOptions
+            {
+                UseJitter = true,
+                MaxRetryAttempts = 3,
+                Delay = TimeSpan.FromSeconds(0.5)
+            };
+        }))
+        .WithPriority()
+        .WithMediation()
+        .WithFileTransferMediation();
+};
+
+builder.Services.AddApizr(
+    registry => registry
+        .AddManagerFor<IEmailDisposableApi>(opts => opts.WithBaseAddress("https://disposable.github.io"))
+        .AddManagerFor<IStaticEmailDisposableApi>(opts => opts.WithBaseAddress("https://rawcdn.githack.com")),
+    optionsBuilder);
 
 var app = builder.Build();
 app.UseHttpsRedirection();

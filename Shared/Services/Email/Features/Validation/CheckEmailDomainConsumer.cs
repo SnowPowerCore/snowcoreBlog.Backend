@@ -9,23 +9,29 @@ using snowcoreBlog.Backend.Email.Core.Constants;
 using snowcoreBlog.Backend.Email.Core.Contracts;
 using snowcoreBlog.PublicApi.Utilities.DataResult;
 using StackExchange.Redis;
+using Apizr;
+using snowcoreBlog.Backend.Email.Api;
 
 namespace snowcoreBlog.Backend.Email.Features.Validation;
 
 public class CheckEmailDomainConsumer : IConsumer<CheckEmailDomain>
 {
     private readonly IValidator<CheckEmailDomain> _validator;
-    private readonly HttpClient _httpClient;
+    private readonly IApizrManager<IEmailDisposableApi> _emailDisposableApiManager;
+    private readonly IApizrManager<IStaticEmailDisposableApi> _staticEmailDisposableApiManager;
     private readonly IConnectionMultiplexer _redis;
 
     private const string RedisDisposableDomainsKey = "DisposableEmailDomainsList";
     private static readonly TimeSpan _cacheDuration = TimeSpan.FromHours(12);
-    private static readonly string _fallbackUrl = "https://rawcdn.githack.com/disposable/disposable-email-domains/master/domains.json";
 
-    public CheckEmailDomainConsumer(IValidator<CheckEmailDomain> validator, IConnectionMultiplexer redis)
+    public CheckEmailDomainConsumer(IValidator<CheckEmailDomain> validator,
+                                    IApizrManager<IEmailDisposableApi> emailDisposableApiManager,
+                                    IApizrManager<IStaticEmailDisposableApi> staticEmailDisposableApiManager,
+                                    IConnectionMultiplexer redis)
     {
         _validator = validator;
-        _httpClient = new HttpClient();
+        _emailDisposableApiManager = emailDisposableApiManager;
+        _staticEmailDisposableApiManager = staticEmailDisposableApiManager;
         _redis = redis;
     }
 
@@ -56,27 +62,21 @@ public class CheckEmailDomainConsumer : IConsumer<CheckEmailDomain>
         var cleanedDomain = input.Replace(" ", string.Empty).ToLowerInvariant();
         var hashBytes = SHA1.HashData(Encoding.UTF8.GetBytes(cleanedDomain));
         var prefix = Convert.ToHexStringLower(hashBytes).Substring(0, 2);
-        var url = $"https://disposable.github.io/disposable-email-domains/cache/{prefix}.json";
-        var response = await _httpClient.GetAsync(url);
         try
         {
+            var response = await _emailDisposableApiManager.ExecuteAsync((opt, api) => api.GetDisposableDomainsAsync(prefix, opt));
             if (!response.IsSuccessStatusCode)
-                throw new HttpRequestException($"Failed to fetch disposable domains from {url}. Status code: {response.StatusCode}");
+                throw new HttpRequestException($"Failed to fetch disposable domains from prefix {prefix}. Status code: {response.StatusCode}");
             var json = await response.Content.ReadAsStringAsync();
             using var doc = JsonDocument.Parse(json);
-            // The JSON is a dictionary: hash -> info
             if (doc.RootElement.TryGetProperty(Convert.ToHexStringLower(hashBytes), out var info))
             {
-                // Check if whitelisted property exists and is true
                 if (info.TryGetProperty("whitelist", out var whitelistedProp) && whitelistedProp.GetBoolean())
                 {
-                    // Domain is whitelisted, treat as not disposable
                     return true;
                 }
-                // Found in disposable list and not whitelisted
                 return false;
             }
-            // Not found, not disposable
             return true;
         }
         catch
@@ -89,7 +89,7 @@ public class CheckEmailDomainConsumer : IConsumer<CheckEmailDomain>
             {
                 try
                 {
-                    var fallbackResponse = await _httpClient.GetAsync(_fallbackUrl);
+                    var fallbackResponse = await _staticEmailDisposableApiManager.ExecuteAsync((opt, api) => api.GetFallbackDomainsAsync(opt));
                     fallbackResponse.EnsureSuccessStatusCode();
                     fallbackJson = await fallbackResponse.Content.ReadAsStringAsync();
                     await db.StringSetAsync(RedisDisposableDomainsKey, fallbackJson, _cacheDuration);
@@ -99,7 +99,7 @@ public class CheckEmailDomainConsumer : IConsumer<CheckEmailDomain>
                     return true;
                 }
             }
-            var items = JsonSerializer.Deserialize<List<string>?>(fallbackJson!);
+            var items = JsonSerializer.Deserialize<List<string>>(fallbackJson!);
             if (items is not default(List<string>))
                 domains.AddRange(items);
             if (domains.Contains(cleanedDomain))
