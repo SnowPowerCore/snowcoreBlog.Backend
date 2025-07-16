@@ -13,5 +13,5 @@ public static partial class ApplicationTempUserExtensions
     
     [UserMapping]
     private static string MapLastName(string? lastName) =>
-        !string.IsNullOrEmpty(lastName) ? lastName : string.Empty;
+        !string.IsNullOrWhiteSpace(lastName) ? lastName : string.Empty;
 }

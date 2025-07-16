@@ -31,7 +31,7 @@ public class GetTokenForReaderAccountStep(IRequestClient<GetUserTokenPairWithPay
         if (result.Message.IsSuccess)
         {
             var curPair = result.Message.Value;
-            if (!string.IsNullOrEmpty(curPair!.AccessToken))
+            if (!string.IsNullOrWhiteSpace(curPair!.AccessToken))
             {
                 var currentCookies = httpContextAccessor.HttpContext?.Response.Cookies;
                 currentCookies?.Append(AuthCookieConstants.UserAccessTokenCookieName, curPair.AccessToken,

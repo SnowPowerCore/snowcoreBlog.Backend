@@ -128,7 +128,7 @@ namespace snowcoreBlog.Backend.IAM.Stores
 
         public Task<bool> HasPasswordAsync(TUser user, CancellationToken cancellationToken)
         {
-            bool hasPassword = !string.IsNullOrEmpty(user.PasswordHash);
+            bool hasPassword = !string.IsNullOrWhiteSpace(user.PasswordHash);
             return Task.FromResult(hasPassword);
         }
 
@@ -211,11 +211,15 @@ namespace snowcoreBlog.Backend.IAM.Stores
         {
             using IDocumentSession session = _documentStore.LightweightSession();
             var resolvedUser = await session.Query<TUser>().FirstOrDefaultAsync(x => x.NormalizedEmail == user.NormalizedEmail, cancellationToken);
-
-            var claimsList = new List<Claim>();
-            if (resolvedUser?.RoleClaims != null)
+            if (resolvedUser is default(TUser))
             {
-                foreach (string roleClaim in resolvedUser.RoleClaims)
+                return [];
+            }
+
+            var claimsList = new List<Claim>(resolvedUser.RoleClaims?.Count ?? 0);
+            if (resolvedUser.RoleClaims != null)
+            {
+                foreach (var roleClaim in resolvedUser.RoleClaims)
                 {
                     claimsList.Add(new Claim(ClaimTypes.Role, roleClaim));
                 }

@@ -25,7 +25,7 @@ public class SendGenericEmailUsingAmazonSimpleEmailConsumer(IValidator<SendGener
 
         var sendResponse = await simpleEmail.SendEmailAsync(
             context.Message.ToAmazonSimpleEmailRequest(), context.CancellationToken);
-        if (string.IsNullOrEmpty(sendResponse?.MessageId))
+        if (string.IsNullOrWhiteSpace(sendResponse?.MessageId))
         {
             await context.RespondAsync(
                 new DataResult<GenericEmailSent>(

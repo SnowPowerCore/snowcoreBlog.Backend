@@ -25,7 +25,7 @@ public class CreateReaderAccountUserStep(IRequestClient<CreateUser> client,
         var db = redis.GetDatabase();
         var redisValue = await db.StringGetAsync($"{context.ConfirmRequest.Email}{Fido2AttestationOptions}");
         var attestationOptionsForUser = Encoding.UTF8.GetString(redisValue != RedisValue.Null ? redisValue! : []);
-        if (string.IsNullOrEmpty(attestationOptionsForUser))
+        if (string.IsNullOrWhiteSpace(attestationOptionsForUser))
         {
             return CreateUserForReaderAccountError<ReaderAccountCreatedDto>.Create(
                 AttestationConstants.NoAttestationOptionsInSession);

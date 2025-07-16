@@ -18,7 +18,7 @@ public class UserCookieJsonWebTokenMiddleware : IMiddleware
         context.Response.Headers.Append(HeaderNames.XFrameOptions, XFrameOptionsHeaderValue);
 
         var token = context.Request.Cookies[AuthCookieConstants.UserAccessTokenCookieName];
-        if (!string.IsNullOrEmpty(token))
+        if (!string.IsNullOrWhiteSpace(token))
             context.Request.Headers.Append(HeaderNames.Authorization, $"{JwtBearerDefaults.AuthenticationScheme} {token}");
 
         return next(context);

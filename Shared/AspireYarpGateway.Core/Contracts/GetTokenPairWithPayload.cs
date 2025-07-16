@@ -8,7 +8,7 @@ public record GetTokenPairWithPayload
     
     public required List<string> Roles { get; init; } = [];
     
-    public required Dictionary<string, string> Claims { get; init; } = new DictionaryWithDefault<string, string>(defaultValue: string.Empty);
+    public required Dictionary<string, string> Claims { get; init; } = new DictionaryWithDefault<string, string>(defaultValue: string.Empty, 0);
 
     public required uint AccessTokenValidityDurationInMinutes { get; init; } = 1;
     

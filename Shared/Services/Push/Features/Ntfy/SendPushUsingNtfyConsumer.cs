@@ -28,19 +28,19 @@ public class SendPushUsingNtfyConsumer(IValidator<SendGenericPush> validator,
             .WithTitle(sendMessage.Subject)
             .WithPriority(sendMessage.Priority.ToNtfyPriority());
         
-        if (!string.IsNullOrEmpty(sendMessage.Content))
+        if (!string.IsNullOrWhiteSpace(sendMessage.Content))
             message = message.WithBody(sendMessage.Content, sendMessage.IsContentMarkdown);
         
-        if (!string.IsNullOrEmpty(sendMessage.Email))
+        if (!string.IsNullOrWhiteSpace(sendMessage.Email))
             message = message.WithEmail(sendMessage.Email);
         
-        if (!string.IsNullOrEmpty(sendMessage.PhoneNumber))
+        if (!string.IsNullOrWhiteSpace(sendMessage.PhoneNumber))
             message = message.WithPhoneNumber(sendMessage.PhoneNumber);
         
-        if (!string.IsNullOrEmpty(sendMessage.IconUri))
+        if (!string.IsNullOrWhiteSpace(sendMessage.IconUri))
             message = message.WithIconUri(sendMessage.IconUri);
         
-        if (!string.IsNullOrEmpty(sendMessage.ClickUri))
+        if (!string.IsNullOrWhiteSpace(sendMessage.ClickUri))
             message = message.WithIconUri(sendMessage.ClickUri);
         
         if (sendMessage.Tags.Count > 0)

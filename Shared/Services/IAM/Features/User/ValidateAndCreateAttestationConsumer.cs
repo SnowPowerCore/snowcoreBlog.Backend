@@ -38,7 +38,7 @@ public class ValidateAndCreateAttestationConsumer(IHasher hasher,
                 {
                     Name = updatedTempUser.Email,
                     Id = Guid.NewGuid().ToByteArray(),
-                    DisplayName = !string.IsNullOrEmpty(updatedTempUser.LastName)
+                    DisplayName = !string.IsNullOrWhiteSpace(updatedTempUser.LastName)
                         ? $"{updatedTempUser.FirstName} {updatedTempUser.LastName}"
                         : $"{updatedTempUser.FirstName}"
                 };

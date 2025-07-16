@@ -85,7 +85,7 @@ public class CheckEmailDomainConsumer : IConsumer<CheckEmailDomain>
             var db = _redis.GetDatabase();
             var fallbackJson = await db.StringGetAsync(RedisDisposableDomainsKey);
             List<string>? domains = [];
-            if (string.IsNullOrEmpty(fallbackJson))
+            if (string.IsNullOrWhiteSpace(fallbackJson))
             {
                 try
                 {

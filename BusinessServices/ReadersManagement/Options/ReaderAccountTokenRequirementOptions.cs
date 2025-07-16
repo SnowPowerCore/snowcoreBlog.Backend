@@ -1,4 +1,4 @@
-using MinimalStepifiedSystem.Utils;
+using snowcoreBlog.PublicApi.Utilities.Dictionary;
 
 namespace snowcoreBlog.Backend.ReadersManagement.Options;
 
@@ -8,7 +8,7 @@ public record ReaderAccountTokenRequirementOptions
 
     public List<string> Roles { get; set; } = [];
 
-    public Dictionary<string, string> Claims { get; set; } = new DictionaryWithDefault<string, string>(defaultValue: string.Empty);
+    public Dictionary<string, string> Claims { get; set; } = new DictionaryWithDefault<string, string>(defaultValue: string.Empty, 0);
 
     public required uint AccessTokenValidityDurationInMinutes { get; set; }
 

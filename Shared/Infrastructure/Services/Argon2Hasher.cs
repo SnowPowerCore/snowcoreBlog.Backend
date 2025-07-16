@@ -28,7 +28,7 @@ public class Argon2Hasher : IHasher
 
     public string Hash(string target)
     {
-        if (string.IsNullOrEmpty(target))
+        if (string.IsNullOrWhiteSpace(target))
             throw new ArgumentNullException(nameof(target));
 
         return PasswordHash.ArgonHashString(target, _strength).Replace("\0", string.Empty);
@@ -36,8 +36,8 @@ public class Argon2Hasher : IHasher
 
     public HashedStringsVerificationResult VerifyHashedStrings(string alreadyHashedString, string targetString)
     {
-        if (string.IsNullOrEmpty(alreadyHashedString)) throw new ArgumentNullException(nameof(alreadyHashedString));
-        if (string.IsNullOrEmpty(targetString)) throw new ArgumentNullException(nameof(targetString));
+        if (string.IsNullOrWhiteSpace(alreadyHashedString)) throw new ArgumentNullException(nameof(alreadyHashedString));
+        if (string.IsNullOrWhiteSpace(targetString)) throw new ArgumentNullException(nameof(targetString));
 
         var isValid = PasswordHash.ArgonHashStringVerify(alreadyHashedString, targetString);
 

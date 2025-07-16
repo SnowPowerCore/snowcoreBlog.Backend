@@ -13,7 +13,7 @@ public class Fido2PublicKeyCredentialRepository(IDocumentSession session) : Base
     {
         var batch = session.CreateBatchQuery();
         var exists = false;
-        var tasks = new List<Task<bool>>();
+        var tasks = new List<Task<bool>>(ids.Length);
         foreach (var id in ids)
         {
             tasks.Add(batch.Query(new PublicKeyCredentialByIdAndCredIdQuery { Id = id, PublicKeyCredentialId = publicKeyCredentialId }));

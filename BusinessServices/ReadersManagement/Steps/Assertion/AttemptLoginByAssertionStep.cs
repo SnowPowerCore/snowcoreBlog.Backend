@@ -26,7 +26,7 @@ public class AttemptLoginByAssertionStep(IRequestClient<LoginUser> requestClient
         var db = redis.GetDatabase();
         var redisValue = await db.StringGetAsync($"{context.LoginByAssertion.Email}{Fido2AssertionOptions}");
         var assertionOptionsForUser = Encoding.UTF8.GetString(redisValue != RedisValue.Null ? redisValue! : []);
-        if (string.IsNullOrEmpty(assertionOptionsForUser))
+        if (string.IsNullOrWhiteSpace(assertionOptionsForUser))
         {
             return AssertionError<LoginByAssertionResultDto>.Create(
                 AssertionConstants.NoAssertionOptionsInSession);

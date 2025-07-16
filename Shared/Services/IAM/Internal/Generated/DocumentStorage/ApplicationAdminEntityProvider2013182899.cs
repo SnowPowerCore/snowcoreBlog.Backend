@@ -412,7 +412,7 @@ namespace Marten.Generated.DocumentStorage
 
         public override string AssignIdentity(snowcoreBlog.Backend.IAM.Core.Entities.ApplicationAdminEntity document, string tenantId, Marten.Storage.IMartenDatabase database)
         {
-            if (string.IsNullOrEmpty(document.Id)) throw new InvalidOperationException("Id/id values cannot be null or empty");
+            if (string.IsNullOrWhiteSpace(document.Id)) throw new InvalidOperationException("Id/id values cannot be null or empty");
             return document.Id;
         }
 
@@ -504,7 +504,7 @@ namespace Marten.Generated.DocumentStorage
 
         public override string AssignIdentity(snowcoreBlog.Backend.IAM.Core.Entities.ApplicationAdminEntity document, string tenantId, Marten.Storage.IMartenDatabase database)
         {
-            if (string.IsNullOrEmpty(document.Id)) throw new InvalidOperationException("Id/id values cannot be null or empty");
+            if (string.IsNullOrWhiteSpace(document.Id)) throw new InvalidOperationException("Id/id values cannot be null or empty");
             return document.Id;
         }
 
@@ -596,7 +596,7 @@ namespace Marten.Generated.DocumentStorage
 
         public override string AssignIdentity(snowcoreBlog.Backend.IAM.Core.Entities.ApplicationAdminEntity document, string tenantId, Marten.Storage.IMartenDatabase database)
         {
-            if (string.IsNullOrEmpty(document.Id)) throw new InvalidOperationException("Id/id values cannot be null or empty");
+            if (string.IsNullOrWhiteSpace(document.Id)) throw new InvalidOperationException("Id/id values cannot be null or empty");
             return document.Id;
         }
 
@@ -688,7 +688,7 @@ namespace Marten.Generated.DocumentStorage
 
         public override string AssignIdentity(snowcoreBlog.Backend.IAM.Core.Entities.ApplicationAdminEntity document, string tenantId, Marten.Storage.IMartenDatabase database)
         {
-            if (string.IsNullOrEmpty(document.Id)) throw new InvalidOperationException("Id/id values cannot be null or empty");
+            if (string.IsNullOrWhiteSpace(document.Id)) throw new InvalidOperationException("Id/id values cannot be null or empty");
             return document.Id;
         }
 
