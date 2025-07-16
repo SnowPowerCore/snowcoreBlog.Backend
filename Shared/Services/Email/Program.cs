@@ -55,6 +55,7 @@ builder.Services.AddMassTransit(busConfigurator =>
         config.ConfigureEndpoints(context);
     });
 });
+builder.AddRedisClient(connectionName: "cache");
 
 builder.Services.AddSingleton<IValidator<SendGenericEmail>, GenericEmailValidator>();
 builder.Services.AddSingleton<IValidator<SendTemplatedEmail>, TemplatedEmailValidator>();
@@ -72,9 +73,7 @@ Action<IApizrExtendedCommonOptionsBuilder> optionsBuilder = options =>
                 Delay = TimeSpan.FromSeconds(0.5)
             };
         }))
-        .WithPriority()
-        .WithMediation()
-        .WithFileTransferMediation();
+        .WithPriority();
 };
 
 builder.Services.AddApizr(
