@@ -17,7 +17,7 @@ using Microsoft.AspNetCore.Http.Json;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Routing.Constraints;
-using MinimalStepifiedSystem.Core.Extensions;
+using MinimalStepifiedSystem.Extensions;
 using NSwag;
 using Oakton;
 using Scalar.AspNetCore;
