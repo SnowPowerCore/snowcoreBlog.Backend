@@ -1,7 +1,6 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using System.Net.Mime;
-using System.Security.Claims;
 using FastEndpoints;
 using MaybeResults;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
