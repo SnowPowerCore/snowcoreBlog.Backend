@@ -29,6 +29,7 @@
     <PackageReference Include="Marten" Version="7.40.3" />
     <PackageReference Include="Marten.CommandLine" Version="7.40.3" />
     <PackageReference Include="MinimalStepifiedSystem.Core" Version="1.2.2.0" />
+    <PackageReference Include="MinimalStepifiedSystem.SourceGen" Version="1.2.2.0" />
     <PackageReference Include="OpenTelemetry.Instrumentation.StackExchangeRedis" Version="1.10.0-beta.1" />
     <PackageReference Include="Scalar.AspNetCore" Version="2.3.0" />
     <PackageReference Include="Riok.Mapperly" Version="4.2.1">

@@ -12,11 +12,9 @@ public class ReaderAccountTempUserCreatedConsumer(IOptions<SendGridSenderAccount
 {
     public Task Consume(ConsumeContext<ReaderAccountTempUserCreated> context) =>
         context.Publish(
-            TemplatedEmailExtensions.ToActivateCreatedTempUserEmail(
-                context.Message,
-                configuration.GetSection("Integrations:SendGrid:DynamicTemplates")[EmailConstants.ReaderAccountTempUserCreatedTemplateId]!,
+            GenericEmailExtensions.ToGeneric(
                 options.Value,
                 context.Message.UserEmail,
                 EmailConstants.ReaderAccountTempUserCreatedSubject,
-                EmailConstants.ReaderAccountTempUserCreatedPreHeader), context.CancellationToken);
+                $"Welcome {context.Message.UserFirstName}, your activation link is: {context.Message.VerificationUrl}."), context.CancellationToken);
 }

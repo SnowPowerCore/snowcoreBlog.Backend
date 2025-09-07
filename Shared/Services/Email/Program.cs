@@ -37,15 +37,14 @@ builder.Services.ConfigureHttpJsonOptions(static options =>
 builder.WebHost.UseKestrelHttpsConfiguration();
 builder.AddServiceDefaults();
 builder.Services.AddSendGrid(options => options.ApiKey = builder.Configuration["Integrations:SendGrid:ApiKey"]);
-builder.Services.AddAWSService<IAmazonSimpleEmailServiceV2>(new AWSOptions
-{
-    Credentials = new BasicAWSCredentials(string.Empty, string.Empty),
-    Region = RegionEndpoint.EUNorth1
-});
+var awsOption = builder.Configuration.GetAWSOptions("Integrations:AWS");
+awsOption.Credentials = new BasicAWSCredentials(builder.Configuration["Integrations:AWS:AccessKey"], builder.Configuration["Integrations:AWS:SecretKey"]);
+builder.Services.AddDefaultAWSOptions(awsOption);
+builder.Services.AddAWSService<IAmazonSimpleEmailServiceV2>();
 builder.Services.AddMassTransit(busConfigurator =>
 {
     busConfigurator.AddConsumer<SendGenericEmailUsingAmazonSimpleEmailConsumer>();
-    busConfigurator.AddConsumer<SendTemplatedEmailUsingSendGridConsumer>();
+    busConfigurator.AddConsumer<SendTemplatedEmailUsingAmazonSimpleEmailConsumer>();
     busConfigurator.AddConsumer<CheckEmailDomainConsumer>();
     busConfigurator.ConfigureHttpJsonOptions(static o => o.SerializerOptions.SetJsonSerializationContext());
     busConfigurator.UsingRabbitMq((context, config) =>
