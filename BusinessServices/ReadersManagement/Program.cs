@@ -24,6 +24,7 @@ using Scalar.AspNetCore;
 using snowcoreBlog.Backend.Core.Constants;
 using snowcoreBlog.Backend.Core.Entities.Reader;
 using snowcoreBlog.Backend.Core.Interfaces.Services;
+using snowcoreBlog.Backend.Core.Options;
 using snowcoreBlog.Backend.Email.Core.Options;
 using snowcoreBlog.Backend.Infrastructure;
 using snowcoreBlog.Backend.Infrastructure.Entities;
@@ -53,6 +54,9 @@ builder.Host.UseDefaultServiceProvider(static (c, options) =>
     options.ValidateOnBuild = true;
 });
 builder.Host.ApplyOaktonExtensions();
+
+builder.Services.Configure<ProjectOptions>(
+    builder.Configuration.GetSection("Project"));
 
 builder.Services.Configure<MassTransitHostOptions>(static options =>
 {

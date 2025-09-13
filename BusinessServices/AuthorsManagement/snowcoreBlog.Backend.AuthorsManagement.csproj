@@ -10,7 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Aspire.Npgsql" Version="9.2.1" />
+    <PackageReference Include="Aspire.Npgsql" Version="9.4.2" />
     <PackageReference Include="FastEndpoints" Version="6.1.0" />
     <PackageReference Include="Fody" Version="6.9.2">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
