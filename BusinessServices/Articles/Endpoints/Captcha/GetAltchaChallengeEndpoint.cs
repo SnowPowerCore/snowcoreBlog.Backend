@@ -1,11 +1,11 @@
-﻿using System.Net;
+using System.Net;
 using System.Net.Mime;
 using FastEndpoints;
 using Ixnas.AltchaNet;
-using snowcoreBlog.Backend.Infrastructure;
 using snowcoreBlog.PublicApi.Constants;
+using snowcoreBlog.Backend.Infrastructure;
 
-namespace snowcoreBlog.Backend.ReadersManagement.Endpoints.Captcha;
+namespace snowcoreBlog.Backend.Articles.Endpoints.Captcha;
 
 public class GetAltchaChallengeEndpoint : EndpointWithoutRequest<AltchaChallenge?>
 {
