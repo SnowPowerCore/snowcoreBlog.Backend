@@ -5,16 +5,27 @@ using Microsoft.AspNetCore.HttpOverrides;
 using snowcoreBlog.Backend.Core.Entities.Author;
 using snowcoreBlog.Backend.AuthorsManagement.Interfaces.Repositories.Marten;
 using snowcoreBlog.Backend.AuthorsManagement.Repositories.Marten;
-using snowcoreBlog.Backend.BusinessServices.AuthorsManagement.Features;
 using snowcoreBlog.Backend.BusinessServices.AuthorsManagement.Steps;
 using snowcoreBlog.Backend.Infrastructure.Extensions;
 using snowcoreBlog.ServiceDefaults.Extensions;
+using snowcoreBlog.Backend.AuthorsManagement.Features;
+using Microsoft.AspNetCore.Http.Json;
 
 var builder = WebApplication.CreateSlimBuilder(args);
 builder.Host.UseDefaultServiceProvider(static (c, opts) =>
 {
     opts.ValidateScopes = true;
     opts.ValidateOnBuild = true;
+});
+
+builder.Services.Configure<JsonOptions>(static options =>
+{
+    options.SerializerOptions.SetJsonSerializationContext();
+});
+
+builder.Services.ConfigureHttpJsonOptions(static options =>
+{
+    options.SerializerOptions.SetJsonSerializationContext();
 });
 
 builder.Services.Configure<CookiePolicyOptions>(static options =>
@@ -37,6 +48,7 @@ builder.AddNpgsqlDataSource(connectionName: "db-snowcore-blog-entities");
 builder.Services.AddMarten(static opts =>
 {
     opts.Policies.AllDocumentsSoftDeleted();
+    opts.UseSystemTextJsonForSerialization(configure: static o => o.SetJsonSerializationContext());
 })
     .UseLightweightSessions()
     .UseNpgsqlDataSource();
@@ -46,8 +58,11 @@ builder.Services.AddScoped<CreateAuthorEntityForExistingUserStep>();
 builder.Services.AddMassTransit(busConfigurator =>
 {
     busConfigurator.AddConsumer<CheckAuthorExistsConsumer>();
+    busConfigurator.AddConsumer<ReturnClaimsIfUserAuthorConsumer>();
+    busConfigurator.ConfigureHttpJsonOptions(static o => o.SerializerOptions.SetJsonSerializationContext());
     busConfigurator.UsingRabbitMq((context, config) =>
     {
+        config.ConfigureJsonSerializerOptions(static options => options.SetJsonSerializationContext());
         config.Host(builder.Configuration.GetConnectionString("rabbitmq"));
         config.ConfigureEndpoints(context);
     });

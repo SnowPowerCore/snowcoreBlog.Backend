@@ -1,11 +1,7 @@
-using System;
-using System.Threading.Tasks;
 using MassTransit;
-using Marten;
-using snowcoreBlog.Backend.Core.Entities.Author;
 using snowcoreBlog.Backend.AuthorsManagement.Interfaces.Repositories.Marten;
 
-namespace snowcoreBlog.Backend.BusinessServices.AuthorsManagement.Features;
+namespace snowcoreBlog.Backend.AuthorsManagement.Features;
 
 public record CheckAuthorExistsRequest(Guid UserId);
 public record CheckAuthorExistsResponse(bool Exists);

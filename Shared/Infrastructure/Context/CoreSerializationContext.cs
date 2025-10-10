@@ -68,6 +68,8 @@ namespace snowcoreBlog.Backend.Infrastructure;
 [JsonSerializable(typeof(LoginByAssertionResultDto))]
 [JsonSerializable(typeof(ReaderAccountUserLoggedIn))]
 [JsonSerializable(typeof(AuthenticationStateDto))]
+[JsonSerializable(typeof(RequestReaderClaims))]
+[JsonSerializable(typeof(ReaderClaimsResponse))]
 [JsonSerializable(typeof(Fault<UserCreationResult>))]
 [JsonSerializable(typeof(Fault<TempUserCreationResult>))]
 [JsonSerializable(typeof(Fault<UserNickNameTakenValidationResult>))]

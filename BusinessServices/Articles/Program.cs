@@ -65,7 +65,10 @@ builder.Services.AddSingleton(static sp =>
         .Build();
 });
 
-builder.Services.AddFastEndpoints();
+builder.Services.AddAuthentication();
+builder.Services.AddAuthorization()
+    .AddAntiforgery(options => options.Cookie.Expiration = TimeSpan.Zero)
+    .AddFastEndpoints();
 
 builder.Services.AddScoped<IArticleRepository, ArticleRepository>();
 builder.Services.AddScoped<ValidateAuthorAccountStep>();
