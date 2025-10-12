@@ -13,6 +13,9 @@ using snowcoreBlog.ServiceDefaults.Extensions;
 using JasperFx.CodeGeneration;
 using snowcoreBlog.Backend.Core.Entities.Article;
 using Oakton;
+using snowcoreBlog.ApplicationLaunch.Implementations.BackgroundServices;
+using snowcoreBlog.ApplicationLaunch.Interfaces;
+using snowcoreBlog.Backend.Articles.Services;
 
 var builder = WebApplication.CreateSlimBuilder(args);
 builder.Host.UseDefaultServiceProvider(static (c, options) =>
@@ -43,6 +46,7 @@ builder.Services.Configure<ForwardedHeadersOptions>(static options =>
 builder.WebHost.UseKestrelHttpsConfiguration();
 builder.AddServiceDefaults();
 
+builder.AddNpgsqlDataSource(connectionName: "db-snowcore-blog-article-entities");
 //builder.Services.AddNpgsqlDataSource("Host=localhost;Port=54523;Username=postgres;Password=xQ6S1zf+)!kTnjFFCtt(Ks");
 
 builder.Services.AddMarten(static options =>
@@ -75,12 +79,20 @@ builder.Services.AddSingleton(static sp =>
 builder.Services.AddAuthentication();
 builder.Services.AddAuthorization()
     .AddAntiforgery(options => options.Cookie.Expiration = TimeSpan.Zero)
-    .AddFastEndpoints();
+    .AddFastEndpoints(static options =>
+    {
+        options.SourceGeneratorDiscoveredTypes.AddRange(snowcoreBlog.Backend.Articles.DiscoveredTypes.All);
+    });
 
+builder.Services.AddSingleton<IApplicationLaunchService>(static sp => new ArticlesApplicationLaunchService(sp));
 builder.Services.AddScoped<IArticleRepository, ArticleRepository>();
 builder.Services.AddScoped<ValidateAuthorAccountStep>();
 builder.Services.AddScoped<GenerateSlugStep>();
 builder.Services.AddScoped<SaveArticleStep>();
+
+builder.Services.AddHostedService(static sp =>
+    new ApplicationLaunchWorker(sp.GetRequiredService<IHostApplicationLifetime>(),
+        sp.GetRequiredService<IApplicationLaunchService>()));
 
 var app = builder.Build();
 

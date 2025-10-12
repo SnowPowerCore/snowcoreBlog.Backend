@@ -1,20 +1,10 @@
 using System.Net;
-using snowcoreBlog.Backend.RegionalIpRestriction.Services;
 
 namespace snowcoreBlog.Backend.RegionalIpRestriction.Middleware;
 
-public class RequestRestrictionMiddleware
+public class RequestRestrictionMiddleware : IMiddleware
 {
-    private readonly RequestDelegate _next;
-    private readonly IRequestRestrictionService _service;
-
-    public RequestRestrictionMiddleware(RequestDelegate next, IRequestRestrictionService service)
-    {
-        _next = next;
-        _service = service;
-    }
-
-    public async Task InvokeAsync(HttpContext context)
+    public async Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
         var ip = context.Connection.RemoteIpAddress ?? IPAddress.Loopback;
         var path = context.Request.Path.ToString();
@@ -27,6 +17,6 @@ public class RequestRestrictionMiddleware
         //     return;
         // }
 
-        await _next(context);
+        await next(context);
     }
 }

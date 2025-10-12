@@ -68,7 +68,7 @@ var jsonStringEnumConverter = new JsonStringEnumConverter();
 builder.Services.AddAuthorization()
     .AddFastEndpoints(static options =>
     {
-        // no source generator types for now
+        options.SourceGeneratorDiscoveredTypes.AddRange(snowcoreBlog.Backend.RegionalIpRestriction.DiscoveredTypes.All);
     })
     .SwaggerDocument(options =>
     {

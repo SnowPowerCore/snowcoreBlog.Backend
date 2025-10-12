@@ -13,6 +13,10 @@
     <PackageReference Include="Aspire.Npgsql" Version="9.4.2" />
     <PackageReference Include="FastEndpoints" Version="6.1.0" />
     <PackageReference Include="FastEndpoints.Swagger" Version="6.1.0" />
+    <PackageReference Include="FastEndpoints.Generator" Version="6.1.0">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
     <PackageReference Include="Fody" Version="6.9.2">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
@@ -38,6 +42,7 @@
     <ProjectReference Include="..\..\snowcoreBlog.Universal\ServiceDefaults\snowcoreBlog.ServiceDefaults.csproj" />
     <ProjectReference Include="..\..\snowcoreBlog.Universal\PublicApi\snowcoreBlog.PublicApi.csproj" />
     <ProjectReference Include="..\..\Shared\Infrastructure\snowcoreBlog.Backend.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\snowcoreBlog.Universal\UniversalModules\ApplicationLaunch.Implementations\snowcoreBlog.ApplicationLaunch.Implementations.csproj" />
   </ItemGroup>
 
 </Project>

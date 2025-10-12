@@ -9,6 +9,7 @@ using MassTransit.Events;
 using Scalar.AspNetCore;
 using snowcoreBlog.Backend.AspireYarpGateway.Core.Contracts;
 using snowcoreBlog.Backend.Core.Contracts;
+using snowcoreBlog.Backend.Core.Entities.Article;
 using snowcoreBlog.Backend.Core.Entities.Reader;
 using snowcoreBlog.Backend.Email.Core.Contracts;
 using snowcoreBlog.Backend.IAM.Core.Contracts;
@@ -38,6 +39,8 @@ namespace snowcoreBlog.Backend.Infrastructure;
 [JsonSerializable(typeof(Fido2PublicKeyCredentialEntity))]
 [JsonSerializable(typeof(Fido2AuthenticatorTransportEntity))]
 [JsonSerializable(typeof(Fido2DevicePublicKeyEntity))]
+[JsonSerializable(typeof(ArticleEntity))]
+[JsonSerializable(typeof(ArticleSnapshotEntity))]
 [JsonSerializable(typeof(ReaderEntity))]
 [JsonSerializable(typeof(AltchaStoredChallengeEntity))]
 [JsonSerializable(typeof(CreateAdmin))]
