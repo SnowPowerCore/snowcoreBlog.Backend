@@ -10,13 +10,17 @@ using snowcoreBlog.Backend.Articles.Repositories.Marten;
 using snowcoreBlog.Backend.Articles.Interfaces.Repositories.Marten;
 using snowcoreBlog.Backend.Articles.Steps;
 using snowcoreBlog.ServiceDefaults.Extensions;
+using JasperFx.CodeGeneration;
+using snowcoreBlog.Backend.Core.Entities.Article;
+using Oakton;
 
 var builder = WebApplication.CreateSlimBuilder(args);
-builder.Host.UseDefaultServiceProvider(static (c, opts) =>
+builder.Host.UseDefaultServiceProvider(static (c, options) =>
 {
-    opts.ValidateScopes = true;
-    opts.ValidateOnBuild = true;
+    options.ValidateScopes = true;
+    options.ValidateOnBuild = true;
 });
+builder.Host.ApplyOaktonExtensions();
 
 builder.Services.Configure<JsonOptions>(static options =>
 {
@@ -39,10 +43,13 @@ builder.Services.Configure<ForwardedHeadersOptions>(static options =>
 builder.WebHost.UseKestrelHttpsConfiguration();
 builder.AddServiceDefaults();
 
+//builder.Services.AddNpgsqlDataSource("Host=localhost;Port=54523;Username=postgres;Password=xQ6S1zf+)!kTnjFFCtt(Ks");
+
 builder.Services.AddMarten(static options =>
 {
-    options.RegisterDocumentType<snowcoreBlog.Backend.Core.Entities.Article.ArticleEntity>();
-    options.RegisterDocumentType<snowcoreBlog.Backend.Core.Entities.Article.ArticleSnapshotEntity>();
+    options.RegisterDocumentType<ArticleEntity>();
+    options.RegisterDocumentType<ArticleSnapshotEntity>();
+    options.GeneratedCodeMode = TypeLoadMode.Static;
     options.UseSystemTextJsonForSerialization(configure: static o => o.SetJsonSerializationContext());
     options.Policies.AllDocumentsSoftDeleted();
 })
@@ -98,4 +105,4 @@ app.UseFastEndpoints(c =>
 
 app.MapDefaultEndpoints();
 
-await app.RunAsync();
+await app.RunOaktonCommands(args);
