@@ -2,7 +2,6 @@ using Marten;
 using MassTransit;
 using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.AspNetCore.HttpOverrides;
-using snowcoreBlog.Backend.Core.Entities.Author;
 using snowcoreBlog.Backend.AuthorsManagement.Interfaces.Repositories.Marten;
 using snowcoreBlog.Backend.AuthorsManagement.Repositories.Marten;
 using snowcoreBlog.Backend.BusinessServices.AuthorsManagement.Steps;
@@ -10,6 +9,10 @@ using snowcoreBlog.Backend.Infrastructure.Extensions;
 using snowcoreBlog.ServiceDefaults.Extensions;
 using snowcoreBlog.Backend.AuthorsManagement.Features;
 using Microsoft.AspNetCore.Http.Json;
+using snowcoreBlog.ApplicationLaunch.Implementations.BackgroundServices;
+using snowcoreBlog.ApplicationLaunch.Interfaces;
+using snowcoreBlog.Backend.AuthorsManagement.Services;
+using StackExchange.Redis;
 
 var builder = WebApplication.CreateSlimBuilder(args);
 builder.Host.UseDefaultServiceProvider(static (c, opts) =>
@@ -53,6 +56,8 @@ builder.Services.AddMarten(static opts =>
     .UseLightweightSessions()
     .UseNpgsqlDataSource();
 
+builder.Services.AddSingleton<IApplicationLaunchService>(static sp =>
+    new AuthorsManagementApplicationLaunchService(sp.GetRequiredService<IConnectionMultiplexer>()));
 builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
 builder.Services.AddScoped<CreateAuthorEntityForExistingUserStep>();
 builder.Services.AddMassTransit(busConfigurator =>
@@ -68,10 +73,12 @@ builder.Services.AddMassTransit(busConfigurator =>
     });
 });
 
+builder.AddRedisClient(connectionName: "cache");
 //builder.Services.AddFastEndpoints();
-// builder.Services.AddHostedService(sp =>
-//         new ApplicationLaunchWorker(sp.GetRequiredService<IHostApplicationLifetime>(),
-//             sp.GetRequiredService<IApplicationLaunchService>()));
+
+builder.Services.AddHostedService(static sp =>
+    new ApplicationLaunchWorker(sp.GetRequiredService<IHostApplicationLifetime>(),
+        sp.GetRequiredService<IApplicationLaunchService>()));
 
 var app = builder.Build();
 

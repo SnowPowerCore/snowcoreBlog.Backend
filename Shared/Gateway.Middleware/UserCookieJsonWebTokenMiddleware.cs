@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Net.Http.Headers;
 using snowcoreBlog.Backend.Core.Constants;
 
-namespace snowcoreBlog.Backend.AspireYarpGateway.Middleware;
+namespace snowcoreBlog.Backend.Gateway.Middleware;
 
 public class UserCookieJsonWebTokenMiddleware : IMiddleware
 {

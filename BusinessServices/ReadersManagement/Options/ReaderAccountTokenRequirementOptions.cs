@@ -13,7 +13,4 @@ public record ReaderAccountTokenRequirementOptions
     public required uint AccessTokenValidityDurationInMinutes { get; set; }
 
     public required uint RefreshTokenValidityDurationInMinutes { get; set; }
-
-    // List of concrete microservice names that should be queried for additional claims
-    public List<string> ClaimProviderServices { get; set; } = [];
 }

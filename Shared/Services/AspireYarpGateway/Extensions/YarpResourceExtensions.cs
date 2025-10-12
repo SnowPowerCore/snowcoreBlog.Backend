@@ -20,9 +20,10 @@ using Microsoft.Extensions.Logging;
 using snowcoreBlog.Backend.AspireYarpGateway.Core.Contracts;
 using snowcoreBlog.Backend.AspireYarpGateway.Extensions;
 using snowcoreBlog.Backend.AspireYarpGateway.Features;
-using snowcoreBlog.Backend.AspireYarpGateway.Middleware;
 using snowcoreBlog.Backend.AspireYarpGateway.Options;
 using snowcoreBlog.Backend.AspireYarpGateway.Validation;
+using snowcoreBlog.Backend.Gateway.Middleware;
+using snowcoreBlog.Backend.Gateway.Middleware.Extensions;
 using snowcoreBlog.Backend.Infrastructure.Extensions;
 using snowcoreBlog.PublicApi.Utilities.Dictionary;
 using snowcoreBlog.ServiceDefaults.Extensions;
@@ -232,6 +233,7 @@ internal class YarpResourceLifecyclehook(
         builder.Services.AddMassTransit(busConfigurator =>
         {
             busConfigurator.AddConsumer<GetUserTokenPairWithPayloadConsumer>();
+            // Request client for Regional IP restriction checks (will be handled by RegionalIpRestriction service)
             busConfigurator.ConfigureHttpJsonOptions(static o => o.SerializerOptions.SetJsonSerializationContext());
             busConfigurator.UsingRabbitMq((context, config) =>
             {
@@ -241,7 +243,7 @@ internal class YarpResourceLifecyclehook(
             });
         });
 
-        builder.Services.AddSingleton<UserCookieJsonWebTokenMiddleware>();
+        builder.Services.AddGatewayMiddleware();
         builder.Services.AddSingleton<IValidator<GetUserTokenPairWithPayload>, GetUserTokenPairWithPayloadValidator>();
 
         builder.Services.AddCors(static x => x.AddDefaultPolicy(static p => p
@@ -271,7 +273,7 @@ internal class YarpResourceLifecyclehook(
                 HttpOnly = HttpOnlyPolicy.Always,
                 Secure = CookieSecurePolicy.Always
             })
-            .UseMiddleware<UserCookieJsonWebTokenMiddleware>()
+            .UseGatewayMiddleware()
             .UseForwardedHeaders()
             .UseAuthentication()
             .UseAuthorization();

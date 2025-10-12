@@ -13,13 +13,16 @@ using snowcoreBlog.Backend.Core.Constants;
 using snowcoreBlog.Backend.ReadersManagement.Constants;
 using snowcoreBlog.Backend.AspireYarpGateway.Core.Contracts;
 using System.Collections.Concurrent;
+using System.Linq;
+using StackExchange.Redis;
 
 namespace snowcoreBlog.Backend.ReadersManagement.Steps.Assertion;
 
 public class GetTokenForReaderAccountStep(IHttpContextAccessor httpContextAccessor,
                                           IScopedClientFactory clientFactory,
                                           IRequestClient<GetUserTokenPairWithPayload> requestClient,
-                                          IOptions<ReaderAccountTokenRequirementOptions> tokenReqOpts) : IStep<LoginByAssertionDelegate, LoginByAssertionContext, IMaybe<LoginByAssertionResultDto>>
+                                          IOptions<ReaderAccountTokenRequirementOptions> tokenReqOpts,
+                                          IConnectionMultiplexer redis) : IStep<LoginByAssertionDelegate, LoginByAssertionContext, IMaybe<LoginByAssertionResultDto>>
 {
     public async Task<IMaybe<LoginByAssertionResultDto>> InvokeAsync(LoginByAssertionContext context, LoginByAssertionDelegate next, CancellationToken token = default)
     {
@@ -29,17 +32,34 @@ public class GetTokenForReaderAccountStep(IHttpContextAccessor httpContextAccess
         readerTokenReq.Claims.Add(ReaderAccountClaimConstants.ReaderAccountEmailClaimKey, context.LoginByAssertion.Email);
         readerTokenReq.Claims.Add(ReaderAccountClaimConstants.ReaderAccountUserIdClaimKey, currentUserId.ToString());
 
-        var configuredProviders = tokenReqOpts.Value.ClaimProviderServices ?? [];
+        // Try to read the list of claim provider service names from Redis first.
+        var db = redis.GetDatabase();
+        var redisVal = await db.StringGetAsync(ClaimServiceProvidersConstants.RedisKey);
+        List<string> configuredProviders = [];
+
+        if (redisVal.HasValue && !string.IsNullOrWhiteSpace(redisVal))
+        {
+            // stored as comma-separated values; keep only unique providers (case-insensitive)
+            configuredProviders = redisVal.ToString()
+                .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                .Select(s => s.Trim())
+                .Where(s => !string.IsNullOrEmpty(s))
+                .Distinct(StringComparer.OrdinalIgnoreCase)
+                .ToList();
+        }
+
         if (configuredProviders.Count > 0)
         {
             var requestId = Guid.NewGuid();
-            var claimsTasks = new ConcurrentBag<Task<Response<ReaderClaimsResponse>>>();
+            var claimsTasks = new Task<Response<ReaderClaimsResponse>>[configuredProviders.Count];
 
             try
             {
                 // send one request directly to each configured provider queue (provider string resolved to queue name)
-                foreach (var provider in configuredProviders)
+                for (var i = 0; i < configuredProviders.Count; i++)
                 {
+                    var provider = configuredProviders[i];
+                    
                     var req = new RequestReaderClaims
                     {
                         RequestId = requestId,
@@ -51,15 +71,14 @@ public class GetTokenForReaderAccountStep(IHttpContextAccessor httpContextAccess
                     var client = clientFactory.CreateRequestClient<RequestReaderClaims>(
                         new Uri($"queue:{provider}"), timeout: RequestTimeout.After(m: 1));
 
-                    claimsTasks.Add(client.GetResponse<ReaderClaimsResponse>(req));
+                    claimsTasks[i] = client.GetResponse<ReaderClaimsResponse>(req);
                 }
 
-                // wait until all providers responded or the operation was cancelled externally
-                var allTasks = claimsTasks.ToArray();
                 try
                 {
+                    // Wait until all providers responded or the operation was cancelled externally
                     // WaitAsync will throw OperationCanceledException if token is cancelled
-                    await Task.WhenAll(allTasks).WaitAsync(token);
+                    await Task.WhenAll(claimsTasks).WaitAsync(token);
                 }
                 catch (OperationCanceledException) { }
 

@@ -1,0 +1,45 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <PublishTrimmed>true</PublishTrimmed>
+    <PublishReadyToRun>true</PublishReadyToRun>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Aspire.Npgsql" Version="9.4.2" />
+    <PackageReference Include="Aspire.StackExchange.Redis" Version="9.4.2" />
+    <PackageReference Include="FastEndpoints" Version="6.1.0" />
+    <PackageReference Include="FastEndpoints.Security" Version="6.1.0" />
+    <PackageReference Include="FastEndpoints.Generator" Version="6.1.0">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="FastEndpoints.Swagger" Version="6.1.0" />
+    <PackageReference Include="Fody" Version="6.9.2">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="ConfigureAwait.Fody" Version="3.3.2" />
+    <PackageReference Include="MassTransit.RabbitMQ" Version="8.4.1" />
+    <PackageReference Include="Marten" Version="7.40.3" />
+    <PackageReference Include="Marten.CommandLine" Version="7.40.3" />
+    <PackageReference Include="MinimalStepifiedSystem.Core" Version="1.2.2.0" />
+    <PackageReference Include="MinimalStepifiedSystem.SourceGen" Version="1.2.2.0" />
+    <PackageReference Include="OpenTelemetry.Instrumentation.StackExchangeRedis" Version="1.10.0-beta.1" />
+    <PackageReference Include="Scalar.AspNetCore" Version="2.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="**/FodyWeavers.*" Visible="false" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Shared\Infrastructure\snowcoreBlog.Backend.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\..\snowcoreBlog.Universal\ServiceDefaults\snowcoreBlog.ServiceDefaults.csproj" />
+    <ProjectReference Include="..\..\..\snowcoreBlog.Universal\PublicApi\snowcoreBlog.PublicApi.csproj" />
+  </ItemGroup>
+
+</Project>
