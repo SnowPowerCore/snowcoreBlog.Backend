@@ -13,9 +13,8 @@ public class PingEndpoint : EndpointWithoutRequest<string>
         Get("ping");
         Version(1);
         SerializerContext(CoreSerializationContext.Default);
-        AllowAnonymous();
         Description(b => b
-            .WithTags(ApiTagConstants.ReaderAccountManagement)
+            .WithTags(ApiTagConstants.Articles)
             .Produces<string>((int)HttpStatusCode.OK, MediaTypeNames.Application.Json)
             .ProducesProblemFE((int)HttpStatusCode.BadRequest));
     }

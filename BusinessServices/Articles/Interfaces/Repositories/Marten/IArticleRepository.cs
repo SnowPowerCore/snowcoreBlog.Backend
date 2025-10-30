@@ -8,4 +8,5 @@ public interface IArticleRepository
     Task<Guid> InsertArticleWithSnapshotAsync(ArticleEntity entity, ArticleSnapshotEntity snapshot, CancellationToken ct = default);
     Task InsertSnapshotAsync(ArticleSnapshotEntity snapshot, CancellationToken ct = default);
     Task<ArticleSnapshotEntity?> GetLatestSnapshotAsync(Guid articleId, CancellationToken ct = default);
+    Task<List<(ArticleEntity Article, ArticleSnapshotEntity? Snapshot)>> GetLatestArticlesWithSnapshotsAsync(int count, CancellationToken ct = default);
 }

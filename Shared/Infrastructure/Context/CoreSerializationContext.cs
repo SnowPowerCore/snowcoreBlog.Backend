@@ -42,6 +42,8 @@ namespace snowcoreBlog.Backend.Infrastructure;
 [JsonSerializable(typeof(ArticleEntity))]
 [JsonSerializable(typeof(ArticleSnapshotEntity))]
 [JsonSerializable(typeof(ReaderEntity))]
+[JsonSerializable(typeof(ArticleDto))]
+[JsonSerializable(typeof(List<ArticleDto>))]
 [JsonSerializable(typeof(AltchaStoredChallengeEntity))]
 [JsonSerializable(typeof(CreateAdmin))]
 [JsonSerializable(typeof(CreateUser))]

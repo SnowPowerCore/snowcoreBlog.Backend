@@ -16,6 +16,15 @@ using Oakton;
 using snowcoreBlog.ApplicationLaunch.Implementations.BackgroundServices;
 using snowcoreBlog.ApplicationLaunch.Interfaces;
 using snowcoreBlog.Backend.Articles.Services;
+using NSwag;
+using Scalar.AspNetCore;
+using FastEndpoints.Swagger;
+using snowcoreBlog.Backend.Infrastructure.Processors;
+using System.Text.Json.Serialization;
+using snowcoreBlog.Backend.Articles.Steps.Articles;
+using System.Text.Json;
+
+var jsonStringEnumConverter = new JsonStringEnumConverter();
 
 var builder = WebApplication.CreateSlimBuilder(args);
 builder.Host.UseDefaultServiceProvider(static (c, options) =>
@@ -26,6 +35,11 @@ builder.Host.UseDefaultServiceProvider(static (c, options) =>
 builder.Host.ApplyOaktonExtensions();
 
 builder.Services.Configure<JsonOptions>(static options =>
+{
+    options.SerializerOptions.SetJsonSerializationContext();
+});
+
+builder.Services.ConfigureHttpJsonOptions(static options =>
 {
     options.SerializerOptions.SetJsonSerializationContext();
 });
@@ -75,6 +89,9 @@ builder.Services.AddSingleton(static sp =>
         })
         .Build();
 });
+builder.AddRedisClient(connectionName: "cache");
+
+const int GlobalVersion = 1;
 
 builder.Services.AddAuthentication();
 builder.Services.AddAuthorization()
@@ -82,13 +99,36 @@ builder.Services.AddAuthorization()
     .AddFastEndpoints(static options =>
     {
         options.SourceGeneratorDiscoveredTypes.AddRange(snowcoreBlog.Backend.Articles.DiscoveredTypes.All);
-    });
+    })
+    .SwaggerDocument(options =>
+    {
+        options.AutoTagPathSegmentIndex = 0;
+        options.ShortSchemaNames = true;
+        options.MaxEndpointVersion = GlobalVersion;
+        options.DocumentSettings = static s =>
+        {
+            s.DocumentName = $"v{GlobalVersion}";
+            s.Version = $"v{GlobalVersion}";
+            s.SchemaSettings.IgnoreObsoleteProperties = true;
+            s.OperationProcessors.Add(new AntiforgeryHeaderProcessor());
+            s.OperationProcessors.Add(new AltchaHeaderProcessor());
+        };
+        options.SerializerSettings = s =>
+        {
+            s.Converters.Add(jsonStringEnumConverter);
+            s.SetJsonSerializationContext();
+            s.PropertyNamingPolicy = null;
+            s.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+        };
+    })
+    .AddResponseCaching();
 
 builder.Services.AddSingleton<IApplicationLaunchService>(static sp => new ArticlesApplicationLaunchService(sp));
 builder.Services.AddScoped<IArticleRepository, ArticleRepository>();
 builder.Services.AddScoped<ValidateAuthorAccountStep>();
 builder.Services.AddScoped<GenerateSlugStep>();
 builder.Services.AddScoped<SaveArticleStep>();
+builder.Services.AddScoped<GetArticlesCachedStep>();
 
 builder.Services.AddHostedService(static sp =>
     new ApplicationLaunchWorker(sp.GetRequiredService<IHostApplicationLifetime>(),
@@ -104,6 +144,7 @@ app.UseHttpsRedirection()
         HttpOnly = HttpOnlyPolicy.Always,
         Secure = CookieSecurePolicy.Always
     })
+    .UseResponseCaching()
     .UseAuthentication()
     .UseAuthorization()
     .UseAntiforgeryFE();
@@ -112,9 +153,29 @@ app.UseFastEndpoints(c =>
 {
     c.Endpoints.RoutePrefix = default;
     c.Versioning.Prefix = "v";
+    c.Serializer.Options.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+    c.Serializer.Options.Converters.Add(jsonStringEnumConverter);
     c.Serializer.Options.SetJsonSerializationContext();
 });
 
 app.MapDefaultEndpoints();
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
+    app.UseOpenApi(c =>
+    {
+        c.Path = "/openapi/{documentName}.json";
+        c.PostProcess = (doc, req) =>
+        {
+            doc.Host = "https://localhost/api/articles";
+            doc.Schemes = [OpenApiSchema.Https];
+        };
+    });
+    app.MapScalarApiReference(o =>
+    {
+        o.DarkMode = true;
+    });
+}
 
 await app.RunOaktonCommands(args);

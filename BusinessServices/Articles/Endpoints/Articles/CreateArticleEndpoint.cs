@@ -10,11 +10,15 @@ using snowcoreBlog.PublicApi.Constants;
 using snowcoreBlog.PublicApi.Utilities.Api;
 using snowcoreBlog.PublicApi.Extensions;
 using snowcoreBlog.Backend.Infrastructure;
+using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Http.Json;
 
 namespace snowcoreBlog.Backend.Articles.Endpoints.Articles;
 
 public class CreateArticleEndpoint : Endpoint<CreateArticleDto, ApiResponse?>
 {
+    public IOptions<JsonOptions> JsonOptions { get; set; }
+    
     [StepifiedProcess(Steps = [
         typeof(ValidateAuthorAccountStep),
         typeof(GenerateSlugStep),
@@ -24,13 +28,13 @@ public class CreateArticleEndpoint : Endpoint<CreateArticleDto, ApiResponse?>
 
     public override void Configure()
     {
-        Post("articles/create");
+        Post("create");
         Version(1);
         SerializerContext(CoreSerializationContext.Default);
         EnableAntiforgery();
         Claims("authorAccount");
         Description(b => b
-            .WithTags(ApiTagConstants.ReaderAccountManagement)
+            .WithTags(ApiTagConstants.Articles)
             .Accepts<CreateArticleDto>(MediaTypeNames.Application.Json)
             .Produces<ApiResponseForOpenApi<CreateArticleResultDto>>((int)HttpStatusCode.OK, MediaTypeNames.Application.Json)
             .ProducesProblemFE((int)HttpStatusCode.BadRequest));
@@ -44,6 +48,9 @@ public class CreateArticleEndpoint : Endpoint<CreateArticleDto, ApiResponse?>
         var context = new CreateArticleContext(req, authorUserId);
         var result = await CreateArticle(context, ct);
 
-        await SendAsync(result?.ToApiResponse(), result?.ToStatusCode() ?? (int)HttpStatusCode.InternalServerError, ct);
+        await SendAsync(
+            result?.ToApiResponse(serializerOptions: JsonOptions.Value.SerializerOptions),
+            result?.ToStatusCode() ?? (int)HttpStatusCode.InternalServerError,
+            ct);
     }
 }
