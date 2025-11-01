@@ -22,6 +22,7 @@ using FastEndpoints.Swagger;
 using snowcoreBlog.Backend.Infrastructure.Processors;
 using System.Text.Json.Serialization;
 using snowcoreBlog.Backend.Articles.Steps.Articles;
+using snowcoreBlog.PublicApi.Extensions;
 using System.Text.Json;
 
 var jsonStringEnumConverter = new JsonStringEnumConverter();
@@ -151,6 +152,12 @@ app.UseHttpsRedirection()
 
 app.UseFastEndpoints(c =>
 {
+    c.Endpoints.NameGenerator = static ctx =>
+    {
+        var currentName = ctx.EndpointType.Name;
+        return currentName.TrimEnd("Endpoint");
+    };
+    c.Endpoints.ShortNames = true;
     c.Endpoints.RoutePrefix = default;
     c.Versioning.Prefix = "v";
     c.Serializer.Options.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
