@@ -10,7 +10,6 @@ using FluentValidation;
 using snowcoreBlog.Backend.IAM.Validation;
 using JasperFx.CodeGeneration;
 using Oakton;
-using Microsoft.AspNetCore.Http.Json;
 using snowcoreBlog.Backend.IAM.Interfaces.Repositories.Marten;
 using snowcoreBlog.Backend.IAM.Repositories.Marten;
 using snowcoreBlog.Backend.IAM.CompiledQueries.Marten;
@@ -22,6 +21,7 @@ using snowcoreBlog.Backend.Infrastructure.Utilities;
 using snowcoreBlog.Backend.Core.Utilities;
 using Weasel.Core;
 using snowcoreBlog.Backend.IAM.Features.Admin;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateSlimBuilder(args);
 builder.Host.UseDefaultServiceProvider(static (c, opts) =>
@@ -36,13 +36,9 @@ builder.Services.Configure<MassTransitHostOptions>(static options =>
     options.WaitUntilStarted = true;
 });
 
-builder.Services.Configure<JsonOptions>(static options =>
-{
-    options.SerializerOptions.SetJsonSerializationContext();
-});
-
 builder.Services.ConfigureHttpJsonOptions(static options =>
 {
+    options.SerializerOptions.NumberHandling = JsonNumberHandling.AllowReadingFromString;
     options.SerializerOptions.SetJsonSerializationContext();
 });
 
@@ -125,7 +121,11 @@ builder.Services.AddMassTransit(busConfigurator =>
     busConfigurator.AddConsumer<ValidateAndCreateAssertionConsumer>();
     busConfigurator.AddConsumer<ValidateAdminExistsConsumer>();
     busConfigurator.AddConsumer<InviteAndCreateAdminConsumer>();
-    busConfigurator.ConfigureHttpJsonOptions(static o => o.SerializerOptions.SetJsonSerializationContext());
+    busConfigurator.ConfigureHttpJsonOptions(static o =>
+    {
+        o.SerializerOptions.NumberHandling = JsonNumberHandling.AllowReadingFromString;
+        o.SerializerOptions.SetJsonSerializationContext();
+    });
     busConfigurator.UsingRabbitMq((context, config) =>
     {
         config.ConfigureJsonSerializerOptions(static options => options.SetJsonSerializationContext());

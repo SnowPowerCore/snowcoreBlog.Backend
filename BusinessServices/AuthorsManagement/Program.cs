@@ -8,11 +8,11 @@ using snowcoreBlog.Backend.BusinessServices.AuthorsManagement.Steps;
 using snowcoreBlog.Backend.Infrastructure.Extensions;
 using snowcoreBlog.ServiceDefaults.Extensions;
 using snowcoreBlog.Backend.AuthorsManagement.Features;
-using Microsoft.AspNetCore.Http.Json;
 using snowcoreBlog.ApplicationLaunch.Implementations.BackgroundServices;
 using snowcoreBlog.ApplicationLaunch.Interfaces;
 using snowcoreBlog.Backend.AuthorsManagement.Services;
 using StackExchange.Redis;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateSlimBuilder(args);
 builder.Host.UseDefaultServiceProvider(static (c, opts) =>
@@ -21,13 +21,9 @@ builder.Host.UseDefaultServiceProvider(static (c, opts) =>
     opts.ValidateOnBuild = true;
 });
 
-builder.Services.Configure<JsonOptions>(static options =>
-{
-    options.SerializerOptions.SetJsonSerializationContext();
-});
-
 builder.Services.ConfigureHttpJsonOptions(static options =>
 {
+    options.SerializerOptions.NumberHandling = JsonNumberHandling.AllowReadingFromString;
     options.SerializerOptions.SetJsonSerializationContext();
 });
 
@@ -64,7 +60,11 @@ builder.Services.AddMassTransit(busConfigurator =>
 {
     busConfigurator.AddConsumer<CheckAuthorExistsConsumer>();
     busConfigurator.AddConsumer<ReturnClaimsIfUserAuthorConsumer>();
-    busConfigurator.ConfigureHttpJsonOptions(static o => o.SerializerOptions.SetJsonSerializationContext());
+    busConfigurator.ConfigureHttpJsonOptions(static o =>
+    {
+        o.SerializerOptions.NumberHandling = JsonNumberHandling.AllowReadingFromString;
+        o.SerializerOptions.SetJsonSerializationContext();
+    });
     busConfigurator.UsingRabbitMq((context, config) =>
     {
         config.ConfigureJsonSerializerOptions(static options => options.SetJsonSerializationContext());

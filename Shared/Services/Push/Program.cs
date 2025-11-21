@@ -5,6 +5,7 @@ using FluentValidation;
 using snowcoreBlog.Backend.Push.Validation;
 using snowcoreBlog.Backend.Push.Core.Contracts;
 using snowcoreBlog.Backend.Push.Features.Ntfy;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateSlimBuilder(args);
 builder.Host.UseDefaultServiceProvider(static (c, opts) =>
@@ -20,6 +21,7 @@ builder.Services.Configure<MassTransitHostOptions>(static options =>
 
 builder.Services.ConfigureHttpJsonOptions(static options =>
 {
+    options.SerializerOptions.NumberHandling = JsonNumberHandling.AllowReadingFromString;
     options.SerializerOptions.SetJsonSerializationContext();
 });
 
@@ -32,7 +34,11 @@ builder.Services.AddNtfyCator(static options =>
 builder.Services.AddMassTransit(busConfigurator =>
 {
     busConfigurator.AddConsumer<SendPushUsingNtfyConsumer>();
-    busConfigurator.ConfigureHttpJsonOptions(static o => o.SerializerOptions.SetJsonSerializationContext());
+    busConfigurator.ConfigureHttpJsonOptions(static o =>
+    {
+        o.SerializerOptions.NumberHandling = JsonNumberHandling.AllowReadingFromString;
+        o.SerializerOptions.SetJsonSerializationContext();
+    });
     busConfigurator.UsingRabbitMq((context, config) =>
     {
         config.ConfigureJsonSerializerOptions(static options => options.SetJsonSerializationContext());

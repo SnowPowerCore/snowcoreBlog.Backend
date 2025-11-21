@@ -5,17 +5,15 @@ using SendGrid.Extensions.DependencyInjection;
 using FluentValidation;
 using snowcoreBlog.Backend.Email.Core.Contracts;
 using snowcoreBlog.Backend.Email.Validation;
-using snowcoreBlog.Backend.Email.Features.SendGrid;
 using snowcoreBlog.Backend.Email.Features.Validation;
 using Amazon.SimpleEmailV2;
-using Amazon.Extensions.NETCore.Setup;
 using Amazon.Runtime;
-using Amazon;
 using snowcoreBlog.Backend.Email.Features.AmazonSimpleEmail;
 using Apizr;
 using snowcoreBlog.Backend.Email.Api;
 using Apizr.Extending.Configuring.Common;
 using Microsoft.Extensions.Http.Resilience;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateSlimBuilder(args);
 builder.Host.UseDefaultServiceProvider(static (c, opts) =>
@@ -31,6 +29,7 @@ builder.Services.Configure<MassTransitHostOptions>(static options =>
 
 builder.Services.ConfigureHttpJsonOptions(static options =>
 {
+    options.SerializerOptions.NumberHandling = JsonNumberHandling.AllowReadingFromString;
     options.SerializerOptions.SetJsonSerializationContext();
 });
 
@@ -46,7 +45,11 @@ builder.Services.AddMassTransit(busConfigurator =>
     busConfigurator.AddConsumer<SendGenericEmailUsingAmazonSimpleEmailConsumer>();
     busConfigurator.AddConsumer<SendTemplatedEmailUsingAmazonSimpleEmailConsumer>();
     busConfigurator.AddConsumer<CheckEmailDomainConsumer>();
-    busConfigurator.ConfigureHttpJsonOptions(static o => o.SerializerOptions.SetJsonSerializationContext());
+    busConfigurator.ConfigureHttpJsonOptions(static o =>
+    {
+        o.SerializerOptions.NumberHandling = JsonNumberHandling.AllowReadingFromString;
+        o.SerializerOptions.SetJsonSerializationContext();
+    });
     busConfigurator.UsingRabbitMq((context, config) =>
     {
         config.ConfigureJsonSerializerOptions(static options => options.SetJsonSerializationContext());

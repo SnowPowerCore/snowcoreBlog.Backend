@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Routing.Constraints;
 using Microsoft.AspNetCore.Localization;
 using System.Text.Json;
 using Microsoft.AspNetCore.CookiePolicy;
-using Microsoft.AspNetCore.Http.Json;
 using snowcoreBlog.Backend.Infrastructure.Extensions;
 using snowcoreBlog.Backend.RegionalIpRestriction.Repositories.Marten;
 using snowcoreBlog.Backend.RegionalIpRestriction.Entities;
@@ -17,13 +16,9 @@ using snowcoreBlog.PublicApi.Extensions;
 
 var builder = WebApplication.CreateSlimBuilder(args);
 
-builder.Services.Configure<JsonOptions>(static options =>
-{
-    options.SerializerOptions.SetJsonSerializationContext();
-});
-
 builder.Services.ConfigureHttpJsonOptions(static options =>
 {
+    options.SerializerOptions.NumberHandling = JsonNumberHandling.AllowReadingFromString;
     options.SerializerOptions.SetJsonSerializationContext();
 });
 
@@ -49,7 +44,11 @@ builder.Services.AddMarten(static options =>
 
 builder.Services.AddMassTransit(busConfigurator =>
 {
-    busConfigurator.ConfigureHttpJsonOptions(static o => o.SerializerOptions.SetJsonSerializationContext());
+    busConfigurator.ConfigureHttpJsonOptions(static o =>
+    {
+        o.SerializerOptions.NumberHandling = JsonNumberHandling.AllowReadingFromString;
+        o.SerializerOptions.SetJsonSerializationContext();
+    });
     busConfigurator.UsingRabbitMq((context, config) =>
     {
         config.ConfigureJsonSerializerOptions(static options => options.SetJsonSerializationContext());

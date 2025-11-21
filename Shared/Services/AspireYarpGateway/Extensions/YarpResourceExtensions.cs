@@ -1,4 +1,5 @@
 using System.Collections.Immutable;
+using System.Text.Json.Serialization;
 using Aspire.Hosting.ApplicationModel;
 using Aspire.Hosting.Lifecycle;
 using FluentValidation;
@@ -11,7 +12,6 @@ using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Hosting.Server.Features;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
-using Microsoft.AspNetCore.Http.Json;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,7 +22,6 @@ using snowcoreBlog.Backend.AspireYarpGateway.Extensions;
 using snowcoreBlog.Backend.AspireYarpGateway.Features;
 using snowcoreBlog.Backend.AspireYarpGateway.Options;
 using snowcoreBlog.Backend.AspireYarpGateway.Validation;
-using snowcoreBlog.Backend.Gateway.Middleware;
 using snowcoreBlog.Backend.Gateway.Middleware.Extensions;
 using snowcoreBlog.Backend.Infrastructure.Extensions;
 using snowcoreBlog.PublicApi.Utilities.Dictionary;
@@ -203,13 +202,9 @@ internal class YarpResourceLifecyclehook(
             builder.WebHost.UseKestrelHttpsConfiguration();
         }
 
-        builder.Services.Configure<JsonOptions>(static options =>
-        {
-            options.SerializerOptions.SetJsonSerializationContext();
-        });
-
         builder.Services.ConfigureHttpJsonOptions(static options =>
         {
+            options.SerializerOptions.NumberHandling = JsonNumberHandling.AllowReadingFromString;
             options.SerializerOptions.SetJsonSerializationContext();
         });
 
@@ -234,7 +229,11 @@ internal class YarpResourceLifecyclehook(
         {
             busConfigurator.AddConsumer<GetUserTokenPairWithPayloadConsumer>();
             // Request client for Regional IP restriction checks (will be handled by RegionalIpRestriction service)
-            busConfigurator.ConfigureHttpJsonOptions(static o => o.SerializerOptions.SetJsonSerializationContext());
+            busConfigurator.ConfigureHttpJsonOptions(static o =>
+            {
+                o.SerializerOptions.NumberHandling = JsonNumberHandling.AllowReadingFromString;
+                o.SerializerOptions.SetJsonSerializationContext();
+            });
             busConfigurator.UsingRabbitMq((context, config) =>
             {
                 config.ConfigureJsonSerializerOptions(static options => options.SetJsonSerializationContext());

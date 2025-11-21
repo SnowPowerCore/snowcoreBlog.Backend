@@ -13,7 +13,6 @@ using JasperFx.CodeGeneration;
 using Marten;
 using MassTransit;
 using Microsoft.AspNetCore.CookiePolicy;
-using Microsoft.AspNetCore.Http.Json;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Routing.Constraints;
@@ -68,13 +67,9 @@ builder.Services.Configure<RouteOptions>(static options =>
     options.SetParameterPolicy<RegexInlineRouteConstraint>("regex");
 });
 
-builder.Services.Configure<JsonOptions>(static options =>
-{
-    options.SerializerOptions.SetJsonSerializationContext();
-});
-
 builder.Services.ConfigureHttpJsonOptions(static options =>
 {
+    options.SerializerOptions.NumberHandling = JsonNumberHandling.AllowReadingFromString;
     options.SerializerOptions.SetJsonSerializationContext();
 });
 
@@ -136,7 +131,11 @@ builder.Services.AddSingleton(static sp =>
 builder.Services.AddMassTransit(busConfigurator =>
 {
     busConfigurator.AddConsumer<ReaderAccountTempUserCreatedConsumer>();
-    busConfigurator.ConfigureHttpJsonOptions(static o => o.SerializerOptions.SetJsonSerializationContext());
+    busConfigurator.ConfigureHttpJsonOptions(static o =>
+    {
+        o.SerializerOptions.NumberHandling = JsonNumberHandling.AllowReadingFromString;
+        o.SerializerOptions.SetJsonSerializationContext();
+    });
     busConfigurator.UsingRabbitMq((context, config) =>
     {
         config.ConfigureJsonSerializerOptions(static options => options.SetJsonSerializationContext());
@@ -150,7 +149,7 @@ const int GlobalVersion = 1;
 
 builder.Services.AddAuthenticationJwtBearer(s => s.SigningKey = builder.Configuration["Security:Signing:User:SigningKey"]);
 builder.Services.AddAuthorization()
-    .AddAntiforgery(options => options.Cookie.Expiration = TimeSpan.Zero)
+    .AddAntiforgery()
     .AddFastEndpoints(static options =>
     {
         options.SourceGeneratorDiscoveredTypes.AddRange(snowcoreBlog.Backend.ReadersManagement.DiscoveredTypes.All);

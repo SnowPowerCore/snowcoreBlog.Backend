@@ -2,7 +2,6 @@ using FastEndpoints;
 using Ixnas.AltchaNet;
 using Marten;
 using Microsoft.AspNetCore.CookiePolicy;
-using Microsoft.AspNetCore.Http.Json;
 using Microsoft.AspNetCore.HttpOverrides;
 using snowcoreBlog.Backend.Infrastructure.Extensions;
 using MinimalStepifiedSystem.Extensions;
@@ -24,6 +23,8 @@ using System.Text.Json.Serialization;
 using snowcoreBlog.Backend.Articles.Steps.Articles;
 using snowcoreBlog.PublicApi.Extensions;
 using System.Text.Json;
+using System.Net.Mime;
+using FastEndpoints.OpenTelemetry.Middleware;
 
 var jsonStringEnumConverter = new JsonStringEnumConverter();
 
@@ -35,13 +36,9 @@ builder.Host.UseDefaultServiceProvider(static (c, options) =>
 });
 builder.Host.ApplyOaktonExtensions();
 
-builder.Services.Configure<JsonOptions>(static options =>
-{
-    options.SerializerOptions.SetJsonSerializationContext();
-});
-
 builder.Services.ConfigureHttpJsonOptions(static options =>
 {
+    options.SerializerOptions.NumberHandling = JsonNumberHandling.AllowReadingFromString;
     options.SerializerOptions.SetJsonSerializationContext();
 });
 
@@ -96,7 +93,7 @@ const int GlobalVersion = 1;
 
 builder.Services.AddAuthentication();
 builder.Services.AddAuthorization()
-    .AddAntiforgery(options => options.Cookie.Expiration = TimeSpan.Zero)
+    .AddAntiforgery()
     .AddFastEndpoints(static options =>
     {
         options.SourceGeneratorDiscoveredTypes.AddRange(snowcoreBlog.Backend.Articles.DiscoveredTypes.All);
@@ -148,22 +145,22 @@ app.UseHttpsRedirection()
     .UseResponseCaching()
     .UseAuthentication()
     .UseAuthorization()
-    .UseAntiforgeryFE();
-
-app.UseFastEndpoints(c =>
-{
-    c.Endpoints.NameGenerator = static ctx =>
+    .UseAntiforgeryFE(additionalContentTypes: [MediaTypeNames.Application.Json])
+    .UseFastEndpointsDiagnosticsMiddleware()
+    .UseFastEndpoints(c =>
     {
-        var currentName = ctx.EndpointType.Name;
-        return currentName.TrimEnd("Endpoint");
-    };
-    c.Endpoints.ShortNames = true;
-    c.Endpoints.RoutePrefix = default;
-    c.Versioning.Prefix = "v";
-    c.Serializer.Options.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
-    c.Serializer.Options.Converters.Add(jsonStringEnumConverter);
-    c.Serializer.Options.SetJsonSerializationContext();
-});
+        c.Endpoints.NameGenerator = static ctx =>
+        {
+            var currentName = ctx.EndpointType.Name;
+            return currentName.TrimEnd("Endpoint");
+        };
+        c.Endpoints.ShortNames = true;
+        c.Endpoints.RoutePrefix = default;
+        c.Versioning.Prefix = "v";
+        c.Serializer.Options.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+        c.Serializer.Options.Converters.Add(jsonStringEnumConverter);
+        c.Serializer.Options.SetJsonSerializationContext();
+    });
 
 app.MapDefaultEndpoints();
 
