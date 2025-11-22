@@ -2,6 +2,7 @@
 using MinimalStepifiedSystem.Interfaces;
 using MaybeResults;
 using snowcoreBlog.Backend.Core.Contracts;
+using snowcoreBlog.Backend.Core.Resources;
 using snowcoreBlog.Backend.IAM.Core.Contracts;
 using snowcoreBlog.Backend.ReadersManagement.Constants;
 using snowcoreBlog.Backend.ReadersManagement.Context;
@@ -11,7 +12,6 @@ using snowcoreBlog.PublicApi.Utilities.DataResult;
 using Microsoft.Extensions.Options;
 using snowcoreBlog.Backend.Core.Options;
 using System.Web;
-using snowcoreBlog.Frontend.Core.Resources;
 
 namespace snowcoreBlog.Backend.ReadersManagement.Steps.ReaderAccount.Request;
 
