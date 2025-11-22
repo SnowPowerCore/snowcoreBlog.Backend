@@ -1,7 +1,7 @@
 using System.Collections.Immutable;
 using System.Text.Json.Serialization;
 using Aspire.Hosting.ApplicationModel;
-using Aspire.Hosting.Lifecycle;
+using Aspire.Hosting.Eventing;
 using FluentValidation;
 using MassTransit;
 using Microsoft.AspNetCore.Authorization;
@@ -48,69 +48,36 @@ public static class YarpResourceExtensions
             throw new InvalidOperationException("A yarp resource has already been added to this application");
         }
 
-        builder.Services.TryAddLifecycleHook<YarpResourceLifecyclehook>();
+        var yarpBuilder = builder.AddResource(new YarpResource(name))
+                                 .WithInitialState(new()
+                                 {
+                                     ResourceType = "Yarp",
+                                     Properties = [],
+                                 })
+                                 .ExcludeFromManifest();
 
-        var resource = new YarpResource(name);
-        return builder.AddResource(resource).ExcludeFromManifest();
+        // Use modern OnInitializeResource pattern for wait support
+        yarpBuilder.OnInitializeResource(StartYarpResourceAsync);
+
+        return yarpBuilder;
     }
 
-    /// <summary>
-    /// Loads the YARP configuration from the specified configuration section.
-    /// </summary>
-    /// <param name="builder">The builder.</param>
-    /// <param name="sectionName">The configuration section name to load from.</param>
-    /// <returns>The builder.</returns>
-    public static IResourceBuilder<YarpResource> LoadFromConfiguration(this IResourceBuilder<YarpResource> builder, string sectionName)
+    private static async Task StartYarpResourceAsync(YarpResource yarpResource, InitializeResourceEvent initEvent, CancellationToken cancellationToken)
     {
-        builder.Resource.ConfigurationSectionName = sectionName;
-        return builder;
-    }
-    
-    public static IResourceBuilder<YarpResource> WithAuthPolicies(this IResourceBuilder<YarpResource> builder, params (string, Action<AuthorizationPolicyBuilder>)[] policies)
-    {
-        builder.Resource.PoliciesConfigs = policies;
-        return builder;
-    }
-}
-
-/// <summary>
-/// Represents a YARP resource.
-/// </summary>
-/// <param name="name">The name of the resource in the application model.</param>
-public class YarpResource(string name) : Resource(name), IResourceWithServiceDiscovery, IResourceWithEnvironment
-{
-    // YARP configuration
-    internal DictionaryWithDefault<string, RouteConfig> RouteConfigs { get; } = new(defaultValue: new(), 0);
-    internal DictionaryWithDefault<string, ClusterConfig> ClusterConfigs { get; } = new(defaultValue: new(), 0);
-    internal List<EndpointAnnotation> Endpoints { get; } = [];
-    internal string? ConfigurationSectionName { get; set; }
-    internal (string, Action<AuthorizationPolicyBuilder>)[] PoliciesConfigs { get; set; } = [];
-}
-
-// This starts up the YARP reverse proxy with the configuration from the resource
-internal class YarpResourceLifecyclehook(
-    IHostEnvironment hostEnvironment,
-    DistributedApplicationExecutionContext executionContext,
-    ResourceNotificationService resourceNotificationService,
-    ResourceLoggerService resourceLoggerService) : IDistributedApplicationLifecycleHook, IAsyncDisposable
-{
-    private WebApplication? _app;
-
-    public async Task BeforeStartAsync(DistributedApplicationModel appModel, CancellationToken cancellationToken = default)
-    {
+        var executionContext = initEvent.Services.GetRequiredService<DistributedApplicationExecutionContext>();
         if (executionContext.IsPublishMode)
         {
             return;
         }
 
-        var yarpResource = appModel.Resources.OfType<YarpResource>().SingleOrDefault();
+        var logger = initEvent.Logger;
+        var notificationService = initEvent.Notifications;
+        var serviceProvider = initEvent.Services;
 
-        if (yarpResource is null)
-        {
-            return;
-        }
+        logger.LogInformation("Starting YARP gateway resource '{ResourceName}'", yarpResource.Name);
 
-        await resourceNotificationService.PublishUpdateAsync(yarpResource, s => s with
+        // Publish initial state
+        await notificationService.PublishUpdateAsync(yarpResource, s => s with
         {
             ResourceType = "Yarp",
             State = "Starting"
@@ -118,35 +85,70 @@ internal class YarpResourceLifecyclehook(
 
         // We don't want to proxy for yarp resources so force endpoints to not proxy
         var bindings = yarpResource.Annotations.OfType<EndpointAnnotation>().ToList();
-
         foreach (var b in bindings)
         {
             b.IsProxied = false;
         }
+
+        // Get required services
+        var hostEnvironment = serviceProvider.GetRequiredService<IHostEnvironment>();
+        var eventing = serviceProvider.GetRequiredService<IDistributedApplicationEventing>();
+
+        // Publish BeforeResourceStartedEvent - this is CRITICAL for wait support
+        await eventing.PublishAsync(new BeforeResourceStartedEvent(yarpResource, serviceProvider), cancellationToken);
+
+        // Build and configure WebApplication
+        var app = await BuildYarpWebApplicationAsync(
+            yarpResource,
+            hostEnvironment,
+            executionContext,
+            logger,
+            cancellationToken);
+
+        // Start the WebApplication
+        await app.StartAsync(cancellationToken);
+
+        // Update endpoint allocations
+        var endpoints = yarpResource.Annotations.OfType<EndpointAnnotation>().ToList();
+        var server = app.Services.GetRequiredService<IServer>();
+        var addresses = server.Features.GetRequiredFeature<IServerAddressesFeature>().Addresses;
+
+        UpdateAllocatedEndpoints(endpoints, addresses);
+
+        // Publish running state
+        await notificationService.PublishUpdateAsync(yarpResource, s => s with
+        {
+            State = "Running",
+            Urls = endpoints.Select(ep => new UrlSnapshot(ep.Name, ep.AllocatedEndpoint?.UriString ?? "", IsInternal: false)).ToImmutableArray(),
+        });
+
+        logger.LogInformation("YARP gateway resource '{ResourceName}' is now running", yarpResource.Name);
+
+        // Handle graceful shutdown
+        cancellationToken.Register(async () =>
+        {
+            logger.LogInformation("Stopping YARP gateway resource '{ResourceName}'", yarpResource.Name);
+            await app.StopAsync(CancellationToken.None);
+            await app.DisposeAsync();
+        });
     }
 
-    public async Task AfterEndpointsAllocatedAsync(DistributedApplicationModel appModel, CancellationToken cancellationToken = default)
+    private static async Task<WebApplication> BuildYarpWebApplicationAsync(
+        YarpResource yarpResource,
+        IHostEnvironment hostEnvironment,
+        DistributedApplicationExecutionContext executionContext,
+        ILogger logger,
+        CancellationToken cancellationToken)
     {
-        if (executionContext.IsPublishMode)
-        {
-            return;
-        }
-
-        var yarpResource = appModel.Resources.OfType<YarpResource>().SingleOrDefault();
-        if (yarpResource is default(YarpResource))
-        {
-            return;
-        }
-
         var builder = WebApplication.CreateSlimBuilder(new WebApplicationOptions
         {
             ContentRootPath = hostEnvironment.ContentRootPath,
-            EnvironmentName = hostEnvironment.EnvironmentName, 
+            EnvironmentName = hostEnvironment.EnvironmentName,
             WebRootPath = Path.Combine(hostEnvironment.ContentRootPath, "wwwroot")
         });
 
         builder.Logging.ClearProviders();
-        builder.Logging.AddProvider(new ResourceLoggerProvider(resourceLoggerService.GetLogger(yarpResource.Name)));
+        builder.Logging.AddProvider(new ResourceLoggerProvider(logger));
 
         // Convert environment variables into configuration
         if (yarpResource.TryGetEnvironmentVariables(out var envAnnotations))
@@ -228,7 +230,6 @@ internal class YarpResourceLifecyclehook(
         builder.Services.AddMassTransit(busConfigurator =>
         {
             busConfigurator.AddConsumer<GetUserTokenPairWithPayloadConsumer>();
-            // Request client for Regional IP restriction checks (will be handled by RegionalIpRestriction service)
             busConfigurator.ConfigureHttpJsonOptions(static o =>
             {
                 o.SerializerOptions.NumberHandling = JsonNumberHandling.AllowReadingFromString;
@@ -251,9 +252,11 @@ internal class YarpResourceLifecyclehook(
             .AllowAnyMethod()
             .AllowAnyHeader()
             .AllowCredentials()));
+
         builder.Services.AddMultipleAuthentications(
             builder.Configuration["Security:Signing:User:SigningKey"]!,
             builder.Configuration["Security:Signing:Admin:SigningKey"]!);
+
         builder.Services.AddAuthorization(options =>
         {
             foreach (var policy in yarpResource.PoliciesConfigs)
@@ -262,116 +265,132 @@ internal class YarpResourceLifecyclehook(
             }
         });
 
-        _app = builder.Build();
+        builder.Services.AddHealthChecks();
 
-        _app.UseHttpsRedirection()
-            .UseCors()
-            .UseCookiePolicy(new()
-            {
-                MinimumSameSitePolicy = SameSiteMode.Strict,
-                HttpOnly = HttpOnlyPolicy.Always,
-                Secure = CookieSecurePolicy.Always
-            })
-            .UseGatewayMiddleware()
-            .UseForwardedHeaders()
-            .UseAuthentication()
-            .UseAuthorization();
+        var app = builder.Build();
 
-        var urlToEndpointNameMap = new Dictionary<string, string>();
+        app.UseHttpsRedirection()
+           .UseCors()
+           .UseCookiePolicy(new()
+           {
+               MinimumSameSitePolicy = SameSiteMode.Strict,
+               HttpOnly = HttpOnlyPolicy.Always,
+               Secure = CookieSecurePolicy.Always
+           })
+           .UseGatewayMiddleware()
+           .UseForwardedHeaders()
+           .UseAuthentication()
+           .UseAuthorization();
 
-        if (endpoints is default(IEnumerable<EndpointAnnotation>))
+        // Configure URLs
+        if (endpoints is null || !endpoints.Any())
         {
             var url = $"{defaultScheme}://127.0.0.1:0/";
-            _app.Urls.Add(url);
-            urlToEndpointNameMap[url] = "default";
+            app.Urls.Add(url);
         }
         else
         {
             foreach (var ep in endpoints)
             {
                 var scheme = ep.UriScheme ?? defaultScheme;
-                needsHttps = needsHttps || scheme == "https";
-
                 var url = ep.Port switch
                 {
                     null => $"{scheme}://127.0.0.1:0/",
                     _ => $"{scheme}://localhost:{ep.Port}"
                 };
-
-                var uri = new Uri(url);
-                _app.Urls.Add(url);
-                urlToEndpointNameMap[uri.ToString()] = ep.Name;
+                app.Urls.Add(url);
             }
         }
 
-        _app.MapDefaultEndpoints();
+        app.MapDefaultEndpoints();
 
-        if (_app.Environment.IsDevelopment())
+        if (app.Environment.IsDevelopment())
         {
-            _app.UseDeveloperExceptionPage();
+            app.UseDeveloperExceptionPage();
         }
 
-        _app.MapReverseProxy();
+        app.MapReverseProxy();
 
-        await _app.StartAsync(cancellationToken);
+        return app;
+    }
 
-        var addresses = _app.Services.GetRequiredService<IServer>().Features.GetRequiredFeature<IServerAddressesFeature>().Addresses;
-
-        // Update the EndpointAnnotations with the allocated URLs from ASP.NET Core
-        foreach (var url in addresses)
+    private static void UpdateAllocatedEndpoints(List<EndpointAnnotation> endpoints, ICollection<string> addresses)
+    {
+        foreach (var ep in endpoints)
         {
-            if (urlToEndpointNameMap.TryGetValue(new Uri(url).ToString(), out var name)
-                || urlToEndpointNameMap.TryGetValue(new UriBuilder(url) { Port = 0 }.Uri.ToString(), out name))
+            foreach (var url in addresses)
             {
-                var ep = endpoints?.FirstOrDefault(ep => ep.Name == name);
-                if (ep is not default(EndpointAnnotation))
+                var uri = new Uri(url);
+                if (ep.Port == null || ep.Port == uri.Port)
                 {
-                    var uri = new Uri(url);
                     var host = uri.Host is "127.0.0.1" or "[::1]" ? "localhost" : uri.Host;
                     ep.AllocatedEndpoint = new(ep, host, uri.Port);
+                    break;
                 }
             }
         }
-
-        await resourceNotificationService.PublishUpdateAsync(yarpResource, s => s with
-        {
-            State = "Running",
-            Urls = endpoints?.Select(ep => new UrlSnapshot(ep.Name, ep.AllocatedEndpoint?.UriString ?? "", IsInternal: false)).ToImmutableArray() ?? [],
-        });
     }
 
-    public ValueTask DisposeAsync()
+    /// <summary>
+    /// Loads the YARP configuration from the specified configuration section.
+    /// </summary>
+    /// <param name="builder">The builder.</param>
+    /// <param name="sectionName">The configuration section name to load from.</param>
+    /// <returns>The builder.</returns>
+    public static IResourceBuilder<YarpResource> LoadFromConfiguration(this IResourceBuilder<YarpResource> builder, string sectionName)
     {
-        return _app?.DisposeAsync() ?? default;
+        builder.Resource.ConfigurationSectionName = sectionName;
+        return builder;
+    }
+    
+    public static IResourceBuilder<YarpResource> WithAuthPolicies(this IResourceBuilder<YarpResource> builder, params (string, Action<AuthorizationPolicyBuilder>)[] policies)
+    {
+        builder.Resource.PoliciesConfigs = policies;
+        return builder;
+    }
+}
+
+/// <summary>
+/// Represents a YARP resource.
+/// </summary>
+/// <param name="name">The name of the resource in the application model.</param>
+public class YarpResource(string name) : Resource(name), IResourceWithServiceDiscovery, IResourceWithEnvironment, IResourceWithWaitSupport
+{
+    // YARP configuration
+    internal DictionaryWithDefault<string, RouteConfig> RouteConfigs { get; } = new(defaultValue: new(), 0);
+    internal DictionaryWithDefault<string, ClusterConfig> ClusterConfigs { get; } = new(defaultValue: new(), 0);
+    internal List<EndpointAnnotation> Endpoints { get; } = [];
+    internal string? ConfigurationSectionName { get; set; }
+    internal (string, Action<AuthorizationPolicyBuilder>)[] PoliciesConfigs { get; set; } = [];
+}
+
+// Helper class for proxying logs to the resource logger
+file class ResourceLoggerProvider(ILogger logger) : ILoggerProvider
+{
+    public ILogger CreateLogger(string categoryName)
+    {
+        return new ResourceLogger(logger);
     }
 
-    private class ResourceLoggerProvider(ILogger logger) : ILoggerProvider
+    public void Dispose()
     {
-        public ILogger CreateLogger(string categoryName)
+    }
+
+    private class ResourceLogger(ILogger logger) : ILogger
+    {
+        public IDisposable? BeginScope<TState>(TState state) where TState : notnull
         {
-            return new ResourceLogger(logger);
+            return logger.BeginScope(state);
         }
 
-        public void Dispose()
+        public bool IsEnabled(LogLevel logLevel)
         {
+            return logger.IsEnabled(logLevel);
         }
 
-        private class ResourceLogger(ILogger logger) : ILogger
+        public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception? exception, Func<TState, Exception?, string> formatter)
         {
-            public IDisposable? BeginScope<TState>(TState state) where TState : notnull
-            {
-                return logger.BeginScope(state);
-            }
-
-            public bool IsEnabled(LogLevel logLevel)
-            {
-                return logger.IsEnabled(logLevel);
-            }
-
-            public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception? exception, Func<TState, Exception?, string> formatter)
-            {
-                logger.Log(logLevel, eventId, state, exception, formatter);
-            }
+            logger.Log(logLevel, eventId, state, exception, formatter);
         }
     }
 }
