@@ -51,7 +51,7 @@ public class LoginByAssertionEndpoint : Endpoint<LoginByAssertionDto, ApiRespons
 
         var result = await LoginByAssertion(context, ct);
 
-        await SendAsync(
+        await Send.ResponseAsync(
             result?.ToApiResponse(serializerOptions: JsonOptions.Value.SerializerOptions),
             result?.ToStatusCode() ?? (int)HttpStatusCode.InternalServerError,
             ct);

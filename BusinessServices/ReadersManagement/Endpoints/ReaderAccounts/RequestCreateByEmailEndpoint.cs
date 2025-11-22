@@ -53,7 +53,7 @@ public class RequestCreateByEmailEndpoint : Endpoint<RequestCreateReaderAccountD
 
         var result = await RequestCreateReaderAccount(context, ct);
 
-        await SendAsync(
+        await Send.ResponseAsync(
             result?.ToApiResponse(serializerOptions: JsonOptions.Value.SerializerOptions),
             result?.ToStatusCode() ?? (int)HttpStatusCode.InternalServerError,
             ct);

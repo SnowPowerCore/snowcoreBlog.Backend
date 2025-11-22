@@ -48,7 +48,7 @@ public class CreateArticleEndpoint : Endpoint<CreateArticleDto, ApiResponse?>
         var context = new CreateArticleContext(req, authorUserId);
         var result = await CreateArticle(context, ct);
 
-        await SendAsync(
+        await Send.ResponseAsync(
             result?.ToApiResponse(serializerOptions: JsonOptions.Value.SerializerOptions),
             result?.ToStatusCode() ?? (int)HttpStatusCode.InternalServerError,
             ct);

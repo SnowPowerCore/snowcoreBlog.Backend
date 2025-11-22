@@ -23,6 +23,6 @@ public class GetIpRestrictionsEndpoint : EndpointWithoutRequest<IReadOnlyList<Ip
     public override async Task HandleAsync(CancellationToken ct)
     {
         var all = await _repo.GetAllAsync();
-        await SendAsync(all, cancellation: ct);
+        await Send.ResponseAsync(all, cancellation: ct);
     }
 }

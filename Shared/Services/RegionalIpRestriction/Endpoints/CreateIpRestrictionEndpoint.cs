@@ -40,6 +40,6 @@ public class CreateIpRestrictionEndpoint : Endpoint<CreateIpRestrictionRequest, 
 
         await _repo.SaveAsync(entity);
 
-        await SendCreatedAtAsync<GetIpRestrictionsEndpoint>(entity, cancellation: ct);
+        await Send.CreatedAtAsync<GetIpRestrictionsEndpoint>(entity, cancellation: ct);
     }
 }

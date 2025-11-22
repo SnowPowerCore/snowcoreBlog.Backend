@@ -48,7 +48,7 @@ public class RequestAttestationOptionsEndpoint : Endpoint<RequestAttestationOpti
 
         var result = await RequestReaderAccountAttestationOptions(context, ct);
 
-        await SendAsync(
+        await Send.ResponseAsync(
             result?.ToApiResponse(serializerOptions: JsonOptions.Value.SerializerOptions),
             result?.ToStatusCode() ?? (int)HttpStatusCode.InternalServerError,
             ct);

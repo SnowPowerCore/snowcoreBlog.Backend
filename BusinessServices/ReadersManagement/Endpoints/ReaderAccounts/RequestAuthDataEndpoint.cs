@@ -48,13 +48,13 @@ public class RequestAuthDataEndpoint : EndpointWithoutRequest<ApiResponse>
         {
             var accessToken = HttpContext.Request.Headers[HeaderNames.Authorization].ToString().Replace($"{JwtBearerDefaults.AuthenticationScheme} ", string.Empty);
             var decodedToken = _securityTokenHandler.ReadJwtToken(accessToken);
-            return SendAsync(
+            return Send.ResponseAsync(
                 Maybe.Create(new AuthenticationStateDto(decodedToken.Claims.ToDictionary(x => x.Type, x => x.Value)))
                     .ToApiResponse(JsonOptions.Value.SerializerOptions), (int)HttpStatusCode.OK, ct);
         }
         catch (Exception)
         {
-            return SendAsync(
+            return Send.ResponseAsync(
                 ReaderAccountCouldNotReadDataError<AuthenticationStateDto>.Create(ReaderAccountUserConstants.RequestAuthDataUnableToGetData)
                     .ToApiResponse(JsonOptions.Value.SerializerOptions), cancellation: ct);
         }

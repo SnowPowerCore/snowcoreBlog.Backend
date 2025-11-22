@@ -14,5 +14,5 @@ public class RootEndpoint : EndpointWithoutRequest
     }
 
     public override Task HandleAsync(CancellationToken ct) =>
-        SendRedirectAsync("~/scalar/v1");
+        Send.RedirectAsync("~/scalar/v1");
 }

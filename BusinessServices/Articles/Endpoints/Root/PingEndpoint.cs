@@ -20,5 +20,5 @@ public class PingEndpoint : EndpointWithoutRequest<string>
     }
 
     public override Task HandleAsync(CancellationToken ct) =>
-        SendAsync("pong", (int)HttpStatusCode.OK, ct);
+        Send.ResponseAsync("pong", (int)HttpStatusCode.OK, ct);
 }

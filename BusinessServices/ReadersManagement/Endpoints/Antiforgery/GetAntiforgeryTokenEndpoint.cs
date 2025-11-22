@@ -41,7 +41,7 @@ public class GetAntiforgeryTokenEndpoint : EndpointWithoutRequest
     {
         var tokenSet = _antiforgery.GetAndStoreTokens(HttpContext);
         var result = Maybe.Create(new AntiforgeryResultDto(tokenSet.RequestToken, tokenSet.HeaderName));
-        await SendAsync(
+        await Send.ResponseAsync(
             result?.ToApiResponse(serializerOptions: JsonOptions.Value.SerializerOptions),
             result?.ToStatusCode() ?? (int)HttpStatusCode.InternalServerError,
             ct);

@@ -28,7 +28,6 @@ namespace snowcoreBlog.Backend.Infrastructure;
 [JsonSerializable(typeof(List<byte>))]
 [JsonSerializable(typeof(Dictionary<string, string>))]
 [JsonSerializable(typeof(JsonElement))]
-[JsonSerializable(typeof(ScalarOptions))]
 [JsonSerializable(typeof(List<ValidationFailure>))]
 [JsonSerializable(typeof(ApiResponse))]
 [JsonSerializable(typeof(AltchaChallenge))]

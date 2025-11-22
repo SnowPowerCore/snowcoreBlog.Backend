@@ -11,17 +11,17 @@
 
   <ItemGroup>
     <PackageReference Include="Aspire.StackExchange.Redis" Version="9.5.2" />
-    <PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="4.0.1" />
-    <PackageReference Include="AWSSDK.SimpleEmailV2" Version="4.0.0.4" />
-    <PackageReference Include="Fody" Version="6.9.2">
+    <PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="4.0.3.14" />
+    <PackageReference Include="AWSSDK.SimpleEmailV2" Version="4.0.7" />
+    <PackageReference Include="Fody" Version="6.9.3">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="ConfigureAwait.Fody" Version="3.3.2" />
-    <PackageReference Include="MassTransit.RabbitMQ" Version="8.4.1" />
+    <PackageReference Include="MassTransit.RabbitMQ" Version="8.5.5" />
     <PackageReference Include="SendGrid" Version="9.29.3" />
     <PackageReference Include="SendGrid.Extensions.DependencyInjection" Version="1.0.1" />
-    <PackageReference Include="Riok.Mapperly" Version="4.2.1">
+    <PackageReference Include="Riok.Mapperly" Version="4.3.0">
       <ExcludeAssets>runtime</ExcludeAssets>
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>compile; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

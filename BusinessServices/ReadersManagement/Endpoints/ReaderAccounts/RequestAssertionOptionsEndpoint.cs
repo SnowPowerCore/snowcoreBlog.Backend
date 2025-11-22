@@ -48,7 +48,7 @@ public class RequestAssertionOptionsEndpoint : Endpoint<RequestAssertionOptionsD
 
         var result = await RequestReaderAccountAssertionOptions(context, ct);
 
-        await SendAsync(
+        await Send.ResponseAsync(
             result?.ToApiResponse(serializerOptions: JsonOptions.Value.SerializerOptions),
             result?.ToStatusCode() ?? (int)HttpStatusCode.InternalServerError,
             ct);

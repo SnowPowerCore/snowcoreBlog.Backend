@@ -43,7 +43,7 @@ public class GetArticlesCachedEndpoint : EndpointWithoutRequest<ApiResponse?>
         var context = new GetArticlesCachedContext();
         var result = await GetArticlesCached(context, ct);
 
-        await SendAsync(
+        await Send.ResponseAsync(
             result?.ToApiResponse(serializerOptions: JsonOptions.Value.SerializerOptions),
             result?.ToStatusCode() ?? (int)HttpStatusCode.OK,
             ct);

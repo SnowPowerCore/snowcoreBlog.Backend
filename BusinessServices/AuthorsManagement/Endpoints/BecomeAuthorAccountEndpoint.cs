@@ -41,7 +41,7 @@ public class BecomeAuthorAccountEndpoint : Endpoint<BecomeAuthorAccountRequestDt
     {
         var context = new BecomeAuthorAccountContext(req.UserId, req.DisplayName);
         var result = await BecomeAuthorAccount(context, ct);
-        await SendAsync(
+        await Send.ResponseAsync(
             result?.ToApiResponse(serializerOptions: JsonOptions.Value.SerializerOptions),
             result?.ToStatusCode() ?? (int)HttpStatusCode.InternalServerError,
             ct);

@@ -29,5 +29,5 @@ public class GetAltchaChallengeEndpoint : EndpointWithoutRequest<AltchaChallenge
     }
 
     public override Task HandleAsync(CancellationToken ct) =>
-        SendAsync(_altcha.Generate(), (int)HttpStatusCode.OK, ct);
+        Send.ResponseAsync(_altcha.Generate(), (int)HttpStatusCode.OK, ct);
 }
