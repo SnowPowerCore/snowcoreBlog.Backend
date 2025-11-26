@@ -23,7 +23,7 @@ public class RequestCreateByEmailEndpoint : Endpoint<RequestCreateReaderAccountD
 
     [StepifiedProcess(Steps = [
         typeof(ValidateReaderAccountEmailDomainStep),
-        typeof(ValidateReaderAccountNotExistStep),
+        typeof(ValidateReaderAccountNotExistsStep),
         typeof(ValidateReaderAccountTempRecordNotExistsStep),
         typeof(ValidateReaderAccountNickNameWasNotTakenStep),
         typeof(CreateReaderAccountTempUserStep),

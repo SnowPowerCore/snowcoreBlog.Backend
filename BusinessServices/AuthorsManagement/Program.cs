@@ -1,18 +1,18 @@
+using System.Text.Json.Serialization;
 using Marten;
 using MassTransit;
 using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.AspNetCore.HttpOverrides;
+using snowcoreBlog.ApplicationLaunch.Implementations.BackgroundServices;
+using snowcoreBlog.ApplicationLaunch.Interfaces;
+using snowcoreBlog.Backend.AuthorsManagement.Features;
 using snowcoreBlog.Backend.AuthorsManagement.Interfaces.Repositories.Marten;
 using snowcoreBlog.Backend.AuthorsManagement.Repositories.Marten;
+using snowcoreBlog.Backend.AuthorsManagement.Services;
 using snowcoreBlog.Backend.BusinessServices.AuthorsManagement.Steps;
 using snowcoreBlog.Backend.Infrastructure.Extensions;
 using snowcoreBlog.ServiceDefaults.Extensions;
-using snowcoreBlog.Backend.AuthorsManagement.Features;
-using snowcoreBlog.ApplicationLaunch.Implementations.BackgroundServices;
-using snowcoreBlog.ApplicationLaunch.Interfaces;
-using snowcoreBlog.Backend.AuthorsManagement.Services;
 using StackExchange.Redis;
-using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateSlimBuilder(args);
 builder.Host.UseDefaultServiceProvider(static (c, opts) =>

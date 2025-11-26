@@ -1,9 +1,9 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Net.Http.Headers;
 using snowcoreBlog.Backend.Core.Constants;
 
-namespace snowcoreBlog.Backend.Gateway.Middleware;
+namespace snowcoreBlog.Backend.Infrastructure.Middleware;
 
 public class UserCookieJsonWebTokenMiddleware : IMiddleware
 {

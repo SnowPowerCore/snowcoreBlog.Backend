@@ -28,6 +28,7 @@ using snowcoreBlog.Backend.Email.Core.Options;
 using snowcoreBlog.Backend.Infrastructure;
 using snowcoreBlog.Backend.Infrastructure.Entities;
 using snowcoreBlog.Backend.Infrastructure.Extensions;
+using snowcoreBlog.Backend.Infrastructure.Middleware;
 using snowcoreBlog.Backend.Infrastructure.Processors;
 using snowcoreBlog.Backend.Infrastructure.Services;
 using snowcoreBlog.Backend.Infrastructure.Stores;
@@ -178,13 +179,14 @@ builder.Services.AddAuthorization()
 
 builder.Services.AddScoped<IHasher, Argon2Hasher>();
 builder.Services.AddScoped<JwtSecurityTokenHandler>();
+builder.Services.AddScoped<UserCookieJsonWebTokenMiddleware>();
 builder.Services.AddScoped<IAltchaCancellableChallengeStore, AltchaChallengeStore>();
 builder.Services.AddScoped<IReaderRepository, ReaderRepository>();
 builder.Services.AddScoped<ValidateNickNameWasNotTakenStep>();
 builder.Services.AddScoped<ValidateReaderAccountTempRecordNotExistsStep>();
 builder.Services.AddScoped<ValidateReaderAccountExistsStep>();
-builder.Services.AddScoped<snowcoreBlog.Backend.ReadersManagement.Steps.ReaderAccount.Request.ValidateReaderAccountNotExistStep>();
-builder.Services.AddScoped<snowcoreBlog.Backend.ReadersManagement.Steps.ReaderAccount.Confirm.ValidateReaderAccountNotExistStep>();
+builder.Services.AddScoped<snowcoreBlog.Backend.ReadersManagement.Steps.ReaderAccount.Request.ValidateReaderAccountNotExistsStep>();
+builder.Services.AddScoped<snowcoreBlog.Backend.ReadersManagement.Steps.ReaderAccount.Confirm.ValidateReaderAccountNotExistsStep>();
 builder.Services.AddScoped<ValidateReaderAccountEmailDomainStep>();
 builder.Services.AddScoped<ValidateReaderAccountNickNameWasNotTakenStep>();
 builder.Services.AddScoped<CreateReaderAccountTempUserStep>();
@@ -222,6 +224,7 @@ app.UseHttpsRedirection()
             new AcceptLanguageHeaderRequestCultureProvider()
         ];
     })
+    .UseMiddleware<UserCookieJsonWebTokenMiddleware>()
     .UseAuthentication()
     .UseAuthorization()
     .UseAntiforgeryFE(additionalContentTypes: [MediaTypeNames.Application.Json])

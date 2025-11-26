@@ -1,8 +1,8 @@
 using System.Net;
 using System.Net.Mime;
 using FastEndpoints;
-using snowcoreBlog.PublicApi.Constants;
 using snowcoreBlog.Backend.Infrastructure;
+using snowcoreBlog.PublicApi.Constants;
 
 namespace snowcoreBlog.Backend.Articles.Endpoints.Root;
 

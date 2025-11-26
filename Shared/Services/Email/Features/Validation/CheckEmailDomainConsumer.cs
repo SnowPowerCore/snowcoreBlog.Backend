@@ -2,15 +2,15 @@
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
+using Apizr;
 using FluentValidation;
 using MassTransit;
 using MaybeResults;
+using snowcoreBlog.Backend.Email.Api;
 using snowcoreBlog.Backend.Email.Core.Constants;
 using snowcoreBlog.Backend.Email.Core.Contracts;
 using snowcoreBlog.PublicApi.Utilities.DataResult;
 using StackExchange.Redis;
-using Apizr;
-using snowcoreBlog.Backend.Email.Api;
 
 namespace snowcoreBlog.Backend.Email.Features.Validation;
 

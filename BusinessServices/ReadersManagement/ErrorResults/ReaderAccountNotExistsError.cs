@@ -3,4 +3,4 @@
 namespace snowcoreBlog.Backend.ReadersManagement;
 
 [None]
-public partial record ReaderAccountNotExistError;
+public partial record ReaderAccountNotExistsError;

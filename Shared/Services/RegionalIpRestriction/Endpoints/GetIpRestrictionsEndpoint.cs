@@ -1,6 +1,6 @@
 using FastEndpoints;
-using snowcoreBlog.Backend.RegionalIpRestriction.Repositories.Marten;
 using snowcoreBlog.Backend.RegionalIpRestriction.Entities;
+using snowcoreBlog.Backend.RegionalIpRestriction.Repositories.Marten;
 
 namespace snowcoreBlog.Backend.RegionalIpRestriction.Endpoints;
 

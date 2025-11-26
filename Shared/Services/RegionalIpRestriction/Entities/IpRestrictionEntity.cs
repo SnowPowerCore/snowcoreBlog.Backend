@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using Marten;
-using Marten.Schema;
-
 namespace snowcoreBlog.Backend.RegionalIpRestriction.Entities;
 
 public class IpRestrictionEntity

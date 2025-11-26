@@ -1,13 +1,13 @@
 using System.Security.Claims;
 using FluentValidation;
 using MassTransit;
-using Microsoft.Extensions.Options;
 using MaybeResults;
+using Microsoft.Extensions.Options;
 using snowcoreBlog.Backend.AspireYarpGateway.Constants;
-using snowcoreBlog.Backend.AspireYarpGateway.Options;
-using snowcoreBlog.PublicApi.Utilities.DataResult;
 using snowcoreBlog.Backend.AspireYarpGateway.Core.Contracts;
+using snowcoreBlog.Backend.AspireYarpGateway.Options;
 using snowcoreBlog.Backend.AspireYarpGateway.Utilities;
+using snowcoreBlog.PublicApi.Utilities.DataResult;
 
 namespace snowcoreBlog.Backend.AspireYarpGateway.Features;
 

@@ -1,17 +1,17 @@
 using System.Globalization;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 using FastEndpoints;
 using FastEndpoints.Swagger;
+using JasperFx.CodeGeneration;
 using Marten;
 using MassTransit;
-using JasperFx.CodeGeneration;
-using Microsoft.AspNetCore.Routing.Constraints;
-using Microsoft.AspNetCore.Localization;
-using System.Text.Json;
 using Microsoft.AspNetCore.CookiePolicy;
+using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Routing.Constraints;
 using snowcoreBlog.Backend.Infrastructure.Extensions;
-using snowcoreBlog.Backend.RegionalIpRestriction.Repositories.Marten;
 using snowcoreBlog.Backend.RegionalIpRestriction.Entities;
+using snowcoreBlog.Backend.RegionalIpRestriction.Repositories.Marten;
 using snowcoreBlog.PublicApi.Extensions;
 
 var builder = WebApplication.CreateSlimBuilder(args);
@@ -56,7 +56,7 @@ builder.Services.AddMassTransit(busConfigurator =>
         config.ConfigureEndpoints(context);
     });
 });
- 
+
 
 builder.AddRedisClient(connectionName: "cache");
 
@@ -105,7 +105,7 @@ app.UseHttpsRedirection()
         options.DefaultRequestCulture = new RequestCulture(DefaultCulture);
         options.SupportedCultures = supportedCultures;
         options.SupportedUICultures = supportedCultures;
-        options.RequestCultureProviders = [ new AcceptLanguageHeaderRequestCultureProvider() ];
+        options.RequestCultureProviders = [new AcceptLanguageHeaderRequestCultureProvider()];
     })
     .UseAuthorization()
     .UseFastEndpoints(c =>

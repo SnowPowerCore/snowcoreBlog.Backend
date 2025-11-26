@@ -1,8 +1,8 @@
 ﻿using System.Text;
 using Fido2NetLib;
 using MassTransit;
-using MinimalStepifiedSystem.Interfaces;
 using MaybeResults;
+using MinimalStepifiedSystem.Interfaces;
 using snowcoreBlog.Backend.IAM.Core.Contracts;
 using snowcoreBlog.Backend.ReadersManagement.Constants;
 using snowcoreBlog.Backend.ReadersManagement.Context;

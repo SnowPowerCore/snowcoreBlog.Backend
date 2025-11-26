@@ -1,6 +1,6 @@
 ﻿using MassTransit;
-using MinimalStepifiedSystem.Interfaces;
 using MaybeResults;
+using MinimalStepifiedSystem.Interfaces;
 using snowcoreBlog.Backend.Email.Core.Constants;
 using snowcoreBlog.Backend.Email.Core.Contracts;
 using snowcoreBlog.Backend.ReadersManagement.Context;

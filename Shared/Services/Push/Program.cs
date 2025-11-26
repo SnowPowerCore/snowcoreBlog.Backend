@@ -1,11 +1,11 @@
+using System.Text.Json.Serialization;
+using FluentValidation;
 using MassTransit;
 using snowcoreBlog.Backend.Infrastructure.Extensions;
-using snowcoreBlog.ServiceDefaults.Extensions;
-using FluentValidation;
-using snowcoreBlog.Backend.Push.Validation;
 using snowcoreBlog.Backend.Push.Core.Contracts;
 using snowcoreBlog.Backend.Push.Features.Ntfy;
-using System.Text.Json.Serialization;
+using snowcoreBlog.Backend.Push.Validation;
+using snowcoreBlog.ServiceDefaults.Extensions;
 
 var builder = WebApplication.CreateSlimBuilder(args);
 builder.Host.UseDefaultServiceProvider(static (c, opts) =>

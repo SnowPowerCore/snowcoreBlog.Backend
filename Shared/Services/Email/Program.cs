@@ -1,19 +1,19 @@
+using System.Text.Json.Serialization;
+using Amazon.Runtime;
+using Amazon.SimpleEmailV2;
+using Apizr;
+using Apizr.Extending.Configuring.Common;
+using FluentValidation;
 using MassTransit;
+using Microsoft.Extensions.Http.Resilience;
+using SendGrid.Extensions.DependencyInjection;
+using snowcoreBlog.Backend.Email.Api;
+using snowcoreBlog.Backend.Email.Core.Contracts;
+using snowcoreBlog.Backend.Email.Features.AmazonSimpleEmail;
+using snowcoreBlog.Backend.Email.Features.Validation;
+using snowcoreBlog.Backend.Email.Validation;
 using snowcoreBlog.Backend.Infrastructure.Extensions;
 using snowcoreBlog.ServiceDefaults.Extensions;
-using SendGrid.Extensions.DependencyInjection;
-using FluentValidation;
-using snowcoreBlog.Backend.Email.Core.Contracts;
-using snowcoreBlog.Backend.Email.Validation;
-using snowcoreBlog.Backend.Email.Features.Validation;
-using Amazon.SimpleEmailV2;
-using Amazon.Runtime;
-using snowcoreBlog.Backend.Email.Features.AmazonSimpleEmail;
-using Apizr;
-using snowcoreBlog.Backend.Email.Api;
-using Apizr.Extending.Configuring.Common;
-using Microsoft.Extensions.Http.Resilience;
-using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateSlimBuilder(args);
 builder.Host.UseDefaultServiceProvider(static (c, opts) =>

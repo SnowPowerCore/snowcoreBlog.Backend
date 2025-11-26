@@ -1,12 +1,10 @@
-﻿using System.Security.Claims;
-using System.Text.Json;
+﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 using Fido2NetLib;
 using FluentValidation.Results;
 using Ixnas.AltchaNet;
 using MassTransit;
 using MassTransit.Events;
-using Scalar.AspNetCore;
 using snowcoreBlog.Backend.AspireYarpGateway.Core.Contracts;
 using snowcoreBlog.Backend.Core.Contracts;
 using snowcoreBlog.Backend.Core.Entities.Article;

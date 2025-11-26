@@ -1,15 +1,15 @@
 using System.Net;
+using System.Net.Mime;
 using FastEndpoints;
+using MaybeResults;
 using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.Extensions.Options;
-using MaybeResults;
 using snowcoreBlog.Backend.Infrastructure;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 using snowcoreBlog.PublicApi.Constants;
 using snowcoreBlog.PublicApi.Extensions;
 using snowcoreBlog.PublicApi.Utilities.Api;
-using System.Net.Mime;
 
 namespace snowcoreBlog.Backend.ReadersManagement.Endpoints.Antiforgery;
 
@@ -39,6 +39,23 @@ public class GetAntiforgeryTokenEndpoint : EndpointWithoutRequest
 
     public override async Task HandleAsync(CancellationToken ct)
     {
+        // Delete any existing antiforgery cookie to force generation of a fresh token
+        // This ensures we always get a new token that matches the current authentication state
+        var existingCookies = HttpContext.Request.Cookies
+            .Where(c => c.Key.StartsWith(".AspNetCore.Antiforgery", StringComparison.OrdinalIgnoreCase))
+            .ToList();
+
+        foreach (var cookie in existingCookies)
+        {
+            HttpContext.Response.Cookies.Delete(cookie.Key, new CookieOptions
+            {
+                Path = "/",
+                Secure = true,
+                HttpOnly = true,
+                SameSite = SameSiteMode.Strict
+            });
+        }
+
         var tokenSet = _antiforgery.GetAndStoreTokens(HttpContext);
         var result = Maybe.Create(new AntiforgeryResultDto(tokenSet.RequestToken, tokenSet.HeaderName));
         await Send.ResponseAsync(

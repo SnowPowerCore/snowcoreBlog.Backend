@@ -1,6 +1,6 @@
 ﻿using MassTransit;
-using MinimalStepifiedSystem.Interfaces;
 using MaybeResults;
+using MinimalStepifiedSystem.Interfaces;
 using snowcoreBlog.Backend.IAM.Core.Contracts;
 using snowcoreBlog.Backend.ReadersManagement.Context;
 using snowcoreBlog.Backend.ReadersManagement.Delegates;
@@ -24,13 +24,13 @@ public class ValidateReaderAccountExistsStep(IRequestClient<ValidateUserExists> 
             }
             else
             {
-                return ReaderAccountNotExistError<LoginByAssertionResultDto>.Create(
-                    ReaderAccountConstants.ReaderAccountNotExistError);
+                return ReaderAccountNotExistsError<LoginByAssertionResultDto>.Create(
+                    ReaderAccountConstants.ReaderAccountNotExistsError);
             }
         }
         else
         {
-            return ReaderAccountNotExistError<LoginByAssertionResultDto>.Create(
+            return ReaderAccountNotExistsError<LoginByAssertionResultDto>.Create(
                 ReaderAccountConstants.ReaderAccountUnableToCheckIfExistsError, result.Message.Errors);
         }
     }

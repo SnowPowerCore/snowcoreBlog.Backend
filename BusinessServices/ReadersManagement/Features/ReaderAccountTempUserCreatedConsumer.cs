@@ -16,5 +16,5 @@ public class ReaderAccountTempUserCreatedConsumer(IOptions<SendGridSenderAccount
                 options.Value,
                 context.Message.UserEmail,
                 EmailConstants.ReaderAccountTempUserCreatedSubject,
-                $"Welcome {context.Message.UserFirstName}, your activation link is: {context.Message.VerificationUrl}."), context.CancellationToken);
+                $"Welcome {context.Message.UserFirstName}, your activation link is: {context.Message.VerificationUrl}"), context.CancellationToken);
 }

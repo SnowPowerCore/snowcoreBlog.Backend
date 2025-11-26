@@ -21,7 +21,7 @@ public class ConfirmCreateByEmailEndpoint : Endpoint<ConfirmCreateReaderAccountD
     public IOptions<JsonOptions> JsonOptions { get; set; }
 
     [StepifiedProcess(Steps = [
-        typeof(ValidateReaderAccountNotExistStep),
+        typeof(ValidateReaderAccountNotExistsStep),
         typeof(CreateReaderAccountUserStep),
         typeof(CreateReaderEntityForNewUserStep),
         typeof(ReturnCreatedReaderEntityStep),

@@ -2,15 +2,15 @@
 using FluentValidation;
 using Marten;
 using MassTransit;
-using Microsoft.AspNetCore.Identity;
 using MaybeResults;
+using Microsoft.AspNetCore.Identity;
 using snowcoreBlog.Backend.IAM.Constants;
 using snowcoreBlog.Backend.IAM.Core.Contracts;
 using snowcoreBlog.Backend.IAM.Core.Entities;
 using snowcoreBlog.Backend.IAM.Extensions;
 using snowcoreBlog.Backend.IAM.Interfaces.Repositories.Marten;
-using snowcoreBlog.PublicApi.Utilities.DataResult;
 using snowcoreBlog.Backend.Infrastructure.Utilities;
+using snowcoreBlog.PublicApi.Utilities.DataResult;
 
 namespace snowcoreBlog.Backend.IAM.Features.User;
 
@@ -32,7 +32,7 @@ public class CheckAndPerformAssertionConsumer(IFido2 fido2,
                     Errors: result.Errors.Select(e => new NoneDetail(e.PropertyName, e.ErrorMessage)).ToList()));
             return;
         }
-        
+
         var loginMsgAuthAssertion = loginMsg.AuthenticatorAssertion;
 
         var user = await userManager.FindByEmailAsync(userManager.NormalizeEmail(loginMsg.Email));
@@ -47,9 +47,9 @@ public class CheckAndPerformAssertionConsumer(IFido2 fido2,
         var userIdGuid = new Guid(user.Id);
 
         var options = AssertionOptions.FromJson(loginMsg.AssertionOptionsJson);
-        
+
         var targetCredential = await fido2PublicKeyCredentialRepository
-            .GetByUserIdAndPubKeyCredIdAsync(userIdGuid, Base64UrlEncoder.Encode(loginMsgAuthAssertion.Id));
+            .GetByUserIdAndPubKeyCredIdAsync(userIdGuid, loginMsgAuthAssertion.Id);
         if (targetCredential is default(Fido2PublicKeyCredentialEntity))
         {
             await context.RespondAsync(

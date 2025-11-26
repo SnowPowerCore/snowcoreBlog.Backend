@@ -1,6 +1,6 @@
 using MassTransit;
-using snowcoreBlog.Backend.AuthorsManagement.Interfaces.Repositories.Marten;
 using snowcoreBlog.Backend.AspireYarpGateway.Core.Contracts;
+using snowcoreBlog.Backend.AuthorsManagement.Interfaces.Repositories.Marten;
 
 namespace snowcoreBlog.Backend.AuthorsManagement.Features;
 

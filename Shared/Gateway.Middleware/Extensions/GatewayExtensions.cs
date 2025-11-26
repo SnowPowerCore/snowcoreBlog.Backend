@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
+using snowcoreBlog.Backend.Infrastructure.Middleware;
 using snowcoreBlog.Backend.RegionalIpRestriction.Middleware;
 
 namespace snowcoreBlog.Backend.Gateway.Middleware.Extensions;

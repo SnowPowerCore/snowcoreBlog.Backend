@@ -1,6 +1,6 @@
 ﻿using MassTransit;
-using MinimalStepifiedSystem.Interfaces;
 using MaybeResults;
+using MinimalStepifiedSystem.Interfaces;
 using snowcoreBlog.Backend.IAM.Core.Contracts;
 using snowcoreBlog.Backend.ReadersManagement.Context;
 using snowcoreBlog.Backend.ReadersManagement.Delegates;
@@ -8,19 +8,19 @@ using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 using snowcoreBlog.PublicApi.Constants;
 using snowcoreBlog.PublicApi.Utilities.DataResult;
 
-namespace snowcoreBlog.Backend.ReadersManagement.Steps.ReaderAccount.Request;
+namespace snowcoreBlog.Backend.ReadersManagement.Steps.ReaderAccount.Confirm;
 
-public class ValidateReaderAccountNotExistStep(IRequestClient<ValidateUserExists> requestClient) : IStep<RequestCreateReaderAccountDelegate, RequestCreateReaderAccountContext, IMaybe<RequestReaderAccountCreationResultDto>>
+public class ValidateReaderAccountNotExistsStep(IRequestClient<ValidateUserExists> requestClient) : IStep<ConfirmCreateReaderAccountDelegate, ConfirmCreateReaderAccountContext, IMaybe<ReaderAccountCreatedDto>>
 {
-    public async Task<IMaybe<RequestReaderAccountCreationResultDto>> InvokeAsync(RequestCreateReaderAccountContext context, RequestCreateReaderAccountDelegate next, CancellationToken token = default)
+    public async Task<IMaybe<ReaderAccountCreatedDto>> InvokeAsync(ConfirmCreateReaderAccountContext context, ConfirmCreateReaderAccountDelegate next, CancellationToken token = default)
     {
         var result = await requestClient.GetResponse<DataResult<UserExistsValidationResult>>(
-            context.CreateRequest.ToValidateUserExists(), token);
+            context.ConfirmRequest.ToValidateUserExists(), token);
         if (result.Message.IsSuccess)
         {
             if (result.Message.Value!.Exists)
             {
-                return ReaderAccountAlreadyExistsError<RequestReaderAccountCreationResultDto>.Create(
+                return ReaderAccountAlreadyExistsError<ReaderAccountCreatedDto>.Create(
                     ReaderAccountConstants.ReaderAccountAlreadyExistsError);
             }
             else
@@ -30,7 +30,7 @@ public class ValidateReaderAccountNotExistStep(IRequestClient<ValidateUserExists
         }
         else
         {
-            return CreateUserForReaderAccountError<RequestReaderAccountCreationResultDto>.Create(
+            return CreateUserForReaderAccountError<ReaderAccountCreatedDto>.Create(
                 ReaderAccountConstants.ReaderAccountUnableToCheckIfExistsError, result.Message.Errors);
         }
     }

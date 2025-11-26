@@ -1,19 +1,17 @@
 ﻿using MassTransit;
-using MinimalStepifiedSystem.Interfaces;
 using MaybeResults;
+using Microsoft.Extensions.Options;
+using MinimalStepifiedSystem.Interfaces;
+using snowcoreBlog.Backend.AspireYarpGateway.Core.Contracts;
+using snowcoreBlog.Backend.Core.Constants;
+using snowcoreBlog.Backend.ReadersManagement.Constants;
 using snowcoreBlog.Backend.ReadersManagement.Context;
 using snowcoreBlog.Backend.ReadersManagement.Delegates;
+using snowcoreBlog.Backend.ReadersManagement.Extensions;
+using snowcoreBlog.Backend.ReadersManagement.Options;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 using snowcoreBlog.PublicApi.Constants;
 using snowcoreBlog.PublicApi.Utilities.DataResult;
-using Microsoft.Extensions.Options;
-using snowcoreBlog.Backend.ReadersManagement.Options;
-using snowcoreBlog.Backend.ReadersManagement.Extensions;
-using snowcoreBlog.Backend.Core.Constants;
-using snowcoreBlog.Backend.ReadersManagement.Constants;
-using snowcoreBlog.Backend.AspireYarpGateway.Core.Contracts;
-using System.Collections.Concurrent;
-using System.Linq;
 using StackExchange.Redis;
 
 namespace snowcoreBlog.Backend.ReadersManagement.Steps.Assertion;
@@ -59,7 +57,7 @@ public class GetTokenForReaderAccountStep(IHttpContextAccessor httpContextAccess
                 for (var i = 0; i < configuredProviders.Count; i++)
                 {
                     var provider = configuredProviders[i];
-                    
+
                     var req = new RequestReaderClaims
                     {
                         RequestId = requestId,
@@ -114,13 +112,13 @@ public class GetTokenForReaderAccountStep(IHttpContextAccessor httpContextAccess
             }
             else
             {
-                return ReaderAccountNotExistError<LoginByAssertionResultDto>.Create(
+                return ReaderAccountNotExistsError<LoginByAssertionResultDto>.Create(
                     ReaderAccountConstants.ReaderAccountUnableToLogIn);
             }
         }
         else
         {
-            return ReaderAccountNotExistError<LoginByAssertionResultDto>.Create(
+            return ReaderAccountNotExistsError<LoginByAssertionResultDto>.Create(
                 ReaderAccountConstants.ReaderAccountUnableToLogIn, result.Message.Errors);
         }
     }

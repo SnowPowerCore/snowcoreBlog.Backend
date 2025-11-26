@@ -41,7 +41,7 @@ public static class YarpResourceExtensions
     /// <exception cref="InvalidOperationException"></exception>
     public static IResourceBuilder<YarpResource> AddYarp(this IDistributedApplicationBuilder builder, string name)
     {
-        var yarp = builder.Resources.OfType<YarpResource>().SingleOrDefault();
+        var yarp = builder.Resources.OfType<YarpResource>().FirstOrDefault();
         if (yarp is not default(YarpResource))
         {
             // You only need one yarp resource per application

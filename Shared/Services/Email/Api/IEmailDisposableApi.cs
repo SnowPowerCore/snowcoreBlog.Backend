@@ -1,5 +1,5 @@
-using Refit;
 using Apizr.Configuring.Request;
+using Refit;
 
 namespace snowcoreBlog.Backend.Email.Api
 {

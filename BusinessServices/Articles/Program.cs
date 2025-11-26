@@ -1,30 +1,31 @@
+using System.Net.Mime;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using FastEndpoints;
+using FastEndpoints.OpenTelemetry.Middleware;
+using FastEndpoints.Swagger;
 using Ixnas.AltchaNet;
+using JasperFx.CodeGeneration;
 using Marten;
 using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.AspNetCore.HttpOverrides;
-using snowcoreBlog.Backend.Infrastructure.Extensions;
 using MinimalStepifiedSystem.Extensions;
-using snowcoreBlog.Backend.Articles.Repositories.Marten;
-using snowcoreBlog.Backend.Articles.Interfaces.Repositories.Marten;
-using snowcoreBlog.Backend.Articles.Steps;
-using snowcoreBlog.ServiceDefaults.Extensions;
-using JasperFx.CodeGeneration;
-using snowcoreBlog.Backend.Core.Entities.Article;
+using NSwag;
 using Oakton;
+using Scalar.AspNetCore;
 using snowcoreBlog.ApplicationLaunch.Implementations.BackgroundServices;
 using snowcoreBlog.ApplicationLaunch.Interfaces;
+using snowcoreBlog.Backend.Articles.Interfaces.Repositories.Marten;
+using snowcoreBlog.Backend.Articles.Repositories.Marten;
 using snowcoreBlog.Backend.Articles.Services;
-using NSwag;
-using Scalar.AspNetCore;
-using FastEndpoints.Swagger;
-using snowcoreBlog.Backend.Infrastructure.Processors;
-using System.Text.Json.Serialization;
+using snowcoreBlog.Backend.Articles.Steps;
 using snowcoreBlog.Backend.Articles.Steps.Articles;
+using snowcoreBlog.Backend.Core.Entities.Article;
+using snowcoreBlog.Backend.Infrastructure.Extensions;
+using snowcoreBlog.Backend.Infrastructure.Middleware;
+using snowcoreBlog.Backend.Infrastructure.Processors;
 using snowcoreBlog.PublicApi.Extensions;
-using System.Text.Json;
-using System.Net.Mime;
-using FastEndpoints.OpenTelemetry.Middleware;
+using snowcoreBlog.ServiceDefaults.Extensions;
 
 var jsonStringEnumConverter = new JsonStringEnumConverter();
 
@@ -122,6 +123,7 @@ builder.Services.AddAuthorization()
     .AddResponseCaching();
 
 builder.Services.AddSingleton<IApplicationLaunchService>(static sp => new ArticlesApplicationLaunchService(sp));
+builder.Services.AddScoped<UserCookieJsonWebTokenMiddleware>();
 builder.Services.AddScoped<IArticleRepository, ArticleRepository>();
 builder.Services.AddScoped<ValidateAuthorAccountStep>();
 builder.Services.AddScoped<GenerateSlugStep>();
@@ -143,6 +145,7 @@ app.UseHttpsRedirection()
         Secure = CookieSecurePolicy.Always
     })
     .UseResponseCaching()
+    .UseMiddleware<UserCookieJsonWebTokenMiddleware>()
     .UseAuthentication()
     .UseAuthorization()
     .UseAntiforgeryFE(additionalContentTypes: [MediaTypeNames.Application.Json])

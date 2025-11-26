@@ -3,9 +3,9 @@ using Fido2NetLib.Objects;
 using FluentValidation;
 using Marten;
 using MassTransit;
+using MaybeResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
-using MaybeResults;
 using snowcoreBlog.Backend.Core.Interfaces.Services;
 using snowcoreBlog.Backend.Core.Utilities;
 using snowcoreBlog.Backend.IAM.Constants;
@@ -130,7 +130,7 @@ public class ValidateAndCreateUserConsumer(IHasher hasher,
             {
                 await applicationTempUserRepository.RemoveAsync(tempUserEntity, token: CancellationToken.None);
                 await fido2PublicKeyCredentialRepository.AddOrUpdateAsync(credential, token: CancellationToken.None);
-                
+
                 await context.RespondAsync(
                     new DataResult<UserCreationResult>(new UserCreationResult
                     {

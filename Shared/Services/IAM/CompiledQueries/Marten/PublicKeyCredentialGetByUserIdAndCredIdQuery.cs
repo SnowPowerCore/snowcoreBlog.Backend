@@ -12,6 +12,6 @@ public class PublicKeyCredentialGetByUserIdAndCredIdQuery : ICompiledQuery<Fido2
 
     public Expression<Func<IMartenQueryable<Fido2PublicKeyCredentialEntity>, Fido2PublicKeyCredentialEntity>> QueryIs()
     {
-        return q => q.SingleOrDefault(x => x.UserId == UserId && x.PublicKeyCredentialId.Equals(PublicKeyCredentialId, StringComparison.Ordinal));
+        return q => q.FirstOrDefault(x => x.UserId == UserId && x.PublicKeyCredentialId.Equals(PublicKeyCredentialId, StringComparison.Ordinal));
     }
 }
