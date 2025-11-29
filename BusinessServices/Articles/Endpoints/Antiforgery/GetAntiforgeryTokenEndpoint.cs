@@ -11,13 +11,13 @@ using snowcoreBlog.PublicApi.Constants;
 using snowcoreBlog.PublicApi.Extensions;
 using snowcoreBlog.PublicApi.Utilities.Api;
 
-namespace snowcoreBlog.Backend.ReadersManagement.Endpoints.Antiforgery;
+namespace snowcoreBlog.Backend.Articles.Endpoints.Antiforgery;
 
 public class GetAntiforgeryTokenEndpoint : EndpointWithoutRequest
 {
     public IAntiforgery _antiforgery;
 
-    public IOptions<JsonOptions> JsonOptions { get; set; }
+    public required IOptions<JsonOptions> JsonOptions { get; set; }
 
     public override void Configure()
     {
