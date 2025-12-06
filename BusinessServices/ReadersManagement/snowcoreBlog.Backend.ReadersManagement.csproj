@@ -10,29 +10,29 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Aspire.Npgsql" Version="9.5.2" />
-    <PackageReference Include="Aspire.StackExchange.Redis" Version="9.5.2" />
-    <PackageReference Include="FastEndpoints" Version="7.1.1" />
-    <PackageReference Include="FastEndpoints.Security" Version="7.1.1" />
-    <PackageReference Include="FastEndpoints.Generator" Version="7.1.1">
+    <PackageReference Include="Aspire.Npgsql" />
+    <PackageReference Include="Aspire.StackExchange.Redis" />
+    <PackageReference Include="FastEndpoints" />
+    <PackageReference Include="FastEndpoints.Security" />
+    <PackageReference Include="FastEndpoints.Generator">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="FastEndpoints.Swagger" Version="7.1.1" />
-    <PackageReference Include="Fody" Version="6.9.3">
+    <PackageReference Include="FastEndpoints.Swagger" />
+    <PackageReference Include="Fody">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="ConfigureAwait.Fody" Version="3.3.2" />
-    <PackageReference Include="Ixnas.AltchaNet" Version="1.1.0" />
-    <PackageReference Include="MassTransit.RabbitMQ" Version="8.5.5" />
-    <PackageReference Include="Marten" Version="7.40.5" />
-    <PackageReference Include="Marten.CommandLine" Version="7.40.5" />
-    <PackageReference Include="MinimalStepifiedSystem.Core" Version="1.2.2.0" />
-    <PackageReference Include="MinimalStepifiedSystem.SourceGen" Version="1.2.2.0" />
-    <PackageReference Include="OpenTelemetry.Instrumentation.StackExchangeRedis" Version="1.10.0-beta.1" />
-    <PackageReference Include="Scalar.AspNetCore" Version="2.11.0" />
-    <PackageReference Include="Riok.Mapperly" Version="4.3.0">
+    <PackageReference Include="ConfigureAwait.Fody" />
+    <PackageReference Include="Ixnas.AltchaNet" />
+    <PackageReference Include="MassTransit.RabbitMQ" />
+    <PackageReference Include="Marten" />
+    <PackageReference Include="Marten.CommandLine" />
+    <PackageReference Include="MinimalStepifiedSystem.Core" />
+    <PackageReference Include="MinimalStepifiedSystem.SourceGen" />
+    <PackageReference Include="OpenTelemetry.Instrumentation.StackExchangeRedis" />
+    <PackageReference Include="Scalar.AspNetCore" />
+    <PackageReference Include="Riok.Mapperly">
       <ExcludeAssets>runtime</ExcludeAssets>
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>compile; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

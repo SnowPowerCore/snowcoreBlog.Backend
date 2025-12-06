@@ -10,17 +10,17 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Aspire.Npgsql" Version="9.5.2" />
-    <PackageReference Include="Aspire.StackExchange.Redis" Version="9.5.2" />
-    <PackageReference Include="FastEndpoints" Version="7.1.1" />
-    <PackageReference Include="Fody" Version="6.9.3">
+    <PackageReference Include="Aspire.Npgsql" />
+    <PackageReference Include="Aspire.StackExchange.Redis" />
+    <PackageReference Include="FastEndpoints" />
+    <PackageReference Include="Fody">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="ConfigureAwait.Fody" Version="3.3.2" />
-    <PackageReference Include="Marten" Version="7.40.5" />
-    <PackageReference Include="MinimalStepifiedSystem.Core" Version="1.2.2.0" />
-    <PackageReference Include="Riok.Mapperly" Version="4.3.0">
+    <PackageReference Include="ConfigureAwait.Fody" />
+    <PackageReference Include="Marten" />
+    <PackageReference Include="MinimalStepifiedSystem.Core" />
+    <PackageReference Include="Riok.Mapperly">
       <IncludeAssets>runtime</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>

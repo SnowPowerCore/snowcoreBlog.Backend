@@ -9,11 +9,11 @@ public static class GatewayExtensions
 {
     public static IServiceCollection AddGatewayMiddleware(this IServiceCollection serviceCollection) =>
         serviceCollection
-            .AddSingleton<UserCookieJsonWebTokenMiddleware>()
-            .AddSingleton<RequestRestrictionMiddleware>();
+            .AddScoped<UserCookieJsonWebTokenMiddleware>();
+            // .AddScoped<RequestRestrictionMiddleware>();
 
     public static IApplicationBuilder UseGatewayMiddleware(this IApplicationBuilder appBuilder) =>
         appBuilder
-            .UseMiddleware<UserCookieJsonWebTokenMiddleware>()
-            .UseMiddleware<RequestRestrictionMiddleware>();
+            .UseMiddleware<UserCookieJsonWebTokenMiddleware>();
+            // .UseMiddleware<RequestRestrictionMiddleware>();
 }

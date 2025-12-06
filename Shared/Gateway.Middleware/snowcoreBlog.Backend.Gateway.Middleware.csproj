@@ -7,11 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Fody" Version="6.9.3">
+    <PackageReference Include="Fody">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="ConfigureAwait.Fody" Version="3.3.2" />
+    <PackageReference Include="ConfigureAwait.Fody" />
   </ItemGroup>
   
   <ItemGroup>

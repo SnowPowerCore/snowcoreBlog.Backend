@@ -1,0 +1,53 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <PublishTrimmed>true</PublishTrimmed>
+    <PublishReadyToRun>true</PublishReadyToRun>
+    <UserSecretsId>f4650b45-fed6-4a9a-9b97-2918092e0f30</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Aspire.Npgsql" />
+    <PackageReference Include="Aspire.StackExchange.Redis" />
+    <PackageReference Include="FastEndpoints" />
+    <PackageReference Include="FastEndpoints.Security" />
+    <PackageReference Include="FastEndpoints.Generator">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="FastEndpoints.Swagger" />
+    <PackageReference Include="FastEndpoints.OpenTelemetry" />
+    <PackageReference Include="Fody">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="ConfigureAwait.Fody" />
+    <PackageReference Include="MassTransit.RabbitMQ" />
+    <PackageReference Include="Marten" />
+    <PackageReference Include="Marten.CommandLine" />
+    <PackageReference Include="MinimalStepifiedSystem.Core" />
+    <PackageReference Include="MinimalStepifiedSystem.SourceGen" />
+    <PackageReference Include="OpenTelemetry.Instrumentation.StackExchangeRedis" />
+    <PackageReference Include="Scalar.AspNetCore" />
+    <PackageReference Include="Riok.Mapperly">
+      <ExcludeAssets>runtime</ExcludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>compile; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="**/FodyWeavers.*" Visible="false" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\snowcoreBlog.Universal\ServiceDefaults\snowcoreBlog.ServiceDefaults.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\snowcoreBlog.Backend.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\Core\snowcoreBlog.Backend.Core.csproj" />
+    <ProjectReference Include="..\..\..\snowcoreBlog.Universal\PublicApi\snowcoreBlog.PublicApi.csproj" />
+  </ItemGroup>
+
+</Project>

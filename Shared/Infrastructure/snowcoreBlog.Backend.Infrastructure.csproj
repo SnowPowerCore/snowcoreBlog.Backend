@@ -8,24 +8,24 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FastEndpoints" Version="7.1.1" />
-    <PackageReference Include="FastEndpoints.OpenTelemetry" Version="2.3.0" />
-    <PackageReference Include="Fody" Version="6.9.3">
+    <PackageReference Include="FastEndpoints" />
+    <PackageReference Include="FastEndpoints.OpenTelemetry" />
+    <PackageReference Include="Fody">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="ConfigureAwait.Fody" Version="3.3.2" />
-    <PackageReference Include="Marten" Version="7.40.5" />
-    <PackageReference Include="Ixnas.AltchaNet" Version="1.1.0" />
-    <PackageReference Include="MassTransit.RabbitMQ" Version="8.5.5" />
-    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.3.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.11" />
-    <PackageReference Include="Npgsql.OpenTelemetry" Version="9.0.4" />
-    <PackageReference Include="NSwag.Generation.AspNetCore" Version="14.6.3" />
-    <PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="1.14.0" />
-    <PackageReference Include="OpenTelemetry.Instrumentation.StackExchangeRedis" Version="1.10.0-beta.1" />
-    <PackageReference Include="Scalar.AspNetCore" Version="2.11.0" />
-    <PackageReference Include="Sodium.Core" Version="1.4.0" />
+    <PackageReference Include="ConfigureAwait.Fody" />
+    <PackageReference Include="Marten" />
+    <PackageReference Include="Ixnas.AltchaNet" />
+    <PackageReference Include="MassTransit.RabbitMQ" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" />
+    <PackageReference Include="Npgsql.OpenTelemetry" />
+    <PackageReference Include="NSwag.Generation.AspNetCore" />
+    <PackageReference Include="OpenTelemetry.Extensions.Hosting" />
+    <PackageReference Include="OpenTelemetry.Instrumentation.StackExchangeRedis" />
+    <PackageReference Include="Scalar.AspNetCore" />
+    <PackageReference Include="Sodium.Core" />
   </ItemGroup>
 
   <ItemGroup>

@@ -14,7 +14,7 @@ public static class ArticleSeedData
             PublishedAt = DateTime.Parse("2025-10-05T12:00:00Z").ToUniversalTime(),
             AuthorUserIds = new[] { Guid.Parse("11111111-1111-4111-8111-111111111111") },
             Tags = new[] { "dotnet", "performance", "profiling" },
-            CoverImageUrl = null
+            CoverImageUrl = "https://picsum.photos/1920/1080"
         },
 
         new ArticleEntity
@@ -26,7 +26,7 @@ public static class ArticleSeedData
             PublishedAt = DateTime.Parse("2025-09-22T10:00:00Z").ToUniversalTime(),
             AuthorUserIds = new[] { Guid.Parse("22222222-2222-4222-8222-222222222222") },
             Tags = new[] { "aspnet-core", "minimal-apis", "web" },
-            CoverImageUrl = null
+            CoverImageUrl = "https://picsum.photos/1920/1080"
         },
 
         new ArticleEntity
@@ -38,7 +38,7 @@ public static class ArticleSeedData
             PublishedAt = DateTime.Parse("2025-08-18T13:10:00Z").ToUniversalTime(),
             AuthorUserIds = new[] { Guid.Parse("11111111-1111-4111-8111-111111111111") },
             Tags = new[] { "csharp", "source-generators", "roslyn" },
-            CoverImageUrl = null
+            CoverImageUrl = "https://picsum.photos/1920/1080"
         },
 
         new ArticleEntity
@@ -50,7 +50,7 @@ public static class ArticleSeedData
             PublishedAt = DateTime.Parse("2025-07-12T14:00:00Z").ToUniversalTime(),
             AuthorUserIds = new[] { Guid.Parse("33333333-3333-4333-8333-333333333333") },
             Tags = new[] { "ef-core", "migrations", "database" },
-            CoverImageUrl = null
+            CoverImageUrl = "https://picsum.photos/1920/1080"
         },
 
         new ArticleEntity
@@ -62,7 +62,7 @@ public static class ArticleSeedData
             PublishedAt = DateTime.Parse("2025-06-05T09:00:00Z").ToUniversalTime(),
             AuthorUserIds = new[] { Guid.Parse("22222222-2222-4222-8222-222222222222") },
             Tags = new[] { "blazor", "wasm", "optimization" },
-            CoverImageUrl = null
+            CoverImageUrl = "https://picsum.photos/1920/1080"
         },
 
         new ArticleEntity
@@ -74,7 +74,7 @@ public static class ArticleSeedData
             PublishedAt = DateTime.Parse("2025-05-20T16:30:00Z").ToUniversalTime(),
             AuthorUserIds = new[] { Guid.Parse("11111111-1111-4111-8111-111111111111") },
             Tags = new[] { "masstransit", "rabbitmq", "microservices" },
-            CoverImageUrl = null
+            CoverImageUrl = "https://picsum.photos/1920/1080"
         },
 
         new ArticleEntity
@@ -86,7 +86,7 @@ public static class ArticleSeedData
             PublishedAt = DateTime.Parse("2025-04-22T10:10:00Z").ToUniversalTime(),
             AuthorUserIds = new[] { Guid.Parse("33333333-3333-4333-8333-333333333333") },
             Tags = new[] { "observability", "opentelemetry", "tracing" },
-            CoverImageUrl = null
+            CoverImageUrl = "https://picsum.photos/1920/1080"
         },
 
         new ArticleEntity
@@ -98,7 +98,7 @@ public static class ArticleSeedData
             PublishedAt = DateTime.Parse("2025-03-10T10:00:00Z").ToUniversalTime(),
             AuthorUserIds = new[] { Guid.Parse("22222222-2222-4222-8222-222222222222") },
             Tags = new[] { "testing", "playwright", "integration" },
-            CoverImageUrl = null
+            CoverImageUrl = "https://picsum.photos/1920/1080"
         },
 
         new ArticleEntity
@@ -110,7 +110,7 @@ public static class ArticleSeedData
             PublishedAt = DateTime.Parse("2025-02-08T14:20:00Z").ToUniversalTime(),
             AuthorUserIds = new[] { Guid.Parse("11111111-1111-4111-8111-111111111111") },
             Tags = new[] { "marten", "postgres", "event-sourcing" },
-            CoverImageUrl = null
+            CoverImageUrl = "https://picsum.photos/1920/1080"
         },
 
         new ArticleEntity
@@ -122,7 +122,7 @@ public static class ArticleSeedData
             PublishedAt = DateTime.Parse("2025-01-15T09:30:00Z").ToUniversalTime(),
             AuthorUserIds = new[] { Guid.Parse("33333333-3333-4333-8333-333333333333") },
             Tags = new[] { "ci-cd", "github-actions", "devops" },
-            CoverImageUrl = null
+            CoverImageUrl = "https://picsum.photos/1920/1080"
         }
     };
 

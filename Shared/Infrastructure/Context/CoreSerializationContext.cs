@@ -8,6 +8,7 @@ using MassTransit.Events;
 using snowcoreBlog.Backend.AspireYarpGateway.Core.Contracts;
 using snowcoreBlog.Backend.Core.Contracts;
 using snowcoreBlog.Backend.Core.Entities.Article;
+using snowcoreBlog.Backend.Core.Entities.Notification;
 using snowcoreBlog.Backend.Core.Entities.Reader;
 using snowcoreBlog.Backend.Email.Core.Contracts;
 using snowcoreBlog.Backend.IAM.Core.Contracts;
@@ -38,9 +39,20 @@ namespace snowcoreBlog.Backend.Infrastructure;
 [JsonSerializable(typeof(Fido2DevicePublicKeyEntity))]
 [JsonSerializable(typeof(ArticleEntity))]
 [JsonSerializable(typeof(ArticleSnapshotEntity))]
+[JsonSerializable(typeof(NotificationEntity))]
+[JsonSerializable(typeof(NotificationType))]
 [JsonSerializable(typeof(ReaderEntity))]
 [JsonSerializable(typeof(ArticleDto))]
 [JsonSerializable(typeof(List<ArticleDto>))]
+[JsonSerializable(typeof(NotificationDto))]
+[JsonSerializable(typeof(List<NotificationDto>))]
+[JsonSerializable(typeof(NotificationTypeDto))]
+[JsonSerializable(typeof(CreateNotificationDto))]
+[JsonSerializable(typeof(CreateNotificationResultDto))]
+[JsonSerializable(typeof(UpdateNotificationDto))]
+[JsonSerializable(typeof(DeleteNotificationDto))]
+[JsonSerializable(typeof(DeleteNotificationResultDto))]
+[JsonSerializable(typeof(GetActiveNotificationsDto))]
 [JsonSerializable(typeof(AltchaStoredChallengeEntity))]
 [JsonSerializable(typeof(CreateAdmin))]
 [JsonSerializable(typeof(CreateUser))]

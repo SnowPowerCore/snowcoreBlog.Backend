@@ -4,9 +4,9 @@ using MinimalStepifiedSystem.Interfaces;
 using snowcoreBlog.Backend.IAM.Core.Contracts;
 using snowcoreBlog.Backend.ReadersManagement.Context;
 using snowcoreBlog.Backend.ReadersManagement.Delegates;
+using snowcoreBlog.Backend.ReadersManagement.Steps.ReaderAccount.Shared;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 using snowcoreBlog.PublicApi.Constants;
-using snowcoreBlog.PublicApi.Utilities.DataResult;
 
 namespace snowcoreBlog.Backend.ReadersManagement.Steps.ReaderAccount.Confirm;
 
@@ -14,24 +14,19 @@ public class ValidateReaderAccountNotExistsStep(IRequestClient<ValidateUserExist
 {
     public async Task<IMaybe<ReaderAccountCreatedDto>> InvokeAsync(ConfirmCreateReaderAccountContext context, ConfirmCreateReaderAccountDelegate next, CancellationToken token = default)
     {
-        var result = await requestClient.GetResponse<DataResult<UserExistsValidationResult>>(
-            context.ConfirmRequest.ToValidateUserExists(), token);
-        if (result.Message.IsSuccess)
+        var result = await ValidateReaderAccountNotExistsSharedStep.CheckAsync(
+            requestClient,
+            context.ConfirmRequest.ToValidateUserExists(),
+            token);
+        if (result is Some<bool> success && !success.Value)
         {
-            if (result.Message.Value!.Exists)
-            {
-                return ReaderAccountAlreadyExistsError<ReaderAccountCreatedDto>.Create(
-                    ReaderAccountConstants.ReaderAccountAlreadyExistsError);
-            }
-            else
-            {
-                return await next(context, token);
-            }
+            return await next(context, token);
         }
-        else
+        if (result is INone noneWithErrors)
         {
-            return CreateUserForReaderAccountError<ReaderAccountCreatedDto>.Create(
-                ReaderAccountConstants.ReaderAccountUnableToCheckIfExistsError, result.Message.Errors);
+            return noneWithErrors.Cast<ReaderAccountCreatedDto>();
         }
+        return ReaderAccountAlreadyExistsError<ReaderAccountCreatedDto>.Create(
+            ReaderAccountConstants.ReaderAccountUnableToCheckIfExistsError);
     }
 }
