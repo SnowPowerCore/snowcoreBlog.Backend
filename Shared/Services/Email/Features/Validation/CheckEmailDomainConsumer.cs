@@ -14,30 +14,17 @@ using StackExchange.Redis;
 
 namespace snowcoreBlog.Backend.Email.Features.Validation;
 
-public class CheckEmailDomainConsumer : IConsumer<CheckEmailDomain>
+public class CheckEmailDomainConsumer(IValidator<CheckEmailDomain> validator,
+                                IApizrManager<IEmailDisposableApi> emailDisposableApiManager,
+                                IApizrManager<IStaticEmailDisposableApi> staticEmailDisposableApiManager,
+                                IConnectionMultiplexer redis) : IConsumer<CheckEmailDomain>
 {
-    private readonly IValidator<CheckEmailDomain> _validator;
-    private readonly IApizrManager<IEmailDisposableApi> _emailDisposableApiManager;
-    private readonly IApizrManager<IStaticEmailDisposableApi> _staticEmailDisposableApiManager;
-    private readonly IConnectionMultiplexer _redis;
-
     private const string RedisDisposableDomainsKey = "DisposableEmailDomainsList";
     private static readonly TimeSpan _cacheDuration = TimeSpan.FromHours(12);
 
-    public CheckEmailDomainConsumer(IValidator<CheckEmailDomain> validator,
-                                    IApizrManager<IEmailDisposableApi> emailDisposableApiManager,
-                                    IApizrManager<IStaticEmailDisposableApi> staticEmailDisposableApiManager,
-                                    IConnectionMultiplexer redis)
-    {
-        _validator = validator;
-        _emailDisposableApiManager = emailDisposableApiManager;
-        _staticEmailDisposableApiManager = staticEmailDisposableApiManager;
-        _redis = redis;
-    }
-
     public async Task Consume(ConsumeContext<CheckEmailDomain> context)
     {
-        var result = await _validator.ValidateAsync(context.Message, context.CancellationToken);
+        var result = await validator.ValidateAsync(context.Message, context.CancellationToken);
         if (!result.IsValid)
         {
             await context.RespondAsync(
@@ -64,7 +51,7 @@ public class CheckEmailDomainConsumer : IConsumer<CheckEmailDomain>
         var prefix = Convert.ToHexStringLower(hashBytes).Substring(0, 2);
         try
         {
-            var response = await _emailDisposableApiManager.ExecuteAsync((opt, api) => api.GetDisposableDomainsAsync(prefix, opt));
+            var response = await emailDisposableApiManager.ExecuteAsync((opt, api) => api.GetDisposableDomainsAsync(prefix, opt));
             if (!response.IsSuccessStatusCode)
                 throw new HttpRequestException($"Failed to fetch disposable domains from prefix {prefix}. Status code: {response.StatusCode}");
             var json = await response.Content.ReadAsStringAsync();
@@ -82,14 +69,14 @@ public class CheckEmailDomainConsumer : IConsumer<CheckEmailDomain>
         catch
         {
             // Fallback: check against Redis-cached disposable domains list
-            var db = _redis.GetDatabase();
+            var db = redis.GetDatabase();
             var fallbackJson = await db.StringGetAsync(RedisDisposableDomainsKey);
             List<string>? domains = [];
             if (string.IsNullOrWhiteSpace(fallbackJson))
             {
                 try
                 {
-                    var fallbackResponse = await _staticEmailDisposableApiManager.ExecuteAsync((opt, api) => api.GetFallbackDomainsAsync(opt));
+                    var fallbackResponse = await staticEmailDisposableApiManager.ExecuteAsync((opt, api) => api.GetFallbackDomainsAsync(opt));
                     fallbackResponse.EnsureSuccessStatusCode();
                     fallbackJson = await fallbackResponse.Content.ReadAsStringAsync();
                     await db.StringSetAsync(RedisDisposableDomainsKey, fallbackJson, _cacheDuration);

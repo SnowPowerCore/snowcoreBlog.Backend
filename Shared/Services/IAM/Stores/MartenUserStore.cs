@@ -5,7 +5,7 @@ using snowcoreBlog.Backend.IAM.Core.Interfaces.Identity;
 
 namespace snowcoreBlog.Backend.IAM.Stores
 {
-    public class MartenUserStore<TUser> : IUserStore<TUser>,
+    public class MartenUserStore<TUser>(IDocumentStore documentStore, ILogger<MartenUserStore<TUser>> logger) : IUserStore<TUser>,
                                           IUserPasswordStore<TUser>,
                                           IUserEmailStore<TUser>,
                                           IUserPhoneNumberStore<TUser>,
@@ -16,22 +16,15 @@ namespace snowcoreBlog.Backend.IAM.Stores
                                           IUserClaimStore<TUser>
                                           where TUser : IdentityUser, IClaimsUser
     {
-        private readonly IDocumentStore _documentStore;
-        private readonly ILogger _logger;
+        private readonly ILogger _logger = logger;
 
         public IQueryable<TUser> Users
         {
             get
             {
-                IDocumentSession session = _documentStore.LightweightSession();
+                IDocumentSession session = documentStore.LightweightSession();
                 return session.Query<TUser>();
             }
-        }
-
-        public MartenUserStore(IDocumentStore documentStore, ILogger<MartenUserStore<TUser>> logger)
-        {
-            _documentStore = documentStore;
-            _logger = logger;
         }
 
         public Task<string> GetUserIdAsync(TUser user, CancellationToken cancellationToken) =>
@@ -61,7 +54,7 @@ namespace snowcoreBlog.Backend.IAM.Stores
 
             try
             {
-                using IDocumentSession session = _documentStore.IdentitySession();
+                using IDocumentSession session = documentStore.IdentitySession();
                 session.Store(user);
                 await session.SaveChangesAsync(cancellationToken);
                 return IdentityResult.Success;
@@ -77,7 +70,7 @@ namespace snowcoreBlog.Backend.IAM.Stores
         {
             try
             {
-                using IDocumentSession session = _documentStore.IdentitySession();
+                using IDocumentSession session = documentStore.IdentitySession();
                 session.Update(user);
                 await session.SaveChangesAsync(cancellationToken);
                 return IdentityResult.Success;
@@ -93,7 +86,7 @@ namespace snowcoreBlog.Backend.IAM.Stores
         {
             try
             {
-                using IDocumentSession session = _documentStore.IdentitySession();
+                using IDocumentSession session = documentStore.IdentitySession();
                 session.Delete(user);
                 await session.SaveChangesAsync(cancellationToken);
                 return IdentityResult.Success;
@@ -107,13 +100,13 @@ namespace snowcoreBlog.Backend.IAM.Stores
 
         public Task<TUser?> FindByIdAsync(string userId, CancellationToken cancellationToken)
         {
-            using IDocumentSession session = _documentStore.LightweightSession();
+            using IDocumentSession session = documentStore.LightweightSession();
             return session.Query<TUser>().FirstOrDefaultAsync(x => x.Id == userId, cancellationToken);
         }
 
         public Task<TUser?> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken)
         {
-            using IDocumentSession session = _documentStore.LightweightSession();
+            using IDocumentSession session = documentStore.LightweightSession();
             return session.Query<TUser>().FirstOrDefaultAsync(x => x.NormalizedUserName == normalizedUserName, cancellationToken);
         }
 
@@ -152,7 +145,7 @@ namespace snowcoreBlog.Backend.IAM.Stores
 
         public Task<TUser?> FindByEmailAsync(string normalizedEmail, CancellationToken cancellationToken)
         {
-            using IDocumentSession session = _documentStore.LightweightSession();
+            using IDocumentSession session = documentStore.LightweightSession();
             return session.Query<TUser>().FirstOrDefaultAsync(x => x.NormalizedEmail == normalizedEmail, cancellationToken);
         }
 
@@ -209,7 +202,7 @@ namespace snowcoreBlog.Backend.IAM.Stores
 
         public async Task<IList<Claim>> GetClaimsAsync(TUser user, CancellationToken cancellationToken)
         {
-            using IDocumentSession session = _documentStore.LightweightSession();
+            using IDocumentSession session = documentStore.LightweightSession();
             var resolvedUser = await session.Query<TUser>().FirstOrDefaultAsync(x => x.NormalizedEmail == user.NormalizedEmail, cancellationToken);
             if (resolvedUser is default(TUser))
             {
@@ -243,7 +236,7 @@ namespace snowcoreBlog.Backend.IAM.Stores
 
                 user.RoleClaims = userRoleClaims;
 
-                using IDocumentSession session = _documentStore.IdentitySession();
+                using IDocumentSession session = documentStore.IdentitySession();
                 session.Store(user);
                 await session.SaveChangesAsync(cancellationToken);
             }
@@ -297,7 +290,7 @@ namespace snowcoreBlog.Backend.IAM.Stores
 
         public async Task<IList<TUser>> GetUsersForClaimAsync(Claim claim, CancellationToken cancellationToken)
         {
-            using IDocumentSession session = _documentStore.LightweightSession();
+            using IDocumentSession session = documentStore.LightweightSession();
             IReadOnlyList<TUser> readonlyList = await session.Query<TUser>()
                                                         .Where(x => x.RoleClaims.Contains(claim.Value))
                                                         .ToListAsync(cancellationToken);
@@ -309,7 +302,7 @@ namespace snowcoreBlog.Backend.IAM.Stores
 
         public async Task Wipe()
         {
-            using IDocumentSession session = _documentStore.IdentitySession();
+            using IDocumentSession session = documentStore.IdentitySession();
             session.DeleteWhere<TUser>(x => true);
             await session.SaveChangesAsync();
         }

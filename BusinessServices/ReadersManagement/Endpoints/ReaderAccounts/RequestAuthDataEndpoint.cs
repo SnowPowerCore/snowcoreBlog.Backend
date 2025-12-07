@@ -17,10 +17,8 @@ using snowcoreBlog.PublicApi.Utilities.Api;
 
 namespace snowcoreBlog.Backend.ReadersManagement.Endpoints.ReaderAccounts;
 
-public class RequestAuthDataEndpoint : EndpointWithoutRequest<ApiResponse>
+public class RequestAuthDataEndpoint(JwtSecurityTokenHandler securityTokenHandler) : EndpointWithoutRequest<ApiResponse>
 {
-    private readonly JwtSecurityTokenHandler _securityTokenHandler;
-
     public IOptions<JsonOptions> JsonOptions { get; set; }
 
     public override void Configure()
@@ -37,17 +35,12 @@ public class RequestAuthDataEndpoint : EndpointWithoutRequest<ApiResponse>
             .ProducesProblemFE((int)HttpStatusCode.BadRequest));
     }
 
-    public RequestAuthDataEndpoint(JwtSecurityTokenHandler securityTokenHandler)
-    {
-        _securityTokenHandler = securityTokenHandler;
-    }
-
     public override Task HandleAsync(CancellationToken ct)
     {
         try
         {
             var accessToken = HttpContext.Request.Headers[HeaderNames.Authorization].ToString().Replace($"{JwtBearerDefaults.AuthenticationScheme} ", string.Empty);
-            var decodedToken = _securityTokenHandler.ReadJwtToken(accessToken);
+            var decodedToken = securityTokenHandler.ReadJwtToken(accessToken);
             return Send.ResponseAsync(
                 Maybe.Create(new AuthenticationStateDto(decodedToken.Claims.ToDictionary(x => x.Type, x => x.Value)))
                     .ToApiResponse(JsonOptions.Value.SerializerOptions), (int)HttpStatusCode.OK, ct);

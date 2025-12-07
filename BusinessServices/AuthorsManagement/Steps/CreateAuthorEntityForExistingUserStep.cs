@@ -7,21 +7,14 @@ using snowcoreBlog.Backend.Core.Entities.Author;
 
 namespace snowcoreBlog.Backend.BusinessServices.AuthorsManagement.Steps;
 
-public class CreateAuthorEntityForExistingUserStep : IStep<BecomeAuthorAccountDelegate, BecomeAuthorAccountContext, IMaybe<AuthorEntity>>
+public class CreateAuthorEntityForExistingUserStep(IAuthorRepository authorRepository) : IStep<BecomeAuthorAccountDelegate, BecomeAuthorAccountContext, IMaybe<AuthorEntity>>
 {
-    private readonly IAuthorRepository _authorRepository;
-
-    public CreateAuthorEntityForExistingUserStep(IAuthorRepository authorRepository)
-    {
-        _authorRepository = authorRepository;
-    }
-
     public async Task<IMaybe<AuthorEntity>> InvokeAsync(BecomeAuthorAccountContext context, BecomeAuthorAccountDelegate next, CancellationToken cancellationToken = default)
     {
         var userId = context.UserId;
         var displayName = context.DisplayName;
 
-        var existing = (await _authorRepository.GetAllAsync(cancellationToken)).FirstOrDefault(a => a.UserId == userId);
+        var existing = (await authorRepository.GetAllAsync(cancellationToken)).FirstOrDefault(a => a.UserId == userId);
         if (existing != null)
             return Maybe.Create<AuthorEntity>(default!);
 
@@ -31,7 +24,7 @@ public class CreateAuthorEntityForExistingUserStep : IStep<BecomeAuthorAccountDe
             UserId = userId,
             DisplayName = displayName
         };
-        await _authorRepository.AddOrUpdateAsync(author, saveChange: true, token: cancellationToken);
+        await authorRepository.AddOrUpdateAsync(author, saveChange: true, token: cancellationToken);
         return Maybe.Create(author);
     }
 }

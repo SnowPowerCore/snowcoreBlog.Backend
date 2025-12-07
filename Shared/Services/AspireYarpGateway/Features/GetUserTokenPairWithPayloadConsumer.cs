@@ -18,22 +18,15 @@ namespace snowcoreBlog.Backend.AspireYarpGateway.Features;
 /// This consumer doesn't do any additional business logic checks but executes a simple request data
 /// validation.
 /// </summary>
-public class GetUserTokenPairWithPayloadConsumer : IConsumer<GetUserTokenPairWithPayload>
+public class GetUserTokenPairWithPayloadConsumer(IValidator<GetUserTokenPairWithPayload> validator,
+                                           IOptions<SecuritySigningOptions> securitySigningOpts) : IConsumer<GetUserTokenPairWithPayload>
 {
-    private readonly IValidator<GetUserTokenPairWithPayload> _validator;
-    private readonly SecuritySigningOptions _currentSecuritySigningOptions;
-
-    public GetUserTokenPairWithPayloadConsumer(IValidator<GetUserTokenPairWithPayload> validator,
-                                               IOptions<SecuritySigningOptions> securitySigningOpts)
-    {
-        _validator = validator;
-        _currentSecuritySigningOptions = securitySigningOpts.Value;
-    }
+    private readonly SecuritySigningOptions _currentSecuritySigningOptions = securitySigningOpts.Value;
 
     public async Task Consume(ConsumeContext<GetUserTokenPairWithPayload> context)
     {
         var request = context.Message;
-        var result = await _validator.ValidateAsync(request, context.CancellationToken);
+        var result = await validator.ValidateAsync(request, context.CancellationToken);
         if (!result.IsValid)
         {
             await context.RespondAsync(

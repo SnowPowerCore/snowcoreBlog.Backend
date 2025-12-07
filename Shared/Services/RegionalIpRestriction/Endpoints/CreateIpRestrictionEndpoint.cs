@@ -12,15 +12,8 @@ public class CreateIpRestrictionRequest
     public DateTimeOffset? ExpiresAt { get; set; }
 }
 
-public class CreateIpRestrictionEndpoint : Endpoint<CreateIpRestrictionRequest, IpRestrictionEntity>
+public class CreateIpRestrictionEndpoint(IIpRestrictionRepository repo) : Endpoint<CreateIpRestrictionRequest, IpRestrictionEntity>
 {
-    private readonly IIpRestrictionRepository _repo;
-
-    public CreateIpRestrictionEndpoint(IIpRestrictionRepository repo)
-    {
-        _repo = repo;
-    }
-
     public override void Configure()
     {
         Post("/ip-restrictions");
@@ -38,7 +31,7 @@ public class CreateIpRestrictionEndpoint : Endpoint<CreateIpRestrictionRequest, 
             ExpiresAt = req.ExpiresAt
         };
 
-        await _repo.SaveAsync(entity);
+        await repo.SaveAsync(entity);
 
         await Send.CreatedAtAsync<GetIpRestrictionsEndpoint>(entity, cancellation: ct);
     }

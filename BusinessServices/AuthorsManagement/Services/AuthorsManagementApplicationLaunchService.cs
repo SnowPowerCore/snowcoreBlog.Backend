@@ -6,21 +6,14 @@ using StackExchange.Redis;
 
 namespace snowcoreBlog.Backend.AuthorsManagement.Services;
 
-public class AuthorsManagementApplicationLaunchService : IApplicationLaunchService
+public class AuthorsManagementApplicationLaunchService(IConnectionMultiplexer redis) : IApplicationLaunchService
 {
-    private readonly IConnectionMultiplexer _redis;
-
-    public AuthorsManagementApplicationLaunchService(IConnectionMultiplexer redis)
-    {
-        _redis = redis;
-    }
-
     public async Task InitAsync()
     {
         try
         {
             var authorProvider = StringExtensions.TrimEnd(nameof(ReturnClaimsIfUserAuthorConsumer), "Consumer");
-            var db = _redis.GetDatabase();
+            var db = redis.GetDatabase();
             var redisVal = await db.StringGetAsync(ClaimServiceProvidersConstants.RedisKey);
             if (redisVal.HasValue && !string.IsNullOrWhiteSpace(redisVal))
             {

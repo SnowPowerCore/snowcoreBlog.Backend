@@ -3,32 +3,25 @@ using Microsoft.AspNetCore.Identity;
 
 namespace snowcoreBlog.Backend.IAM.Stores
 {
-    public class MartenRoleStore<TRole> : IRoleStore<TRole>,
+    public class MartenRoleStore<TRole>(IDocumentStore documentStore, ILogger<MartenRoleStore<TRole>> logger) : IRoleStore<TRole>,
                                           IQueryableRoleStore<TRole> where TRole : IdentityRole
     {
-        private readonly IDocumentStore _documentStore;
-        private readonly ILogger _logger;
+        private readonly ILogger _logger = logger;
 
         public IQueryable<TRole> Roles
         {
             get
             {
-                IDocumentSession session = _documentStore.LightweightSession();
+                IDocumentSession session = documentStore.LightweightSession();
                 return session.Query<TRole>();
             }
-        }
-
-        public MartenRoleStore(IDocumentStore documentStore, ILogger<MartenRoleStore<TRole>> logger)
-        {
-            _documentStore = documentStore;
-            _logger = logger;
         }
 
         public async Task<IdentityResult> CreateAsync(TRole role, CancellationToken cancellationToken)
         {
             try
             {
-                using IDocumentSession session = _documentStore.IdentitySession();
+                using IDocumentSession session = documentStore.IdentitySession();
                 session.Store(role);
                 await session.SaveChangesAsync(cancellationToken);
 
@@ -45,7 +38,7 @@ namespace snowcoreBlog.Backend.IAM.Stores
         {
             try
             {
-                using IDocumentSession session = _documentStore.IdentitySession();
+                using IDocumentSession session = documentStore.IdentitySession();
                 session.Update(role);
                 await session.SaveChangesAsync(cancellationToken);
 
@@ -62,7 +55,7 @@ namespace snowcoreBlog.Backend.IAM.Stores
         {
             try
             {
-                using IDocumentSession session = _documentStore.IdentitySession();
+                using IDocumentSession session = documentStore.IdentitySession();
                 session.Delete(role);
                 await session.SaveChangesAsync(cancellationToken);
 
@@ -98,13 +91,13 @@ namespace snowcoreBlog.Backend.IAM.Stores
 
         public Task<TRole?> FindByIdAsync(string roleId, CancellationToken cancellationToken)
         {
-            using IDocumentSession session = _documentStore.LightweightSession();
+            using IDocumentSession session = documentStore.LightweightSession();
             return session.Query<TRole>().FirstOrDefaultAsync(x => x.Id == roleId, cancellationToken);
         }
 
         public Task<TRole?> FindByNameAsync(string normalizedRoleName, CancellationToken cancellationToken)
         {
-            using IDocumentSession session = _documentStore.LightweightSession();
+            using IDocumentSession session = documentStore.LightweightSession();
             return session.Query<TRole>().FirstOrDefaultAsync(x => x.NormalizedName == normalizedRoleName, cancellationToken);
         }
 

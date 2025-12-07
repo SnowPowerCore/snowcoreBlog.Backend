@@ -7,10 +7,8 @@ using snowcoreBlog.PublicApi.Constants;
 
 namespace snowcoreBlog.Backend.Articles.Endpoints.Captcha;
 
-public class GetAltchaChallengeEndpoint : EndpointWithoutRequest<AltchaChallenge?>
+public class GetAltchaChallengeEndpoint(AltchaService altcha) : EndpointWithoutRequest<AltchaChallenge?>
 {
-    private readonly AltchaService _altcha;
-
     public override void Configure()
     {
         Get("captcha/challenge");
@@ -23,11 +21,6 @@ public class GetAltchaChallengeEndpoint : EndpointWithoutRequest<AltchaChallenge
             .ProducesProblemFE((int)HttpStatusCode.BadRequest));
     }
 
-    public GetAltchaChallengeEndpoint(AltchaService altcha)
-    {
-        _altcha = altcha;
-    }
-
     public override Task HandleAsync(CancellationToken ct) =>
-        Send.ResponseAsync(_altcha.Generate(), (int)HttpStatusCode.OK, ct);
+        Send.ResponseAsync(altcha.Generate(), (int)HttpStatusCode.OK, ct);
 }

@@ -13,9 +13,9 @@ using snowcoreBlog.PublicApi.Utilities.Api;
 
 namespace snowcoreBlog.Backend.Articles.Endpoints.Antiforgery;
 
-public class GetAntiforgeryTokenEndpoint : EndpointWithoutRequest
+public class GetAntiforgeryTokenEndpoint(IAntiforgery antiforgery) : EndpointWithoutRequest
 {
-    public IAntiforgery _antiforgery;
+    public IAntiforgery _antiforgery = antiforgery;
 
     public required IOptions<JsonOptions> JsonOptions { get; set; }
 
@@ -30,11 +30,6 @@ public class GetAntiforgeryTokenEndpoint : EndpointWithoutRequest
             .Produces<ApiResponseForOpenApi<AntiforgeryResultDto>>((int)HttpStatusCode.OK, MediaTypeNames.Application.Json)
             .Produces<ApiResponse>((int)HttpStatusCode.InternalServerError, MediaTypeNames.Application.Json)
             .ProducesProblemFE((int)HttpStatusCode.BadRequest));
-    }
-
-    public GetAntiforgeryTokenEndpoint(IAntiforgery antiforgery)
-    {
-        _antiforgery = antiforgery;
     }
 
     public override async Task HandleAsync(CancellationToken ct)

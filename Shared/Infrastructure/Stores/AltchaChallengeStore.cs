@@ -5,14 +5,9 @@ using snowcoreBlog.Backend.Infrastructure.Entities;
 
 namespace snowcoreBlog.Backend.Infrastructure.Stores;
 
-public class AltchaChallengeStore : IAltchaCancellableChallengeStore
+public class AltchaChallengeStore(IConfiguration configuration) : IAltchaCancellableChallengeStore
 {
-    private readonly string _connectionString;
-
-    public AltchaChallengeStore(IConfiguration configuration)
-    {
-        _connectionString = configuration.GetConnectionString("db-snowcore-blog-entities")!;
-    }
+    private readonly string _connectionString = configuration.GetConnectionString("db-snowcore-blog-entities")!;
 
     public async Task<bool> Exists(string challenge, CancellationToken cancellationToken)
     {

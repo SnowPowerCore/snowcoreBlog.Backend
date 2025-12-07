@@ -4,18 +4,11 @@ using snowcoreBlog.Backend.AuthorsManagement.Interfaces.Repositories.Marten;
 
 namespace snowcoreBlog.Backend.AuthorsManagement.Features;
 
-public class ReturnClaimsIfUserAuthorConsumer : IConsumer<RequestReaderClaims>
+public class ReturnClaimsIfUserAuthorConsumer(IAuthorRepository authorRepository) : IConsumer<RequestReaderClaims>
 {
-    private readonly IAuthorRepository _authorRepository;
-
-    public ReturnClaimsIfUserAuthorConsumer(IAuthorRepository authorRepository)
-    {
-        _authorRepository = authorRepository;
-    }
-
     public async Task Consume(ConsumeContext<RequestReaderClaims> context)
     {
-        var exists = (await _authorRepository.GetAllAsync(context.CancellationToken)).Any(a => a.UserId == context.Message.UserId);
+        var exists = (await authorRepository.GetAllAsync(context.CancellationToken)).Any(a => a.UserId == context.Message.UserId);
         await context.RespondAsync(new ReaderClaimsResponse
         {
             RequestId = context.Message.RequestId,

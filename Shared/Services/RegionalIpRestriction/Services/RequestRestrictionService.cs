@@ -3,20 +3,14 @@ using snowcoreBlog.Backend.RegionalIpRestriction.Repositories.Marten;
 
 namespace snowcoreBlog.Backend.RegionalIpRestriction.Services;
 
-public class RequestRestrictionService : IRequestRestrictionService
+public class RequestRestrictionService(IIpRestrictionRepository ipRepo) : IRequestRestrictionService
 {
-    private readonly IIpRestrictionRepository _ipRepo;
-
-    public RequestRestrictionService(IIpRestrictionRepository ipRepo)
-    {
-        _ipRepo = ipRepo;
-    }
 
     // Very small proof-of-concept: checks if any restriction contains the remote IP as substring.
     // Replace with CIDR-aware check and GeoIP lookup in future iterations.
     public async Task<bool> IsAllowedAsync(IPAddress ip, string path, CancellationToken ct = default)
     {
-        var list = await _ipRepo.GetAllAsync();
+        var list = await ipRepo.GetAllAsync();
 
         var s = ip.MapToIPv4().ToString();
 

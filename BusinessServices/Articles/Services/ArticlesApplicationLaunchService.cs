@@ -5,18 +5,11 @@ using snowcoreBlog.Backend.Core.Entities.Article;
 
 namespace snowcoreBlog.Backend.Articles.Services;
 
-public class ArticlesApplicationLaunchService : IApplicationLaunchService
+public class ArticlesApplicationLaunchService(IServiceProvider serviceProvider) : IApplicationLaunchService
 {
-    private readonly IServiceProvider _serviceProvider;
-
-    public ArticlesApplicationLaunchService(IServiceProvider serviceProvider)
-    {
-        _serviceProvider = serviceProvider;
-    }
-
     public async Task InitAsync()
     {
-        using var scope = _serviceProvider.CreateScope();
+        using var scope = serviceProvider.CreateScope();
         var articleRepository = scope.ServiceProvider.GetRequiredService<IArticleRepository>();
         var querySession = scope.ServiceProvider.GetRequiredService<IQuerySession>();
 
