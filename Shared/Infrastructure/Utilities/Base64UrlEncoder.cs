@@ -30,7 +30,28 @@ public static class Base64UrlEncoder
     {
         _ = arg ?? throw LogHelper.LogArgumentNullException(nameof(arg));
 
-        return Encode(Encoding.UTF8.GetBytes(arg));
+        ReadOnlySpan<char> source = arg.AsSpan();
+        var byteCount = Encoding.UTF8.GetByteCount(source);
+
+        byte[]? rented = null;
+        try
+        {
+            const int StackAllocThreshold = 256;
+            Span<byte> bytes = byteCount <= StackAllocThreshold
+                ? stackalloc byte[byteCount]
+                : (rented = ArrayPool<byte>.Shared.Rent(byteCount));
+
+            if (rented is not null)
+                bytes = bytes.Slice(0, byteCount);
+
+            var bytesWritten = Encoding.UTF8.GetBytes(source, bytes);
+            return Base64Url.EncodeToString(bytes.Slice(0, bytesWritten));
+        }
+        finally
+        {
+            if (rented is not null)
+                ArrayPool<byte>.Shared.Return(rented, true);
+        }
     }
 
     /// <summary>

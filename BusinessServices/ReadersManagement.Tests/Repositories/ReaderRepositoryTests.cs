@@ -25,50 +25,56 @@ public class ReaderRepositoryTests
     }
 
     [Fact]
-    public async Task InsertAsync_ShouldCallDocumentSession()
+    public async Task AddOrUpdateAsync_ShouldStoreReader()
     {
         // Arrange
         var reader = new ReaderEntity
         {
-            Id = Guid.NewGuid()
+            Id = Guid.NewGuid(),
+            UserId = Guid.NewGuid(),
+            NickName = "test"
         };
 
         // Act
-        await _repository.InsertAsync(reader);
+        await _repository.AddOrUpdateAsync(reader);
 
         // Assert
-        _documentSession.Received(1).Insert(reader);
+        _documentSession.Received(1).Store(Arg.Is<ReaderEntity>(x => x.Id == reader.Id && x.UserId == reader.UserId));
         await _documentSession.Received(1).SaveChangesAsync(Arg.Any<CancellationToken>());
     }
 
     [Fact]
-    public async Task UpdateAsync_ShouldCallDocumentSession()
+    public async Task AddOrUpdateAsync_WithId_ShouldStoreReader()
     {
         // Arrange
         var reader = new ReaderEntity
         {
-            Id = Guid.NewGuid()
+            Id = Guid.NewGuid(),
+            UserId = Guid.NewGuid(),
+            NickName = "test"
         };
 
         // Act
-        await _repository.UpdateAsync(reader);
+        await _repository.AddOrUpdateAsync(reader, reader.Id);
 
         // Assert
-        _documentSession.Received(1).Update(reader);
+        _documentSession.Received(1).Store(Arg.Is<ReaderEntity>(x => x.Id == reader.Id && x.UserId == reader.UserId));
         await _documentSession.Received(1).SaveChangesAsync(Arg.Any<CancellationToken>());
     }
 
     [Fact]
-    public async Task DeleteAsync_ShouldCallDocumentSession()
+    public async Task RemoveAsync_ShouldDeleteReader()
     {
         // Arrange
         var reader = new ReaderEntity
         {
-            Id = Guid.NewGuid()
+            Id = Guid.NewGuid(),
+            UserId = Guid.NewGuid(),
+            NickName = "test"
         };
 
         // Act
-        await _repository.DeleteAsync(reader);
+        await _repository.RemoveAsync(reader);
 
         // Assert
         _documentSession.Received(1).Delete(reader);

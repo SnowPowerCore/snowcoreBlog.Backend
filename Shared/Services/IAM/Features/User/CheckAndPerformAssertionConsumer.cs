@@ -66,7 +66,7 @@ public class CheckAndPerformAssertionConsumer(IFido2 fido2,
                 .SelectMany(user => user.PublicKeyCredentials)
                 .ToListAsync(context.CancellationToken);
             return await fido2PublicKeyCredentialRepository
-                .CheckPublicKeyCredExistsAsync(creds.ToArray(), Base64UrlEncoder.Encode(@params.CredentialId), cancellationToken);
+                .CheckPublicKeyCredExistsAsync(creds, Base64UrlEncoder.Encode(@params.CredentialId), cancellationToken);
         }
 
         var assertionResult = await fido2.MakeAssertionAsync(

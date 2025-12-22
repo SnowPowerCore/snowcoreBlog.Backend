@@ -25,50 +25,56 @@ public class AuthorRepositoryTests
     }
 
     [Fact]
-    public async Task InsertAsync_ShouldCallDocumentSession()
+    public async Task AddOrUpdateAsync_ShouldStoreAuthor()
     {
         // Arrange
         var author = new AuthorEntity
         {
-            Id = Guid.NewGuid()
+            Id = Guid.NewGuid(),
+            UserId = Guid.NewGuid(),
+            DisplayName = "test"
         };
 
         // Act
-        await _repository.InsertAsync(author);
+        await _repository.AddOrUpdateAsync(author);
 
         // Assert
-        _documentSession.Received(1).Insert(author);
+        _documentSession.Received(1).Store(Arg.Is<AuthorEntity>(x => x.Id == author.Id && x.UserId == author.UserId));
         await _documentSession.Received(1).SaveChangesAsync(Arg.Any<CancellationToken>());
     }
 
     [Fact]
-    public async Task UpdateAsync_ShouldCallDocumentSession()
+    public async Task AddOrUpdateAsync_WithId_ShouldStoreAuthor()
     {
         // Arrange
         var author = new AuthorEntity
         {
-            Id = Guid.NewGuid()
+            Id = Guid.NewGuid(),
+            UserId = Guid.NewGuid(),
+            DisplayName = "test"
         };
 
         // Act
-        await _repository.UpdateAsync(author);
+        await _repository.AddOrUpdateAsync(author, author.Id);
 
         // Assert
-        _documentSession.Received(1).Update(author);
+        _documentSession.Received(1).Store(Arg.Is<AuthorEntity>(x => x.Id == author.Id && x.UserId == author.UserId));
         await _documentSession.Received(1).SaveChangesAsync(Arg.Any<CancellationToken>());
     }
 
     [Fact]
-    public async Task DeleteAsync_ShouldCallDocumentSession()
+    public async Task RemoveAsync_ShouldDeleteAuthor()
     {
         // Arrange
         var author = new AuthorEntity
         {
-            Id = Guid.NewGuid()
+            Id = Guid.NewGuid(),
+            UserId = Guid.NewGuid(),
+            DisplayName = "test"
         };
 
         // Act
-        await _repository.DeleteAsync(author);
+        await _repository.RemoveAsync(author);
 
         // Assert
         _documentSession.Received(1).Delete(author);

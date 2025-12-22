@@ -25,9 +25,10 @@ public class RequestNewAssertionOptionsStep(IRequestClient<ValidateAndCreateAsse
         if (result.Message.IsSuccess)
         {
             var db = redis.GetDatabase();
+            var json = result.Message.Value!.ToJson();
             await db.StringSetAsync(
                 $"{context.RequestAssertionOptions.Email}{Fido2AssertionOptions}",
-                Encoding.UTF8.GetBytes(result.Message.Value!.ToJson()),
+                json,
                 TimeSpan.FromMinutes(5));
 
             return Maybe.Create(result.Message.Value)!;

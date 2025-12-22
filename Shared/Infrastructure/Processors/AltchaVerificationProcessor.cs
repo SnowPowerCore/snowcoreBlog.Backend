@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Buffers;
+using System.Text;
 using System.Text.Json;
 using FastEndpoints;
 using Ixnas.AltchaNet;
@@ -21,16 +22,41 @@ public class AltchaVerificationProcessor(AltchaService altcha) : IGlobalPreProce
         var errorMessage = $"The [{HeaderKeyConstants.CaptchaHeader}] header has to be set!";
         if (context.HttpContext.Request.Headers.TryGetValue(HeaderKeyConstants.CaptchaHeader, out var captchaSolutionBase64))
         {
-            var captchaSolutionJson = Encoding.UTF8.GetString(Convert.FromBase64String(captchaSolutionBase64));
-            var captchaSolution = JsonSerializer.Deserialize<AltchaResponse>(captchaSolutionJson, _serializerOptions);
-            var validationResult = await _altcha.Validate(captchaSolution, ct);
-            if (validationResult?.IsValid ?? false)
+            var base64 = captchaSolutionBase64.ToString();
+            if (!string.IsNullOrWhiteSpace(base64))
             {
-                return;
-            }
-            else
-            {
-                errorMessage = validationResult?.ValidationError.Message;
+                // base64 max decoded length ~= (len/4)*3 (+ a little slack)
+                var maxDecodedLength = (base64.Length / 4) * 3 + 3;
+                byte[]? rented = null;
+                try
+                {
+                    Span<byte> decoded = maxDecodedLength <= 4096
+                        ? stackalloc byte[maxDecodedLength]
+                        : (rented = ArrayPool<byte>.Shared.Rent(maxDecodedLength));
+
+                    if (rented is not null)
+                        decoded = decoded.Slice(0, maxDecodedLength);
+
+                    if (Convert.TryFromBase64String(base64, decoded, out var bytesWritten))
+                    {
+                        var captchaSolutionJson = Encoding.UTF8.GetString(decoded.Slice(0, bytesWritten));
+                        var captchaSolution = JsonSerializer.Deserialize<AltchaResponse>(captchaSolutionJson, _serializerOptions);
+                        var validationResult = await _altcha.Validate(captchaSolution, ct);
+                        if (validationResult?.IsValid ?? false)
+                        {
+                            return;
+                        }
+                        else
+                        {
+                            errorMessage = validationResult?.ValidationError.Message;
+                        }
+                    }
+                }
+                finally
+                {
+                    if (rented is not null)
+                        ArrayPool<byte>.Shared.Return(rented, clearArray: true);
+                }
             }
         }
         context.ValidationFailures.Add(new("AltchaValidationError", errorMessage));

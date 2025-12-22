@@ -1,4 +1,5 @@
-﻿using System.Net.Mail;
+﻿using System.Buffers;
+using System.Net.Mail;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
@@ -47,8 +48,38 @@ public class CheckEmailDomainConsumer(IValidator<CheckEmailDomain> validator,
     private async Task<bool> IsDomainNotDisposableAsync(string input)
     {
         var cleanedDomain = input.Replace(" ", string.Empty).ToLowerInvariant();
-        var hashBytes = SHA1.HashData(Encoding.UTF8.GetBytes(cleanedDomain));
-        var prefix = Convert.ToHexStringLower(hashBytes).Substring(0, 2);
+        Span<byte> hash = stackalloc byte[20];
+        string hashHex;
+        string prefix;
+
+        byte[]? rented = null;
+        try
+        {
+            ReadOnlySpan<char> domainSpan = cleanedDomain.AsSpan();
+            int byteCount = Encoding.UTF8.GetByteCount(domainSpan);
+
+            Span<byte> utf8Bytes = byteCount <= 256
+                ? stackalloc byte[byteCount]
+                : (rented = ArrayPool<byte>.Shared.Rent(byteCount));
+
+            int bytesWritten = Encoding.UTF8.GetBytes(domainSpan, utf8Bytes);
+            if (!SHA1.TryHashData(utf8Bytes.Slice(0, bytesWritten), hash, out int hashBytesWritten) || hashBytesWritten != hash.Length)
+                throw new CryptographicException("Unable to compute SHA1 hash.");
+
+            hashHex = Convert.ToHexStringLower(hash);
+            prefix = string.Create(2, hash[0], static (dest, b) =>
+            {
+                const string Hex = "0123456789abcdef";
+                dest[0] = Hex[b >> 4];
+                dest[1] = Hex[b & 0xF];
+            });
+        }
+        finally
+        {
+            if (rented is not null)
+                ArrayPool<byte>.Shared.Return(rented, clearArray: true);
+        }
+
         try
         {
             var response = await emailDisposableApiManager.ExecuteAsync((opt, api) => api.GetDisposableDomainsAsync(prefix, opt));
@@ -56,7 +87,7 @@ public class CheckEmailDomainConsumer(IValidator<CheckEmailDomain> validator,
                 throw new HttpRequestException($"Failed to fetch disposable domains from prefix {prefix}. Status code: {response.StatusCode}");
             var json = await response.Content.ReadAsStringAsync();
             using var doc = JsonDocument.Parse(json);
-            if (doc.RootElement.TryGetProperty(Convert.ToHexStringLower(hashBytes), out var info))
+            if (doc.RootElement.TryGetProperty(hashHex, out var info))
             {
                 if (info.TryGetProperty("whitelist", out var whitelistedProp) && whitelistedProp.GetBoolean())
                 {

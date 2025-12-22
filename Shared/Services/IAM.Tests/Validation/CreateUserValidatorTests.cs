@@ -24,10 +24,10 @@ public class CreateUserValidatorTests
             AttestationOptionsJson = "{}",
             AuthenticatorAttestation = new Fido2NetLib.AuthenticatorAttestationRawResponse
             {
-                Id = new byte[] { 1, 2, 3 },
+                Id = "AQID",
                 RawId = new byte[] { 1, 2, 3 },
                 Type = Fido2NetLib.Objects.PublicKeyCredentialType.PublicKey,
-                Response = new Fido2NetLib.AuthenticatorAttestationRawResponse.ResponseData
+                Response = new Fido2NetLib.AuthenticatorAttestationRawResponse.AttestationResponse
                 {
                     AttestationObject = new byte[] { 1, 2, 3 },
                     ClientDataJson = new byte[] { 1, 2, 3 }
@@ -56,10 +56,10 @@ public class CreateUserValidatorTests
             AttestationOptionsJson = "{}",
             AuthenticatorAttestation = new Fido2NetLib.AuthenticatorAttestationRawResponse
             {
-                Id = new byte[] { 1, 2, 3 },
+                Id = "AQID",
                 RawId = new byte[] { 1, 2, 3 },
                 Type = Fido2NetLib.Objects.PublicKeyCredentialType.PublicKey,
-                Response = new Fido2NetLib.AuthenticatorAttestationRawResponse.ResponseData
+                Response = new Fido2NetLib.AuthenticatorAttestationRawResponse.AttestationResponse
                 {
                     AttestationObject = new byte[] { 1, 2, 3 },
                     ClientDataJson = new byte[] { 1, 2, 3 }
@@ -86,10 +86,10 @@ public class CreateUserValidatorTests
             AttestationOptionsJson = "{}",
             AuthenticatorAttestation = new Fido2NetLib.AuthenticatorAttestationRawResponse
             {
-                Id = new byte[] { 1, 2, 3 },
+                Id = "AQID",
                 RawId = new byte[] { 1, 2, 3 },
                 Type = Fido2NetLib.Objects.PublicKeyCredentialType.PublicKey,
-                Response = new Fido2NetLib.AuthenticatorAttestationRawResponse.ResponseData
+                Response = new Fido2NetLib.AuthenticatorAttestationRawResponse.AttestationResponse
                 {
                     AttestationObject = new byte[] { 1, 2, 3 },
                     ClientDataJson = new byte[] { 1, 2, 3 }

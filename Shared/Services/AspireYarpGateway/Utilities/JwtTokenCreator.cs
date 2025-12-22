@@ -1,5 +1,6 @@
 using System.Security.Claims;
 using System.Security.Cryptography;
+using System.Buffers;
 using System.Text;
 using FastEndpoints.Security;
 using Microsoft.IdentityModel.JsonWebTokens;
@@ -63,7 +64,30 @@ public class JwtTokenCreator
             if (opts.KeyIsPemEncoded)
                 rsa.ImportFromPem(opts.SigningKey);
             else
-                rsa.ImportRSAPrivateKey(Convert.FromBase64String(opts.SigningKey), out _);
+            {
+                var base64 = opts.SigningKey;
+                var maxDecodedLength = (base64.Length / 4) * 3 + 3;
+                byte[]? rented = null;
+                try
+                {
+                    Span<byte> decoded = maxDecodedLength <= 4096
+                        ? stackalloc byte[maxDecodedLength]
+                        : (rented = ArrayPool<byte>.Shared.Rent(maxDecodedLength));
+
+                    if (rented is not null)
+                        decoded = decoded.Slice(0, maxDecodedLength);
+
+                    if (!Convert.TryFromBase64String(base64, decoded, out var bytesWritten))
+                        throw new FormatException("SigningKey is not a valid base64-encoded RSA private key.");
+
+                    rsa.ImportRSAPrivateKey(decoded.Slice(0, bytesWritten), out _);
+                }
+                finally
+                {
+                    if (rented is not null)
+                        ArrayPool<byte>.Shared.Return(rented, clearArray: true);
+                }
+            }
 
             return new(
                 new RsaSecurityKey(rsa)

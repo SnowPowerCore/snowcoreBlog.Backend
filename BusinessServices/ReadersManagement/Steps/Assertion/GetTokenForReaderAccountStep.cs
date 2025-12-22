@@ -39,12 +39,35 @@ public class GetTokenForReaderAccountStep(IHttpContextAccessor httpContextAccess
         if (redisVal.HasValue && !string.IsNullOrWhiteSpace(redisVal))
         {
             // stored as comma-separated values; keep only unique providers (case-insensitive)
-            configuredProviders = redisVal.ToString()
-                .Split(',', StringSplitOptions.RemoveEmptyEntries)
-                .Select(s => s.Trim())
-                .Where(s => !string.IsNullOrEmpty(s))
-                .Distinct(StringComparer.OrdinalIgnoreCase)
-                .ToList();
+            var distinctProviders = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            var orderedProviders = new List<string>();
+
+            ReadOnlySpan<char> span = redisVal.ToString().AsSpan();
+            while (!span.IsEmpty)
+            {
+                var commaIndex = span.IndexOf(',');
+                ReadOnlySpan<char> segment;
+                if (commaIndex < 0)
+                {
+                    segment = span;
+                    span = default;
+                }
+                else
+                {
+                    segment = span.Slice(0, commaIndex);
+                    span = span.Slice(commaIndex + 1);
+                }
+
+                segment = segment.Trim();
+                if (segment.Length == 0)
+                    continue;
+
+                var provider = segment.ToString();
+                if (distinctProviders.Add(provider))
+                    orderedProviders.Add(provider);
+            }
+
+            configuredProviders = orderedProviders;
         }
 
         if (configuredProviders.Count > 0)

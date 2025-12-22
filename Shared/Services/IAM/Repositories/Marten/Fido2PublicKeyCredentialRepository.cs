@@ -9,14 +9,14 @@ namespace snowcoreBlog.Backend.IAM.Repositories.Marten;
 
 public class Fido2PublicKeyCredentialRepository(IDocumentSession session) : BaseMartenRepository<Fido2PublicKeyCredentialEntity>(session), IFido2PublicKeyCredentialRepository
 {
-    public async Task<bool> CheckPublicKeyCredExistsAsync(Guid[] ids, string publicKeyCredentialId, CancellationToken token = default)
+    public async Task<bool> CheckPublicKeyCredExistsAsync(IReadOnlyList<Guid> ids, string publicKeyCredentialId, CancellationToken token = default)
     {
         var batch = session.CreateBatchQuery();
         var exists = false;
-        var tasks = new List<Task<bool>>(ids.Length);
-        foreach (var id in ids)
+        var tasks = new List<Task<bool>>(ids.Count);
+        for (var i = 0; i < ids.Count; i++)
         {
-            tasks.Add(batch.Query(new PublicKeyCredentialByIdAndCredIdQuery { Id = id, PublicKeyCredentialId = publicKeyCredentialId }));
+            tasks.Add(batch.Query(new PublicKeyCredentialByIdAndCredIdQuery { Id = ids[i], PublicKeyCredentialId = publicKeyCredentialId }));
         }
         await batch.Execute(token);
         foreach (var task in tasks)

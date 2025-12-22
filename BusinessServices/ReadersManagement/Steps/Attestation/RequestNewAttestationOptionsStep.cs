@@ -25,9 +25,10 @@ public class RequestNewAttestationOptionsStep(IRequestClient<ValidateAndCreateAt
         if (result.Message.IsSuccess)
         {
             var db = redis.GetDatabase();
+            var json = result.Message.Value!.ToJson();
             await db.StringSetAsync(
                 $"{context.RequestAttestationOptions.Email}{Fido2AttestationOptions}",
-                Encoding.UTF8.GetBytes(result.Message.Value!.ToJson()),
+                json,
                 TimeSpan.FromMinutes(5));
 
             return Maybe.Create(result.Message.Value)!;
