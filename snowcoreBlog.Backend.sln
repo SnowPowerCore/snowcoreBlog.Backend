@@ -43,9 +43,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{4F52FD
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{1A5DBE61-BD94-ADDB-8E0E-98FFEE9EF8D9}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NotificationsManagement", "NotificationsManagement", "{F872F5FA-9A50-34FF-C335-01B92A4DBCEF}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ServiceNotifications", "ServiceNotifications", "{F872F5FA-9A50-34FF-C335-01B92A4DBCEF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "snowcoreBlog.Backend.NotificationsManagement", "Shared\Services\NotificationsManagement\snowcoreBlog.Backend.NotificationsManagement.csproj", "{E203E7B0-51AF-40CA-AD17-43104CDD0A47}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "snowcoreBlog.Backend.ServiceNotifications", "Shared\Services\ServiceNotifications\snowcoreBlog.Backend.ServiceNotifications.csproj", "{E203E7B0-51AF-40CA-AD17-43104CDD0A47}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{D1E4B9F6-D533-D423-8818-2E1510152B85}"
 EndProject
@@ -71,7 +71,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "snowcoreBlog.Backend.Author
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "snowcoreBlog.Backend.ReadersManagement.Tests", "BusinessServices\ReadersManagement.Tests\snowcoreBlog.Backend.ReadersManagement.Tests.csproj", "{59103BB6-FC1C-4CDF-AD26-1346DE134F19}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "snowcoreBlog.Backend.NotificationsManagement.Tests", "Shared\Services\NotificationsManagement.Tests\snowcoreBlog.Backend.NotificationsManagement.Tests.csproj", "{6AF64136-60E8-40C8-903A-2D2D22825A47}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "snowcoreBlog.Backend.ServiceNotifications.Tests", "Shared\Services\ServiceNotifications.Tests\snowcoreBlog.Backend.ServiceNotifications.Tests.csproj", "{6AF64136-60E8-40C8-903A-2D2D22825A47}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "snowcoreBlog.Backend.RegionalIpRestriction.Tests", "Shared\Services\RegionalIpRestriction.Tests\snowcoreBlog.Backend.RegionalIpRestriction.Tests.csproj", "{D1D1F377-68AB-4EA6-9B78-87F15F24A867}"
 EndProject
