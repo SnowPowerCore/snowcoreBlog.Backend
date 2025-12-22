@@ -1,18 +1,26 @@
 using System.Text.Json.Serialization;
+using System.Net.Mime;
+using System.Text.Json;
 using Marten;
 using MassTransit;
 using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.AspNetCore.HttpOverrides;
 using snowcoreBlog.ApplicationLaunch.Implementations.BackgroundServices;
 using snowcoreBlog.ApplicationLaunch.Interfaces;
+using snowcoreBlog.Backend.AuthorsManagement.CompiledQueries.Marten;
 using snowcoreBlog.Backend.AuthorsManagement.Features;
 using snowcoreBlog.Backend.AuthorsManagement.Interfaces.Repositories.Marten;
 using snowcoreBlog.Backend.AuthorsManagement.Repositories.Marten;
 using snowcoreBlog.Backend.AuthorsManagement.Services;
-using snowcoreBlog.Backend.BusinessServices.AuthorsManagement.Steps;
 using snowcoreBlog.Backend.Infrastructure.Extensions;
+using snowcoreBlog.Backend.Infrastructure.Middleware;
+using snowcoreBlog.PublicApi.Extensions;
 using snowcoreBlog.ServiceDefaults.Extensions;
 using StackExchange.Redis;
+using FastEndpoints;
+using FastEndpoints.OpenTelemetry.Middleware;
+using MinimalStepifiedSystem.Extensions;
+using snowcoreBlog.Backend.AuthorsManagement.Steps;
 
 var builder = WebApplication.CreateSlimBuilder(args);
 builder.Host.UseDefaultServiceProvider(static (c, opts) =>
@@ -44,10 +52,13 @@ builder.WebHost.UseKestrelHttpsConfiguration();
 builder.AddServiceDefaults();
 builder.Services.AddOpenTelemetry().ConnectBackendServices();
 builder.AddNpgsqlDataSource(connectionName: "db-snowcore-blog-entities");
-builder.Services.AddMarten(static opts =>
+builder.Services.AddMarten(opts =>
 {
     opts.Policies.AllDocumentsSoftDeleted();
     opts.UseSystemTextJsonForSerialization(configure: static o => o.SetJsonSerializationContext());
+
+    opts.RegisterCompiledQueryType(typeof(AuthorGetByUserIdQuery));
+    opts.RegisterCompiledQueryType(typeof(AuthorExistsByUserIdQuery));
 })
     .UseLightweightSessions()
     .UseNpgsqlDataSource();
@@ -58,7 +69,6 @@ builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
 builder.Services.AddScoped<CreateAuthorEntityForExistingUserStep>();
 builder.Services.AddMassTransit(busConfigurator =>
 {
-    busConfigurator.AddConsumer<CheckAuthorExistsConsumer>();
     busConfigurator.AddConsumer<ReturnClaimsIfUserAuthorConsumer>();
     busConfigurator.ConfigureHttpJsonOptions(static o =>
     {
@@ -74,7 +84,15 @@ builder.Services.AddMassTransit(busConfigurator =>
 });
 
 builder.AddRedisClient(connectionName: "cache");
-//builder.Services.AddFastEndpoints();
+
+const int GlobalVersion = 1;
+
+builder.Services.AddAuthentication();
+builder.Services.AddAuthorization()
+    .AddAntiforgery()
+    .AddFastEndpoints();
+
+builder.Services.AddScoped<UserCookieJsonWebTokenMiddleware>();
 
 builder.Services.AddHostedService(static sp =>
     new ApplicationLaunchWorker(sp.GetRequiredService<IHostApplicationLifetime>(),
@@ -82,8 +100,33 @@ builder.Services.AddHostedService(static sp =>
 
 var app = builder.Build();
 
-app.UseHttpsRedirection();
+app.UseStepifiedSystem();
+app.UseHttpsRedirection()
+    .UseCookiePolicy(new()
+    {
+        MinimumSameSitePolicy = SameSiteMode.Strict,
+        HttpOnly = HttpOnlyPolicy.Always,
+        Secure = CookieSecurePolicy.Always
+    })
+    .UseMiddleware<UserCookieJsonWebTokenMiddleware>()
+    .UseAuthentication()
+    .UseAuthorization()
+    .UseAntiforgeryFE(additionalContentTypes: [MediaTypeNames.Application.Json])
+    .UseFastEndpointsDiagnosticsMiddleware()
+    .UseFastEndpoints(c =>
+    {
+        c.Endpoints.NameGenerator = static ctx =>
+        {
+            var currentName = ctx.EndpointType.Name;
+            return currentName.TrimEnd("Endpoint");
+        };
+        c.Endpoints.ShortNames = true;
+        c.Endpoints.RoutePrefix = default;
+        c.Versioning.Prefix = "v";
+        c.Serializer.Options.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+        c.Serializer.Options.SetJsonSerializationContext();
+    });
+
 app.MapDefaultEndpoints();
-// app.UseFastEndpoints();
 
 await app.RunAsync();

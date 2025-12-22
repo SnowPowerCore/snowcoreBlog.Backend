@@ -197,6 +197,10 @@ builder.Services.AddScoped<RequestNewAttestationOptionsStep>();
 builder.Services.AddScoped<RequestNewAssertionOptionsStep>();
 builder.Services.AddScoped<AttemptLoginByAssertionStep>();
 builder.Services.AddScoped<GetTokenForReaderAccountStep>();
+builder.Services.AddScoped<snowcoreBlog.Backend.ReadersManagement.Steps.Tokens.ResolveRefreshTokenStep>();
+builder.Services.AddScoped<snowcoreBlog.Backend.ReadersManagement.Steps.Tokens.UseRefreshTokenLockStep>();
+builder.Services.AddScoped<snowcoreBlog.Backend.ReadersManagement.Steps.Tokens.ValidateRefreshTokenRecordStep>();
+builder.Services.AddScoped<snowcoreBlog.Backend.ReadersManagement.Steps.Tokens.RotateReaderTokenPairStep>();
 
 var app = builder.Build();
 

@@ -8,7 +8,7 @@ public class ReturnClaimsIfUserAuthorConsumer(IAuthorRepository authorRepository
 {
     public async Task Consume(ConsumeContext<RequestReaderClaims> context)
     {
-        var exists = (await authorRepository.GetAllAsync(context.CancellationToken)).Any(a => a.UserId == context.Message.UserId);
+        var exists = await authorRepository.AnyByUserIdAsync(context.Message.UserId, context.CancellationToken);
         await context.RespondAsync(new ReaderClaimsResponse
         {
             RequestId = context.Message.RequestId,

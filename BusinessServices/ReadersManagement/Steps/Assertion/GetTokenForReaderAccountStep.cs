@@ -4,6 +4,7 @@ using Microsoft.Extensions.Options;
 using MinimalStepifiedSystem.Interfaces;
 using snowcoreBlog.Backend.AspireYarpGateway.Core.Contracts;
 using snowcoreBlog.Backend.Core.Constants;
+using snowcoreBlog.Backend.Infrastructure;
 using snowcoreBlog.Backend.ReadersManagement.Constants;
 using snowcoreBlog.Backend.ReadersManagement.Context;
 using snowcoreBlog.Backend.ReadersManagement.Delegates;
@@ -108,6 +109,30 @@ public class GetTokenForReaderAccountStep(IHttpContextAccessor httpContextAccess
                     new() { MaxAge = TimeSpan.FromMinutes(tokenReqOpts.Value.AccessTokenValidityDurationInMinutes) });
                 currentCookies?.Append(AuthCookieConstants.UserRefreshTokenCookieName, curPair.RefreshToken,
                     new() { MaxAge = TimeSpan.FromMinutes(tokenReqOpts.Value.RefreshTokenValidityDurationInMinutes) });
+
+                // Persist the refresh token server-side for rotation/validation.
+                var refreshRecord = new ReaderRefreshTokenRecord
+                {
+                    UserId = currentUserId,
+                    Claims = readerTokenReq.Claims.ToDictionary(),
+                    ExpiresAt = curPair.RefreshTokenExpiresAt
+                };
+
+                var refreshKey = ReaderRefreshTokenConstants.RefreshTokenKey(curPair.RefreshToken);
+                var userCurrentKey = ReaderRefreshTokenConstants.UserCurrentRefreshTokenKey(currentUserId);
+                var ttl = curPair.RefreshTokenExpiresAt - DateTimeOffset.UtcNow;
+                if (ttl <= TimeSpan.Zero)
+                    ttl = TimeSpan.FromMinutes(tokenReqOpts.Value.RefreshTokenValidityDurationInMinutes);
+
+                // Revoke any previously issued refresh token for this user.
+                var previousToken = await db.StringGetAsync(userCurrentKey);
+                if (previousToken.HasValue && !string.IsNullOrWhiteSpace(previousToken.ToString()))
+                {
+                    await db.KeyDeleteAsync(ReaderRefreshTokenConstants.RefreshTokenKey(previousToken.ToString()));
+                }
+
+                await db.StringSetAsync(refreshKey, System.Text.Json.JsonSerializer.Serialize(refreshRecord, CoreSerializationContext.Default.ReaderRefreshTokenRecord), expiry: ttl);
+                await db.StringSetAsync(userCurrentKey, curPair.RefreshToken, expiry: ttl);
                 return Maybe.Create<LoginByAssertionResultDto>(new());
             }
             else

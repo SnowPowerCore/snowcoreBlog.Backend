@@ -18,7 +18,7 @@ public class ValidateReaderAccountNotExistsStep(IRequestClient<ValidateUserExist
             requestClient,
             context.ConfirmRequest.ToValidateUserExists(),
             token);
-        if (result is Some<bool> success && !success.Value)
+        if (result is Some<bool> success && success.Value)
         {
             return await next(context, token);
         }

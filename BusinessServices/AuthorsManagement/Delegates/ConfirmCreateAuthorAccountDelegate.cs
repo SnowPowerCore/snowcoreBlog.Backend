@@ -1,7 +1,7 @@
 using MaybeResults;
 using snowcoreBlog.Backend.AuthorsManagement.Context;
-using snowcoreBlog.Backend.Core.Entities.Author;
+using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 
 namespace snowcoreBlog.Backend.AuthorsManagement.Delegates;
 
-public delegate Task<IMaybe<AuthorEntity>> BecomeAuthorAccountDelegate(BecomeAuthorAccountContext context, CancellationToken token = default);
+public delegate Task<IMaybe<AuthorDto>> BecomeAuthorAccountDelegate(BecomeAuthorAccountContext context, CancellationToken token = default);
