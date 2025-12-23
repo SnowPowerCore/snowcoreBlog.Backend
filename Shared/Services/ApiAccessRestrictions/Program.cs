@@ -10,10 +10,11 @@ using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Routing.Constraints;
 using snowcoreBlog.Backend.Infrastructure.Extensions;
-using snowcoreBlog.Backend.RegionalIpRestriction.Entities;
-using snowcoreBlog.Backend.RegionalIpRestriction.Repositories.Marten;
-using snowcoreBlog.Backend.RegionalIpRestriction.Services;
+using snowcoreBlog.Backend.ApiAccessRestrictions.Entities;
+using snowcoreBlog.Backend.ApiAccessRestrictions.Repositories.Marten;
+using snowcoreBlog.Backend.ApiAccessRestrictions.Services;
 using snowcoreBlog.PublicApi.Extensions;
+using snowcoreBlog.Backend.ApiAccessRestrictions.Interfaces.Services;
 
 var builder = WebApplication.CreateSlimBuilder(args);
 
@@ -70,7 +71,7 @@ var jsonStringEnumConverter = new JsonStringEnumConverter();
 builder.Services.AddAuthorization()
     .AddFastEndpoints(static options =>
     {
-        options.SourceGeneratorDiscoveredTypes.AddRange(snowcoreBlog.Backend.RegionalIpRestriction.DiscoveredTypes.All);
+        options.SourceGeneratorDiscoveredTypes.AddRange(snowcoreBlog.Backend.ApiAccessRestrictions.DiscoveredTypes.All);
     })
     .SwaggerDocument(options =>
     {
@@ -86,7 +87,7 @@ builder.Services.AddAuthorization()
     });
 
 builder.Services.AddScoped<IIpRestrictionRepository, IpRestrictionRepository>();
-builder.Services.AddScoped<snowcoreBlog.Backend.RegionalIpRestriction.Services.IRequestRestrictionService, snowcoreBlog.Backend.RegionalIpRestriction.Services.RequestRestrictionService>();
+builder.Services.AddScoped<IRequestRestrictionService, RequestRestrictionService>();
 builder.Services.AddScoped<IRegionRestrictionRepository, RegionRestrictionRepository>();
 builder.Services.AddScoped<IApiAccessRuleRepository, ApiAccessRuleRepository>();
 builder.Services.AddScoped<IApiAccessResponseTemplateRepository, ApiAccessResponseTemplateRepository>();

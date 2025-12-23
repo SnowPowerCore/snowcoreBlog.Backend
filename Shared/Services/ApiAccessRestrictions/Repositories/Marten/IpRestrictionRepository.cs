@@ -1,7 +1,7 @@
 using Marten;
-using snowcoreBlog.Backend.RegionalIpRestriction.Entities;
+using snowcoreBlog.Backend.ApiAccessRestrictions.Entities;
 
-namespace snowcoreBlog.Backend.RegionalIpRestriction.Repositories.Marten;
+namespace snowcoreBlog.Backend.ApiAccessRestrictions.Repositories.Marten;
 
 public interface IIpRestrictionRepository
 {

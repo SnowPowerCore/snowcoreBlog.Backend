@@ -22,6 +22,7 @@ using snowcoreBlog.Backend.AspireYarpGateway.Extensions;
 using snowcoreBlog.Backend.AspireYarpGateway.Features;
 using snowcoreBlog.Backend.AspireYarpGateway.Options;
 using snowcoreBlog.Backend.AspireYarpGateway.Validation;
+using snowcoreBlog.Backend.ApiAccessRestrictions.GatewayIntegration;
 using snowcoreBlog.Backend.Gateway.Middleware.Extensions;
 using snowcoreBlog.Backend.Infrastructure.Extensions;
 using snowcoreBlog.PublicApi.Utilities.Dictionary;
@@ -180,6 +181,9 @@ public static class YarpResourceExtensions
         }
 
         builder.Services.AddServiceDiscovery();
+
+        // Local (in-process) restrictions evaluation support.
+        builder.Services.AddApiAccessRestrictionsGatewayIntegration();
 
         var proxyBuilder = builder.Services.AddReverseProxy();
 

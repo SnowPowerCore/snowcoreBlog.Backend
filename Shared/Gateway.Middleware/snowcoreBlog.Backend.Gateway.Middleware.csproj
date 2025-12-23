@@ -22,7 +22,7 @@
     <ProjectReference Include="..\..\snowcoreBlog.Universal\PublicApi\snowcoreBlog.PublicApi.csproj" />
     <ProjectReference Include="..\Infrastructure\snowcoreBlog.Backend.Infrastructure.csproj" />
     <ProjectReference Include="..\Core\snowcoreBlog.Backend.Core.csproj" />
-    <ProjectReference Include="..\Services\RegionalIpRestriction\snowcoreBlog.Backend.RegionalIpRestriction.csproj" />
+    <ProjectReference Include="..\Services\ApiAccessRestrictions\snowcoreBlog.Backend.ApiAccessRestrictions.csproj" />
   </ItemGroup>
 
   <ItemGroup>

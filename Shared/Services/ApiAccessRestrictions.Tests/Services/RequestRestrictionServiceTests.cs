@@ -1,11 +1,11 @@
 using System.Net;
 using FluentAssertions;
 using NSubstitute;
-using snowcoreBlog.Backend.RegionalIpRestriction.Entities;
-using snowcoreBlog.Backend.RegionalIpRestriction.Repositories.Marten;
-using snowcoreBlog.Backend.RegionalIpRestriction.Services;
+using snowcoreBlog.Backend.ApiAccessRestrictions.Entities;
+using snowcoreBlog.Backend.ApiAccessRestrictions.Repositories.Marten;
+using snowcoreBlog.Backend.ApiAccessRestrictions.Services;
 
-namespace snowcoreBlog.Backend.RegionalIpRestriction.Tests.Services;
+namespace snowcoreBlog.Backend.ApiAccessRestrictions.Tests.Services;
 
 public class RequestRestrictionServiceTests
 {
@@ -22,7 +22,7 @@ public class RequestRestrictionServiceTests
     public async Task IsAllowedAsync_WithNoRestrictions_ShouldReturnTrue()
     {
         // Arrange
-        _ipRepo.GetAllAsync().Returns(new List<IpRestrictionEntity>());
+        _ipRepo.GetAllAsync().Returns([]);
         var ip = IPAddress.Parse("192.168.1.1");
 
         // Act
@@ -42,7 +42,7 @@ public class RequestRestrictionServiceTests
             {
                 Id = Guid.NewGuid(),
                 IsBlocked = true,
-                IpRanges = new List<string> { "192.168.1" }
+                IpRanges = ["192.168.1"]
             }
         };
         _ipRepo.GetAllAsync().Returns(restrictions);
@@ -65,7 +65,7 @@ public class RequestRestrictionServiceTests
             {
                 Id = Guid.NewGuid(),
                 IsBlocked = true,
-                IpRanges = new List<string> { "192.168.1.100" }
+                IpRanges = ["192.168.1.100"]
             }
         };
         _ipRepo.GetAllAsync().Returns(restrictions);
@@ -88,7 +88,7 @@ public class RequestRestrictionServiceTests
             {
                 Id = Guid.NewGuid(),
                 IsBlocked = false,
-                IpRanges = new List<string> { "192.168.1" }
+                IpRanges = ["192.168.1"]
             }
         };
         _ipRepo.GetAllAsync().Returns(restrictions);
@@ -111,7 +111,7 @@ public class RequestRestrictionServiceTests
             {
                 Id = Guid.NewGuid(),
                 IsBlocked = true,
-                IpRanges = new List<string> { "10.0.0" }
+                IpRanges = ["10.0.0"]
             }
         };
         _ipRepo.GetAllAsync().Returns(restrictions);
@@ -134,7 +134,7 @@ public class RequestRestrictionServiceTests
             {
                 Id = Guid.NewGuid(),
                 IsBlocked = true,
-                IpRanges = new List<string> { "", "   " }
+                IpRanges = ["", "   "]
             }
         };
         _ipRepo.GetAllAsync().Returns(restrictions);

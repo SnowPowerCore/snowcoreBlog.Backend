@@ -1,11 +1,11 @@
 using System.Net;
-using snowcoreBlog.Backend.RegionalIpRestriction.Repositories.Marten;
+using snowcoreBlog.Backend.ApiAccessRestrictions.Interfaces.Services;
+using snowcoreBlog.Backend.ApiAccessRestrictions.Repositories.Marten;
 
-namespace snowcoreBlog.Backend.RegionalIpRestriction.Services;
+namespace snowcoreBlog.Backend.ApiAccessRestrictions.Services;
 
 public class RequestRestrictionService(IIpRestrictionRepository ipRepo) : IRequestRestrictionService
 {
-
     // Very small proof-of-concept: checks if any restriction contains the remote IP as substring.
     // Replace with CIDR-aware check and GeoIP lookup in future iterations.
     public async Task<bool> IsAllowedAsync(IPAddress ip, string path, CancellationToken ct = default)

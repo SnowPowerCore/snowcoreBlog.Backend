@@ -37,7 +37,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "snowcoreBlog.Backend.Aspire
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "snowcoreBlog.Backend.Gateway.Middleware", "Shared\Gateway.Middleware\snowcoreBlog.Backend.Gateway.Middleware.csproj", "{89410382-A462-4016-9E64-A05C84FC5689}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "snowcoreBlog.Backend.RegionalIpRestriction", "Shared\Services\RegionalIpRestriction\snowcoreBlog.Backend.RegionalIpRestriction.csproj", "{4F061383-9C11-441D-A4EA-65C59FFAA1EE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "snowcoreBlog.Backend.ApiAccessRestrictions", "Shared\Services\ApiAccessRestrictions\snowcoreBlog.Backend.ApiAccessRestrictions.csproj", "{4F061383-9C11-441D-A4EA-65C59FFAA1EE}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{4F52FD11-658E-A102-6CD3-7D7C16FFA15B}"
 EndProject
@@ -73,7 +73,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "snowcoreBlog.Backend.Reader
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "snowcoreBlog.Backend.ServiceNotifications.Tests", "Shared\Services\ServiceNotifications.Tests\snowcoreBlog.Backend.ServiceNotifications.Tests.csproj", "{6AF64136-60E8-40C8-903A-2D2D22825A47}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "snowcoreBlog.Backend.RegionalIpRestriction.Tests", "Shared\Services\RegionalIpRestriction.Tests\snowcoreBlog.Backend.RegionalIpRestriction.Tests.csproj", "{D1D1F377-68AB-4EA6-9B78-87F15F24A867}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "snowcoreBlog.Backend.ApiAccessRestrictions.Tests", "Shared\Services\ApiAccessRestrictions.Tests\snowcoreBlog.Backend.ApiAccessRestrictions.Tests.csproj", "{D1D1F377-68AB-4EA6-9B78-87F15F24A867}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

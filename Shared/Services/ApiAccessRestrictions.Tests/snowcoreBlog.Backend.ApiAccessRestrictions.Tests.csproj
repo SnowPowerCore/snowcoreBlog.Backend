@@ -24,7 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\RegionalIpRestriction\snowcoreBlog.Backend.RegionalIpRestriction.csproj" />
+    <ProjectReference Include="..\ApiAccessRestrictions\snowcoreBlog.Backend.ApiAccessRestrictions.csproj" />
   </ItemGroup>
 
 </Project>

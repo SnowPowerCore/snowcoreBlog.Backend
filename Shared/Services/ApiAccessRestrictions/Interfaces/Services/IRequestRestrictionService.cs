@@ -1,6 +1,6 @@
 using System.Net;
 
-namespace snowcoreBlog.Backend.RegionalIpRestriction.Services;
+namespace snowcoreBlog.Backend.ApiAccessRestrictions.Interfaces.Services;
 
 public interface IRequestRestrictionService
 {
