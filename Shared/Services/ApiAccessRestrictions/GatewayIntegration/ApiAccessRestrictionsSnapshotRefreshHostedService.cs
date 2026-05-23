@@ -12,15 +12,15 @@ public sealed class ApiAccessRestrictionsSnapshotRefreshHostedService(IHttpClien
     {
         var timer = new PeriodicTimer(TimeSpan.FromSeconds(30));
 
-        await RefreshOnce(stoppingToken);
+        await RefreshAsync(stoppingToken);
 
         while (await timer.WaitForNextTickAsync(stoppingToken))
         {
-            await RefreshOnce(stoppingToken);
+            await RefreshAsync(stoppingToken);
         }
     }
 
-    private async Task RefreshOnce(CancellationToken ct)
+    private async Task RefreshAsync(CancellationToken ct)
     {
         try
         {
@@ -32,7 +32,7 @@ public sealed class ApiAccessRestrictionsSnapshotRefreshHostedService(IHttpClien
             }.SetJsonSerializationContext();
 
             var snapshot = await client.GetFromJsonAsync(
-                "/access/snapshot/v1",
+                "snapshot/v1",
                 CoreSerializationContext.Default.ApiAccessRestrictionsSnapshotDto,
                 ct);
             if (snapshot is default(ApiAccessRestrictionsSnapshotDto))

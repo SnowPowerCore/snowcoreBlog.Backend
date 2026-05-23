@@ -1,4 +1,5 @@
 using System.Net;
+using System.Buffers.Binary;
 using System.Text.RegularExpressions;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 
@@ -179,10 +180,15 @@ public sealed class CompiledApiAccessRestrictionsSnapshot
 
         private static uint ToUInt32(IPAddress ipv4)
         {
-            var bytes = ipv4.GetAddressBytes();
-            if (BitConverter.IsLittleEndian)
-                Array.Reverse(bytes);
-            return BitConverter.ToUInt32(bytes, 0);
+            Span<byte> bytes = stackalloc byte[4];
+            if (!ipv4.TryWriteBytes(bytes, out var written) || written != 4)
+            {
+                // Shouldn't happen because callers pass MapToIPv4(), but keep a safe fallback.
+                var arr = ipv4.GetAddressBytes();
+                return BinaryPrimitives.ReadUInt32BigEndian(arr);
+            }
+
+            return BinaryPrimitives.ReadUInt32BigEndian(bytes);
         }
 
         private sealed class AlwaysFalseIpMatcher : IpMatcher
