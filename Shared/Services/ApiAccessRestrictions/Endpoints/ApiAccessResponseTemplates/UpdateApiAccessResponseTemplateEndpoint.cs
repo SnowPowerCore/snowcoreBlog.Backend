@@ -23,7 +23,7 @@ public class UpdateApiAccessResponseTemplateEndpoint(IApiAccessResponseTemplateR
         }
 
         var existing = await repo.GetByIdAsync(id, ct);
-        if (existing is null)
+        if (existing is default(Entities.ApiAccessResponseTemplateEntity))
         {
             await Send.NotFoundAsync(ct);
             return;

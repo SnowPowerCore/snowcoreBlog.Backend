@@ -13,7 +13,7 @@ public class InviteAndCreateAdminConsumer(UserManager<ApplicationAdminEntity> ad
     {
         // Ensure the inviting admin exists
         var invitingAdmin = await adminManager.FindByIdAsync(context.Message.FromAdmin.ToString());
-        if (invitingAdmin is null)
+        if (invitingAdmin is default(ApplicationAdminEntity))
         {
             await context.RespondAsync(new DataResult<AdminCreationResult>(
                 Errors: [new("FromAdmin", "Inviting admin does not exist.")]
@@ -23,7 +23,7 @@ public class InviteAndCreateAdminConsumer(UserManager<ApplicationAdminEntity> ad
 
         // Check if the email is already taken
         var existingAdmin = await adminManager.FindByEmailAsync(context.Message.Email);
-        if (existingAdmin is not null)
+        if (existingAdmin is not default(ApplicationAdminEntity))
         {
             await context.RespondAsync(new DataResult<AdminCreationResult>(
                 Errors: [new("Email", "Admin with this email already exists.")]

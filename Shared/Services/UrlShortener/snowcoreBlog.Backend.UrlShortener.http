@@ -1,0 +1,15 @@
+### Create a short URL
+POST http://localhost:5000/create
+Content-Type: application/json
+
+{
+  "originalUrl": "https://example.com/very/long/path",
+  "maxClicks": 10,
+  "windowSeconds": 60
+}
+
+### Resolve (follow redirect)
+GET http://localhost:5000/r/{{code}}
+
+### Get stats
+GET http://localhost:5000/admin/{{code}}/stats

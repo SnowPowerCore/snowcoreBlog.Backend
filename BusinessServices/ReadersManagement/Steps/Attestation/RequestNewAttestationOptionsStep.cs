@@ -1,5 +1,4 @@
-﻿using System.Text;
-using Fido2NetLib;
+﻿using Fido2NetLib;
 using MassTransit;
 using MaybeResults;
 using MinimalStepifiedSystem.Interfaces;

@@ -57,7 +57,7 @@ public sealed class ValidateRefreshTokenRecordStep(IConnectionMultiplexer redis)
             });
         }
 
-        if (record is null || record.ExpiresAt <= DateTimeOffset.UtcNow)
+        if (record is default(ReaderRefreshTokenRecord) || record.ExpiresAt <= DateTimeOffset.UtcNow)
         {
             await db.KeyDeleteAsync(recordKey);
             return Maybe.Create(new RefreshReaderJwtPairOperationResult

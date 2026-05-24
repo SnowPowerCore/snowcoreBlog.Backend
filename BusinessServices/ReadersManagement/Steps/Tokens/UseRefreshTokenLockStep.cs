@@ -1,6 +1,5 @@
 using System.Net;
 using MaybeResults;
-using MassTransit;
 using MinimalStepifiedSystem.Interfaces;
 using snowcoreBlog.Backend.Infrastructure.Utilities;
 using snowcoreBlog.Backend.ReadersManagement.Constants;

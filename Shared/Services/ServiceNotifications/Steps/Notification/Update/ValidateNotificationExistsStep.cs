@@ -18,7 +18,7 @@ public class ValidateNotificationExistsStep(INotificationRepository notification
     {
         var existingNotification = await notificationRepository.GetByIdAsync(context.UpdateRequest.Id, token);
 
-        if (existingNotification is null)
+        if (existingNotification is default(Core.Entities.Notification.NotificationEntity))
         {
             return NotificationNotFoundError<NotificationDto>.Create(
                 $"Notification with ID '{context.UpdateRequest.Id}' was not found.");

@@ -248,7 +248,7 @@ app.UseHttpsRedirection()
         c.Serializer.Options.SetJsonSerializationContext();
         c.Serializer.ResponseSerializer = static (rsp, dto, contentType, _, cancellation) =>
         {
-            if (dto is null)
+            if (dto is default(object))
                 return Task.CompletedTask;
             rsp.ContentType = contentType;
             return rsp.WriteAsJsonAsync(

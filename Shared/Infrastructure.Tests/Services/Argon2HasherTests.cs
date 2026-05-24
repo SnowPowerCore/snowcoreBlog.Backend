@@ -1,6 +1,5 @@
 using FluentAssertions;
 using Microsoft.Extensions.Options;
-using NSubstitute;
 using snowcoreBlog.Backend.Core.Utilities;
 using snowcoreBlog.Backend.Infrastructure.Services;
 using snowcoreBlog.Backend.Infrastructure.Utilities;

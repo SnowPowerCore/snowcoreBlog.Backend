@@ -74,7 +74,7 @@ public class JwtTokenCreator
                         ? stackalloc byte[maxDecodedLength]
                         : (rented = ArrayPool<byte>.Shared.Rent(maxDecodedLength));
 
-                    if (rented is not null)
+                    if (rented is not default(byte[]))
                         decoded = decoded.Slice(0, maxDecodedLength);
 
                     if (!Convert.TryFromBase64String(base64, decoded, out var bytesWritten))
@@ -84,7 +84,7 @@ public class JwtTokenCreator
                 }
                 finally
                 {
-                    if (rented is not null)
+                    if (rented is not default(byte[]))
                         ArrayPool<byte>.Shared.Return(rented, clearArray: true);
                 }
             }

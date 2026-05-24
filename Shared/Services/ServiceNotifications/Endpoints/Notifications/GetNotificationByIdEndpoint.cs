@@ -40,7 +40,7 @@ public class GetNotificationByIdEndpoint : EndpointWithoutRequest<ApiResponse?>
         var id = Route<Guid>("id");
         var notification = await NotificationRepository.GetByIdAsync(id, ct);
 
-        if (notification is null)
+        if (notification is default(Core.Entities.Notification.NotificationEntity))
         {
             await Send.ResponseAsync(
                 ErrorResponseUtilities.ApiResponseWithErrors(

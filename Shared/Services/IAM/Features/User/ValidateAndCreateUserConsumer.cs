@@ -113,7 +113,7 @@ public class ValidateAndCreateUserConsumer(IHasher hasher,
                 });
             }
 
-            if (credentialResult.PublicKey is not null)
+            if (credentialResult.PublicKey is not default(byte[]))
             {
                 credential.DevicePublicKeys.Add(new Fido2DevicePublicKeyEntity
                 {

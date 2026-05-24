@@ -18,7 +18,7 @@ public class ValidateNotificationExistsForDeleteStep(INotificationRepository not
     {
         var existingNotification = await notificationRepository.GetByIdAsync(context.DeleteRequest.Id, token);
 
-        if (existingNotification is null)
+        if (existingNotification is default(Core.Entities.Notification.NotificationEntity))
         {
             return NotificationNotFoundError<DeleteNotificationResultDto>.Create(
                 $"Notification with ID '{context.DeleteRequest.Id}' was not found.");

@@ -76,7 +76,7 @@ public class CheckEmailDomainConsumer(IValidator<CheckEmailDomain> validator,
         }
         finally
         {
-            if (rented is not null)
+            if (rented is not default(byte[]))
                 ArrayPool<byte>.Shared.Return(rented, clearArray: true);
         }
 

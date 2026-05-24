@@ -2,7 +2,6 @@ using System.Net;
 using System.Text.Json;
 using MassTransit;
 using MaybeResults;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using MinimalStepifiedSystem.Interfaces;
 using snowcoreBlog.Backend.AspireYarpGateway.Core.Contracts;
@@ -34,7 +33,7 @@ public sealed class RotateReaderTokenPairStep(
     {
         var refreshToken = context.RefreshToken;
         var record = context.Record;
-        if (string.IsNullOrWhiteSpace(refreshToken) || record is null)
+        if (string.IsNullOrWhiteSpace(refreshToken) || record is default(ReaderRefreshTokenRecord))
         {
             return Maybe.Create(new RefreshReaderJwtPairOperationResult
             {
@@ -50,7 +49,7 @@ public sealed class RotateReaderTokenPairStep(
         var result = await requestClient.GetResponse<DataResult<UserTokenPairWithPayloadGenerated>>(
             tokenRequest, timeout: RequestTimeout.After(m: 1));
 
-        if (!result.Message.IsSuccess || result.Message.Value is null || string.IsNullOrWhiteSpace(result.Message.Value.AccessToken))
+        if (!result.Message.IsSuccess || result.Message.Value is default(UserTokenPairWithPayloadGenerated) || string.IsNullOrWhiteSpace(result.Message.Value.AccessToken))
         {
             return Maybe.Create(new RefreshReaderJwtPairOperationResult
             {

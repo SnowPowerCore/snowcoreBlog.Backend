@@ -59,7 +59,7 @@ public class ApiAccessRestrictionEvaluator(
         {
             var regionRestrictions = await regionRepo.GetAllAsync(ct);
             var decision = EvaluateRegion(regionRestrictions, request.CountryCode!, request.Path);
-            if (decision is not null)
+            if (decision is not default(CheckApiAccessResponseDto))
             {
                 return decision;
             }

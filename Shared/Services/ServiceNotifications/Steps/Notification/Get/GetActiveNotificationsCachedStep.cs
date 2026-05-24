@@ -34,7 +34,7 @@ public class GetActiveNotificationsCachedStep(INotificationRepository notificati
             try
             {
                 var fromCache = JsonSerializer.Deserialize(cached.ToString(), CoreSerializationContext.Default.ListNotificationDto);
-                if (fromCache is not null)
+                if (fromCache is not default(List<NotificationDto>))
                     return Maybe.Create(fromCache);
             }
             catch { /* Cache miss or deserialization error, fetch from DB */ }

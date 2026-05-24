@@ -171,7 +171,7 @@ public static class YarpResourceExtensions
                     _ => throw new NotSupportedException()
                 };
 
-                if (val is not null)
+                if (!string.IsNullOrWhiteSpace(val))
                 {
                     dict[k.Replace("__", ":")] = val;
                 }
@@ -192,7 +192,7 @@ public static class YarpResourceExtensions
             proxyBuilder.LoadFromMemory(yarpResource.RouteConfigs.Values.ToList(), yarpResource.ClusterConfigs.Values.ToList());
         }
 
-        if (yarpResource.ConfigurationSectionName is not null)
+        if (!string.IsNullOrWhiteSpace(yarpResource.ConfigurationSectionName))
         {
             proxyBuilder.LoadFromConfig(builder.Configuration.GetSection(yarpResource.ConfigurationSectionName));
         }
@@ -287,7 +287,7 @@ public static class YarpResourceExtensions
            .UseAuthorization();
 
         // Configure URLs
-        if (endpoints is null || !endpoints.Any())
+        if (endpoints is default(List<EndpointAnnotation>) || !endpoints.Any())
         {
             var url = $"{defaultScheme}://127.0.0.1:0/";
             app.Urls.Add(url);

@@ -23,7 +23,7 @@ public class UpdateApiAccessRuleEndpoint(IApiAccessRuleRepository repo) : Endpoi
         }
 
         var existing = await repo.GetByIdAsync(id, ct);
-        if (existing is null)
+        if (existing is default(Entities.ApiAccessRuleEntity))
         {
             await Send.NotFoundAsync(ct);
             return;

@@ -133,6 +133,7 @@ builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
 
 // Steps
 builder.Services.AddScoped<GetActiveNotificationsCachedStep>();
+builder.Services.AddScoped<GetActiveNotificationsForUserStep>();
 builder.Services.AddScoped<CreateNotificationEntityStep>();
 builder.Services.AddScoped<ValidateNotificationExistsStep>();
 builder.Services.AddScoped<UpdateNotificationEntityStep>();
@@ -184,7 +185,7 @@ app.UseHttpsRedirection()
         c.Serializer.Options.SetJsonSerializationContext();
         c.Serializer.ResponseSerializer = static (rsp, dto, contentType, _, cancellation) =>
         {
-            if (dto is null)
+            if (dto is default(object))
                 return Task.CompletedTask;
             rsp.ContentType = contentType;
             return rsp.WriteAsJsonAsync(

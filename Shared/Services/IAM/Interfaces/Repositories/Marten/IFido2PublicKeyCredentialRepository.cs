@@ -1,6 +1,5 @@
 using snowcoreBlog.Backend.Core.Interfaces.Repositories;
 using snowcoreBlog.Backend.IAM.Core.Entities;
-using System.Collections.Generic;
 
 namespace snowcoreBlog.Backend.IAM.Interfaces.Repositories.Marten;
 

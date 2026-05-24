@@ -25,7 +25,7 @@ public class ArticlesApplicationLaunchService(IServiceProvider serviceProvider) 
             {
                 // Find the initial snapshot(s) for this article
                 var initial = ArticleSeedData.Snapshots.OrderBy(s => s.ModifiedAt).FirstOrDefault(s => s.ArticleId == article.Id);
-                if (initial is null)
+                if (initial is default(ArticleSnapshotEntity))
                     continue;
 
                 // Ensure article.LatestSnapshotId references the snapshot we are inserting

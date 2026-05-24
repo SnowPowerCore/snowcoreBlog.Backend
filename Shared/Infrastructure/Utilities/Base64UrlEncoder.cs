@@ -41,7 +41,7 @@ public static class Base64UrlEncoder
                 ? stackalloc byte[byteCount]
                 : (rented = ArrayPool<byte>.Shared.Rent(byteCount));
 
-            if (rented is not null)
+            if (rented is not default(byte[]))
                 bytes = bytes.Slice(0, byteCount);
 
             var bytesWritten = Encoding.UTF8.GetBytes(source, bytes);
@@ -49,7 +49,7 @@ public static class Base64UrlEncoder
         }
         finally
         {
-            if (rented is not null)
+            if (rented is not default(byte[]))
                 ArrayPool<byte>.Shared.Return(rented, true);
         }
     }
@@ -154,7 +154,7 @@ public static class Base64UrlEncoder
         }
         finally
         {
-            if (rented is not null)
+            if (rented is not default(byte[]))
                 ArrayPool<byte>.Shared.Return(rented, true);
         }
     }
@@ -236,13 +236,13 @@ public static class Base64UrlEncoder
         }
         finally
         {
-            if (arrayPoolBytes is not null)
+            if (arrayPoolBytes is not default(byte[]))
             {
                 bytesSpan.Clear();
                 ArrayPool<byte>.Shared.Return(arrayPoolBytes);
             }
 
-            if (arrayPoolChars is not null)
+            if (arrayPoolChars is not default(char[]))
             {
                 charsSpan.Clear();
                 ArrayPool<char>.Shared.Return(arrayPoolChars);

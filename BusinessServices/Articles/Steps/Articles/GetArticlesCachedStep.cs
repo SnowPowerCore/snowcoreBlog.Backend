@@ -25,7 +25,7 @@ public class GetArticlesCachedStep(IArticleRepository articleRepository, IConnec
             try
             {
                 var fromCache = JsonSerializer.Deserialize(cached.ToString(), CoreSerializationContext.Default.ListArticleDto);
-                if (fromCache is not null)
+                if (fromCache is not default(List<ArticleDto>))
                     return Maybe.Create(fromCache);
             }
             catch { }

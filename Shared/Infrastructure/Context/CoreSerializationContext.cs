@@ -53,6 +53,8 @@ namespace snowcoreBlog.Backend.Infrastructure;
 [JsonSerializable(typeof(AuthorDto))]
 [JsonSerializable(typeof(NotificationDto))]
 [JsonSerializable(typeof(List<NotificationDto>))]
+[JsonSerializable(typeof(RequestUserNotifications))]
+[JsonSerializable(typeof(UserNotificationsResponse))]
 [JsonSerializable(typeof(NotificationTypeDto))]
 [JsonSerializable(typeof(CreateNotificationDto))]
 [JsonSerializable(typeof(CreateNotificationResultDto))]
