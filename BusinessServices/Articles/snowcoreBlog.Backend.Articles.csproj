@@ -24,7 +24,7 @@
     </PackageReference>
     <PackageReference Include="ConfigureAwait.Fody" />
     <PackageReference Include="Marten" />
-    <PackageReference Include="Marten.CommandLine" />
+    <PackageReference Include="Marten.SourceGenerator" PrivateAssets="all" />
     <PackageReference Include="Ixnas.AltchaNet" />
     <PackageReference Include="MinimalStepifiedSystem.SourceGen" />
     <PackageReference Include="MinimalStepifiedSystem.Core" />

@@ -1,11 +1,8 @@
-using System.Text.Json.Serialization;
 using Fido2NetLib;
 using FluentValidation;
-using JasperFx.CodeGeneration;
 using Marten;
 using MassTransit;
 using Microsoft.AspNetCore.Identity;
-using Oakton;
 using snowcoreBlog.Backend.Core.Interfaces.Services;
 using snowcoreBlog.Backend.Core.Utilities;
 using snowcoreBlog.Backend.IAM.CompiledQueries.Marten;
@@ -21,7 +18,9 @@ using snowcoreBlog.Backend.Infrastructure.Extensions;
 using snowcoreBlog.Backend.Infrastructure.Services;
 using snowcoreBlog.Backend.Infrastructure.Utilities;
 using snowcoreBlog.ServiceDefaults.Extensions;
-using Weasel.Core;
+using System.Text.Json.Serialization;
+
+[assembly: JasperFx.JasperFxAssembly]
 
 var builder = WebApplication.CreateSlimBuilder(args);
 builder.Host.UseDefaultServiceProvider(static (c, opts) =>
@@ -29,7 +28,6 @@ builder.Host.UseDefaultServiceProvider(static (c, opts) =>
     opts.ValidateScopes = true;
     opts.ValidateOnBuild = true;
 });
-builder.Host.ApplyOaktonExtensions();
 
 builder.Services.Configure<MassTransitHostOptions>(static options =>
 {
@@ -66,8 +64,6 @@ builder.Services.AddMarten(static opts =>
     opts.RegisterCompiledQueryType(typeof(PublicKeyCredentialByIdAndCredIdQuery));
     opts.RegisterCompiledQueryType(typeof(PublicKeyCredentialGetByUserIdAndCredIdQuery));
     opts.RegisterCompiledQueryType(typeof(PublicKeyCredentialsGetByUserIdQuery));
-    opts.AutoCreateSchemaObjects = AutoCreate.All;
-    opts.GeneratedCodeMode = TypeLoadMode.Static;
     opts.UseSystemTextJsonForSerialization(configure: static o => o.SetJsonSerializationContext());
     opts.Schema.For<ApplicationAdminEntity>().SoftDeleted();
     opts.Schema.For<ApplicationUserEntity>().SoftDeleted();
@@ -142,4 +138,4 @@ builder.Services.AddSingleton<IValidator<CreateTempUser>, CreateTempUserValidato
 var app = builder.Build();
 app.UseHttpsRedirection();
 app.MapDefaultEndpoints();
-await app.RunOaktonCommands(args);
+await app.RunAsync();

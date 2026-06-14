@@ -3,7 +3,6 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using FastEndpoints;
 using FastEndpoints.Swagger;
-using JasperFx.CodeGeneration;
 using Marten;
 using MassTransit;
 using Microsoft.AspNetCore.CookiePolicy;
@@ -39,7 +38,6 @@ builder.Services.AddMarten(static options =>
     options.RegisterDocumentType<RegionRestrictionEntity>();
     options.RegisterDocumentType<ApiAccessRuleEntity>();
     options.RegisterDocumentType<ApiAccessResponseTemplateEntity>();
-    options.GeneratedCodeMode = TypeLoadMode.Static;
     options.UseSystemTextJsonForSerialization(configure: static o => o.SetJsonSerializationContext());
     options.Policies.AllDocumentsSoftDeleted();
 })

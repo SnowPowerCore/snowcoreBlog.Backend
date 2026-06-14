@@ -1,17 +1,12 @@
-using System.Net.Mime;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 using FastEndpoints;
 using FastEndpoints.OpenTelemetry.Middleware;
 using FastEndpoints.Swagger;
 using Ixnas.AltchaNet;
-using JasperFx.CodeGeneration;
 using Marten;
 using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.AspNetCore.HttpOverrides;
 using MinimalStepifiedSystem.Extensions;
 using NSwag;
-using Oakton;
 using Scalar.AspNetCore;
 using snowcoreBlog.ApplicationLaunch.Implementations.BackgroundServices;
 using snowcoreBlog.ApplicationLaunch.Interfaces;
@@ -26,6 +21,11 @@ using snowcoreBlog.Backend.Infrastructure.Middleware;
 using snowcoreBlog.Backend.Infrastructure.Processors;
 using snowcoreBlog.PublicApi.Extensions;
 using snowcoreBlog.ServiceDefaults.Extensions;
+using System.Net.Mime;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+
+[assembly: JasperFx.JasperFxAssembly]
 
 var jsonStringEnumConverter = new JsonStringEnumConverter();
 
@@ -35,7 +35,6 @@ builder.Host.UseDefaultServiceProvider(static (c, options) =>
     options.ValidateScopes = true;
     options.ValidateOnBuild = true;
 });
-builder.Host.ApplyOaktonExtensions();
 
 builder.Services.ConfigureHttpJsonOptions(static options =>
 {
@@ -66,7 +65,6 @@ builder.Services.AddMarten(static options =>
 {
     options.RegisterDocumentType<ArticleEntity>();
     options.RegisterDocumentType<ArticleSnapshotEntity>();
-    options.GeneratedCodeMode = TypeLoadMode.Static;
     options.UseSystemTextJsonForSerialization(configure: static o => o.SetJsonSerializationContext());
     options.Policies.AllDocumentsSoftDeleted();
 })
@@ -185,4 +183,4 @@ if (app.Environment.IsDevelopment())
     });
 }
 
-await app.RunOaktonCommands(args);
+await app.RunAsync();

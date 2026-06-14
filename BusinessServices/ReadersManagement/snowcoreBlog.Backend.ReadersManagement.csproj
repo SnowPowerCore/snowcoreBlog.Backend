@@ -27,7 +27,7 @@
     <PackageReference Include="Ixnas.AltchaNet" />
     <PackageReference Include="MassTransit.RabbitMQ" />
     <PackageReference Include="Marten" />
-    <PackageReference Include="Marten.CommandLine" />
+    <PackageReference Include="Marten.SourceGenerator" PrivateAssets="all" />
     <PackageReference Include="MinimalStepifiedSystem.Core" />
     <PackageReference Include="MinimalStepifiedSystem.SourceGen" />
     <PackageReference Include="OpenTelemetry.Instrumentation.StackExchangeRedis" />

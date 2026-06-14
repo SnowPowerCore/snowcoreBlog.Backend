@@ -1,15 +1,8 @@
-using System.Globalization;
-using System.IdentityModel.Tokens.Jwt;
-using System.Net.Mime;
-using System.Security.Cryptography;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 using FastEndpoints;
 using FastEndpoints.OpenTelemetry.Middleware;
 using FastEndpoints.Security;
 using FastEndpoints.Swagger;
 using Ixnas.AltchaNet;
-using JasperFx.CodeGeneration;
 using Marten;
 using MassTransit;
 using Microsoft.AspNetCore.CookiePolicy;
@@ -18,7 +11,6 @@ using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Routing.Constraints;
 using MinimalStepifiedSystem.Extensions;
 using NSwag;
-using Oakton;
 using Scalar.AspNetCore;
 using snowcoreBlog.Backend.Core.Constants;
 using snowcoreBlog.Backend.Core.Entities.Reader;
@@ -44,6 +36,14 @@ using snowcoreBlog.Backend.ReadersManagement.Steps.ReaderAccount.Confirm;
 using snowcoreBlog.Backend.ReadersManagement.Steps.ReaderAccount.Request;
 using snowcoreBlog.PublicApi.Extensions;
 using snowcoreBlog.ServiceDefaults.Extensions;
+using System.Globalization;
+using System.IdentityModel.Tokens.Jwt;
+using System.Net.Mime;
+using System.Security.Cryptography;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+
+[assembly: JasperFx.JasperFxAssembly]
 
 var jsonStringEnumConverter = new JsonStringEnumConverter();
 
@@ -53,7 +53,6 @@ builder.Host.UseDefaultServiceProvider(static (c, options) =>
     options.ValidateScopes = true;
     options.ValidateOnBuild = true;
 });
-builder.Host.ApplyOaktonExtensions();
 
 builder.Services.Configure<ProjectOptions>(
     builder.Configuration.GetSection("Project"));
@@ -108,7 +107,6 @@ builder.Services.AddMarten(static options =>
 {
     options.RegisterDocumentType<ReaderEntity>();
     options.RegisterDocumentType<AltchaStoredChallengeEntity>();
-    options.GeneratedCodeMode = TypeLoadMode.Static;
     options.UseSystemTextJsonForSerialization(configure: static o => o.SetJsonSerializationContext());
     options.Policies.AllDocumentsSoftDeleted();
 })
@@ -311,4 +309,4 @@ if (app.Environment.IsDevelopment())
     });
 }
 
-await app.RunOaktonCommands(args);
+await app.RunAsync();

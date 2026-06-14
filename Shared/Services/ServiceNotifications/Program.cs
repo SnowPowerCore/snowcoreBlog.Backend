@@ -6,7 +6,6 @@ using FastEndpoints;
 using FastEndpoints.OpenTelemetry.Middleware;
 using FastEndpoints.Security;
 using FastEndpoints.Swagger;
-using JasperFx.CodeGeneration;
 using Marten;
 using MassTransit;
 using Microsoft.AspNetCore.CookiePolicy;
@@ -77,7 +76,6 @@ builder.AddNpgsqlDataSource(connectionName: "db-snowcore-blog-entities");
 builder.Services.AddMarten(static options =>
 {
     options.RegisterDocumentType<NotificationEntity>();
-    options.GeneratedCodeMode = TypeLoadMode.Static;
     options.UseSystemTextJsonForSerialization(configure: static o => o.SetJsonSerializationContext());
     options.Policies.AllDocumentsSoftDeleted();
 })

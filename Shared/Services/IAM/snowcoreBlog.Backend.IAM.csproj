@@ -14,7 +14,7 @@
     <PackageReference Include="Aspire.Npgsql" />
     <PackageReference Include="Fido2.AspNet" />
     <PackageReference Include="Marten" />
-    <PackageReference Include="Marten.CommandLine" />
+    <PackageReference Include="Marten.SourceGenerator" PrivateAssets="all" />
     <PackageReference Include="Fody">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>

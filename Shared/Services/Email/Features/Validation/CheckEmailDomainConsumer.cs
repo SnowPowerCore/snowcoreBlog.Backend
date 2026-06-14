@@ -117,7 +117,7 @@ public class CheckEmailDomainConsumer(IValidator<CheckEmailDomain> validator,
                     return true;
                 }
             }
-            var items = JsonSerializer.Deserialize<List<string>>(fallbackJson!);
+            var items = JsonSerializer.Deserialize<List<string>>((ReadOnlySpan<byte>)fallbackJson!);
             if (items is not default(List<string>))
                 domains.AddRange(items);
             if (domains.Contains(cleanedDomain))
