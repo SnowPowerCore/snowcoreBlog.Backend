@@ -81,7 +81,7 @@ public static class YarpResourceExtensions
         await notificationService.PublishUpdateAsync(yarpResource, s => s with
         {
             ResourceType = "Yarp",
-            State = "Starting"
+            State = KnownResourceStates.Starting
         });
 
         // We don't want to proxy for yarp resources so force endpoints to not proxy
@@ -119,7 +119,7 @@ public static class YarpResourceExtensions
         // Publish running state
         await notificationService.PublishUpdateAsync(yarpResource, s => s with
         {
-            State = "Running",
+            State = KnownResourceStates.Running,
             Urls = endpoints.Select(ep => new UrlSnapshot(ep.Name, ep.AllocatedEndpoint?.UriString ?? "", IsInternal: false)).ToImmutableArray(),
         });
 
@@ -154,11 +154,19 @@ public static class YarpResourceExtensions
         // Convert environment variables into configuration
         if (yarpResource.TryGetEnvironmentVariables(out var envAnnotations))
         {
-            var context = new EnvironmentCallbackContext(executionContext, cancellationToken: cancellationToken);
+            var context = new EnvironmentCallbackContext(executionContext, yarpResource, cancellationToken: cancellationToken);
 
             foreach (var cb in envAnnotations)
             {
-                await cb.Callback(context);
+                try
+                {
+                    await cb.Callback(context);
+                }
+                catch (Exception ex)
+                {
+                    logger.LogError(ex, "Error validating environment variable callback for YARP resource '{ResourceName}'", yarpResource.Name);
+                    throw;
+                }
             }
 
             var dict = new Dictionary<string, string?>();

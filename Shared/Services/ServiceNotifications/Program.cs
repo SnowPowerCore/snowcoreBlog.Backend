@@ -14,7 +14,6 @@ using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Routing.Constraints;
 using MinimalStepifiedSystem.Extensions;
 using NSwag;
-using Oakton;
 using Scalar.AspNetCore;
 using snowcoreBlog.Backend.Core.Entities.Notification;
 using snowcoreBlog.Backend.Infrastructure;
@@ -37,7 +36,6 @@ builder.Host.UseDefaultServiceProvider(static (c, options) =>
     options.ValidateScopes = true;
     options.ValidateOnBuild = true;
 });
-builder.Host.ApplyOaktonExtensions();
 
 builder.Services.Configure<MassTransitHostOptions>(static options =>
 {
@@ -239,4 +237,4 @@ if (app.Environment.IsDevelopment())
     });
 }
 
-await app.RunOaktonCommands(args);
+await app.RunAsync();
