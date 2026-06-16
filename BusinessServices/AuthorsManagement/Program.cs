@@ -21,6 +21,10 @@ using FastEndpoints;
 using FastEndpoints.OpenTelemetry.Middleware;
 using MinimalStepifiedSystem.Extensions;
 using snowcoreBlog.Backend.AuthorsManagement.Steps;
+using Marten.Services;
+using snowcoreBlog.Backend.Infrastructure;
+
+var serializer = new SystemTextJsonSerializer();
 
 var builder = WebApplication.CreateSlimBuilder(args);
 builder.Host.UseDefaultServiceProvider(static (c, opts) =>
@@ -55,8 +59,8 @@ builder.AddNpgsqlDataSource(connectionName: "db-snowcore-blog-entities");
 builder.Services.AddMarten(opts =>
 {
     opts.Policies.AllDocumentsSoftDeleted();
-    opts.UseSystemTextJsonForSerialization(configure: static o => o.SetJsonSerializationContext());
-
+    serializer.UseTypeInfoResolver(CoreSerializationContext.Default);
+    opts.Serializer(serializer);
     opts.RegisterCompiledQueryType(typeof(AuthorGetByUserIdQuery));
     opts.RegisterCompiledQueryType(typeof(AuthorExistsByUserIdQuery));
 })

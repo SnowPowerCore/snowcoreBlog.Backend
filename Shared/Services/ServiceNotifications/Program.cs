@@ -7,6 +7,7 @@ using FastEndpoints.OpenTelemetry.Middleware;
 using FastEndpoints.Security;
 using FastEndpoints.Swagger;
 using Marten;
+using Marten.Services;
 using MassTransit;
 using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.AspNetCore.HttpOverrides;
@@ -29,6 +30,7 @@ using snowcoreBlog.PublicApi.Extensions;
 using snowcoreBlog.ServiceDefaults.Extensions;
 
 var jsonStringEnumConverter = new JsonStringEnumConverter();
+var serializer = new SystemTextJsonSerializer();
 
 var builder = WebApplication.CreateSlimBuilder(args);
 builder.Host.UseDefaultServiceProvider(static (c, options) =>
@@ -71,10 +73,11 @@ builder.AddServiceDefaults();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddOpenTelemetry().ConnectBackendServices();
 builder.AddNpgsqlDataSource(connectionName: "db-snowcore-blog-entities");
-builder.Services.AddMarten(static options =>
+builder.Services.AddMarten(options =>
 {
     options.RegisterDocumentType<NotificationEntity>();
-    options.UseSystemTextJsonForSerialization(configure: static o => o.SetJsonSerializationContext());
+    serializer.UseTypeInfoResolver(CoreSerializationContext.Default);
+    options.Serializer(serializer);
     options.Policies.AllDocumentsSoftDeleted();
 })
     .UseLightweightSessions()

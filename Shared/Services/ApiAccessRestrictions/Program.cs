@@ -14,6 +14,10 @@ using snowcoreBlog.Backend.ApiAccessRestrictions.Repositories.Marten;
 using snowcoreBlog.Backend.ApiAccessRestrictions.Services;
 using snowcoreBlog.PublicApi.Extensions;
 using snowcoreBlog.Backend.ApiAccessRestrictions.Interfaces.Services;
+using Marten.Services;
+using snowcoreBlog.Backend.Infrastructure;
+
+var serializer = new SystemTextJsonSerializer();
 
 var builder = WebApplication.CreateSlimBuilder(args);
 
@@ -32,13 +36,14 @@ builder.WebHost.UseKestrelHttpsConfiguration();
 
 builder.Services.AddHttpContextAccessor();
 builder.AddNpgsqlDataSource(connectionName: "db-ip-restrictions-entities");
-builder.Services.AddMarten(static options =>
+builder.Services.AddMarten(options =>
 {
     options.RegisterDocumentType<IpRestrictionEntity>();
     options.RegisterDocumentType<RegionRestrictionEntity>();
     options.RegisterDocumentType<ApiAccessRuleEntity>();
     options.RegisterDocumentType<ApiAccessResponseTemplateEntity>();
-    options.UseSystemTextJsonForSerialization(configure: static o => o.SetJsonSerializationContext());
+    serializer.UseTypeInfoResolver(CoreSerializationContext.Default);
+    options.Serializer(serializer);
     options.Policies.AllDocumentsSoftDeleted();
 })
     .UseLightweightSessions()

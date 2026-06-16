@@ -1,6 +1,7 @@
 using Fido2NetLib;
 using FluentValidation;
 using Marten;
+using Marten.Services;
 using MassTransit;
 using Microsoft.AspNetCore.Identity;
 using snowcoreBlog.Backend.Core.Interfaces.Services;
@@ -14,6 +15,7 @@ using snowcoreBlog.Backend.IAM.Features.User;
 using snowcoreBlog.Backend.IAM.Interfaces.Repositories.Marten;
 using snowcoreBlog.Backend.IAM.Repositories.Marten;
 using snowcoreBlog.Backend.IAM.Validation;
+using snowcoreBlog.Backend.Infrastructure;
 using snowcoreBlog.Backend.Infrastructure.Extensions;
 using snowcoreBlog.Backend.Infrastructure.Services;
 using snowcoreBlog.Backend.Infrastructure.Utilities;
@@ -21,6 +23,8 @@ using snowcoreBlog.ServiceDefaults.Extensions;
 using System.Text.Json.Serialization;
 
 [assembly: JasperFx.JasperFxAssembly]
+
+var serializer = new SystemTextJsonSerializer();
 
 var builder = WebApplication.CreateSlimBuilder(args);
 builder.Host.UseDefaultServiceProvider(static (c, opts) =>
@@ -50,24 +54,25 @@ builder.AddServiceDefaults();
 builder.Services.AddOpenTelemetry().ConnectBackendServices();
 builder.AddNpgsqlDataSource(connectionName: "db-iam-entities", configureDataSourceBuilder: b => b.ConnectionStringBuilder.IncludeErrorDetail = true);
 //builder.Services.AddNpgsqlDataSource("Host=localhost;Port=54523;Username=postgres;Password=xQ6S1zf+)!kTnjFFCtt(Ks");
-builder.Services.AddMarten(static opts =>
+builder.Services.AddMarten(options =>
 {
-    opts.RegisterDocumentType<ApplicationAdminEntity>();
-    opts.RegisterDocumentType<ApplicationUserEntity>();
-    opts.RegisterDocumentType<ApplicationTempUserEntity>();
-    opts.RegisterDocumentType<Fido2AuthenticatorTransportEntity>();
-    opts.RegisterDocumentType<Fido2DevicePublicKeyEntity>();
-    opts.RegisterDocumentType<Fido2PublicKeyCredentialEntity>();
-    opts.RegisterCompiledQueryType(typeof(ApplicationGetTempUserByEmailQuery));
-    opts.RegisterCompiledQueryType(typeof(ApplicationTempUserByEmailQuery));
-    opts.RegisterCompiledQueryType(typeof(ApplicationTempUserByNickNameQuery));
-    opts.RegisterCompiledQueryType(typeof(PublicKeyCredentialByIdAndCredIdQuery));
-    opts.RegisterCompiledQueryType(typeof(PublicKeyCredentialGetByUserIdAndCredIdQuery));
-    opts.RegisterCompiledQueryType(typeof(PublicKeyCredentialsGetByUserIdQuery));
-    opts.UseSystemTextJsonForSerialization(configure: static o => o.SetJsonSerializationContext());
-    opts.Schema.For<ApplicationAdminEntity>().SoftDeleted();
-    opts.Schema.For<ApplicationUserEntity>().SoftDeleted();
-    opts.Schema.For<Fido2AuthenticatorTransportEntity>()
+    options.RegisterDocumentType<ApplicationAdminEntity>();
+    options.RegisterDocumentType<ApplicationUserEntity>();
+    options.RegisterDocumentType<ApplicationTempUserEntity>();
+    options.RegisterDocumentType<Fido2AuthenticatorTransportEntity>();
+    options.RegisterDocumentType<Fido2DevicePublicKeyEntity>();
+    options.RegisterDocumentType<Fido2PublicKeyCredentialEntity>();
+    options.RegisterCompiledQueryType(typeof(ApplicationGetTempUserByEmailQuery));
+    options.RegisterCompiledQueryType(typeof(ApplicationTempUserByEmailQuery));
+    options.RegisterCompiledQueryType(typeof(ApplicationTempUserByNickNameQuery));
+    options.RegisterCompiledQueryType(typeof(PublicKeyCredentialByIdAndCredIdQuery));
+    options.RegisterCompiledQueryType(typeof(PublicKeyCredentialGetByUserIdAndCredIdQuery));
+    options.RegisterCompiledQueryType(typeof(PublicKeyCredentialsGetByUserIdQuery));
+    serializer.UseTypeInfoResolver(CoreSerializationContext.Default);
+    options.Serializer(serializer);
+    options.Schema.For<ApplicationAdminEntity>().SoftDeleted();
+    options.Schema.For<ApplicationUserEntity>().SoftDeleted();
+    options.Schema.For<Fido2AuthenticatorTransportEntity>()
         .Index(static x => new { x.PublicKeyId, x.Value }, static x =>
         {
             x.Name = "iam_uq_fido2_auth_trnsprt_cred_id_val_idx";
@@ -75,7 +80,7 @@ builder.Services.AddMarten(static opts =>
         })
         .ForeignKey<Fido2PublicKeyCredentialEntity>(static x => x.PublicKeyId!, x => x.Name = "iam_fk_fido2_auth_trnsprt_pub_key_cred_idx")
         .SoftDeletedWithIndex(static x => x.Name = "iam_del_fido2_auth_trnsprt_idx");
-    opts.Schema.For<Fido2DevicePublicKeyEntity>()
+    options.Schema.For<Fido2DevicePublicKeyEntity>()
         .Index(static x => new { x.PublicKeyId, x.Value }, static x =>
         {
             x.Name = "iam_uq_fido2_dev_pub_key_cred_id_val_idx";
@@ -83,7 +88,7 @@ builder.Services.AddMarten(static opts =>
         })
         .ForeignKey<Fido2PublicKeyCredentialEntity>(static x => x.PublicKeyId!, x => x.Name = "iam_fk_fido2_dev_pub_key_pub_key_cred_idx")
         .SoftDeletedWithIndex(static x => x.Name = "iam_del_fido2_dev_pub_key_idx");
-    opts.Schema.For<Fido2PublicKeyCredentialEntity>()
+    options.Schema.For<Fido2PublicKeyCredentialEntity>()
         .Index(static x => x.PublicKeyCredentialId, static x =>
         {
             x.Name = "iam_pk_fido2_pub_key_cred_idx";

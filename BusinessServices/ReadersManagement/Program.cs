@@ -4,6 +4,7 @@ using FastEndpoints.Security;
 using FastEndpoints.Swagger;
 using Ixnas.AltchaNet;
 using Marten;
+using Marten.Services;
 using MassTransit;
 using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.AspNetCore.HttpOverrides;
@@ -46,6 +47,7 @@ using System.Text.Json.Serialization;
 [assembly: JasperFx.JasperFxAssembly]
 
 var jsonStringEnumConverter = new JsonStringEnumConverter();
+var serializer = new SystemTextJsonSerializer();
 
 var builder = WebApplication.CreateSlimBuilder(args);
 builder.Host.UseDefaultServiceProvider(static (c, options) =>
@@ -103,11 +105,12 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddOpenTelemetry().ConnectBackendServices();
 builder.AddNpgsqlDataSource(connectionName: "db-snowcore-blog-entities");
 //builder.Services.AddNpgsqlDataSource("Host=localhost;Port=54523;Username=postgres;Password=xQ6S1zf+)!kTnjFFCtt(Ks");
-builder.Services.AddMarten(static options =>
+builder.Services.AddMarten(options =>
 {
     options.RegisterDocumentType<ReaderEntity>();
     options.RegisterDocumentType<AltchaStoredChallengeEntity>();
-    options.UseSystemTextJsonForSerialization(configure: static o => o.SetJsonSerializationContext());
+    serializer.UseTypeInfoResolver(CoreSerializationContext.Default);
+    options.Serializer(serializer);
     options.Policies.AllDocumentsSoftDeleted();
 })
     .UseLightweightSessions()

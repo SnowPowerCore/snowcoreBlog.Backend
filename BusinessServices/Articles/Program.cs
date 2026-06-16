@@ -3,6 +3,7 @@ using FastEndpoints.OpenTelemetry.Middleware;
 using FastEndpoints.Swagger;
 using Ixnas.AltchaNet;
 using Marten;
+using Marten.Services;
 using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.AspNetCore.HttpOverrides;
 using MinimalStepifiedSystem.Extensions;
@@ -16,6 +17,7 @@ using snowcoreBlog.Backend.Articles.Services;
 using snowcoreBlog.Backend.Articles.Steps;
 using snowcoreBlog.Backend.Articles.Steps.Articles;
 using snowcoreBlog.Backend.Core.Entities.Article;
+using snowcoreBlog.Backend.Infrastructure;
 using snowcoreBlog.Backend.Infrastructure.Extensions;
 using snowcoreBlog.Backend.Infrastructure.Middleware;
 using snowcoreBlog.Backend.Infrastructure.Processors;
@@ -28,6 +30,7 @@ using System.Text.Json.Serialization;
 [assembly: JasperFx.JasperFxAssembly]
 
 var jsonStringEnumConverter = new JsonStringEnumConverter();
+var serializer = new SystemTextJsonSerializer();
 
 var builder = WebApplication.CreateSlimBuilder(args);
 builder.Host.UseDefaultServiceProvider(static (c, options) =>
@@ -61,11 +64,12 @@ builder.AddServiceDefaults();
 builder.AddNpgsqlDataSource(connectionName: "db-snowcore-blog-article-entities");
 //builder.Services.AddNpgsqlDataSource("Host=localhost;Port=54523;Username=postgres;Password=xQ6S1zf+)!kTnjFFCtt(Ks");
 
-builder.Services.AddMarten(static options =>
+builder.Services.AddMarten(options =>
 {
     options.RegisterDocumentType<ArticleEntity>();
     options.RegisterDocumentType<ArticleSnapshotEntity>();
-    options.UseSystemTextJsonForSerialization(configure: static o => o.SetJsonSerializationContext());
+    serializer.UseTypeInfoResolver(CoreSerializationContext.Default);
+    options.Serializer(serializer);
     options.Policies.AllDocumentsSoftDeleted();
 })
     .UseLightweightSessions()

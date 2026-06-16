@@ -8,6 +8,10 @@ using snowcoreBlog.Backend.UrlShortener.Repositories.Marten;
 using snowcoreBlog.Backend.Infrastructure.Extensions;
 using snowcoreBlog.ServiceDefaults.Extensions;
 using FastEndpoints;
+using Marten.Services;
+using snowcoreBlog.Backend.Infrastructure;
+
+var serializer = new SystemTextJsonSerializer();
 
 var builder = WebApplication.CreateSlimBuilder(args);
 builder.Host.UseDefaultServiceProvider(static (c, opts) =>
@@ -31,10 +35,11 @@ builder.WebHost.UseKestrelHttpsConfiguration();
 builder.AddServiceDefaults();
 builder.Services.AddOpenTelemetry().ConnectBackendServices();
 builder.AddNpgsqlDataSource(connectionName: "db-snowcore-blog-entities");
-builder.Services.AddMarten(opts =>
+builder.Services.AddMarten(options =>
 {
-    opts.Policies.AllDocumentsSoftDeleted();
-    opts.UseSystemTextJsonForSerialization(configure: static o => o.SetJsonSerializationContext());
+    options.Policies.AllDocumentsSoftDeleted();
+    serializer.UseTypeInfoResolver(CoreSerializationContext.Default);
+    options.Serializer(serializer);
 })
     .UseLightweightSessions()
     .UseNpgsqlDataSource();
