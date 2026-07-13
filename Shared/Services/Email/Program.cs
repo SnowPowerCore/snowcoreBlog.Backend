@@ -1,90 +1,37 @@
-using System.Text.Json.Serialization;
-using Amazon.Runtime;
-using Amazon.SimpleEmailV2;
-using Apizr;
-using Apizr.Extending.Configuring.Common;
-using FluentValidation;
-using MassTransit;
-using Microsoft.Extensions.Http.Resilience;
-using SendGrid.Extensions.DependencyInjection;
-using snowcoreBlog.Backend.Email.Api;
-using snowcoreBlog.Backend.Email.Core.Contracts;
-using snowcoreBlog.Backend.Email.Features.AmazonSimpleEmail;
-using snowcoreBlog.Backend.Email.Features.Validation;
-using snowcoreBlog.Backend.Email.Validation;
-using snowcoreBlog.Backend.Infrastructure.Extensions;
+using snowcoreBlog.Backend.Email.Extensions.Startup;
 using snowcoreBlog.ServiceDefaults.Extensions;
 
 var builder = WebApplication.CreateSlimBuilder(args);
+
+// Hosting configuration
 builder.Host.UseDefaultServiceProvider(static (c, opts) =>
 {
     opts.ValidateScopes = true;
     opts.ValidateOnBuild = true;
 });
 
-builder.Services.Configure<MassTransitHostOptions>(static options =>
-{
-    options.WaitUntilStarted = true;
-});
-
-builder.Services.ConfigureHttpJsonOptions(static options =>
-{
-    options.SerializerOptions.NumberHandling = JsonNumberHandling.AllowReadingFromString;
-    options.SerializerOptions.SetJsonSerializationContext();
-});
-
 builder.WebHost.UseKestrelHttpsConfiguration();
 builder.AddServiceDefaults();
-builder.Services.AddSendGrid(options => options.ApiKey = builder.Configuration["Integrations:SendGrid:ApiKey"]);
-var awsOption = builder.Configuration.GetAWSOptions("Integrations:AWS");
-awsOption.Credentials = new BasicAWSCredentials(builder.Configuration["Integrations:AWS:AccessKey"], builder.Configuration["Integrations:AWS:SecretKey"]);
-builder.Services.AddDefaultAWSOptions(awsOption);
-builder.Services.AddAWSService<IAmazonSimpleEmailServiceV2>();
-builder.Services.AddMassTransit(busConfigurator =>
-{
-    busConfigurator.AddConsumer<SendGenericEmailUsingAmazonSimpleEmailConsumer>();
-    busConfigurator.AddConsumer<SendTemplatedEmailUsingAmazonSimpleEmailConsumer>();
-    busConfigurator.AddConsumer<CheckEmailDomainConsumer>();
-    busConfigurator.ConfigureHttpJsonOptions(static o =>
-    {
-        o.SerializerOptions.NumberHandling = JsonNumberHandling.AllowReadingFromString;
-        o.SerializerOptions.SetJsonSerializationContext();
-    });
-    busConfigurator.UsingRabbitMq((context, config) =>
-    {
-        config.ConfigureJsonSerializerOptions(static options => options.SetJsonSerializationContext());
-        config.Host(builder.Configuration.GetConnectionString("rabbitmq"));
-        config.ConfigureEndpoints(context);
-    });
-});
-builder.AddRedisClient(connectionName: "cache");
 
-builder.Services.AddSingleton<IValidator<SendGenericEmail>, GenericEmailValidator>();
-builder.Services.AddSingleton<IValidator<SendTemplatedEmail>, TemplatedEmailValidator>();
-builder.Services.AddSingleton<IValidator<CheckEmailDomain>, CheckEmailDomainValidator>();
+// Redis cache
+builder.AddRedisClientConfiguration("cache");
 
-Action<IApizrExtendedCommonOptionsBuilder> optionsBuilder = options =>
-{
-    options.ConfigureHttpClientBuilder(builder => builder
-        .AddStandardResilienceHandler(config =>
-        {
-            config.Retry = new HttpRetryStrategyOptions
-            {
-                UseJitter = true,
-                MaxRetryAttempts = 3,
-                Delay = TimeSpan.FromSeconds(0.5)
-            };
-        }))
-        .WithPriority();
-};
+// Email services (SendGrid, AWS SES)
+builder.Services.AddEmailServiceConfiguration(builder.Configuration);
 
-builder.Services.AddApizr(
-    registry => registry
-        .AddManagerFor<IEmailDisposableApi>(opts => opts.WithBaseAddress("https://disposable.github.io"))
-        .AddManagerFor<IStaticEmailDisposableApi>(opts => opts.WithBaseAddress("https://rawcdn.githack.com")),
-    optionsBuilder);
+// MassTransit configuration
+builder.Services.AddMassTransitConfiguration(
+    builder.Configuration.GetConnectionString("rabbitmq"));
+
+// Validation services
+builder.Services.AddValidationConfiguration();
+
+// External API configuration (Apizr for disposable email detection)
+builder.Services.AddExternalApiConfiguration();
 
 var app = builder.Build();
+
 app.UseHttpsRedirection();
 app.MapDefaultEndpoints();
+
 await app.RunAsync();

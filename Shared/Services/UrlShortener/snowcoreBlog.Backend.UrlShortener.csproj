@@ -32,6 +32,7 @@
 
   <ItemGroup>
     <Folder Include="Endpoints\" />
+    <Folder Include="Extensions\" />
   </ItemGroup>
 
   <ItemGroup>

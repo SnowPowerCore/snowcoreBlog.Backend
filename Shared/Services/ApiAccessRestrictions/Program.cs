@@ -1,146 +1,36 @@
-using System.Globalization;
-using System.Text.Json;
-using System.Text.Json.Serialization;
-using FastEndpoints;
-using FastEndpoints.Swagger;
-using Marten;
-using MassTransit;
-using Microsoft.AspNetCore.CookiePolicy;
-using Microsoft.AspNetCore.Localization;
-using Microsoft.AspNetCore.Routing.Constraints;
-using snowcoreBlog.Backend.Infrastructure.Extensions;
-using snowcoreBlog.Backend.ApiAccessRestrictions.Entities;
-using snowcoreBlog.Backend.ApiAccessRestrictions.Repositories.Marten;
-using snowcoreBlog.Backend.ApiAccessRestrictions.Services;
-using snowcoreBlog.PublicApi.Extensions;
-using snowcoreBlog.Backend.ApiAccessRestrictions.Interfaces.Services;
-using Marten.Services;
-using snowcoreBlog.Backend.Infrastructure;
-
-var serializer = new SystemTextJsonSerializer();
+using snowcoreBlog.Backend.ApiAccessRestrictions.Extensions.Startup;
 
 var builder = WebApplication.CreateSlimBuilder(args);
 
-builder.Services.ConfigureHttpJsonOptions(static options =>
-{
-    options.SerializerOptions.NumberHandling = JsonNumberHandling.AllowReadingFromString;
-    options.SerializerOptions.SetJsonSerializationContext();
-});
+// Hosting configuration
+builder.UseServiceDefaultsConfiguration();
 
-builder.Services.Configure<RouteOptions>(static options =>
-{
-    options.SetParameterPolicy<RegexInlineRouteConstraint>("regex");
-});
+// PostgreSQL and Marten
+builder.AddNpgsqlDataSourceConfiguration("db-ip-restrictions-entities");
+builder.Services.AddMartenConfiguration();
 
-builder.WebHost.UseKestrelHttpsConfiguration();
+// Redis cache
+builder.AddRedisClientConfiguration("cache");
 
-builder.Services.AddHttpContextAccessor();
-builder.AddNpgsqlDataSource(connectionName: "db-ip-restrictions-entities");
-builder.Services.AddMarten(options =>
-{
-    options.RegisterDocumentType<IpRestrictionEntity>();
-    options.RegisterDocumentType<RegionRestrictionEntity>();
-    options.RegisterDocumentType<ApiAccessRuleEntity>();
-    options.RegisterDocumentType<ApiAccessResponseTemplateEntity>();
-    serializer.UseTypeInfoResolver(CoreSerializationContext.Default);
-    options.Serializer(serializer);
-    options.Policies.AllDocumentsSoftDeleted();
-})
-    .UseLightweightSessions()
-    .UseNpgsqlDataSource();
+// MassTransit configuration
+builder.Services.AddMassTransitConfiguration(
+    builder.Configuration.GetConnectionString("rabbitmq"));
 
-builder.Services.AddMassTransit(busConfigurator =>
-{
-    busConfigurator.ConfigureHttpJsonOptions(static o =>
-    {
-        o.SerializerOptions.NumberHandling = JsonNumberHandling.AllowReadingFromString;
-        o.SerializerOptions.SetJsonSerializationContext();
-    });
-    busConfigurator.UsingRabbitMq((context, config) =>
-    {
-        config.ConfigureJsonSerializerOptions(static options => options.SetJsonSerializationContext());
-        config.Host(builder.Configuration.GetConnectionString("rabbitmq"));
-        config.ConfigureEndpoints(context);
-    });
-});
+// Hosting options
+builder.Services.AddHostingConfiguration();
 
+// OpenTelemetry
+builder.Services.AddTelemetryConfiguration();
 
-builder.AddRedisClient(connectionName: "cache");
-
-const int GlobalVersion = 1;
-
-var jsonStringEnumConverter = new JsonStringEnumConverter();
-
-builder.Services.AddAuthorization()
-    .AddFastEndpoints(static options =>
-    {
-        options.SourceGeneratorDiscoveredTypes.AddRange(snowcoreBlog.Backend.ApiAccessRestrictions.DiscoveredTypes.All);
-    })
-    .SwaggerDocument(options =>
-    {
-        options.AutoTagPathSegmentIndex = 0;
-        options.ShortSchemaNames = true;
-        options.MaxEndpointVersion = GlobalVersion;
-        options.SerializerSettings = s =>
-        {
-            s.Converters.Add(jsonStringEnumConverter);
-            s.SetJsonSerializationContext();
-            s.PropertyNamingPolicy = null;
-        };
-    });
-
-builder.Services.AddScoped<IIpRestrictionRepository, IpRestrictionRepository>();
-builder.Services.AddScoped<IRequestRestrictionService, RequestRestrictionService>();
-builder.Services.AddScoped<IRegionRestrictionRepository, RegionRestrictionRepository>();
-builder.Services.AddScoped<IApiAccessRuleRepository, ApiAccessRuleRepository>();
-builder.Services.AddScoped<IApiAccessResponseTemplateRepository, ApiAccessResponseTemplateRepository>();
-builder.Services.AddScoped<IApiAccessRestrictionEvaluator, ApiAccessRestrictionEvaluator>();
+// FastEndpoints
+builder.Services.AddFastEndpointsConfiguration();
 
 var app = builder.Build();
 
-const string DefaultCulture = "en";
-var supportedCultures = new[]
-{
-    new CultureInfo(DefaultCulture)
-};
+// Middleware pipeline
+app.UseApplicationMiddleware();
 
-app.UseHttpsRedirection()
-    .UseCookiePolicy(new()
-    {
-        MinimumSameSitePolicy = SameSiteMode.Strict,
-        HttpOnly = HttpOnlyPolicy.Always,
-        Secure = CookieSecurePolicy.Always
-    })
-    .UseRequestLocalization(options =>
-    {
-        options.DefaultRequestCulture = new RequestCulture(DefaultCulture);
-        options.SupportedCultures = supportedCultures;
-        options.SupportedUICultures = supportedCultures;
-        options.RequestCultureProviders = [new AcceptLanguageHeaderRequestCultureProvider()];
-    })
-    .UseAuthorization()
-    .UseFastEndpoints(c =>
-    {
-        c.Endpoints.NameGenerator = static ctx =>
-        {
-            var currentName = ctx.EndpointType.Name;
-            return currentName.TrimEnd("Endpoint");
-        };
-        c.Endpoints.ShortNames = true;
-        c.Endpoints.RoutePrefix = default;
-        c.Versioning.Prefix = "v";
-        c.Serializer.Options.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
-        c.Serializer.Options.Converters.Add(jsonStringEnumConverter);
-        c.Serializer.Options.SetJsonSerializationContext();
-    });
+// Endpoints
+app.MapEndpoints();
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseDeveloperExceptionPage();
-    app.UseOpenApi(c =>
-    {
-        c.Path = "/openapi/{documentName}.json";
-    });
-}
-
-await app.RunAsync();
+await app.RunApplicationAsync();

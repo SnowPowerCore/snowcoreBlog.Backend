@@ -190,6 +190,12 @@ public static class YarpResourceExtensions
 
         builder.Services.AddServiceDiscovery();
 
+        // Apply service discovery to ALL HttpClients in the gateway, mirroring the
+        // ServiceDefaults pattern. Without this, HttpClients with Aspire service
+        // names as hosts (e.g. "backend-apiaccessrestrictions") fall back to DNS
+        // and fail with "No such host is known".
+        builder.Services.ConfigureHttpClientDefaults(http => http.AddServiceDiscovery());
+
         // Local (in-process) restrictions evaluation support.
         builder.Services.AddApiAccessRestrictionsGatewayIntegration();
 
