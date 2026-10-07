@@ -27,10 +27,16 @@ builder.Services.AddFastEndpointsConfiguration();
 // Core services
 builder.Services.AddCoreServicesConfiguration();
 
+// ActualLab.Fusion: real-time author display name availability compute service + RPC WebSocket server
+builder.Services.AddFusionConfiguration();
+
 var app = builder.Build();
 
 // Middleware pipeline
 app.UseApplicationMiddleware();
+
+// Fusion: enable WebSockets + map the RPC WebSocket endpoint (/fusion/ws) before endpoints
+app.UseFusionConfiguration();
 
 // Endpoints
 app.MapEndpoints();

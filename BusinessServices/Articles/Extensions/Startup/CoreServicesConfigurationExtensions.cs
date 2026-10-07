@@ -15,6 +15,7 @@ public static class CoreServicesConfigurationExtensions
         services.AddScoped<GenerateSlugStep>();
         services.AddScoped<SaveArticleStep>();
         services.AddScoped<GetArticlesCachedStep>();
+        services.AddScoped<GetArticleBySlugStep>();
 
         services.AddHostedService(static sp =>
             new ApplicationLaunchWorker(sp.GetRequiredService<IHostApplicationLifetime>(),

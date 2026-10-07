@@ -23,17 +23,26 @@ public class ArticlesApplicationLaunchService(IServiceProvider serviceProvider) 
             // Seed articles and snapshots from ArticleSeedData
             foreach (var article in ArticleSeedData.Articles)
             {
-                // Find the initial snapshot(s) for this article
-                var initial = ArticleSeedData.Snapshots.OrderBy(s => s.ModifiedAt).FirstOrDefault(s => s.ArticleId == article.Id);
-                if (initial is default(ArticleSnapshotEntity))
+                // All versions of the article ordered oldest → newest
+                var snapshots = ArticleSeedData.Snapshots
+                    .Where(s => s.ArticleId == article.Id)
+                    .OrderBy(s => s.ModifiedAt)
+                    .ToArray();
+
+                if (snapshots.Length == 0)
                     continue;
 
-                // Ensure article.LatestSnapshotId references the snapshot we are inserting
-                var entityToInsert = article with { LatestSnapshotId = initial.Id };
+                // Ensure article.LatestSnapshotId references the NEWEST snapshot we are inserting
+                var latest = snapshots[^1];
+                var entityToInsert = article with { LatestSnapshotId = latest.Id };
 
                 try
                 {
-                    await articleRepository.InsertArticleWithSnapshotAsync(entityToInsert, initial);
+                    await articleRepository.InsertArticleWithSnapshotAsync(entityToInsert, latest);
+
+                    // Insert the older snapshots as version history
+                    for (var i = 0; i < snapshots.Length - 1; i++)
+                        await articleRepository.InsertSnapshotAsync(snapshots[i]);
                 }
                 catch
                 {

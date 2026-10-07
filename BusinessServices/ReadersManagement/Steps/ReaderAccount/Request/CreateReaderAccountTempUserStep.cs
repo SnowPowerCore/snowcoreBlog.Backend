@@ -11,13 +11,15 @@ using snowcoreBlog.Backend.ReadersManagement.Constants;
 using snowcoreBlog.Backend.ReadersManagement.Context;
 using snowcoreBlog.Backend.ReadersManagement.Delegates;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
+using snowcoreBlog.PublicApi.Services;
 using snowcoreBlog.PublicApi.Utilities.DataResult;
 
 namespace snowcoreBlog.Backend.ReadersManagement.Steps.ReaderAccount.Request;
 
 public class CreateReaderAccountTempUserStep(IRequestClient<CreateTempUser> client,
                                              IOptions<ProjectOptions> projectOptions,
-                                             IPublishEndpoint publishEndpoint) : IStep<RequestCreateReaderAccountDelegate, RequestCreateReaderAccountContext, IMaybe<RequestReaderAccountCreationResultDto>>
+                                             IPublishEndpoint publishEndpoint,
+                                             INickNameAvailabilityService nickNameAvailability) : IStep<RequestCreateReaderAccountDelegate, RequestCreateReaderAccountContext, IMaybe<RequestReaderAccountCreationResultDto>>
 {
     public async Task<IMaybe<RequestReaderAccountCreationResultDto>> InvokeAsync(RequestCreateReaderAccountContext context, RequestCreateReaderAccountDelegate next, CancellationToken token = default)
     {
@@ -41,6 +43,10 @@ public class CreateReaderAccountTempUserStep(IRequestClient<CreateTempUser> clie
                     responseObj.Email,
                     url,
                     verificationTokenExpDateStr), token);
+
+            // The nickname is now reserved by the temp user — invalidate its cached
+            // Fusion availability so every connected client re-checks in real time.
+            await nickNameAvailability.NotifyReservedAsync(context.CreateRequest.NickName, token);
 
             return Maybe.Create<RequestReaderAccountCreationResultDto>(new(responseObj.Id));
         }

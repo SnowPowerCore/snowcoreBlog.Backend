@@ -9,4 +9,5 @@ public interface IArticleRepository
     Task InsertSnapshotAsync(ArticleSnapshotEntity snapshot, CancellationToken ct = default);
     Task<ArticleSnapshotEntity?> GetLatestSnapshotAsync(Guid articleId, CancellationToken ct = default);
     Task<List<(ArticleEntity Article, ArticleSnapshotEntity? Snapshot)>> GetLatestArticlesWithSnapshotsAsync(int count, CancellationToken ct = default);
+    Task<(ArticleEntity Article, ArticleSnapshotEntity? Snapshot)?> GetBySlugWithLatestSnapshotAsync(string slug, CancellationToken ct = default);
 }

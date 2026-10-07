@@ -33,6 +33,7 @@ public static class MartenConfigurationExtensions
         {
             opts.RegisterCompiledQueryType(typeof(AuthorGetByUserIdQuery));
             opts.RegisterCompiledQueryType(typeof(AuthorExistsByUserIdQuery));
+            opts.RegisterCompiledQueryType(typeof(AuthorExistsByDisplayNameQuery));
         });
 
         return services;

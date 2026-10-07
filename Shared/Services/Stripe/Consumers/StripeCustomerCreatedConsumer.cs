@@ -23,7 +23,7 @@ public class StripeCustomerCreatedConsumer : IConsumer<StripeCustomerCreated>
             Email = context.Message.Email,
             Name = context.Message.Name
         });
-        _logger.LogInformation($"Created Stripe customer with ID: {customer.Id}");
+        _logger.LogInformation("Created Stripe customer with ID: {CustomerId}", customer.Id);
         // Optionally respond or publish event
     }
 }

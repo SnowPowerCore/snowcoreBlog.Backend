@@ -12,6 +12,11 @@
   <ItemGroup>
     <PackageReference Include="Aspire.Npgsql" />
     <PackageReference Include="Aspire.StackExchange.Redis" />
+    <PackageReference Include="ActualLab.Fusion" />
+    <PackageReference Include="ActualLab.Fusion.Server" />
+    <PackageReference Include="ActualLab.Fusion.Blazor.Authentication" />
+    <PackageReference Include="ActualLab.Generators" PrivateAssets="all" />
+    <PackageReference Include="ActualLab.Rpc" />
     <PackageReference Include="FastEndpoints" />
     <PackageReference Include="FastEndpoints.Security" />
     <PackageReference Include="FastEndpoints.Generator">

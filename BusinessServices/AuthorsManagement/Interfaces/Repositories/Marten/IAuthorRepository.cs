@@ -8,4 +8,6 @@ public interface IAuthorRepository : IRepository<AuthorEntity>
 	Task<AuthorEntity?> GetByUserIdAsync(Guid userId, CancellationToken token = default);
 
 	Task<bool> AnyByUserIdAsync(Guid userId, CancellationToken token = default);
+
+	Task<bool> AnyByDisplayNameAsync(string displayName, CancellationToken token = default);
 }

@@ -16,4 +16,8 @@ public class AuthorRepository(IDocumentSession session) : BaseMartenRepository<A
 	public Task<bool> AnyByUserIdAsync(Guid userId, CancellationToken token = default) =>
 		AnyByQueryAsync(MartenCompiledQueryProvider<AuthorEntity, bool>
 			.Create(new AuthorExistsByUserIdQuery { UserId = userId }), token);
+
+	public Task<bool> AnyByDisplayNameAsync(string displayName, CancellationToken token = default) =>
+		AnyByQueryAsync(MartenCompiledQueryProvider<AuthorEntity, bool>
+			.Create(new AuthorExistsByDisplayNameQuery { DisplayName = displayName }), token);
 }

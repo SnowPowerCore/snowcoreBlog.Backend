@@ -50,4 +50,16 @@ public class ArticleRepository(IQuerySession querySession, IDocumentSession docS
 
         return articles.Select(a => (a, latestByArticle.TryGetValue(a.Id, out var snap) ? snap : null)).ToList();
     }
+
+    public async Task<(ArticleEntity Article, ArticleSnapshotEntity? Snapshot)?> GetBySlugWithLatestSnapshotAsync(string slug, CancellationToken ct = default)
+    {
+        var article = await querySession.Query<ArticleEntity>()
+            .FirstOrDefaultAsync(x => x.Slug == slug, ct);
+
+        if (article is null)
+            return null;
+
+        var snapshot = await GetLatestSnapshotAsync(article.Id, ct);
+        return (article, snapshot);
+    }
 }

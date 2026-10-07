@@ -10,7 +10,7 @@ using snowcoreBlog.Backend.ReadersManagement.Steps.Attestation;
 using snowcoreBlog.Backend.ReadersManagement.Steps.NickName;
 using snowcoreBlog.Backend.ReadersManagement.Steps.ReaderAccount.Confirm;
 using snowcoreBlog.Backend.ReadersManagement.Steps.ReaderAccount.Request;
-using System.IdentityModel.Tokens.Jwt;
+using Microsoft.IdentityModel.JsonWebTokens;
 
 namespace snowcoreBlog.Backend.ReadersManagement.Extensions.Startup;
 
@@ -20,7 +20,7 @@ public static class CoreServicesConfigurationExtensions
     {
         services.AddHttpContextAccessor();
         services.AddScoped<IHasher, Argon2Hasher>();
-        services.AddScoped<JwtSecurityTokenHandler>();
+        services.AddScoped<JsonWebTokenHandler>();
         services.AddScoped<UserCookieJsonWebTokenMiddleware>();
 
         // Steps

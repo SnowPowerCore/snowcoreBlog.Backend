@@ -242,7 +242,7 @@ namespace snowcoreBlog.Backend.IAM.Stores
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Failed to add claims to the user {user.Email} in Marten.");
+                _logger.LogError(ex, "Failed to add claims to the user {Email} in Marten.", user.Email);
             }
         }
 
@@ -284,7 +284,7 @@ namespace snowcoreBlog.Backend.IAM.Stores
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Failed to add claims to the user {user.Email} in Marten.");
+                _logger.LogError(ex, "Failed to add claims to the user {Email} in Marten.", user.Email);
             }
         }
 

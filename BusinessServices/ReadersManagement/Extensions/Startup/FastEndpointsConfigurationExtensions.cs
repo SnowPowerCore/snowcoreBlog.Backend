@@ -2,6 +2,7 @@ using FastEndpoints;
 using FastEndpoints.Security;
 using FastEndpoints.Swagger;
 using MassTransit;
+using Microsoft.IdentityModel.Tokens;
 using snowcoreBlog.Backend.Core.Constants;
 using snowcoreBlog.Backend.Infrastructure;
 using snowcoreBlog.Backend.Infrastructure.Extensions;
@@ -9,6 +10,7 @@ using snowcoreBlog.Backend.Infrastructure.Processors;
 using snowcoreBlog.Backend.Infrastructure.Utilities;
 using snowcoreBlog.PublicApi.Extensions;
 using System.Net.Mime;
+using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -24,6 +26,20 @@ public static class FastEndpointsConfigurationExtensions
         string signingKey)
     {
         services.AddAuthenticationJwtBearer(s => s.SigningKey = signingKey);
+
+        // Mirror the signing configuration used by JwtTokenCreator.CreateToken so endpoints
+        // can both verify AND read claims from a token issued by the gateway.
+        // JwtTokenCreator signs with: new SymmetricSecurityKey(Encoding.ASCII.GetBytes(signingKey))
+        services.AddSingleton(new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(signingKey)),
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            ValidateLifetime = true,
+            ClockSkew = TimeSpan.FromMinutes(5)
+        });
+
         services.AddAuthorization()
             .AddAntiforgery()
             .AddFastEndpoints(static options =>

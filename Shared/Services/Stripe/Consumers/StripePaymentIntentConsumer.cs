@@ -24,7 +24,7 @@ public class StripePaymentIntentConsumer : IConsumer<StripePaymentIntent>
             Currency = context.Message.Currency,
             Customer = context.Message.CustomerId
         });
-        _logger.LogInformation($"Created Stripe payment intent with ID: {paymentIntent.Id}");
+        _logger.LogInformation("Created Stripe payment intent with ID: {PaymentIntentId}", paymentIntent.Id);
         // Optionally respond or publish event
     }
 }
