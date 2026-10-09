@@ -48,7 +48,10 @@ public class GetArticleBySlugStep(IArticleRepository articleRepository, IConnect
             PublishedAt = article.PublishedAt,
             ModifiedAt = snapshot?.ModifiedAt,
             Tags = article.Tags,
-            CoverImageUrl = article.CoverImageUrl
+            CoverImageUrl = article.CoverImageUrl,
+            Category = article.Category,
+            Excerpt = snapshot?.Excerpt,
+            MetaDescription = snapshot?.MetaDescription
         };
 
         // Cache the serialized DTO for TTL

@@ -35,6 +35,10 @@ builder.Services.AddHostingConfiguration();
 builder.Services.AddFastEndpointsConfiguration(
     builder.Configuration["Security:Signing:User:SigningKey"] ?? throw new InvalidOperationException("Signing key not configured"));
 
+// External identity providers (Microsoft / Google / Apple) — schemes are only
+// registered when their credentials are present in Integrations:ExternalAuth.
+builder.Services.AddExternalAuthenticationConfiguration(builder.Configuration);
+
 // Core services
 builder.Services.AddCoreServicesConfiguration();
 

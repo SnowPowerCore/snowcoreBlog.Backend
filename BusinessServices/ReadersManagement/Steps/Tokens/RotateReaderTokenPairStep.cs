@@ -14,6 +14,7 @@ using snowcoreBlog.Backend.ReadersManagement.Delegates;
 using snowcoreBlog.Backend.ReadersManagement.Extensions;
 using snowcoreBlog.Backend.ReadersManagement.Models;
 using snowcoreBlog.Backend.ReadersManagement.Options;
+using snowcoreBlog.Backend.ReadersManagement.Services;
 using snowcoreBlog.PublicApi.Utilities.Api;
 using snowcoreBlog.PublicApi.Utilities.DataResult;
 using StackExchange.Redis;
@@ -24,6 +25,7 @@ public sealed class RotateReaderTokenPairStep(
     IHttpContextAccessor httpContextAccessor,
     IRequestClient<GetUserTokenPairWithPayload> requestClient,
     IOptions<ReaderAccountTokenRequirementOptions> tokenReqOpts,
+    ReaderAccountTokenPairIssuer tokenPairIssuer,
     IConnectionMultiplexer redis) : IStep<RefreshReaderJwtPairDelegate, RefreshReaderJwtPairContext, IMaybe<RefreshReaderJwtPairOperationResult>>
 {
     public async Task<IMaybe<RefreshReaderJwtPairOperationResult>> InvokeAsync(
@@ -44,6 +46,18 @@ public sealed class RotateReaderTokenPairStep(
 
         var tokenRequest = tokenReqOpts.Value.ToGetUserTokenPairWithPayload();
         foreach (var kv in record.Claims)
+            tokenRequest.Claims[kv.Key] = kv.Value;
+
+        // Re-ask the configured claim providers so claims granted after sign-in
+        // (e.g. a reader that became an author) are picked up without forcing a
+        // full re-authentication. Base claims from the stored record stay in
+        // place; fresh provider claims override them. Provider outages are
+        // tolerated by the issuer — the record claims are then kept as-is.
+        var freshClaims = await tokenPairIssuer.MergeExternalClaimsAsync(
+            record.UserId,
+            record.Claims.GetValueOrDefault(ReaderAccountClaimConstants.ReaderAccountEmailClaimKey) ?? string.Empty,
+            token);
+        foreach (var kv in freshClaims)
             tokenRequest.Claims[kv.Key] = kv.Value;
 
         var result = await requestClient.GetResponse<DataResult<UserTokenPairWithPayloadGenerated>>(
@@ -69,7 +83,9 @@ public sealed class RotateReaderTokenPairStep(
         var newRecord = new ReaderRefreshTokenRecord
         {
             UserId = record.UserId,
-            Claims = new Dictionary<string, string>(record.Claims, StringComparer.Ordinal),
+            // Persist the merged claims (base + fresh provider claims) so the
+            // next rotation keeps the refreshed claim set.
+            Claims = new Dictionary<string, string>(tokenRequest.Claims, StringComparer.Ordinal),
             ExpiresAt = newPair.RefreshTokenExpiresAt
         };
 

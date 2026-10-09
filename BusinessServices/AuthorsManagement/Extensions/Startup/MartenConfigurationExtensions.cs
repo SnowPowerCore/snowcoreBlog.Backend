@@ -18,23 +18,18 @@ public static class MartenConfigurationExtensions
             opts.Policies.AllDocumentsSoftDeleted();
             Serializer.UseTypeInfoResolver(CoreSerializationContext.Default);
             opts.Serializer(Serializer);
+
+            // Compiled queries MUST be registered on the same StoreOptions instance —
+            // a second AddMarten call would create a fresh DocumentStore with a default
+            // serializer (no TypeInfoResolver) that wins DI and breaks JSON serialization.
+            opts.RegisterCompiledQueryType(typeof(AuthorGetByUserIdQuery));
+            opts.RegisterCompiledQueryType(typeof(AuthorExistsByUserIdQuery));
+            opts.RegisterCompiledQueryType(typeof(AuthorExistsByDisplayNameQuery));
         })
             .UseLightweightSessions()
             .UseNpgsqlDataSource();
 
         services.AddScoped<IAuthorRepository, AuthorRepository>();
-
-        return services;
-    }
-
-    public static IServiceCollection AddCompiledQueriesConfiguration(this IServiceCollection services)
-    {
-        services.AddMarten(opts =>
-        {
-            opts.RegisterCompiledQueryType(typeof(AuthorGetByUserIdQuery));
-            opts.RegisterCompiledQueryType(typeof(AuthorExistsByUserIdQuery));
-            opts.RegisterCompiledQueryType(typeof(AuthorExistsByDisplayNameQuery));
-        });
 
         return services;
     }

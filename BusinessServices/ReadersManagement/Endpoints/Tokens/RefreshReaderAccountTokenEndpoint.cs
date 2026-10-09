@@ -32,6 +32,9 @@ public class RefreshReaderAccountTokenEndpoint : Endpoint<string, ApiResponse?>
         Post("tokens/refresh");
         Version(1);
         SerializerContext(CoreSerializationContext.Default);
+        // Accepts an empty JSON body (cookie-only proactive rotation) instead of
+        // failing with a JSON serializer error before the step pipeline runs.
+        RequestBinder(new RefreshTokenRequestBinder());
         AllowAnonymous();
         Description(b => b
             .WithTags(ApiTagConstants.Tokens)

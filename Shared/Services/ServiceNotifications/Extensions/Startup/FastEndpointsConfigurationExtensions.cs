@@ -22,10 +22,7 @@ public static class FastEndpointsConfigurationExtensions
         services.AddAuthenticationJwtBearer(s => s.SigningKey = signingKey);
         services.AddAuthorization()
             .AddAntiforgery()
-            .AddFastEndpoints(static options =>
-            {
-                options.SourceGeneratorDiscoveredTypes.AddRange(DiscoveredTypes.All);
-            })
+            .AddFastEndpoints()
             .SwaggerDocument(options =>
             {
                 options.AutoTagPathSegmentIndex = 0;

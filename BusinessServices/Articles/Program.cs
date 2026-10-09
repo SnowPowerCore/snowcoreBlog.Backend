@@ -18,10 +18,14 @@ builder.AddRedisClientConfiguration(connectionName: "cache");
 builder.Services.AddHostingConfiguration();
 
 // FastEndpoints
-builder.Services.AddFastEndpointsConfiguration();
+builder.Services.AddFastEndpointsConfiguration(
+    builder.Configuration["Security:Signing:User:SigningKey"]!);
 
 // Core services
 builder.Services.AddCoreServicesConfiguration();
+
+// FluentValidation (FastEndpoints auto-wires registered IValidator<T> instances)
+builder.Services.AddValidationConfiguration();
 
 var app = builder.Build();
 

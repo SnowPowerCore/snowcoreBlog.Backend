@@ -42,10 +42,7 @@ public static class FastEndpointsConfigurationExtensions
 
         services.AddAuthorization()
             .AddAntiforgery()
-            .AddFastEndpoints(static options =>
-            {
-                options.SourceGeneratorDiscoveredTypes.AddRange(DiscoveredTypes.All);
-            })
+            .AddFastEndpoints()
             .SwaggerDocument(options =>
             {
                 options.AutoTagPathSegmentIndex = 0;

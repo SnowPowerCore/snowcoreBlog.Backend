@@ -6,4 +6,6 @@ public class UserConstants
     public const string UserNotFoundError = nameof(UserNotFoundError);
     public const string UserTokenVerificationError = nameof(UserTokenVerificationError);
     public const string CredentialsVerificationError = nameof(CredentialsVerificationError);
+    public const string UserTotpCodeVerificationError = nameof(UserTotpCodeVerificationError);
+    public const string UserTotpNotConfiguredError = nameof(UserTotpNotConfiguredError);
 }

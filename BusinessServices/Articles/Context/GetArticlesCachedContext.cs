@@ -1,3 +1,3 @@
 namespace snowcoreBlog.Backend.Articles.Context;
 
-public class GetArticlesCachedContext { }
+public class GetArticlesCachedContext;

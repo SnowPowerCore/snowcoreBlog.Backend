@@ -21,6 +21,9 @@ public static class MassTransitConfigurationExtensions
         {
             busConfigurator.AddConsumer<CheckAndPerformAssertionConsumer>();
             busConfigurator.AddConsumer<ValidateAndCreateUserConsumer>();
+            busConfigurator.AddConsumer<ValidateAndCreateUserWithAuthenticatorConsumer>();
+            busConfigurator.AddConsumer<SetupUserAuthenticatorConsumer>();
+            busConfigurator.AddConsumer<ValidateUserOneTimeCodeConsumer>();
             busConfigurator.AddConsumer<CreateTempUserConsumer>();
             busConfigurator.AddConsumer<ValidateUserExistsConsumer>();
             busConfigurator.AddConsumer<ValidateTempUserExistsConsumer>();

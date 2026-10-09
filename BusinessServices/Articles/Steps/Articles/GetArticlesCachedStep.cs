@@ -44,7 +44,10 @@ public class GetArticlesCachedStep(IArticleRepository articleRepository, IConnec
             PublishedAt = r.Article.PublishedAt,
             ModifiedAt = r.Snapshot?.ModifiedAt,
             Tags = r.Article.Tags,
-            CoverImageUrl = r.Article.CoverImageUrl
+            CoverImageUrl = r.Article.CoverImageUrl,
+            Category = r.Article.Category,
+            Excerpt = r.Snapshot?.Excerpt,
+            MetaDescription = r.Snapshot?.MetaDescription
         }).ToList();
 
         // Cache the serialized DTO list for TTL

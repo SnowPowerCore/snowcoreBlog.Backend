@@ -21,6 +21,7 @@
     </PackageReference>
     <PackageReference Include="ConfigureAwait.Fody" />
     <PackageReference Include="MassTransit.RabbitMQ" />
+    <PackageReference Include="Otp.NET" />
     <PackageReference Include="Sodium.Core" />
     <PackageReference Include="Riok.Mapperly">
       <ExcludeAssets>runtime</ExcludeAssets>

@@ -13,8 +13,10 @@ public class ValidateUserExistsConsumer(UserManager<ApplicationUserEntity> userM
         var user = await userManager.FindByEmailAsync(userManager.NormalizeEmail(context.Message.Email));
         if (user is not default(ApplicationUserEntity))
         {
+            _ = Guid.TryParse(user.Id, out var userId);
+
             await context.RespondAsync(
-                new DataResult<UserExistsValidationResult>(new() { Exists = true }));
+                new DataResult<UserExistsValidationResult>(new() { Exists = true, UserId = userId }));
         }
         else
         {

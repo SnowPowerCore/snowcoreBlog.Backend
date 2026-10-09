@@ -1,0 +1,45 @@
+using MassTransit;
+using MaybeResults;
+using MinimalStepifiedSystem.Interfaces;
+using snowcoreBlog.Backend.Core.Contracts;
+using snowcoreBlog.Backend.Core.Entities.Reader;
+using snowcoreBlog.Backend.IAM.Core.Contracts;
+using snowcoreBlog.Backend.ReadersManagement.Constants;
+using snowcoreBlog.Backend.ReadersManagement.Context;
+using snowcoreBlog.Backend.ReadersManagement.Delegates;
+using snowcoreBlog.Backend.ReadersManagement.Interfaces.Repositories.Marten;
+using snowcoreBlog.PublicApi.BusinessObjects.Dto;
+using snowcoreBlog.PublicApi.Constants;
+using snowcoreBlog.PublicApi.Utilities.DataResult;
+
+namespace snowcoreBlog.Backend.ReadersManagement.Steps.ReaderAccount.Authenticator;
+
+public class CreateReaderEntityForAuthenticatorStep(IPublishEndpoint publishEndpoint,
+                                                    IReaderRepository readerRepository) : IStep<ConfirmCreateReaderAccountWithAuthenticatorDelegate, ConfirmCreateReaderAccountWithAuthenticatorContext, IMaybe<ReaderAccountCreatedDto>>
+{
+    public async Task<IMaybe<ReaderAccountCreatedDto>> InvokeAsync(ConfirmCreateReaderAccountWithAuthenticatorContext context, ConfirmCreateReaderAccountWithAuthenticatorDelegate next, CancellationToken token = default)
+    {
+        var createUserForReaderAccountResult = context.GetFromData<DataResult<UserCreationResult>>(
+            ReaderAccountUserConstants.CreateUserForReaderAccountResult);
+
+        var newReaderEntity = await readerRepository
+            .AddOrUpdateAsync(createUserForReaderAccountResult!.Value!.ToEntity(), token: token);
+        if (newReaderEntity is not default(ReaderEntity))
+        {
+            var readerAccountCreated = new ReaderAccountCreated(newReaderEntity!.Id, newReaderEntity.NickName);
+
+            context.SetDataWith(
+                ReaderAccountConstants.CreateReaderAccountResult,
+                Maybe.Create(readerAccountCreated));
+
+            await publishEndpoint.Publish(readerAccountCreated, token);
+
+            return await next(context, token);
+        }
+        else
+        {
+            return CreateReaderAccountError<ReaderAccountCreatedDto>.Create(
+                ReaderAccountConstants.ReaderAccountUnableToCreateUpdateError);
+        }
+    }
+}

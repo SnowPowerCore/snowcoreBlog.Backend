@@ -12,4 +12,11 @@ public class ApplicationUserEntity : IdentityUser, IClaimsUser
     public string LastName { get; set; }
 
     public ICollection<Guid> PublicKeyCredentials { get; set; } = [];
+
+    /// <summary>
+    /// Base32-encoded TOTP shared secret used with authenticator apps
+    /// (Microsoft / Google Authenticator). Present when the account was
+    /// created with, or enrolled into, authenticator-based two-factor login.
+    /// </summary>
+    public string? TotpSecret { get; set; }
 }

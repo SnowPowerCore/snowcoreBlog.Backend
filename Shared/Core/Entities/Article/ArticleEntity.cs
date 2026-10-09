@@ -19,4 +19,7 @@ public record ArticleEntity : BaseEntity
     public string[] Tags { get; init; } = [];
     
     public string? CoverImageUrl { get; init; }
+
+    // Free-form category (taxonomy-ish); null = uncategorized.
+    public string? Category { get; init; }
 }

@@ -1,11 +1,14 @@
 using FastEndpoints;
 using FastEndpoints.OpenTelemetry.Middleware;
+using FastEndpoints.Security;
 using FastEndpoints.Swagger;
+using Microsoft.IdentityModel.Tokens;
 using snowcoreBlog.Backend.Infrastructure.Extensions;
 using snowcoreBlog.Backend.Infrastructure.Middleware;
 using snowcoreBlog.Backend.Infrastructure.Processors;
 using snowcoreBlog.PublicApi.Extensions;
 using System.Net.Mime;
+using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -16,15 +19,31 @@ public static class FastEndpointsConfigurationExtensions
     const int GlobalVersion = 1;
     private static readonly JsonStringEnumConverter JsonStringEnumConverter = new();
 
-    public static IServiceCollection AddFastEndpointsConfiguration(this IServiceCollection services)
+    public static IServiceCollection AddFastEndpointsConfiguration(
+        this IServiceCollection services,
+        string signingKey)
     {
-        services.AddAuthentication();
+        // Registers the JwtBearer scheme as the DEFAULT authentication scheme (and thus
+        // the default challenge scheme) — without it, endpoints with Claims(...)/[Authorize]
+        // throw "No authenticationScheme was specified, and there was no DefaultChallengeScheme found"
+        // when an unauthenticated request challenges. Mirrors AuthorsManagement.
+        services.AddAuthenticationJwtBearer(s => s.SigningKey = signingKey);
+
+        // Mirror the signing configuration used by JwtTokenCreator (gateway) so endpoints
+        // can both verify AND read claims from a token issued by the gateway.
+        services.AddSingleton(new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(signingKey)),
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            ValidateLifetime = true,
+            ClockSkew = TimeSpan.FromMinutes(5)
+        });
+
         services.AddAuthorization()
                 .AddAntiforgery()
-                .AddFastEndpoints(static options =>
-                {
-                    options.SourceGeneratorDiscoveredTypes.AddRange(DiscoveredTypes.All);
-                })
+                .AddFastEndpoints()
                 .SwaggerDocument(options =>
                 {
                     options.AutoTagPathSegmentIndex = 0;

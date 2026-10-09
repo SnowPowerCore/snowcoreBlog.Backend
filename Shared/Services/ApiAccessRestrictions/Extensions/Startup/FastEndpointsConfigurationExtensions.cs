@@ -15,10 +15,7 @@ public static class FastEndpointsConfigurationExtensions
     public static IServiceCollection AddFastEndpointsConfiguration(this IServiceCollection services)
     {
         services.AddAuthorization()
-                .AddFastEndpoints(static options =>
-                {
-                    options.SourceGeneratorDiscoveredTypes.AddRange(DiscoveredTypes.All);
-                })
+                .AddFastEndpoints()
                 .SwaggerDocument(options =>
                 {
                     options.AutoTagPathSegmentIndex = 0;

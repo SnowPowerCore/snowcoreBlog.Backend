@@ -10,8 +10,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AspNet.Security.OAuth.Apple" />
     <PackageReference Include="Aspire.Npgsql" />
     <PackageReference Include="Aspire.StackExchange.Redis" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" />
     <PackageReference Include="ActualLab.Fusion" />
     <PackageReference Include="ActualLab.Fusion.Server" />
     <PackageReference Include="ActualLab.Fusion.Blazor.Authentication" />
@@ -36,6 +39,7 @@
     <PackageReference Include="MinimalStepifiedSystem.Core" />
     <PackageReference Include="MinimalStepifiedSystem.SourceGen" />
     <PackageReference Include="OpenTelemetry.Instrumentation.StackExchangeRedis" />
+    <PackageReference Include="QRCoder" />
     <PackageReference Include="Scalar.AspNetCore" />
     <PackageReference Include="Riok.Mapperly">
       <ExcludeAssets>runtime</ExcludeAssets>

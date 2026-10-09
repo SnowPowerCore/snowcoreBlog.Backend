@@ -12,8 +12,6 @@ builder.Services.AddMartenConfiguration();
 // Redis cache
 builder.AddRedisClientConfiguration("cache");
 
-builder.Services.AddCompiledQueriesConfiguration();
-
 // MassTransit configuration
 builder.Services.AddMassTransitConfiguration(
     builder.Configuration.GetConnectionString("rabbitmq"));
@@ -22,7 +20,9 @@ builder.Services.AddMassTransitConfiguration(
 builder.Services.AddHostingConfiguration();
 
 // FastEndpoints
-builder.Services.AddFastEndpointsConfiguration();
+builder.Services.AddFastEndpointsConfiguration(
+    builder.Configuration["Security:Signing:User:SigningKey"]
+        ?? throw new InvalidOperationException("Signing key not configured"));
 
 // Core services
 builder.Services.AddCoreServicesConfiguration();

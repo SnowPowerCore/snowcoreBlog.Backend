@@ -7,6 +7,9 @@
     <InvariantGlobalization>true</InvariantGlobalization>
     <PublishTrimmed>true</PublishTrimmed>
     <PublishReadyToRun>true</PublishReadyToRun>
+    <!-- Shared dev-time secrets (same ID as ReadersManagement/AspireYarpGateway/etc.) —
+         provides Security:Signing:User:SigningKey for JWT bearer validation. -->
+    <UserSecretsId>f4650b45-fed6-4a9a-9b97-2918092e0f30</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -18,6 +21,7 @@
     <PackageReference Include="ActualLab.Generators" PrivateAssets="all" />
     <PackageReference Include="ActualLab.Rpc" />
     <PackageReference Include="FastEndpoints" />
+    <PackageReference Include="FastEndpoints.Security" />
     <PackageReference Include="Fody">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>

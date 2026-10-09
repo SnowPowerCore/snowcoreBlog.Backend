@@ -21,4 +21,11 @@ public record ApplicationTempUserEntity : BaseEntity
     public required bool ConfirmedAgreement { get; init; }
 
     public bool InitialEmailConsent { get; init; } = true;
+
+    /// <summary>
+    /// Base32-encoded TOTP shared secret generated while the pending
+    /// registration is being completed with an authenticator app.
+    /// Moved onto the real user entity once the first code is verified.
+    /// </summary>
+    public string? TotpSecret { get; init; }
 }
