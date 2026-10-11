@@ -8,22 +8,9 @@ using System.Net;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Http.Json;
 using snowcoreBlog.PublicApi.Utilities.Api;
+using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 
 namespace snowcoreBlog.Backend.UrlShortener.Endpoints.UrlShortener;
-
-public class CreateShortUrlRequest
-{
-    public string OriginalUrl { get; set; } = string.Empty;
-    public int? MaxClicks { get; set; }
-    public int? WindowSeconds { get; set; }
-    public string? CustomCode { get; set; }
-}
-
-public class CreateShortUrlResult
-{
-    public string Code { get; set; } = string.Empty;
-    public string ShortUrl { get; set; } = string.Empty;
-}
 
 public class CreateShortUrlEndpoint : Endpoint<CreateShortUrlRequest, ApiResponse?>
 {

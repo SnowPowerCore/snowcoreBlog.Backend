@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "snowcoreBlog.Backend.Documents": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:60517;http://localhost:60518"
+    }
+  }
+}

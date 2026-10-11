@@ -1,6 +1,5 @@
 using Ixnas.AltchaNet;
 using snowcoreBlog.Backend.Core.Interfaces.Services;
-using snowcoreBlog.Backend.Infrastructure.Middleware;
 using snowcoreBlog.Backend.Infrastructure.Services;
 using snowcoreBlog.Backend.Infrastructure.Stores;
 using snowcoreBlog.Backend.ReadersManagement.Interfaces.Repositories.Marten;
@@ -14,6 +13,7 @@ using snowcoreBlog.Backend.ReadersManagement.Steps.ReaderAccount.Authenticator;
 using snowcoreBlog.Backend.ReadersManagement.Steps.ReaderAccount.Request;
 using Microsoft.IdentityModel.JsonWebTokens;
 using snowcoreBlog.Backend.ReadersManagement.Steps.ReaderAccount.Confirm;
+using snowcoreBlog.Backend.Gateway.Middleware.Middleware;
 
 namespace snowcoreBlog.Backend.ReadersManagement.Extensions.Startup;
 

@@ -3,6 +3,7 @@ using MaybeResults;
 using MinimalStepifiedSystem.Interfaces;
 using snowcoreBlog.Backend.Core.Contracts;
 using snowcoreBlog.Backend.IAM.Core.Contracts;
+using snowcoreBlog.Backend.Infrastructure.StepProgress;
 using snowcoreBlog.Backend.ReadersManagement.Constants;
 using snowcoreBlog.Backend.ReadersManagement.Context;
 using snowcoreBlog.Backend.ReadersManagement.Delegates;
@@ -17,6 +18,8 @@ public class CreateReaderAccountUserWithAuthenticatorStep(IRequestClient<CreateU
 {
     public async Task<IMaybe<ReaderAccountCreatedDto>> InvokeAsync(ConfirmCreateReaderAccountWithAuthenticatorContext context, ConfirmCreateReaderAccountWithAuthenticatorDelegate next, CancellationToken token = default)
     {
+        context.ReportStepProgress(ReaderAccountStepProgressCodes.CreatingUserAccount);
+
         var response = await client.GetResponse<DataResult<UserCreationResult>>(
             new CreateUserWithAuthenticator
             {

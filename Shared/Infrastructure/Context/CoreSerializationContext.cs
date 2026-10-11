@@ -9,6 +9,7 @@ using snowcoreBlog.Backend.AspireYarpGateway.Core.Contracts;
 using snowcoreBlog.Backend.Core.Contracts;
 using snowcoreBlog.Backend.Core.Entities.Article;
 using snowcoreBlog.Backend.Core.Entities.Author;
+using snowcoreBlog.Backend.Core.Entities.Documents;
 using snowcoreBlog.Backend.Core.Entities.Notification;
 using snowcoreBlog.Backend.Core.Entities.Reader;
 using snowcoreBlog.Backend.Email.Core.Contracts;
@@ -18,6 +19,7 @@ using snowcoreBlog.Backend.Infrastructure.Entities;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 using snowcoreBlog.PublicApi.Utilities.Api;
 using snowcoreBlog.PublicApi.Utilities.DataResult;
+using snowcoreBlog.PublicApi.Utilities.Sse;
 
 namespace snowcoreBlog.Backend.Infrastructure;
 
@@ -31,11 +33,14 @@ namespace snowcoreBlog.Backend.Infrastructure;
 [JsonSerializable(typeof(JsonElement))]
 [JsonSerializable(typeof(List<ValidationFailure>))]
 [JsonSerializable(typeof(ApiResponse))]
+[JsonSerializable(typeof(StepProgressEvent))]
+[JsonSerializable(typeof(StepProgressFinalEvent))]
 [JsonSerializable(typeof(ApiAccessRestrictionsSnapshotDto))]
 [JsonSerializable(typeof(ApiAccessRuleSnapshotDto))]
 [JsonSerializable(typeof(ApiAccessResponseTemplateSnapshotDto))]
 [JsonSerializable(typeof(IpRestrictionSnapshotDto))]
 [JsonSerializable(typeof(RegionRestrictionSnapshotDto))]
+[JsonSerializable(typeof(ApiAccessRestrictionsChanged))]
 [JsonSerializable(typeof(AltchaChallenge))]
 [JsonSerializable(typeof(AltchaResponse))]
 [JsonSerializable(typeof(ApplicationAdminEntity))]
@@ -50,6 +55,12 @@ namespace snowcoreBlog.Backend.Infrastructure;
 [JsonSerializable(typeof(NotificationEntity))]
 [JsonSerializable(typeof(NotificationType))]
 [JsonSerializable(typeof(ReaderEntity))]
+[JsonSerializable(typeof(DocumentEntity))]
+[JsonSerializable(typeof(DocumentStatus))]
+[JsonSerializable(typeof(DocumentDto))]
+[JsonSerializable(typeof(List<DocumentDto>))]
+[JsonSerializable(typeof(DocumentStatusDto))]
+[JsonSerializable(typeof(DocumentUploaded))]
 [JsonSerializable(typeof(ArticleDto))]
 [JsonSerializable(typeof(List<ArticleDto>))]
 [JsonSerializable(typeof(CreateArticleDto))]

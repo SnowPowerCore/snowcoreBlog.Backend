@@ -7,10 +7,12 @@ using snowcoreBlog.Backend.Core.Contracts;
 using snowcoreBlog.Backend.Core.Options;
 using snowcoreBlog.Backend.Core.Resources;
 using snowcoreBlog.Backend.IAM.Core.Contracts;
+using snowcoreBlog.Backend.Infrastructure.StepProgress;
 using snowcoreBlog.Backend.ReadersManagement.Constants;
 using snowcoreBlog.Backend.ReadersManagement.Context;
 using snowcoreBlog.Backend.ReadersManagement.Delegates;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
+using snowcoreBlog.PublicApi.Constants;
 using snowcoreBlog.PublicApi.Services;
 using snowcoreBlog.PublicApi.Utilities.DataResult;
 
@@ -23,6 +25,8 @@ public class CreateReaderAccountTempUserStep(IRequestClient<CreateTempUser> clie
 {
     public async Task<IMaybe<RequestReaderAccountCreationResultDto>> InvokeAsync(RequestCreateReaderAccountContext context, RequestCreateReaderAccountDelegate next, CancellationToken token = default)
     {
+        context.ReportStepProgress(ReaderAccountStepProgressCodes.CreatingTempUser);
+
         var response = await client.GetResponse<DataResult<TempUserCreationResult>>(
             context.CreateRequest.ToCreateTempUser(), token);
         if (response.Message.IsSuccess)

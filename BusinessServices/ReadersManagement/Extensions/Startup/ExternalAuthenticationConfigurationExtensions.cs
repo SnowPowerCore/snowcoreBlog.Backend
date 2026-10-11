@@ -1,7 +1,4 @@
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Google;
-using Microsoft.AspNetCore.Authentication.MicrosoftAccount;
-using AspNet.Security.OAuth.Apple;
 using snowcoreBlog.Backend.ReadersManagement.Options;
 using snowcoreBlog.Backend.ReadersManagement.Services;
 

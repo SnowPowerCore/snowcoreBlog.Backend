@@ -3,10 +3,10 @@ using MinimalStepifiedSystem.Interfaces;
 using Microsoft.Extensions.Options;
 using snowcoreBlog.Backend.UrlShortener.Context;
 using snowcoreBlog.Backend.UrlShortener.Delegates;
-using snowcoreBlog.Backend.UrlShortener.Core.Entities;
 using snowcoreBlog.Backend.UrlShortener.Models;
 using snowcoreBlog.Backend.UrlShortener.Interfaces.Repositories.Marten;
 using snowcoreBlog.Backend.UrlShortener.Options;
+using snowcoreBlog.Backend.Core.Entities.UrlShortener;
 
 namespace snowcoreBlog.Backend.UrlShortener.Steps;
 
@@ -30,8 +30,7 @@ public sealed class PersistUrlMappingStep(IUrlMappingRepository repo, IOptions<U
             IsActive = true
         };
 
-        var persisted = await repo.AddOrUpdateAsync(entity, entity.Id, true, token);
-        context.Mapping = persisted;
+        context.Mapping = (UrlMappingEntity?)await repo.AddOrUpdateAsync(entity, entity.Id, true, token);
 
         return await next(context, token);
     }

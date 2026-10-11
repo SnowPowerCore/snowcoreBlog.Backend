@@ -11,6 +11,10 @@ public sealed class CompiledApiAccessRestrictionsSnapshot
 
     public required IReadOnlyList<CompiledRule> Rules { get; init; }
 
+    // O(1) lookup by rule id for the evaluator (previously it re-scanned the rules
+    // list with First() for every candidate rule).
+    public required IReadOnlyDictionary<Guid, CompiledRule> RulesById { get; init; }
+
     public required IReadOnlyDictionary<Guid, ApiAccessResponseTemplateSnapshotDto> TemplatesById { get; init; }
 
     public required IReadOnlyList<CompiledIpRestriction> IpRestrictions { get; init; }
@@ -27,6 +31,13 @@ public sealed class CompiledApiAccessRestrictionsSnapshot
             .Select(CompiledRule.Compile)
             .ToList();
 
+        var rulesById = new Dictionary<Guid, CompiledRule>(rules.Count);
+        foreach (var compiledRule in rules)
+        {
+            // Duplicate ids would throw with ToDictionary; last one wins to mirror TemplatesById.
+            rulesById[compiledRule.Rule.Id] = compiledRule;
+        }
+
         var ipRestrictions = snapshot.IpRestrictions
             .Select(CompiledIpRestriction.Compile)
             .ToList();
@@ -40,6 +51,7 @@ public sealed class CompiledApiAccessRestrictionsSnapshot
             GeneratedAt = snapshot.GeneratedAt,
             TemplatesById = templatesById,
             Rules = rules,
+            RulesById = rulesById,
             IpRestrictions = ipRestrictions,
             RegionRestrictions = regionRestrictions
         };

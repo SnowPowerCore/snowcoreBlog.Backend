@@ -198,6 +198,15 @@ public static class YarpResourceExtensions
 
         // Local (in-process) restrictions evaluation support.
         builder.Services.AddApiAccessRestrictionsGatewayIntegration();
+        builder.Services.AddApiAccessRestrictionMiddleware(builder.Configuration);
+
+        // Recall flags (fire-and-forget restriction decisions) are persisted in the
+        // shared Redis cache. Only wire the client when the Aspire reference provides
+        // a connection string; otherwise the integration falls back to a no-op store.
+        if (!string.IsNullOrWhiteSpace(builder.Configuration.GetConnectionString("cache")))
+        {
+            builder.AddRedisClient("cache");
+        }
 
         var proxyBuilder = builder.Services.AddReverseProxy();
 
@@ -248,6 +257,7 @@ public static class YarpResourceExtensions
         builder.Services.AddMassTransit(busConfigurator =>
         {
             busConfigurator.AddConsumer<GetUserTokenPairWithPayloadConsumer>();
+            busConfigurator.AddConsumer<ApiAccessRestrictionsChangedConsumer>();
             busConfigurator.ConfigureHttpJsonOptions(static o =>
             {
                 o.SerializerOptions.NumberHandling = JsonNumberHandling.AllowReadingFromString;
@@ -298,6 +308,7 @@ public static class YarpResourceExtensions
            .UseGatewayMiddleware()
            .UseForwardedHeaders()
            .UseAuthentication()
+           .UseApiAccessRestrictionMiddleware()
            .UseAuthorization();
 
         // Configure URLs

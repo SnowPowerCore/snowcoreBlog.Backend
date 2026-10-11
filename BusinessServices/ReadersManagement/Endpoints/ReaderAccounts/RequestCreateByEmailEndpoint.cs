@@ -6,6 +6,7 @@ using Microsoft.Extensions.Options;
 using MinimalStepifiedSystem.Attributes;
 using snowcoreBlog.Backend.Core.Constants;
 using snowcoreBlog.Backend.Infrastructure;
+using snowcoreBlog.Backend.Infrastructure.StepProgress;
 using snowcoreBlog.Backend.ReadersManagement.Context;
 using snowcoreBlog.Backend.ReadersManagement.Delegates;
 using snowcoreBlog.Backend.ReadersManagement.Steps.ReaderAccount.Request;
@@ -42,20 +43,23 @@ public class RequestCreateByEmailEndpoint : Endpoint<RequestCreateReaderAccountD
         Description(b => b
             .WithTags(ApiTagConstants.ReaderAccountManagement, ApiTagConstants.Captcha)
             .Accepts<RequestCreateReaderAccountDto>(MediaTypeNames.Application.Json)
-            .Produces<ApiResponseForOpenApi<RequestReaderAccountCreationResultDto>>((int)HttpStatusCode.OK, MediaTypeNames.Application.Json)
-            .Produces<ApiResponse>((int)HttpStatusCode.InternalServerError, MediaTypeNames.Application.Json)
+            .Produces((int)HttpStatusCode.OK, contentType: MediaTypeNames.Text.EventStream)
             .ProducesProblemFE((int)HttpStatusCode.BadRequest));
     }
 
     public override async Task HandleAsync(RequestCreateReaderAccountDto req, CancellationToken ct)
     {
-        var context = new RequestCreateReaderAccountContext(req);
+        await HttpContext.SendStepProgressStreamAsync(
+            async (reporter, token) =>
+            {
+                var context = new RequestCreateReaderAccountContext(req);
+                context.AttachStepProgressReporter(reporter);
 
-        var result = await RequestCreateReaderAccount(context, ct);
+                var result = await RequestCreateReaderAccount(context, token);
 
-        await Send.ResponseAsync(
-            result?.ToApiResponse(serializerOptions: JsonOptions.Value.SerializerOptions),
-            result?.ToStatusCode() ?? (int)HttpStatusCode.InternalServerError,
+                return (result?.ToApiResponse(serializerOptions: JsonOptions.Value.SerializerOptions),
+                    result?.ToStatusCode() ?? (int)HttpStatusCode.InternalServerError);
+            },
             ct);
     }
 }

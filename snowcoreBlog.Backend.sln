@@ -41,6 +41,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "snowcoreBlog.Backend.ApiAcc
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "snowcoreBlog.Backend.ServiceNotifications", "Shared\Services\ServiceNotifications\snowcoreBlog.Backend.ServiceNotifications.csproj", "{E203E7B0-51AF-40CA-AD17-43104CDD0A47}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "snowcoreBlog.Backend.Documents", "Shared\Services\Documents\snowcoreBlog.Backend.Documents.csproj", "{6E4F9A2B-3C18-4D57-9F21-A8B70C54E912}"
+EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{D1E4B9F6-D533-D423-8818-2E1510152B85}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "snowcoreBlog.Backend.Core.Tests", "Shared\Core.Tests\snowcoreBlog.Backend.Core.Tests.csproj", "{23032FFF-6953-48BB-B87B-6C4989DE57CC}"
@@ -68,6 +70,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "snowcoreBlog.Backend.ServiceNotifications.Tests", "Shared\Services\ServiceNotifications.Tests\snowcoreBlog.Backend.ServiceNotifications.Tests.csproj", "{6AF64136-60E8-40C8-903A-2D2D22825A47}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "snowcoreBlog.Backend.ApiAccessRestrictions.Tests", "Shared\Services\ApiAccessRestrictions.Tests\snowcoreBlog.Backend.ApiAccessRestrictions.Tests.csproj", "{D1D1F377-68AB-4EA6-9B78-87F15F24A867}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "snowcoreBlog.Backend.Documents.Tests", "Shared\Services\Documents.Tests\snowcoreBlog.Backend.Documents.Tests.csproj", "{91C3D7E5-4A62-4B08-8D33-F27E91A05B46}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -463,6 +467,30 @@ Global
 		{D1D1F377-68AB-4EA6-9B78-87F15F24A867}.Release|x64.Build.0 = Release|Any CPU
 		{D1D1F377-68AB-4EA6-9B78-87F15F24A867}.Release|x86.ActiveCfg = Release|Any CPU
 		{D1D1F377-68AB-4EA6-9B78-87F15F24A867}.Release|x86.Build.0 = Release|Any CPU
+		{6E4F9A2B-3C18-4D57-9F21-A8B70C54E912}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E4F9A2B-3C18-4D57-9F21-A8B70C54E912}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E4F9A2B-3C18-4D57-9F21-A8B70C54E912}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{6E4F9A2B-3C18-4D57-9F21-A8B70C54E912}.Debug|x64.Build.0 = Debug|Any CPU
+		{6E4F9A2B-3C18-4D57-9F21-A8B70C54E912}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{6E4F9A2B-3C18-4D57-9F21-A8B70C54E912}.Debug|x86.Build.0 = Debug|Any CPU
+		{6E4F9A2B-3C18-4D57-9F21-A8B70C54E912}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E4F9A2B-3C18-4D57-9F21-A8B70C54E912}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6E4F9A2B-3C18-4D57-9F21-A8B70C54E912}.Release|x64.ActiveCfg = Release|Any CPU
+		{6E4F9A2B-3C18-4D57-9F21-A8B70C54E912}.Release|x64.Build.0 = Release|Any CPU
+		{6E4F9A2B-3C18-4D57-9F21-A8B70C54E912}.Release|x86.ActiveCfg = Release|Any CPU
+		{6E4F9A2B-3C18-4D57-9F21-A8B70C54E912}.Release|x86.Build.0 = Release|Any CPU
+		{91C3D7E5-4A62-4B08-8D33-F27E91A05B46}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{91C3D7E5-4A62-4B08-8D33-F27E91A05B46}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{91C3D7E5-4A62-4B08-8D33-F27E91A05B46}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{91C3D7E5-4A62-4B08-8D33-F27E91A05B46}.Debug|x64.Build.0 = Debug|Any CPU
+		{91C3D7E5-4A62-4B08-8D33-F27E91A05B46}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{91C3D7E5-4A62-4B08-8D33-F27E91A05B46}.Debug|x86.Build.0 = Debug|Any CPU
+		{91C3D7E5-4A62-4B08-8D33-F27E91A05B46}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{91C3D7E5-4A62-4B08-8D33-F27E91A05B46}.Release|Any CPU.Build.0 = Release|Any CPU
+		{91C3D7E5-4A62-4B08-8D33-F27E91A05B46}.Release|x64.ActiveCfg = Release|Any CPU
+		{91C3D7E5-4A62-4B08-8D33-F27E91A05B46}.Release|x64.Build.0 = Release|Any CPU
+		{91C3D7E5-4A62-4B08-8D33-F27E91A05B46}.Release|x86.ActiveCfg = Release|Any CPU
+		{91C3D7E5-4A62-4B08-8D33-F27E91A05B46}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -481,5 +509,6 @@ Global
 		{59103BB6-FC1C-4CDF-AD26-1346DE134F19} = {D1E4B9F6-D533-D423-8818-2E1510152B85}
 		{6AF64136-60E8-40C8-903A-2D2D22825A47} = {D1E4B9F6-D533-D423-8818-2E1510152B85}
 		{D1D1F377-68AB-4EA6-9B78-87F15F24A867} = {D1E4B9F6-D533-D423-8818-2E1510152B85}
+		{91C3D7E5-4A62-4B08-8D33-F27E91A05B46} = {D1E4B9F6-D533-D423-8818-2E1510152B85}
 	EndGlobalSection
 EndGlobal

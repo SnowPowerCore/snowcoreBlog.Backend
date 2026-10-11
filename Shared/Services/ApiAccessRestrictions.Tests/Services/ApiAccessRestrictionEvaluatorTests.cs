@@ -1,9 +1,9 @@
 using System.Net;
 using FluentAssertions;
 using NSubstitute;
-using snowcoreBlog.Backend.ApiAccessRestrictions.Entities;
 using snowcoreBlog.Backend.ApiAccessRestrictions.Repositories.Marten;
 using snowcoreBlog.Backend.ApiAccessRestrictions.Services;
+using snowcoreBlog.Backend.Core.Entities.ApiAccessRestrictions;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 
 namespace snowcoreBlog.Backend.ApiAccessRestrictions.Tests.Services;
@@ -50,7 +50,7 @@ public class ApiAccessRestrictionEvaluatorTests
                 Id = Guid.NewGuid(),
                 Enabled = true,
                 Priority = 10,
-                Action = ApiAccessRestrictionActionDto.Block,
+                Action = RestrictionLevel.Block,
                 Methods = ["GET"],
                 PathPatterns = ["/api/secret/*"],
                 ResponseTemplateId = templateId
@@ -88,7 +88,7 @@ public class ApiAccessRestrictionEvaluatorTests
             {
                 Enabled = true,
                 Priority = 1,
-                Action = ApiAccessRestrictionActionDto.Block,
+                Action = RestrictionLevel.Block,
                 IpRanges = ["10.0.0.0/24"],
                 PathPatterns = ["/api/*"]
             }

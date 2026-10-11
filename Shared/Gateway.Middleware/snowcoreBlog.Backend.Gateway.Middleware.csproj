@@ -29,4 +29,8 @@
     <None Update="**/FodyWeavers.*" Visible="false" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Middleware\" />
+  </ItemGroup>
+
 </Project>

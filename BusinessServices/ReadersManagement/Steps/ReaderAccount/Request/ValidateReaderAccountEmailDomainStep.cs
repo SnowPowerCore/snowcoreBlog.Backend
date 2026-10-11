@@ -3,10 +3,12 @@ using MaybeResults;
 using MinimalStepifiedSystem.Interfaces;
 using snowcoreBlog.Backend.Email.Core.Constants;
 using snowcoreBlog.Backend.Email.Core.Contracts;
+using snowcoreBlog.Backend.Infrastructure.StepProgress;
 using snowcoreBlog.Backend.ReadersManagement.Context;
 using snowcoreBlog.Backend.ReadersManagement.Delegates;
 using snowcoreBlog.Backend.ReadersManagement.Extensions;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
+using snowcoreBlog.PublicApi.Constants;
 using snowcoreBlog.PublicApi.Utilities.DataResult;
 
 namespace snowcoreBlog.Backend.ReadersManagement.Steps.ReaderAccount.Request;
@@ -15,6 +17,8 @@ public class ValidateReaderAccountEmailDomainStep(IRequestClient<CheckEmailDomai
 {
     public async Task<IMaybe<RequestReaderAccountCreationResultDto>> InvokeAsync(RequestCreateReaderAccountContext context, RequestCreateReaderAccountDelegate next, CancellationToken token = default)
     {
+        context.ReportStepProgress(ReaderAccountStepProgressCodes.ValidatingEmailDomain);
+
         var result = await requestClient.GetResponse<DataResult<EmailDomainChecked>>(
             context.CreateRequest.ToCheckEmailDomain(), token);
         if (result.Message.IsSuccess)

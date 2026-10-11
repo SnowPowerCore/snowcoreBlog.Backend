@@ -1,5 +1,4 @@
 using MassTransit;
-using Microsoft.Extensions.Options;
 using snowcoreBlog.Backend.IAM.Core.Contracts;
 using snowcoreBlog.PublicApi.Utilities.DataResult;
 

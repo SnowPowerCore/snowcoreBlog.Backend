@@ -1,6 +1,6 @@
-namespace snowcoreBlog.Backend.UrlShortener.Context;
+using snowcoreBlog.Backend.Core.Entities.UrlShortener;
 
-using snowcoreBlog.Backend.UrlShortener.Core.Entities;
+namespace snowcoreBlog.Backend.UrlShortener.Context;
 
 public class ResolveShortUrlContext
 {

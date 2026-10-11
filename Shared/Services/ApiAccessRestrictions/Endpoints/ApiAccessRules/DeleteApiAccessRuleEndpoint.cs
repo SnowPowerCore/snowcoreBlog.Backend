@@ -1,9 +1,12 @@
 using FastEndpoints;
+using MassTransit;
 using snowcoreBlog.Backend.ApiAccessRestrictions.Repositories.Marten;
+using snowcoreBlog.Backend.AspireYarpGateway.Core.Contracts;
 
 namespace snowcoreBlog.Backend.ApiAccessRestrictions.Endpoints.ApiAccessRules;
 
-public class DeleteApiAccessRuleEndpoint(IApiAccessRuleRepository repo) : EndpointWithoutRequest
+public class DeleteApiAccessRuleEndpoint(IApiAccessRuleRepository repo,
+                                         IPublishEndpoint publisher) : EndpointWithoutRequest
 {
     public override void Configure()
     {
@@ -16,6 +19,7 @@ public class DeleteApiAccessRuleEndpoint(IApiAccessRuleRepository repo) : Endpoi
     {
         var id = Route<Guid>("id");
         await repo.DeleteAsync(id, ct);
+        await publisher.Publish(new ApiAccessRestrictionsChanged(DateTimeOffset.UtcNow), ct);
         await Send.OkAsync(cancellation: ct);
     }
 }

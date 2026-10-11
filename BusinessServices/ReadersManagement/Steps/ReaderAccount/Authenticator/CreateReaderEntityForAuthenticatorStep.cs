@@ -4,6 +4,7 @@ using MinimalStepifiedSystem.Interfaces;
 using snowcoreBlog.Backend.Core.Contracts;
 using snowcoreBlog.Backend.Core.Entities.Reader;
 using snowcoreBlog.Backend.IAM.Core.Contracts;
+using snowcoreBlog.Backend.Infrastructure.StepProgress;
 using snowcoreBlog.Backend.ReadersManagement.Constants;
 using snowcoreBlog.Backend.ReadersManagement.Context;
 using snowcoreBlog.Backend.ReadersManagement.Delegates;
@@ -19,6 +20,8 @@ public class CreateReaderEntityForAuthenticatorStep(IPublishEndpoint publishEndp
 {
     public async Task<IMaybe<ReaderAccountCreatedDto>> InvokeAsync(ConfirmCreateReaderAccountWithAuthenticatorContext context, ConfirmCreateReaderAccountWithAuthenticatorDelegate next, CancellationToken token = default)
     {
+        context.ReportStepProgress(ReaderAccountStepProgressCodes.CreatingReaderProfile);
+
         var createUserForReaderAccountResult = context.GetFromData<DataResult<UserCreationResult>>(
             ReaderAccountUserConstants.CreateUserForReaderAccountResult);
 

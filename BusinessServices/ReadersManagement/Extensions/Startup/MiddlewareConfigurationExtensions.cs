@@ -1,6 +1,6 @@
 using FastEndpoints.OpenTelemetry.Middleware;
 using Microsoft.AspNetCore.CookiePolicy;
-using snowcoreBlog.Backend.Infrastructure.Middleware;
+using snowcoreBlog.Backend.Gateway.Middleware.Middleware;
 
 namespace snowcoreBlog.Backend.ReadersManagement.Extensions.Startup;
 

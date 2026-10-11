@@ -1,4 +1,4 @@
-using Microsoft.Extensions.DependencyInjection;
+using StackExchange.Redis;
 
 namespace snowcoreBlog.Backend.ApiAccessRestrictions.GatewayIntegration;
 
@@ -18,7 +18,20 @@ public static class ServiceCollectionExtensions
 
         services.AddSingleton<IApiAccessRestrictionsSnapshotStore, ApiAccessRestrictionsSnapshotStore>();
         services.AddSingleton<ILocalApiAccessRestrictionsEvaluator, LocalApiAccessRestrictionsEvaluator>();
+        services.AddSingleton<IApiAccessRestrictionsSnapshotRefresher, ApiAccessRestrictionsSnapshotRefresher>();
         services.AddHostedService<ApiAccessRestrictionsSnapshotRefreshHostedService>();
+
+        // Recall store requires an IConnectionMultiplexer (registered by AddRedisClient
+        // in the host when a connection string is available); otherwise fall back to a
+        // no-op store so post-response restriction decisions are simply not persisted.
+        services.AddSingleton<IApiAccessRecallStore>(static serviceProvider =>
+        {
+            var connectionMultiplexer = serviceProvider.GetService<IConnectionMultiplexer>();
+            return connectionMultiplexer is not default(IConnectionMultiplexer)
+                ? new RedisApiAccessRecallStore(connectionMultiplexer)
+                : NoOpApiAccessRecallStore.Instance;
+        });
+
         return services;
     }
 }

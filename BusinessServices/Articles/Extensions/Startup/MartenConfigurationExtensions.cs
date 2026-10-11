@@ -4,8 +4,8 @@ using Marten.Services;
 using snowcoreBlog.Backend.Articles.Interfaces.Repositories.Marten;
 using snowcoreBlog.Backend.Articles.Repositories.Marten;
 using snowcoreBlog.Backend.Core.Entities.Article;
+using snowcoreBlog.Backend.Gateway.Middleware.Middleware;
 using snowcoreBlog.Backend.Infrastructure;
-using snowcoreBlog.Backend.Infrastructure.Middleware;
 using System.Security.Cryptography;
 
 namespace snowcoreBlog.Backend.Articles.Extensions.Startup;

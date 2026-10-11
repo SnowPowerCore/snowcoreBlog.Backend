@@ -1,9 +1,9 @@
 using Marten;
 using Marten.Services;
-using snowcoreBlog.Backend.ApiAccessRestrictions.Entities;
 using snowcoreBlog.Backend.ApiAccessRestrictions.Interfaces.Services;
 using snowcoreBlog.Backend.ApiAccessRestrictions.Repositories.Marten;
 using snowcoreBlog.Backend.ApiAccessRestrictions.Services;
+using snowcoreBlog.Backend.Core.Entities.ApiAccessRestrictions;
 using snowcoreBlog.Backend.Infrastructure;
 
 namespace snowcoreBlog.Backend.ApiAccessRestrictions.Extensions.Startup;

@@ -1,10 +1,14 @@
 using FastEndpoints;
+using MassTransit;
 using snowcoreBlog.Backend.ApiAccessRestrictions.Repositories.Marten;
+using snowcoreBlog.Backend.AspireYarpGateway.Core.Contracts;
+using snowcoreBlog.Backend.Core.Entities.ApiAccessRestrictions;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 
 namespace snowcoreBlog.Backend.ApiAccessRestrictions.Endpoints.ApiAccessResponseTemplates;
 
-public class UpdateApiAccessResponseTemplateEndpoint(IApiAccessResponseTemplateRepository repo) : Endpoint<UpdateApiAccessResponseTemplateDto>
+public class UpdateApiAccessResponseTemplateEndpoint(IApiAccessResponseTemplateRepository repo,
+                                                     IPublishEndpoint publisher) : Endpoint<UpdateApiAccessResponseTemplateDto>
 {
     public override void Configure()
     {
@@ -23,7 +27,7 @@ public class UpdateApiAccessResponseTemplateEndpoint(IApiAccessResponseTemplateR
         }
 
         var existing = await repo.GetByIdAsync(id, ct);
-        if (existing is default(Entities.ApiAccessResponseTemplateEntity))
+        if (existing is default(ApiAccessResponseTemplateEntity))
         {
             await Send.NotFoundAsync(ct);
             return;
@@ -36,6 +40,7 @@ public class UpdateApiAccessResponseTemplateEndpoint(IApiAccessResponseTemplateR
         existing.Reason = req.Reason;
 
         await repo.SaveAsync(existing, ct);
+        await publisher.Publish(new ApiAccessRestrictionsChanged(DateTimeOffset.UtcNow), ct);
         await Send.OkAsync(cancellation: ct);
     }
 }

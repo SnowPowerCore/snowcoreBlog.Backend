@@ -1,0 +1,33 @@
+### Upload a document (multipart)
+POST https://localhost:60517/v1/upload
+Content-Type: multipart/form-data; boundary=----documents-boundary
+
+------documents-boundary
+Content-Disposition: form-data; name="category"
+
+general
+------documents-boundary
+Content-Disposition: form-data; name="ownerId"
+
+00000000-0000-0000-0000-000000000000
+------documents-boundary
+Content-Disposition: form-data; name="file"; filename="sample.txt"
+Content-Type: text/plain
+
+Hello from the Documents service!
+------documents-boundary--
+
+### Get document metadata
+GET https://localhost:60517/v1/{{documentId}}
+
+### Download document content
+GET https://localhost:60517/v1/download/{{documentId}}
+
+### List documents by category
+GET https://localhost:60517/v1/category/general
+
+### Delete (soft-delete) a document
+DELETE https://localhost:60517/v1/{{documentId}}
+
+### Healthcheck
+GET https://localhost:60517/v1/ping

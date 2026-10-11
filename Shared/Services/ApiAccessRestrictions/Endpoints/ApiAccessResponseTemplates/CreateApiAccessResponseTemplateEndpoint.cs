@@ -1,11 +1,14 @@
 using FastEndpoints;
-using snowcoreBlog.Backend.ApiAccessRestrictions.Entities;
+using MassTransit;
 using snowcoreBlog.Backend.ApiAccessRestrictions.Repositories.Marten;
+using snowcoreBlog.Backend.AspireYarpGateway.Core.Contracts;
+using snowcoreBlog.Backend.Core.Entities.ApiAccessRestrictions;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 
 namespace snowcoreBlog.Backend.ApiAccessRestrictions.Endpoints.ApiAccessResponseTemplates;
 
-public class CreateApiAccessResponseTemplateEndpoint(IApiAccessResponseTemplateRepository repo) : Endpoint<CreateApiAccessResponseTemplateDto, ApiAccessResponseTemplateEntity>
+public class CreateApiAccessResponseTemplateEndpoint(IApiAccessResponseTemplateRepository repo,
+                                                     IPublishEndpoint publisher) : Endpoint<CreateApiAccessResponseTemplateDto, ApiAccessResponseTemplateEntity>
 {
     public override void Configure()
     {
@@ -26,6 +29,7 @@ public class CreateApiAccessResponseTemplateEndpoint(IApiAccessResponseTemplateR
         };
 
         await repo.SaveAsync(entity, ct);
+        await publisher.Publish(new ApiAccessRestrictionsChanged(DateTimeOffset.UtcNow), ct);
         await Send.CreatedAtAsync<GetApiAccessResponseTemplatesEndpoint>(entity, cancellation: ct);
     }
 }

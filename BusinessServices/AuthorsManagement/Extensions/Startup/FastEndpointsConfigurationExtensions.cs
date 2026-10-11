@@ -2,7 +2,7 @@ using FastEndpoints;
 using FastEndpoints.OpenTelemetry.Middleware;
 using FastEndpoints.Security;
 using Microsoft.IdentityModel.Tokens;
-using snowcoreBlog.Backend.Infrastructure.Middleware;
+using snowcoreBlog.Backend.Gateway.Middleware.Middleware;
 using snowcoreBlog.Backend.Infrastructure.Extensions;
 using snowcoreBlog.PublicApi.Extensions;
 using System.Net.Mime;

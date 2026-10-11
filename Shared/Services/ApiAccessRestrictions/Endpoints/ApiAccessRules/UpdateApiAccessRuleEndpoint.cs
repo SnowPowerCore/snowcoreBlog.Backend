@@ -1,10 +1,14 @@
 using FastEndpoints;
+using MassTransit;
 using snowcoreBlog.Backend.ApiAccessRestrictions.Repositories.Marten;
+using snowcoreBlog.Backend.AspireYarpGateway.Core.Contracts;
+using snowcoreBlog.Backend.Core.Entities.ApiAccessRestrictions;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 
 namespace snowcoreBlog.Backend.ApiAccessRestrictions.Endpoints.ApiAccessRules;
 
-public class UpdateApiAccessRuleEndpoint(IApiAccessRuleRepository repo) : Endpoint<UpdateApiAccessRuleDto>
+public class UpdateApiAccessRuleEndpoint(IApiAccessRuleRepository repo,
+                                         IPublishEndpoint publisher) : Endpoint<UpdateApiAccessRuleDto>
 {
     public override void Configure()
     {
@@ -23,7 +27,7 @@ public class UpdateApiAccessRuleEndpoint(IApiAccessRuleRepository repo) : Endpoi
         }
 
         var existing = await repo.GetByIdAsync(id, ct);
-        if (existing is default(Entities.ApiAccessRuleEntity))
+        if (existing is default(ApiAccessRuleEntity))
         {
             await Send.NotFoundAsync(ct);
             return;
@@ -33,7 +37,7 @@ public class UpdateApiAccessRuleEndpoint(IApiAccessRuleRepository repo) : Endpoi
         existing.Description = req.Description;
         existing.Enabled = req.Enabled;
         existing.Priority = req.Priority;
-        existing.Action = req.Action;
+        existing.Action = (RestrictionLevel)req.Action;
         existing.Methods = req.Methods?.ToList() ?? [];
         existing.PathPatterns = req.PathPatterns?.ToList() ?? [];
         existing.Tags = req.Tags?.ToList() ?? [];
@@ -43,6 +47,7 @@ public class UpdateApiAccessRuleEndpoint(IApiAccessRuleRepository repo) : Endpoi
         existing.ExpiresAt = req.ExpiresAt;
 
         await repo.SaveAsync(existing, ct);
+        await publisher.Publish(new ApiAccessRestrictionsChanged(DateTimeOffset.UtcNow), ct);
         await Send.OkAsync(cancellation: ct);
     }
 }

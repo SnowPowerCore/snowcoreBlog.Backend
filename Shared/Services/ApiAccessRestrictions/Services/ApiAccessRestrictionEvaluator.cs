@@ -1,7 +1,7 @@
 using System.Net;
 using System.Text.RegularExpressions;
-using snowcoreBlog.Backend.ApiAccessRestrictions.Entities;
 using snowcoreBlog.Backend.ApiAccessRestrictions.Repositories.Marten;
+using snowcoreBlog.Backend.Core.Entities.ApiAccessRestrictions;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 
 namespace snowcoreBlog.Backend.ApiAccessRestrictions.Services;
@@ -81,13 +81,13 @@ public class ApiAccessRestrictionEvaluator(
         var reason = template?.Reason ?? rule.Description ?? "Access restricted by policy.";
         var bodyJson = template?.BodyJson;
 
-        var isAllowed = rule.Action == ApiAccessRestrictionActionDto.AllowWithWarning;
+        var isAllowed = rule.Action == RestrictionLevel.AllowWithWarning;
 
         return new CheckApiAccessResponseDto
         {
             IsAllowed = isAllowed,
             MatchedRuleId = rule.Id,
-            Action = rule.Action,
+            Action = (ApiAccessRestrictionActionDto)rule.Action,
             Reason = reason,
             StatusCode = isAllowed ? null : status,
             ContentType = isAllowed ? null : contentType,

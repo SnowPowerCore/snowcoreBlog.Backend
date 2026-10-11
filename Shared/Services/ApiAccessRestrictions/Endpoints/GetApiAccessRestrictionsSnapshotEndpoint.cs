@@ -1,5 +1,6 @@
 using FastEndpoints;
 using snowcoreBlog.Backend.ApiAccessRestrictions.Repositories.Marten;
+using snowcoreBlog.Backend.Core.Entities.ApiAccessRestrictions;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 
 namespace snowcoreBlog.Backend.ApiAccessRestrictions.Endpoints;
@@ -33,7 +34,7 @@ public class GetApiAccessRestrictionsSnapshotEndpoint(IIpRestrictionRepository i
                 Description = r.Description,
                 Enabled = r.Enabled,
                 Priority = r.Priority,
-                Action = r.Action,
+                Action = (ApiAccessRestrictionActionDto)r.Action,
                 CreatedAt = r.CreatedAt,
                 ExpiresAt = r.ExpiresAt,
                 Methods = r.Methods,
@@ -69,8 +70,8 @@ public class GetApiAccessRestrictionsSnapshotEndpoint(IIpRestrictionRepository i
                 RegionCode = r.RegionCode,
                 Level = r.Level switch
                 {
-                    Entities.RestrictionLevel.RequireCaptcha => ApiAccessRestrictionActionDto.RequireCaptcha,
-                    Entities.RestrictionLevel.AllowWithWarning => ApiAccessRestrictionActionDto.AllowWithWarning,
+                    RestrictionLevel.RequireCaptcha => ApiAccessRestrictionActionDto.RequireCaptcha,
+                    RestrictionLevel.AllowWithWarning => ApiAccessRestrictionActionDto.AllowWithWarning,
                     _ => ApiAccessRestrictionActionDto.Block
                 },
                 CreatedAt = r.CreatedAt,

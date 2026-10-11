@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.HttpOverrides;
 using snowcoreBlog.Backend.Infrastructure.Extensions;
 using snowcoreBlog.ServiceDefaults.Extensions;
-using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace snowcoreBlog.Backend.UrlShortener.Extensions.Startup;

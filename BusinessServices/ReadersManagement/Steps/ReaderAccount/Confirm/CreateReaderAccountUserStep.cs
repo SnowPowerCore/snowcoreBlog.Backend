@@ -4,6 +4,7 @@ using MaybeResults;
 using MinimalStepifiedSystem.Interfaces;
 using snowcoreBlog.Backend.Core.Contracts;
 using snowcoreBlog.Backend.IAM.Core.Contracts;
+using snowcoreBlog.Backend.Infrastructure.StepProgress;
 using snowcoreBlog.Backend.ReadersManagement.Constants;
 using snowcoreBlog.Backend.ReadersManagement.Context;
 using snowcoreBlog.Backend.ReadersManagement.Delegates;
@@ -22,6 +23,8 @@ public class CreateReaderAccountUserStep(IRequestClient<CreateUser> client,
 
     public async Task<IMaybe<ReaderAccountCreatedDto>> InvokeAsync(ConfirmCreateReaderAccountContext context, ConfirmCreateReaderAccountDelegate next, CancellationToken token = default)
     {
+        context.ReportStepProgress(ReaderAccountStepProgressCodes.CreatingUserAccount);
+
         var db = redis.GetDatabase();
         var redisValue = await db.StringGetAsync($"{context.ConfirmRequest.Email}{Fido2AttestationOptions}");
         var attestationOptionsForUser = Encoding.UTF8.GetString(redisValue != RedisValue.Null ? redisValue! : []);

@@ -2,6 +2,7 @@
 using MaybeResults;
 using MinimalStepifiedSystem.Interfaces;
 using snowcoreBlog.Backend.IAM.Core.Contracts;
+using snowcoreBlog.Backend.Infrastructure.StepProgress;
 using snowcoreBlog.Backend.ReadersManagement.Context;
 using snowcoreBlog.Backend.ReadersManagement.Delegates;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
@@ -14,6 +15,8 @@ public class ValidateReaderAccountTempRecordNotExistsStep(IRequestClient<Validat
 {
     public async Task<IMaybe<RequestReaderAccountCreationResultDto>> InvokeAsync(RequestCreateReaderAccountContext context, RequestCreateReaderAccountDelegate next, CancellationToken token = default)
     {
+        context.ReportStepProgress(ReaderAccountStepProgressCodes.CheckingPendingRegistration);
+
         var result = await requestClient.GetResponse<DataResult<TempUserExistsValidationResult>>(
             context.CreateRequest.ToValidateTempUserExists(), token);
         if (result.Message.IsSuccess)

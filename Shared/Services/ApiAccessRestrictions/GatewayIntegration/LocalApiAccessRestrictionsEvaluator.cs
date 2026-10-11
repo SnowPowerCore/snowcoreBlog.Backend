@@ -23,8 +23,7 @@ public sealed class LocalApiAccessRestrictionsEvaluator : ILocalApiAccessRestric
 
         foreach (var rule in ordered)
         {
-            var compiled = snapshot.Rules.First(x => x.Rule.Id == rule.Id);
-            if (!MatchesRule(compiled, request))
+            if (!snapshot.RulesById.TryGetValue(rule.Id, out var compiled) || !MatchesRule(compiled, request))
                 continue;
 
             return ApplyRule(snapshot, rule);

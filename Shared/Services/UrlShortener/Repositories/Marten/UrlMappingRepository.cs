@@ -1,7 +1,7 @@
 using Marten;
-using snowcoreBlog.Backend.UrlShortener.Core.Entities;
 using snowcoreBlog.Backend.Infrastructure.Repositories.Marten.Base;
 using snowcoreBlog.Backend.UrlShortener.Interfaces.Repositories.Marten;
+using snowcoreBlog.Backend.Core.Entities.UrlShortener;
 
 namespace snowcoreBlog.Backend.UrlShortener.Repositories.Marten;
 
@@ -21,7 +21,4 @@ public class UrlMappingRepository(IDocumentSession session) : BaseMartenReposito
         var count = await session.Query<ClickEventEntity>().Where(e => e.UrlMappingId == mappingId && e.ClickedAt >= since).CountAsync(ct);
         return (ulong)count;
     }
-
-    public new Task<UrlMappingEntity> AddOrUpdateAsync(UrlMappingEntity entity, Guid? id = null, bool saveChange = true, CancellationToken ct = default) =>
-        base.AddOrUpdateAsync(entity, id, saveChange, ct);
 }
