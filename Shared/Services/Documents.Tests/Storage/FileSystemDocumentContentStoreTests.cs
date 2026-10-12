@@ -14,7 +14,7 @@ public class FileSystemDocumentContentStoreTests : IDisposable
     {
         _rootPath = Path.Combine(Path.GetTempPath(), "snowcore-doc-tests", Guid.NewGuid().ToString("N"));
         _store = new FileSystemDocumentContentStore(
-            Options.Create(new DocumentsOptions
+            Microsoft.Extensions.Options.Options.Create(new DocumentsOptions
             {
                 Storage = new DocumentsStorageOptions { RootPath = _rootPath }
             }),
@@ -29,7 +29,7 @@ public class FileSystemDocumentContentStoreTests : IDisposable
         }
     }
 
-    private static Stream Content(string text)
+    private static MemoryStream Content(string text)
     {
         var bytes = System.Text.Encoding.UTF8.GetBytes(text);
         return new MemoryStream(bytes);
