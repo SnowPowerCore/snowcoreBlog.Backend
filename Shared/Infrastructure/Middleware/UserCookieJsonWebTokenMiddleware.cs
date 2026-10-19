@@ -18,6 +18,11 @@ public class UserCookieJsonWebTokenMiddleware : IMiddleware
         context.Response.Headers.Append(HeaderNames.XFrameOptions, XFrameOptionsHeaderValue);
 
         var token = context.Request.Cookies[AuthCookieConstants.UserAccessTokenCookieName];
+        if (string.IsNullOrWhiteSpace(token))
+        {
+            token = context.Request.Cookies[AuthCookieConstants.BitzArtAccessTokenCookieName];
+        }
+
         if (!string.IsNullOrWhiteSpace(token) &&
             !context.Request.Headers.ContainsKey(HeaderNames.Authorization))
         {

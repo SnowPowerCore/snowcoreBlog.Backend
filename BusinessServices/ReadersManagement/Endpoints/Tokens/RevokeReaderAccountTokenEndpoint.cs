@@ -61,10 +61,14 @@ public class RevokeReaderAccountTokenEndpoint(IHttpContextAccessor httpContextAc
         }
 
         // Always expire both cookies, even when no refresh cookie was present —
-        // the browser pair must never survive a sign-out attempt.
+        // the browser pair must never survive a sign-out attempt. Also expire
+        // the BitzArt.Blazor.Auth-named cookies: when sign-in completed through
+        // the Blazor host, those are the only auth cookies the browser holds.
         var responseCookies = context?.Response.Cookies;
         responseCookies?.Delete(AuthCookieConstants.UserAccessTokenCookieName);
         responseCookies?.Delete(AuthCookieConstants.UserRefreshTokenCookieName);
+        responseCookies?.Delete(AuthCookieConstants.BitzArtAccessTokenCookieName);
+        responseCookies?.Delete(AuthCookieConstants.BitzArtRefreshTokenCookieName);
 
         await Send.ResponseAsync(
             new ApiResponse(default, 0, (int)HttpStatusCode.OK, Array.Empty<string>()),

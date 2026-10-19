@@ -18,9 +18,22 @@ public sealed class ResolveRefreshTokenStep(IHttpContextAccessor httpContextAcce
         CancellationToken token = default)
     {
         var httpContext = httpContextAccessor.HttpContext;
-        context.RefreshTokenFromCookie = httpContext?.Request.Cookies.TryGetValue(AuthCookieConstants.UserRefreshTokenCookieName, out var cookieToken) == true
-            ? cookieToken
-            : null;
+        // Prefer the backend-named cookie, then fall back to the BitzArt.Blazor.Auth
+        // cookie (the only refresh cookie present when sign-in completed through
+        // the Blazor host).
+        var cookieToken = default(string);
+        if (httpContext?.Request.Cookies.TryGetValue(AuthCookieConstants.UserRefreshTokenCookieName, out var backendCookieToken) == true &&
+            !string.IsNullOrWhiteSpace(backendCookieToken))
+        {
+            cookieToken = backendCookieToken;
+        }
+        else if (httpContext?.Request.Cookies.TryGetValue(AuthCookieConstants.BitzArtRefreshTokenCookieName, out var bitzArtCookieToken) == true &&
+                 !string.IsNullOrWhiteSpace(bitzArtCookieToken))
+        {
+            cookieToken = bitzArtCookieToken;
+        }
+
+        context.RefreshTokenFromCookie = cookieToken;
 
         var resolved = !string.IsNullOrWhiteSpace(context.RefreshTokenFromCookie)
             ? context.RefreshTokenFromCookie
