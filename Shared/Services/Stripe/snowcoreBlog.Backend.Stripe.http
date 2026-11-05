@@ -1,0 +1,50 @@
+@base = https://localhost:5053
+@gateway = https://localhost/api/stripe
+
+### Healthcheck
+GET {{base}}/v1/ping
+Accept: application/json
+
+###
+# Create a donation checkout (returns the hosted Checkout URL to redirect to).
+# Success/cancel URLs may be omitted — defaults come from the Stripe options.
+POST {{base}}/v1/donations/checkout
+Content-Type: application/json
+
+{
+  "amountMinor": 1500,
+  "currency": "usd",
+  "donorEmail": "donor@example.com",
+  "message": "Keep up the great work!"
+}
+
+###
+# Poll donation status (Pending → Succeeded once the webhook lands).
+GET {{base}}/v1/donations/{{donationId}}
+
+###
+# Create a goods checkout (ReferenceId correlates with the caller's order).
+POST {{base}}/v1/payments/checkout
+Content-Type: application/json
+
+{
+  "referenceId": "order-2026-000123",
+  "amountMinor": 1999,
+  "currency": "usd",
+  "description": "Premium subscription (1 year)",
+  "buyerEmail": "buyer@example.com"
+}
+
+###
+# Poll payment status (Pending → Succeeded once the webhook lands).
+GET {{base}}/v1/payments/{{paymentId}}
+
+###
+# Stripe webhook receiver (configured in the Stripe Dashboard → Developers → Webhooks).
+# Requires a valid Stripe-Signature header — cannot be invoked manually without
+# the signing secret; use `stripe listen --forward-to .../api/stripe/webhook` locally.
+POST {{base}}/v1/webhook
+Content-Type: application/json
+Stripe-Signature: t=1,v1=placeholder
+
+{ "ignored": "signature verification will reject this" }

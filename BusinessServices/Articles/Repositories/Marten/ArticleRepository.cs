@@ -56,7 +56,7 @@ public class ArticleRepository(IQuerySession querySession, IDocumentSession docS
         var article = await querySession.Query<ArticleEntity>()
             .FirstOrDefaultAsync(x => x.Slug == slug, ct);
 
-        if (article is null)
+        if (article is default(ArticleEntity))
             return null;
 
         var snapshot = await GetLatestSnapshotAsync(article.Id, ct);

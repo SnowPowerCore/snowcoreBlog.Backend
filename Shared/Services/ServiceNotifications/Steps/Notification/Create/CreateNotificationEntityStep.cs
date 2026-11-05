@@ -3,8 +3,8 @@ using MinimalStepifiedSystem.Interfaces;
 using snowcoreBlog.Backend.Core.Entities.Notification;
 using snowcoreBlog.Backend.ServiceNotifications.Context;
 using snowcoreBlog.Backend.ServiceNotifications.Delegates;
-using snowcoreBlog.Backend.ServiceNotifications.Interfaces.Repositories.Marten;
 using snowcoreBlog.Backend.ServiceNotifications.Extensions;
+using snowcoreBlog.Backend.ServiceNotifications.Interfaces.Repositories.Marten;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 
 namespace snowcoreBlog.Backend.ServiceNotifications.Steps.Notification.Create;
@@ -29,7 +29,7 @@ public class CreateNotificationEntityStep(INotificationRepository notificationRe
             IsDismissible = context.CreateRequest.IsDismissible,
             StartDate = context.CreateRequest.StartDate,
             EndDate = context.CreateRequest.EndDate,
-            CreatedAt = DateTime.UtcNow,
+            CreatedAt = DateTimeOffset.UtcNow,
             CreatedByUserId = context.CreatedByUserId
         };
 

@@ -1,3 +1,5 @@
+using snowcoreBlog.Backend.ApiAccessRestrictions.Interfaces;
+
 namespace snowcoreBlog.Backend.ApiAccessRestrictions.GatewayIntegration;
 
 /// <summary>
@@ -11,7 +13,7 @@ public sealed class NoOpApiAccessRecallStore : IApiAccessRecallStore
     private NoOpApiAccessRecallStore() { }
 
     public Task<ApiAccessRecallEntry?> TryGetAsync(string clientId, CancellationToken cancellationToken) =>
-        Task.FromResult<ApiAccessRecallEntry?>(null);
+        Task.FromResult<ApiAccessRecallEntry?>(default);
 
     public Task SetAsync(string clientId, ApiAccessRecallEntry entry, TimeSpan timeToLive, CancellationToken cancellationToken) =>
         Task.CompletedTask;

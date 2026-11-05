@@ -24,7 +24,7 @@ public sealed class CreateDocumentEntityStep(IDocumentRepository documentReposit
             return await next(context, token);
         }
 
-        var now = DateTime.UtcNow;
+        var now = DateTimeOffset.UtcNow;
 
         var entity = new DocumentEntity
         {

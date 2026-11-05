@@ -1,10 +1,10 @@
 using System.Net;
+using AspNet.Security.OAuth.Apple;
 using FastEndpoints;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authentication.MicrosoftAccount;
 using Microsoft.Extensions.Options;
-using AspNet.Security.OAuth.Apple;
 using snowcoreBlog.Backend.ReadersManagement.Options;
 using snowcoreBlog.PublicApi.Constants;
 

@@ -27,8 +27,8 @@ public class DocumentRepositoryTests
         Status = DocumentStatus.Processed,
         Checksum = "abc123",
         ContentKey = "abc123",
-        UploadedAt = DateTime.UtcNow,
-        ProcessedAt = DateTime.UtcNow
+        UploadedAt = DateTimeOffset.UtcNow,
+        ProcessedAt = DateTimeOffset.UtcNow
     };
 
     [Fact]

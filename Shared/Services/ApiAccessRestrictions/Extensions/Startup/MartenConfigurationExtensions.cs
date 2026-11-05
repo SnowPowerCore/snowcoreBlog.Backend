@@ -1,5 +1,7 @@
 using Marten;
 using Marten.Services;
+using snowcoreBlog.Backend.ApiAccessRestrictions.Interfaces;
+using snowcoreBlog.Backend.ApiAccessRestrictions.Interfaces.Repositories.Marten;
 using snowcoreBlog.Backend.ApiAccessRestrictions.Interfaces.Services;
 using snowcoreBlog.Backend.ApiAccessRestrictions.Repositories.Marten;
 using snowcoreBlog.Backend.ApiAccessRestrictions.Services;
@@ -10,7 +12,7 @@ namespace snowcoreBlog.Backend.ApiAccessRestrictions.Extensions.Startup;
 
 public static class MartenConfigurationExtensions
 {
-    private static readonly SystemTextJsonSerializer Serializer = new();
+    private static readonly SystemTextJsonSerializer _serializer = new();
 
     public static IServiceCollection AddMartenConfiguration(this IServiceCollection services)
     {
@@ -20,8 +22,8 @@ public static class MartenConfigurationExtensions
             options.RegisterDocumentType<RegionRestrictionEntity>();
             options.RegisterDocumentType<ApiAccessRuleEntity>();
             options.RegisterDocumentType<ApiAccessResponseTemplateEntity>();
-            Serializer.UseTypeInfoResolver(CoreSerializationContext.Default);
-            options.Serializer(Serializer);
+            _serializer.UseTypeInfoResolver(CoreSerializationContext.Default);
+            options.Serializer(_serializer);
             options.Policies.AllDocumentsSoftDeleted();
         })
             .UseLightweightSessions()

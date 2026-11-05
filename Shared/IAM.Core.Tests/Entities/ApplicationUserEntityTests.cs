@@ -28,7 +28,7 @@ public class ApplicationUserEntityTests
         entity.LastName = "Doe";
         entity.Email = "john.doe@example.com";
         entity.UserName = "johndoe";
-        entity.RoleClaims = new List<string> { "Reader", "Author" };
+        entity.RoleClaims = ["Reader", "Author"];
         entity.PublicKeyCredentials.Add(credentialId);
 
         // Assert

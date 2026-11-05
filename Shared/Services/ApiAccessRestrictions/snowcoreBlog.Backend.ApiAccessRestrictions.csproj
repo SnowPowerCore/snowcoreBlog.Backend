@@ -4,11 +4,13 @@
     <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>f4650b45-fed6-4a9a-9b97-2918092e0f30</UserSecretsId>
     <PublishTrimmed>true</PublishTrimmed>
     <PublishReadyToRun>true</PublishReadyToRun>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Apizr.Extensions.Microsoft.DependencyInjection" />
     <PackageReference Include="Aspire.Npgsql" />
     <PackageReference Include="Aspire.StackExchange.Redis" />
     <PackageReference Include="FastEndpoints" />
@@ -30,6 +32,7 @@
     <PackageReference Include="MinimalStepifiedSystem.SourceGen" />
     <PackageReference Include="OpenTelemetry.Instrumentation.StackExchangeRedis" />
     <PackageReference Include="Scalar.AspNetCore" />
+    <PackageReference Include="TickerQ" />
   </ItemGroup>
 
   <ItemGroup>

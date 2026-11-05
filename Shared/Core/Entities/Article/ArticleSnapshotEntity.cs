@@ -14,5 +14,5 @@ public record ArticleSnapshotEntity : BaseEntity
     // SEO meta description (rendered into <meta name="description">); null = fall back to Excerpt.
     public string? MetaDescription { get; init; }
     
-    public required DateTime ModifiedAt { get; init; }
+    public required DateTimeOffset ModifiedAt { get; init; }
 }

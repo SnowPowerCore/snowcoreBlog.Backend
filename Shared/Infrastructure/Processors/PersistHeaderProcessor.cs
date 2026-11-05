@@ -6,22 +6,28 @@ using snowcoreBlog.PublicApi.Constants;
 
 namespace snowcoreBlog.Backend.Infrastructure.Processors;
 
+/// <summary>
+/// OpenAPI: marks <see cref="HeaderKeyConstants.IdempotencyKey"/> as a required header on
+/// persist-tagged operations and documents the informative duplicate-status response.
+/// </summary>
 public class PersistHeaderProcessor : IOperationProcessor
 {
     public bool Process(OperationProcessorContext context)
     {
         var operation = context.OperationDescription.Operation;
-        if (operation.Tags.Contains(ApiTagConstants.Persist))
+        if (!operation.Tags.Contains(ApiTagConstants.Persist))
         {
-            operation.Parameters.Add(new OpenApiParameter()
-            {
-                Name = HeaderKeyConstants.PersistHeader,
-                Kind = OpenApiParameterKind.Header,
-                Schema = new JsonSchema { Type = JsonObjectType.String },
-                IsRequired = true,
-                Description = "If set, the request will be persisted for safe reprocessing. Provide a non-empty value."
-            });
+            return true;
         }
+
+        operation.Parameters.Add(new OpenApiParameter()
+        {
+            Name = HeaderKeyConstants.IdempotencyKey,
+            Kind = OpenApiParameterKind.Header,
+            IsRequired = true,
+            Description = "Client-supplied idempotency key; required on persist-tagged endpoints. Retrying with the same key returns an informative status instead of re-executing.",
+            Schema = new JsonSchema { Type = JsonObjectType.String }
+        });
 
         return true;
     }

@@ -50,7 +50,7 @@ public class DownloadDocumentEndpoint : EndpointWithoutRequest
         }
 
         var content = await ContentStore.OpenReadAsync(document.ContentKey, ct);
-        if (content is null)
+        if (content is default(Stream))
         {
             await Send.ResponseAsync(
                 ErrorResponseUtilities.ApiResponseWithErrors(

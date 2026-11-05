@@ -1,6 +1,7 @@
 ﻿using MaybeResults;
 using MinimalStepifiedSystem.Interfaces;
 using snowcoreBlog.Backend.Core.Contracts;
+using snowcoreBlog.Backend.Infrastructure.RequestPersistence;
 using snowcoreBlog.Backend.ReadersManagement.Context;
 using snowcoreBlog.Backend.ReadersManagement.Delegates;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
@@ -8,6 +9,7 @@ using snowcoreBlog.PublicApi.Constants;
 
 namespace snowcoreBlog.Backend.ReadersManagement.Steps.ReaderAccount.Confirm;
 
+[CheckpointedStep]
 public class ReturnCreatedReaderEntityStep() : IStep<ConfirmCreateReaderAccountDelegate, ConfirmCreateReaderAccountContext, IMaybe<ReaderAccountCreatedDto>>
 {
     public Task<IMaybe<ReaderAccountCreatedDto>> InvokeAsync(ConfirmCreateReaderAccountContext context, ConfirmCreateReaderAccountDelegate next, CancellationToken token = default)

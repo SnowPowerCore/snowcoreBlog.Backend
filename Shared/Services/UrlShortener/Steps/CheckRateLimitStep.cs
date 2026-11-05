@@ -1,10 +1,10 @@
 using MaybeResults;
 using MinimalStepifiedSystem.Interfaces;
+using snowcoreBlog.Backend.Infrastructure.Utilities;
 using snowcoreBlog.Backend.UrlShortener.Context;
 using snowcoreBlog.Backend.UrlShortener.Delegates;
 using snowcoreBlog.Backend.UrlShortener.Interfaces.Repositories.Marten;
 using snowcoreBlog.Backend.UrlShortener.Models;
-using snowcoreBlog.Backend.Infrastructure.Utilities;
 
 namespace snowcoreBlog.Backend.UrlShortener.Steps;
 

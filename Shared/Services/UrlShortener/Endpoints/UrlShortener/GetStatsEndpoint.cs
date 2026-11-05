@@ -1,5 +1,6 @@
 using System.Net;
 using FastEndpoints;
+using snowcoreBlog.Backend.Core.Entities.UrlShortener;
 using snowcoreBlog.Backend.UrlShortener.Interfaces.Repositories.Marten;
 
 namespace snowcoreBlog.Backend.UrlShortener.Endpoints.UrlShortener;
@@ -29,7 +30,7 @@ public class GetStatsEndpoint : EndpointWithoutRequest
         }
 
         var mapping = await _repo.GetByCodeAsync(code, ct);
-        if (mapping is null)
+        if (mapping is default(UrlMappingEntity))
         {
             await Send.StatusCodeAsync((int)HttpStatusCode.NotFound, ct);
             return;

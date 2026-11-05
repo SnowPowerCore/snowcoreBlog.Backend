@@ -14,11 +14,11 @@ public sealed class LocalApiAccessRestrictionsEvaluator : ILocalApiAccessRestric
     {
         // 1) Admin-defined API rules
         var ordered = snapshot.Rules
-            .Select(r => r.Rule)
-            .Where(r => r.Enabled)
-            .Where(r => r.ExpiresAt is null || r.ExpiresAt > DateTimeOffset.UtcNow)
-            .OrderByDescending(r => r.Priority)
-            .ThenByDescending(r => r.CreatedAt)
+            .Select(static r => r.Rule)
+            .Where(static r => r.Enabled)
+            .Where(static r => r.ExpiresAt is null || r.ExpiresAt > DateTimeOffset.UtcNow)
+            .OrderByDescending(static r => r.Priority)
+            .ThenByDescending(static r => r.CreatedAt)
             .ToList();
 
         foreach (var rule in ordered)
@@ -41,7 +41,7 @@ public sealed class LocalApiAccessRestrictionsEvaluator : ILocalApiAccessRestric
                     Reason = "Access restricted by IP policy.",
                     StatusCode = StatusCodes.Status403Forbidden,
                     ContentType = "application/json",
-                    BodyJson = null
+                    BodyJson = default
                 };
             }
         }
@@ -59,7 +59,7 @@ public sealed class LocalApiAccessRestrictionsEvaluator : ILocalApiAccessRestric
 
     private static CheckApiAccessResponseDto ApplyRule(CompiledApiAccessRestrictionsSnapshot snapshot, ApiAccessRuleSnapshotDto rule)
     {
-        ApiAccessResponseTemplateSnapshotDto? template = null;
+        ApiAccessResponseTemplateSnapshotDto? template = default;
         if (rule.ResponseTemplateId is not null && snapshot.TemplatesById.TryGetValue(rule.ResponseTemplateId.Value, out var t))
         {
             template = t;
@@ -78,9 +78,9 @@ public sealed class LocalApiAccessRestrictionsEvaluator : ILocalApiAccessRestric
             MatchedRuleId = rule.Id,
             Action = rule.Action,
             Reason = reason,
-            StatusCode = isAllowed ? null : status,
-            ContentType = isAllowed ? null : contentType,
-            BodyJson = isAllowed ? null : bodyJson
+            StatusCode = isAllowed ? default : status,
+            ContentType = isAllowed ? default : contentType,
+            BodyJson = isAllowed ? default : bodyJson
         };
     }
 
@@ -144,7 +144,7 @@ public sealed class LocalApiAccessRestrictionsEvaluator : ILocalApiAccessRestric
 
         if (r.Tags.Count > 0)
         {
-            if (request.Tags is null || request.Tags.Count == 0)
+            if (request.Tags is default(IReadOnlyList<string>) || request.Tags.Count == 0)
                 return false;
 
             if (!r.Tags.Intersect(request.Tags, StringComparer.OrdinalIgnoreCase).Any())

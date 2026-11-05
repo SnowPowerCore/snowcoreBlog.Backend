@@ -14,7 +14,7 @@ public record ArticleEntity : BaseEntity
     // Latest snapshot id; this entity's Markdown is represented by the latest snapshot's content.
     public Guid LatestSnapshotId { get; init; }
 
-    public DateTime? PublishedAt { get; init; }
+    public DateTimeOffset? PublishedAt { get; init; }
 
     public string[] Tags { get; init; } = [];
     

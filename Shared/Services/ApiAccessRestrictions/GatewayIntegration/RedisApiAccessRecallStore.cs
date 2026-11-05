@@ -1,5 +1,6 @@
-using StackExchange.Redis;
+using snowcoreBlog.Backend.ApiAccessRestrictions.Interfaces;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
+using StackExchange.Redis;
 
 namespace snowcoreBlog.Backend.ApiAccessRestrictions.GatewayIntegration;
 
@@ -21,9 +22,9 @@ public sealed class RedisApiAccessRecallStore(IConnectionMultiplexer connectionM
             return null;
 
         DateTimeOffset createdAtUtc = default;
-        Guid? ruleId = null;
+        Guid? ruleId = default;
         var action = ApiAccessRestrictionActionDto.Block;
-        string? reason = null;
+        string? reason = default;
 
         foreach (var entry in entries)
         {
@@ -36,7 +37,7 @@ public sealed class RedisApiAccessRecallStore(IConnectionMultiplexer connectionM
                     action = parsedAction;
                     break;
                 case "reason":
-                    reason = entry.Value.IsNull ? null : entry.Value.ToString();
+                    reason = entry.Value.IsNull ? default : entry.Value.ToString();
                     break;
                 case "createdAt" when DateTimeOffset.TryParse(entry.Value, out var parsedCreatedAt):
                     createdAtUtc = parsedCreatedAt;

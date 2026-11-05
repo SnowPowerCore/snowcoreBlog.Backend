@@ -1,14 +1,14 @@
+using snowcoreBlog.Backend.Core.Base;
+
 namespace snowcoreBlog.Backend.Core.Entities.ApiAccessRestrictions;
 
-public class RegionRestrictionEntity
+public record RegionRestrictionEntity : BaseEntity
 {
-    public Guid Id { get; set; } = Guid.NewGuid();
-
     public string RegionCode { get; set; } = string.Empty; // e.g. ISO country code
 
     public RestrictionLevel Level { get; set; } = RestrictionLevel.Block;
 
-    public List<string> AffectedPaths { get; set; } = new();
+    public List<string> AffectedPaths { get; set; } = [];
 
     public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;
     

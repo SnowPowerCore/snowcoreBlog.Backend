@@ -1,7 +1,7 @@
 using System.Security.Claims;
+using System.Text.Json;
 using MassTransit;
 using MaybeResults;
-using System.Text.Json;
 using MinimalStepifiedSystem.Interfaces;
 using snowcoreBlog.Backend.Core.Constants;
 using snowcoreBlog.Backend.Infrastructure;
@@ -26,7 +26,7 @@ public class GetActiveNotificationsForUserStep(IHttpContextAccessor httpContextA
         CancellationToken token = default)
     {
         var user = httpContextAccessor.HttpContext?.User;
-        if (user is null || user.Identity is null || !user.Identity.IsAuthenticated)
+        if (user is default(ClaimsPrincipal) || user.Identity is default(ClaimsIdentity) || !user.Identity.IsAuthenticated)
             return await next(context, token);
 
         var userIdStr = user.FindFirst(ReaderAccountClaimConstants.ReaderAccountUserIdClaimKey)?.Value
@@ -127,12 +127,12 @@ public class GetActiveNotificationsForUserStep(IHttpContextAccessor httpContextA
 
             foreach (var t in notificationsTasks)
             {
-                if (t is not null && t.IsCompletedSuccessfully)
+                if (t is not default(Task<Response<UserNotificationsResponse>>) && t.IsCompletedSuccessfully)
                 {
                     var resp = t.Result;
-                    foreach (var n in resp.Message.Notifications ?? new())
+                    foreach (var n in resp.Message.Notifications ?? [])
                     {
-                        if (n is not null && seen.Add(n.Id))
+                        if (n is not default(NotificationDto) && seen.Add(n.Id))
                             aggregated.Add(n);
                     }
                 }

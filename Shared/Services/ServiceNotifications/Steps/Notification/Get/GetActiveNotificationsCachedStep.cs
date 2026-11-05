@@ -4,8 +4,8 @@ using MinimalStepifiedSystem.Interfaces;
 using snowcoreBlog.Backend.Infrastructure;
 using snowcoreBlog.Backend.ServiceNotifications.Context;
 using snowcoreBlog.Backend.ServiceNotifications.Delegates;
-using snowcoreBlog.Backend.ServiceNotifications.Interfaces.Repositories.Marten;
 using snowcoreBlog.Backend.ServiceNotifications.Extensions;
+using snowcoreBlog.Backend.ServiceNotifications.Interfaces.Repositories.Marten;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 using StackExchange.Redis;
 

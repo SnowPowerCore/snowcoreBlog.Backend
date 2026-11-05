@@ -37,8 +37,13 @@ public class ConfirmCreateByEmailEndpoint : Endpoint<ConfirmCreateReaderAccountD
         Validator<ConfirmCreateReaderAccountValidator>();
         AllowAnonymous();
         EnableAntiforgery();
+
+        // FE-level behavioral tag — the shared configurator reads EndpointTags, which is ONLY
+        // populated by Tags(); OpenAPI-level WithTags alone is invisible to it.
+        Tags(ApiTagConstants.Persist);
+
         Description(b => b
-            .WithTags(ApiTagConstants.ReaderAccountManagement)
+            .WithTags(ApiTagConstants.ReaderAccountManagement, ApiTagConstants.Persist)
             .Accepts<ConfirmCreateReaderAccountDto>(MediaTypeNames.Application.Json)
             .Produces((int)HttpStatusCode.OK, contentType: MediaTypeNames.Text.EventStream)
             .ProducesProblemFE((int)HttpStatusCode.BadRequest));

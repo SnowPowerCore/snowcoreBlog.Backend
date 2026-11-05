@@ -1,15 +1,15 @@
+using snowcoreBlog.Backend.Core.Base;
+
 namespace snowcoreBlog.Backend.Core.Entities.ApiAccessRestrictions;
 
-public class IpRestrictionEntity
+public record IpRestrictionEntity : BaseEntity
 {
-    public Guid Id { get; set; } = Guid.NewGuid();
-
     public string? Name { get; set; }
 
     public string? Description { get; set; }
 
     // CIDR ranges, single IPs, or range notation
-    public List<string> IpRanges { get; set; } = new();
+    public List<string> IpRanges { get; set; } = [];
 
     public bool IsBlocked { get; set; } = true;
 

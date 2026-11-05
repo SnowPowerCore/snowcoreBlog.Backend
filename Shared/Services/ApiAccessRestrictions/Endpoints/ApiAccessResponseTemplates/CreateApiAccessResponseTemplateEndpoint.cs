@@ -1,6 +1,7 @@
 using FastEndpoints;
 using MassTransit;
-using snowcoreBlog.Backend.ApiAccessRestrictions.Repositories.Marten;
+using snowcoreBlog.Backend.ApiAccessRestrictions.Constants;
+using snowcoreBlog.Backend.ApiAccessRestrictions.Interfaces.Repositories.Marten;
 using snowcoreBlog.Backend.AspireYarpGateway.Core.Contracts;
 using snowcoreBlog.Backend.Core.Entities.ApiAccessRestrictions;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
@@ -13,7 +14,7 @@ public class CreateApiAccessResponseTemplateEndpoint(IApiAccessResponseTemplateR
     public override void Configure()
     {
         Post("templates");
-        AllowAnonymous(); // TODO: restrict to admin
+        Claims(AdminClaimConstants.AdminAccountClaimKey);
         Version(1);
     }
 
@@ -28,7 +29,7 @@ public class CreateApiAccessResponseTemplateEndpoint(IApiAccessResponseTemplateR
             Reason = req.Reason
         };
 
-        await repo.SaveAsync(entity, ct);
+        await repo.AddOrUpdateAsync(entity, token: ct);
         await publisher.Publish(new ApiAccessRestrictionsChanged(DateTimeOffset.UtcNow), ct);
         await Send.CreatedAtAsync<GetApiAccessResponseTemplatesEndpoint>(entity, cancellation: ct);
     }

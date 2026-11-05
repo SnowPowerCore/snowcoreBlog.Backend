@@ -35,7 +35,7 @@ public class NotificationRepositoryTests
             Type = NotificationType.Info,
             IsActive = true,
             Priority = 1,
-            CreatedAt = DateTime.UtcNow
+            CreatedAt = DateTimeOffset.UtcNow
         };
 
         // Act
@@ -59,7 +59,7 @@ public class NotificationRepositoryTests
             Type = NotificationType.Info,
             IsActive = true,
             Priority = 1,
-            CreatedAt = DateTime.UtcNow
+            CreatedAt = DateTimeOffset.UtcNow
         };
 
         // Act
@@ -82,7 +82,7 @@ public class NotificationRepositoryTests
             Type = NotificationType.Info,
             IsActive = true,
             Priority = 1,
-            CreatedAt = DateTime.UtcNow
+            CreatedAt = DateTimeOffset.UtcNow
         };
 
         // Act

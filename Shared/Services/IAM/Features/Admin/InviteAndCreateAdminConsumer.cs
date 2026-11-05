@@ -11,22 +11,28 @@ public class InviteAndCreateAdminConsumer(UserManager<ApplicationAdminEntity> ad
 {
     public async Task Consume(ConsumeContext<CreateAdmin> context)
     {
-        // Ensure the inviting admin exists
-        var invitingAdmin = await adminManager.FindByIdAsync(context.Message.FromAdmin.ToString());
-        if (invitingAdmin is default(ApplicationAdminEntity))
+        // FromAdmin == Guid.Empty marks the FIRST EVER admin bootstrap — there
+        // is no inviting admin by definition, so the inviter check is skipped.
+        if (context.Message.FromAdmin != Guid.Empty)
         {
-            await context.RespondAsync(new DataResult<AdminCreationResult>(
-                Errors: [new("FromAdmin", "Inviting admin does not exist.")]
-            ));
-            return;
+            // Ensure the inviting admin exists
+            var invitingAdmin = await adminManager.FindByIdAsync(context.Message.FromAdmin.ToString());
+            if (invitingAdmin is default(ApplicationAdminEntity))
+            {
+                await context.RespondAsync(new DataResult<AdminCreationResult>(
+                    Errors: [new("FromAdmin", "Inviting admin does not exist.")]
+                ));
+                return;
+            }
         }
 
-        // Check if the email is already taken
+        // Check if the email is already taken. Responding with the EXISTING id
+        // keeps the request idempotent (bootstrap re-runs, partial failures).
         var existingAdmin = await adminManager.FindByEmailAsync(context.Message.Email);
         if (existingAdmin is not default(ApplicationAdminEntity))
         {
             await context.RespondAsync(new DataResult<AdminCreationResult>(
-                Errors: [new("Email", "Admin with this email already exists.")]
+                new() { Id = Guid.Parse(existingAdmin.Id) }
             ));
             return;
         }

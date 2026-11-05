@@ -50,22 +50,22 @@ public record NotificationEntity : BaseEntity
     /// <summary>
     /// When this notification becomes active.
     /// </summary>
-    public DateTime? StartDate { get; init; }
+    public DateTimeOffset? StartDate { get; init; }
 
     /// <summary>
     /// When this notification expires and should no longer be shown.
     /// </summary>
-    public DateTime? EndDate { get; init; }
+    public DateTimeOffset? EndDate { get; init; }
 
     /// <summary>
     /// When this notification was created.
     /// </summary>
-    public DateTime CreatedAt { get; init; } = DateTime.UtcNow;
+    public DateTimeOffset CreatedAt { get; init; } = DateTimeOffset.UtcNow;
 
     /// <summary>
     /// When this notification was last modified.
     /// </summary>
-    public DateTime? ModifiedAt { get; init; }
+    public DateTimeOffset? ModifiedAt { get; init; }
 
     /// <summary>
     /// User ID of who created this notification (admin).

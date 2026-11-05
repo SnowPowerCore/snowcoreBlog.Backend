@@ -1,9 +1,9 @@
+using snowcoreBlog.Backend.Core.Base;
+
 namespace snowcoreBlog.Backend.Core.Entities.ApiAccessRestrictions;
 
-public class ApiAccessResponseTemplateEntity
+public record ApiAccessResponseTemplateEntity : BaseEntity
 {
-    public Guid Id { get; set; } = Guid.NewGuid();
-
     public string? Name { get; set; }
 
     public int StatusCode { get; set; } = 403;

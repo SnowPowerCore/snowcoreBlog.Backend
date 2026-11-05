@@ -1,13 +1,14 @@
+using System.Security.Cryptography;
 using Ixnas.AltchaNet;
 using Marten;
 using Marten.Services;
 using snowcoreBlog.Backend.Core.Entities.Reader;
 using snowcoreBlog.Backend.Infrastructure;
 using snowcoreBlog.Backend.Infrastructure.Entities;
+using snowcoreBlog.Backend.Infrastructure.Extensions;
 using snowcoreBlog.Backend.Infrastructure.Stores;
 using snowcoreBlog.Backend.ReadersManagement.Interfaces.Repositories.Marten;
 using snowcoreBlog.Backend.ReadersManagement.Repositories.Marten;
-using System.Security.Cryptography;
 
 namespace snowcoreBlog.Backend.ReadersManagement.Extensions.Startup;
 
@@ -38,6 +39,10 @@ public static class MartenConfigurationExtensions
         {
             options.RegisterDocumentType<ReaderEntity>();
             options.RegisterDocumentType<AltchaStoredChallengeEntity>();
+
+            // Durable request persistence: claims + step checkpoints (unique idempotency-key index)
+            options.AddPersistRequestDocuments();
+
             _serializer.UseTypeInfoResolver(CoreSerializationContext.Default);
             options.Serializer(_serializer);
             options.Policies.AllDocumentsSoftDeleted();

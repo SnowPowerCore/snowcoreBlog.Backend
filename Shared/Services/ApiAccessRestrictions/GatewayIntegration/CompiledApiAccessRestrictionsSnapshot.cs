@@ -1,5 +1,5 @@
-using System.Net;
 using System.Buffers.Binary;
+using System.Net;
 using System.Text.RegularExpressions;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 
@@ -24,8 +24,8 @@ public sealed class CompiledApiAccessRestrictionsSnapshot
     public static CompiledApiAccessRestrictionsSnapshot Compile(ApiAccessRestrictionsSnapshotDto snapshot)
     {
         var templatesById = snapshot.ResponseTemplates
-            .GroupBy(t => t.Id)
-            .ToDictionary(g => g.Key, g => g.Last());
+            .GroupBy(static t => t.Id)
+            .ToDictionary(static g => g.Key, static g => g.Last());
 
         var rules = snapshot.Rules
             .Select(CompiledRule.Compile)

@@ -2,8 +2,8 @@ using MaybeResults;
 using MinimalStepifiedSystem.Interfaces;
 using snowcoreBlog.Backend.ServiceNotifications.Context;
 using snowcoreBlog.Backend.ServiceNotifications.Delegates;
-using snowcoreBlog.Backend.ServiceNotifications.Interfaces.Repositories.Marten;
 using snowcoreBlog.Backend.ServiceNotifications.Extensions;
+using snowcoreBlog.Backend.ServiceNotifications.Interfaces.Repositories.Marten;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 
 namespace snowcoreBlog.Backend.ServiceNotifications.Steps.Notification.Update;
@@ -30,7 +30,7 @@ public class UpdateNotificationEntityStep(INotificationRepository notificationRe
             IsDismissible = context.UpdateRequest.IsDismissible,
             StartDate = context.UpdateRequest.StartDate,
             EndDate = context.UpdateRequest.EndDate,
-            ModifiedAt = DateTime.UtcNow
+            ModifiedAt = DateTimeOffset.UtcNow
         };
 
         var savedEntity = await notificationRepository.AddOrUpdateAsync(updatedEntity, updatedEntity.Id, token: token);

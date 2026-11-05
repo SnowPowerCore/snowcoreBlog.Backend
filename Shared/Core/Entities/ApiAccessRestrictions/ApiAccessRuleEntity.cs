@@ -1,9 +1,9 @@
+using snowcoreBlog.Backend.Core.Base;
+
 namespace snowcoreBlog.Backend.Core.Entities.ApiAccessRestrictions;
 
-public class ApiAccessRuleEntity
+public record ApiAccessRuleEntity : BaseEntity
 {
-    public Guid Id { get; set; } = Guid.NewGuid();
-
     public string? Name { get; set; }
 
     public string? Description { get; set; }
@@ -14,15 +14,15 @@ public class ApiAccessRuleEntity
 
     public RestrictionLevel Action { get; set; } = RestrictionLevel.Block;
 
-    public List<string> Methods { get; set; } = new();
+    public List<string> Methods { get; set; } = [];
 
-    public List<string> PathPatterns { get; set; } = new();
+    public List<string> PathPatterns { get; set; } = [];
 
-    public List<string> Tags { get; set; } = new();
+    public List<string> Tags { get; set; } = [];
 
-    public List<string> IpRanges { get; set; } = new();
+    public List<string> IpRanges { get; set; } = [];
 
-    public List<string> RegionCodes { get; set; } = new();
+    public List<string> RegionCodes { get; set; } = [];
 
     public Guid? ResponseTemplateId { get; set; }
 

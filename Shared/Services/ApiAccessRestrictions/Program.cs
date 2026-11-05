@@ -23,7 +23,9 @@ builder.Services.AddHostingConfiguration();
 builder.Services.AddTelemetryConfiguration();
 
 // FastEndpoints
-builder.Services.AddFastEndpointsConfiguration();
+builder.Services.AddFastEndpointsConfiguration(
+    builder.Configuration["Security:Signing:Admin:SigningKey"]
+        ?? throw new InvalidOperationException("Admin signing key not configured"));
 
 var app = builder.Build();
 

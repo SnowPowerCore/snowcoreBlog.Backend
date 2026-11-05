@@ -1,6 +1,7 @@
 using FastEndpoints;
 using MassTransit;
-using snowcoreBlog.Backend.ApiAccessRestrictions.Repositories.Marten;
+using snowcoreBlog.Backend.ApiAccessRestrictions.Constants;
+using snowcoreBlog.Backend.ApiAccessRestrictions.Interfaces.Repositories.Marten;
 using snowcoreBlog.Backend.AspireYarpGateway.Core.Contracts;
 using snowcoreBlog.Backend.Core.Entities.ApiAccessRestrictions;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
@@ -13,7 +14,7 @@ public class UpdateApiAccessResponseTemplateEndpoint(IApiAccessResponseTemplateR
     public override void Configure()
     {
         Put("templates/{id:guid}");
-        AllowAnonymous(); // TODO: restrict to admin
+        Claims(AdminClaimConstants.AdminAccountClaimKey);
         Version(1);
     }
 
@@ -33,13 +34,16 @@ public class UpdateApiAccessResponseTemplateEndpoint(IApiAccessResponseTemplateR
             return;
         }
 
-        existing.Name = req.Name;
-        existing.StatusCode = req.StatusCode;
-        existing.ContentType = req.ContentType;
-        existing.BodyJson = req.BodyJson;
-        existing.Reason = req.Reason;
+        existing = existing with
+        {
+            Name = req.Name,
+            StatusCode = req.StatusCode,
+            ContentType = req.ContentType,
+            BodyJson = req.BodyJson,
+            Reason = req.Reason
+        };
 
-        await repo.SaveAsync(existing, ct);
+        await repo.AddOrUpdateAsync(existing, existing.Id, token: ct);
         await publisher.Publish(new ApiAccessRestrictionsChanged(DateTimeOffset.UtcNow), ct);
         await Send.OkAsync(cancellation: ct);
     }

@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AspectInjector" />
     <PackageReference Include="FastEndpoints" />
     <PackageReference Include="FastEndpoints.OpenTelemetry" />
     <PackageReference Include="Fody">
@@ -27,6 +28,7 @@
     <PackageReference Include="OpenTelemetry.Instrumentation.StackExchangeRedis" />
     <PackageReference Include="Scalar.AspNetCore" />
     <PackageReference Include="Sodium.Core" />
+    <PackageReference Include="TickerQ" />
   </ItemGroup>
 
   <ItemGroup>

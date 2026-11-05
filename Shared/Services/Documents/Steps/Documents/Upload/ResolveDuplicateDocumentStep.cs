@@ -1,5 +1,6 @@
 using MaybeResults;
 using MinimalStepifiedSystem.Interfaces;
+using snowcoreBlog.Backend.Core.Entities.Documents;
 using snowcoreBlog.Backend.Documents.Context;
 using snowcoreBlog.Backend.Documents.Delegates;
 using snowcoreBlog.Backend.Documents.Interfaces.Repositories.Marten;
@@ -19,7 +20,7 @@ public sealed class ResolveDuplicateDocumentStep(IDocumentRepository documentRep
     public async Task<IMaybe<DocumentDto>> InvokeAsync(UploadDocumentContext context, UploadDocumentDelegate next, CancellationToken token = default)
     {
         var existing = await documentRepository.GetByChecksumAsync(context.Checksum!, token);
-        if (existing is not null)
+        if (existing is not default(DocumentEntity))
         {
             context.IsDuplicate = true;
             context.Document = existing;

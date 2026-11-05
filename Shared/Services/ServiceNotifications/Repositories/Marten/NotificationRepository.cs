@@ -11,7 +11,7 @@ public class NotificationRepository(IDocumentSession session) : BaseMartenReposi
 
     public async Task<IEnumerable<NotificationEntity>> GetActiveNotificationsAsync(int? maxCount = null, CancellationToken token = default)
     {
-        var now = DateTime.UtcNow;
+        var now = DateTimeOffset.UtcNow;
 
         var baseQuery = _session.Query<NotificationEntity>()
             .Where(n => n.IsActive)

@@ -17,16 +17,19 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using snowcoreBlog.Backend.ApiAccessRestrictions.Extensions;
+using snowcoreBlog.Backend.ApiAccessRestrictions.GatewayIntegration;
 using snowcoreBlog.Backend.AspireYarpGateway.Core.Contracts;
 using snowcoreBlog.Backend.AspireYarpGateway.Extensions;
 using snowcoreBlog.Backend.AspireYarpGateway.Features;
 using snowcoreBlog.Backend.AspireYarpGateway.Options;
 using snowcoreBlog.Backend.AspireYarpGateway.Validation;
-using snowcoreBlog.Backend.ApiAccessRestrictions.GatewayIntegration;
 using snowcoreBlog.Backend.Gateway.Middleware.Extensions;
 using snowcoreBlog.Backend.Infrastructure.Extensions;
 using snowcoreBlog.PublicApi.Utilities.Dictionary;
 using snowcoreBlog.ServiceDefaults.Extensions;
+using TickerQ.Dashboard.DependencyInjection;
+using TickerQ.DependencyInjection;
 using Yarp.ReverseProxy.Configuration;
 
 namespace Aspire.Hosting;
@@ -208,6 +211,30 @@ public static class YarpResourceExtensions
             builder.AddRedisClient("cache");
         }
 
+        // TickerQ drives the snapshot-refresh safety-net poll (replaces the former
+        // ApiAccessRestrictionsSnapshotRefreshHostedService). In-memory persistence is
+        // deliberate: the TickerQ 10.x Redis provider namespaces all keys under a fixed
+        // "tq:" prefix with no per-application partition, so sharing the <c>cache</c>
+        // instance with ReadersManagement's TickerQ would make the two schedulers claim
+        // each other's cron occurrences. The cron expression from WithCron is migrated into
+        // the persistence provider by TickerQ's initializer at host start.
+        // The dashboard is opt-in AND requires configured basic auth: this host serves the
+        // public ingress, so an unauthenticated scheduler control plane is never exposed.
+        builder.Services.MapTicker<ApiAccessRestrictionsSnapshotRefreshJob>()
+            .WithCron(ApiAccessRestrictionsSnapshotRefreshJob.CronExpression);
+        builder.Services.AddTickerQ(options =>
+        {
+            var dashboardEnabled = builder.Configuration.GetValue("TickerQ:Dashboard:Enabled", false);
+            var dashboardUsername = builder.Configuration["TickerQ:Dashboard:Username"];
+            var dashboardPassword = builder.Configuration["TickerQ:Dashboard:Password"];
+            if (dashboardEnabled
+                && !string.IsNullOrWhiteSpace(dashboardUsername)
+                && !string.IsNullOrWhiteSpace(dashboardPassword))
+            {
+                options.AddDashboard(dashboard => dashboard.WithBasicAuth(dashboardUsername, dashboardPassword));
+            }
+        });
+
         var proxyBuilder = builder.Services.AddReverseProxy();
 
         if (yarpResource.RouteConfigs.Count > 0)
@@ -296,6 +323,9 @@ public static class YarpResourceExtensions
         builder.Services.AddHealthChecks();
 
         var app = builder.Build();
+
+        // Activate the TickerQ scheduler (also maps the dashboard branch when configured).
+        app.UseTickerQ();
 
         app.UseHttpsRedirection()
            .UseCors()

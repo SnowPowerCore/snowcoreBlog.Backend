@@ -43,7 +43,7 @@ public class GetArticleBySlugStep(IArticleRepository articleRepository, IConnect
             Title = article.Title,
             Slug = article.Slug,
             Markdown = snapshot?.Markdown ?? string.Empty,
-            AuthorUserIds = article.AuthorUserIds ?? Array.Empty<Guid>(),
+            AuthorUserIds = article.AuthorUserIds ?? [],
             LatestSnapshotId = article.LatestSnapshotId,
             PublishedAt = article.PublishedAt,
             ModifiedAt = snapshot?.ModifiedAt,

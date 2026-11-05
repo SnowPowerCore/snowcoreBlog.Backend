@@ -1,7 +1,7 @@
+using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Routing.Constraints;
 using snowcoreBlog.Backend.Infrastructure.Extensions;
 using snowcoreBlog.ServiceDefaults.Extensions;
-using System.Text.Json.Serialization;
 
 namespace snowcoreBlog.Backend.ApiAccessRestrictions.Extensions.Startup;
 

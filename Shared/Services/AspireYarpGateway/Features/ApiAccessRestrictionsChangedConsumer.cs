@@ -1,6 +1,6 @@
 using MassTransit;
 using Microsoft.Extensions.Logging;
-using snowcoreBlog.Backend.ApiAccessRestrictions.GatewayIntegration;
+using snowcoreBlog.Backend.ApiAccessRestrictions.Interfaces;
 using snowcoreBlog.Backend.AspireYarpGateway.Core.Contracts;
 
 namespace snowcoreBlog.Backend.AspireYarpGateway.Features;

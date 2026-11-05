@@ -1,6 +1,6 @@
 using FluentValidation;
-using snowcoreBlog.Backend.Push.Validation;
 using snowcoreBlog.Backend.Push.Core.Contracts;
+using snowcoreBlog.Backend.Push.Validation;
 
 namespace snowcoreBlog.Backend.Push.Extensions.Startup;
 

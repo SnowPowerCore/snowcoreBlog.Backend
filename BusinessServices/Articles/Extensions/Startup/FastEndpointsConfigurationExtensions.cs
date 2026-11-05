@@ -1,3 +1,7 @@
+using System.Net.Mime;
+using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using FastEndpoints;
 using FastEndpoints.OpenTelemetry.Middleware;
 using FastEndpoints.Security;
@@ -7,10 +11,6 @@ using snowcoreBlog.Backend.Gateway.Middleware.Middleware;
 using snowcoreBlog.Backend.Infrastructure.Extensions;
 using snowcoreBlog.Backend.Infrastructure.Processors;
 using snowcoreBlog.PublicApi.Extensions;
-using System.Net.Mime;
-using System.Text;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 
 namespace snowcoreBlog.Backend.Articles.Extensions.Startup;
 

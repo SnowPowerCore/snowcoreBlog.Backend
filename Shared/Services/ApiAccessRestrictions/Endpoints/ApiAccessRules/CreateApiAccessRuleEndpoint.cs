@@ -1,6 +1,7 @@
 using FastEndpoints;
 using MassTransit;
-using snowcoreBlog.Backend.ApiAccessRestrictions.Repositories.Marten;
+using snowcoreBlog.Backend.ApiAccessRestrictions.Constants;
+using snowcoreBlog.Backend.ApiAccessRestrictions.Interfaces.Repositories.Marten;
 using snowcoreBlog.Backend.AspireYarpGateway.Core.Contracts;
 using snowcoreBlog.Backend.Core.Entities.ApiAccessRestrictions;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
@@ -13,7 +14,7 @@ public class CreateApiAccessRuleEndpoint(IApiAccessRuleRepository repo,
     public override void Configure()
     {
         Post("rules");
-        AllowAnonymous(); // TODO: restrict to admin
+        Claims(AdminClaimConstants.AdminAccountClaimKey);
         Version(1);
     }
 
@@ -26,16 +27,16 @@ public class CreateApiAccessRuleEndpoint(IApiAccessRuleRepository repo,
             Enabled = req.Enabled,
             Priority = req.Priority,
             Action = (RestrictionLevel)req.Action,
-            Methods = req.Methods?.ToList() ?? [],
-            PathPatterns = req.PathPatterns?.ToList() ?? [],
-            Tags = req.Tags?.ToList() ?? [],
-            IpRanges = req.IpRanges?.ToList() ?? [],
-            RegionCodes = req.RegionCodes?.ToList() ?? [],
+            Methods = req.Methods?.ToList(),
+            PathPatterns = req.PathPatterns?.ToList(),
+            Tags = req.Tags?.ToList(),
+            IpRanges = req.IpRanges?.ToList(),
+            RegionCodes = req.RegionCodes?.ToList(),
             ResponseTemplateId = req.ResponseTemplateId,
             ExpiresAt = req.ExpiresAt
         };
 
-        await repo.SaveAsync(entity, ct);
+        await repo.AddOrUpdateAsync(entity, token: ct);
         await publisher.Publish(new ApiAccessRestrictionsChanged(DateTimeOffset.UtcNow), ct);
         await Send.CreatedAtAsync<GetApiAccessRulesEndpoint>(entity, cancellation: ct);
     }

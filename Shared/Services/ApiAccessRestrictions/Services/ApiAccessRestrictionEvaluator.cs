@@ -1,15 +1,11 @@
 using System.Net;
 using System.Text.RegularExpressions;
-using snowcoreBlog.Backend.ApiAccessRestrictions.Repositories.Marten;
+using snowcoreBlog.Backend.ApiAccessRestrictions.Interfaces;
+using snowcoreBlog.Backend.ApiAccessRestrictions.Interfaces.Repositories.Marten;
 using snowcoreBlog.Backend.Core.Entities.ApiAccessRestrictions;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 
 namespace snowcoreBlog.Backend.ApiAccessRestrictions.Services;
-
-public interface IApiAccessRestrictionEvaluator
-{
-    Task<CheckApiAccessResponseDto> EvaluateAsync(CheckApiAccessRequestDto request, CancellationToken ct = default);
-}
 
 public class ApiAccessRestrictionEvaluator(
     IIpRestrictionRepository ipRepo,
@@ -22,10 +18,10 @@ public class ApiAccessRestrictionEvaluator(
         // 1) Admin-defined API rules
         var rules = await ruleRepo.GetAllAsync(ct);
         var ordered = rules
-            .Where(r => r.Enabled)
-            .Where(r => r.ExpiresAt is null || r.ExpiresAt > DateTimeOffset.UtcNow)
-            .OrderByDescending(r => r.Priority)
-            .ThenByDescending(r => r.CreatedAt)
+            .Where(static r => r.Enabled)
+            .Where(static r => r.ExpiresAt is null || r.ExpiresAt > DateTimeOffset.UtcNow)
+            .OrderByDescending(static r => r.Priority)
+            .ThenByDescending(static r => r.CreatedAt)
             .ToList();
 
         foreach (var rule in ordered)
@@ -39,7 +35,7 @@ public class ApiAccessRestrictionEvaluator(
         // 2) Existing IP restrictions
         if (!string.IsNullOrWhiteSpace(request.Ip) && IPAddress.TryParse(request.Ip, out var ip))
         {
-            var ipRestrictions = await ipRepo.GetAllAsync();
+            var ipRestrictions = (await ipRepo.GetAllAsync(ct)).ToList();
             if (IsBlockedByIp(ipRestrictions, ip))
             {
                 return new CheckApiAccessResponseDto
@@ -49,7 +45,7 @@ public class ApiAccessRestrictionEvaluator(
                     Reason = "Access restricted by IP policy.",
                     StatusCode = StatusCodes.Status403Forbidden,
                     ContentType = "application/json",
-                    BodyJson = null
+                    BodyJson = default
                 };
             }
         }
@@ -57,7 +53,7 @@ public class ApiAccessRestrictionEvaluator(
         // 3) Existing region restrictions
         if (!string.IsNullOrWhiteSpace(request.CountryCode))
         {
-            var regionRestrictions = await regionRepo.GetAllAsync(ct);
+            var regionRestrictions = (await regionRepo.GetAllAsync(ct)).ToList();
             var decision = EvaluateRegion(regionRestrictions, request.CountryCode!, request.Path);
             if (decision is not default(CheckApiAccessResponseDto))
             {
@@ -70,7 +66,7 @@ public class ApiAccessRestrictionEvaluator(
 
     private async Task<CheckApiAccessResponseDto> DenyFromRuleAsync(ApiAccessRuleEntity rule, CheckApiAccessRequestDto request, CancellationToken ct)
     {
-        ApiAccessResponseTemplateEntity? template = null;
+        ApiAccessResponseTemplateEntity? template = default;
         if (rule.ResponseTemplateId is not null)
         {
             template = await templateRepo.GetByIdAsync(rule.ResponseTemplateId.Value, ct);
@@ -89,9 +85,9 @@ public class ApiAccessRestrictionEvaluator(
             MatchedRuleId = rule.Id,
             Action = (ApiAccessRestrictionActionDto)rule.Action,
             Reason = reason,
-            StatusCode = isAllowed ? null : status,
-            ContentType = isAllowed ? null : contentType,
-            BodyJson = isAllowed ? null : bodyJson
+            StatusCode = isAllowed ? default : status,
+            ContentType = isAllowed ? default : contentType,
+            BodyJson = isAllowed ? default : bodyJson
         };
     }
 
@@ -149,7 +145,7 @@ public class ApiAccessRestrictionEvaluator(
 
         if (rule.Tags.Count > 0)
         {
-            if (request.Tags is null || request.Tags.Count == 0)
+            if (request.Tags is default(IReadOnlyList<string>) || request.Tags.Count == 0)
                 return false;
 
             if (!rule.Tags.Intersect(request.Tags, StringComparer.OrdinalIgnoreCase).Any())

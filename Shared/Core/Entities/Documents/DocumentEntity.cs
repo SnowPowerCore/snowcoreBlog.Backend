@@ -44,8 +44,8 @@ public record DocumentEntity : BaseEntity
     public Dictionary<string, string>? Metadata { get; init; }
 
     /// <summary>UTC timestamp of the upload.</summary>
-    public DateTime UploadedAt { get; init; }
+    public DateTimeOffset UploadedAt { get; init; }
 
     /// <summary>UTC timestamp when the processing sequence finished (null while pending).</summary>
-    public DateTime? ProcessedAt { get; init; }
+    public DateTimeOffset? ProcessedAt { get; init; }
 }

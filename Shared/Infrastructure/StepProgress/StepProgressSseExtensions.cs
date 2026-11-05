@@ -1,5 +1,5 @@
-using System.Runtime.CompilerServices;
 using System.Net;
+using System.Runtime.CompilerServices;
 using System.Threading.Channels;
 using FastEndpoints;
 using Microsoft.AspNetCore.Http;
@@ -116,7 +116,7 @@ public static class StepProgressSseExtensions
         }
 
         var finalFrame = await finalFrameTask;
-        if (finalFrame is not null)
+        if (finalFrame is not default(StreamItem))
         {
             yield return finalFrame;
         }

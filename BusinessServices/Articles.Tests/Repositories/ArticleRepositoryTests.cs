@@ -28,14 +28,14 @@ public class ArticleRepositoryTests
             Id = Guid.NewGuid(),
             Title = "Test Article",
             Slug = "test-article",
-            PublishedAt = DateTime.UtcNow
+            PublishedAt = DateTimeOffset.UtcNow
         };
         var snapshot = new ArticleSnapshotEntity 
         { 
             Id = Guid.NewGuid(),
             ArticleId = article.Id,
             Markdown = "# Test",
-            ModifiedAt = DateTime.UtcNow
+            ModifiedAt = DateTimeOffset.UtcNow
         };
 
         // Act
@@ -57,7 +57,7 @@ public class ArticleRepositoryTests
             Id = Guid.NewGuid(),
             ArticleId = Guid.NewGuid(),
             Markdown = "# Test",
-            ModifiedAt = DateTime.UtcNow
+            ModifiedAt = DateTimeOffset.UtcNow
         };
 
         // Act

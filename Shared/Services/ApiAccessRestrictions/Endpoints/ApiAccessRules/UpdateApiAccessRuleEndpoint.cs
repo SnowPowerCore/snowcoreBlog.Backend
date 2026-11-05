@@ -1,6 +1,7 @@
 using FastEndpoints;
 using MassTransit;
-using snowcoreBlog.Backend.ApiAccessRestrictions.Repositories.Marten;
+using snowcoreBlog.Backend.ApiAccessRestrictions.Constants;
+using snowcoreBlog.Backend.ApiAccessRestrictions.Interfaces.Repositories.Marten;
 using snowcoreBlog.Backend.AspireYarpGateway.Core.Contracts;
 using snowcoreBlog.Backend.Core.Entities.ApiAccessRestrictions;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
@@ -13,7 +14,7 @@ public class UpdateApiAccessRuleEndpoint(IApiAccessRuleRepository repo,
     public override void Configure()
     {
         Put("rules/{id:guid}");
-        AllowAnonymous(); // TODO: restrict to admin
+        Claims(AdminClaimConstants.AdminAccountClaimKey);
         Version(1);
     }
 
@@ -33,20 +34,23 @@ public class UpdateApiAccessRuleEndpoint(IApiAccessRuleRepository repo,
             return;
         }
 
-        existing.Name = req.Name;
-        existing.Description = req.Description;
-        existing.Enabled = req.Enabled;
-        existing.Priority = req.Priority;
-        existing.Action = (RestrictionLevel)req.Action;
-        existing.Methods = req.Methods?.ToList() ?? [];
-        existing.PathPatterns = req.PathPatterns?.ToList() ?? [];
-        existing.Tags = req.Tags?.ToList() ?? [];
-        existing.IpRanges = req.IpRanges?.ToList() ?? [];
-        existing.RegionCodes = req.RegionCodes?.ToList() ?? [];
-        existing.ResponseTemplateId = req.ResponseTemplateId;
-        existing.ExpiresAt = req.ExpiresAt;
+        existing = existing with
+        {
+            Name = req.Name,
+            Description = req.Description,
+            Enabled = req.Enabled,
+            Priority = req.Priority,
+            Action = (RestrictionLevel)req.Action,
+            Methods = req.Methods?.ToList(),
+            PathPatterns = req.PathPatterns?.ToList(),
+            Tags = req.Tags?.ToList(),
+            IpRanges = req.IpRanges?.ToList(),
+            RegionCodes = req.RegionCodes?.ToList(),
+            ResponseTemplateId = req.ResponseTemplateId,
+            ExpiresAt = req.ExpiresAt
+        };
 
-        await repo.SaveAsync(existing, ct);
+        await repo.AddOrUpdateAsync(existing, existing.Id, token: ct);
         await publisher.Publish(new ApiAccessRestrictionsChanged(DateTimeOffset.UtcNow), ct);
         await Send.OkAsync(cancellation: ct);
     }

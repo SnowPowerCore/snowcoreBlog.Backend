@@ -40,7 +40,7 @@ public partial class GenerateSlugStep(IArticleRepository repo) : IStep<CreateArt
             Markdown = context.CreateRequest.Markdown,
             Excerpt = context.CreateRequest.Excerpt,
             MetaDescription = context.CreateRequest.MetaDescription,
-            ModifiedAt = DateTime.UtcNow
+            ModifiedAt = DateTimeOffset.UtcNow
         };
 
         var articleId = Guid.NewGuid();

@@ -1,6 +1,6 @@
 using MaybeResults;
-using MinimalStepifiedSystem.Interfaces;
 using Microsoft.Extensions.Options;
+using MinimalStepifiedSystem.Interfaces;
 using snowcoreBlog.Backend.Documents.Context;
 using snowcoreBlog.Backend.Documents.Delegates;
 using snowcoreBlog.Backend.Documents.Options;
@@ -18,7 +18,7 @@ public sealed class ValidateDocumentUploadStep(IOptions<DocumentsOptions> option
     {
         var limits = options.Value.UploadLimits;
 
-        if (context.Content is null || !context.Content.CanRead)
+        if (context.Content is default(Stream) || !context.Content.CanRead)
         {
             return Task.FromResult(DocumentUploadError<DocumentDto>.Create("Document content is required."));
         }

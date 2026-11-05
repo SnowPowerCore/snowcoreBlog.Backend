@@ -1,3 +1,4 @@
+using System.Security.Cryptography;
 using Ixnas.AltchaNet;
 using Marten;
 using Marten.Services;
@@ -6,7 +7,6 @@ using snowcoreBlog.Backend.Articles.Repositories.Marten;
 using snowcoreBlog.Backend.Core.Entities.Article;
 using snowcoreBlog.Backend.Gateway.Middleware.Middleware;
 using snowcoreBlog.Backend.Infrastructure;
-using System.Security.Cryptography;
 
 namespace snowcoreBlog.Backend.Articles.Extensions.Startup;
 

@@ -1,3 +1,7 @@
+using System.Net.Mime;
+using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using FastEndpoints;
 using FastEndpoints.Security;
 using FastEndpoints.Swagger;
@@ -9,10 +13,6 @@ using snowcoreBlog.Backend.Infrastructure.Extensions;
 using snowcoreBlog.Backend.Infrastructure.Processors;
 using snowcoreBlog.Backend.Infrastructure.Utilities;
 using snowcoreBlog.PublicApi.Extensions;
-using System.Net.Mime;
-using System.Text;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 
 namespace snowcoreBlog.Backend.ReadersManagement.Extensions.Startup;
 
@@ -55,6 +55,7 @@ public static class FastEndpointsConfigurationExtensions
                     s.SchemaSettings.IgnoreObsoleteProperties = true;
                     s.OperationProcessors.Add(new AntiforgeryHeaderProcessor());
                     s.OperationProcessors.Add(new AltchaHeaderProcessor());
+                    s.OperationProcessors.Add(new PersistHeaderProcessor());
                 };
                 options.SerializerSettings = s =>
                 {
@@ -102,6 +103,9 @@ public static class FastEndpointsConfigurationExtensions
                 {
                     ep.PreProcessor<AltchaVerificationProcessor>(Order.Before);
                 }
+
+                // Durable request persistence: tagged endpoints (ApiTagConstants.Persist) only.
+                ep.AttachPersistRequestProcessors();
             };
             c.Errors.UseProblemDetails(static x =>
             {

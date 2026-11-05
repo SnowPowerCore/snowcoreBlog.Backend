@@ -1,5 +1,5 @@
 using FastEndpoints;
-using snowcoreBlog.Backend.ApiAccessRestrictions.Repositories.Marten;
+using snowcoreBlog.Backend.ApiAccessRestrictions.Interfaces.Repositories.Marten;
 using snowcoreBlog.Backend.Core.Entities.ApiAccessRestrictions;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 
@@ -21,13 +21,13 @@ public class GetApiAccessRestrictionsSnapshotEndpoint(IIpRestrictionRepository i
     {
         var rules = await ruleRepo.GetAllAsync(ct);
         var templates = await templateRepo.GetAllAsync(ct);
-        var ipRestrictions = await ipRepo.GetAllAsync();
+        var ipRestrictions = await ipRepo.GetAllAsync(ct);
         var regionRestrictions = await regionRepo.GetAllAsync(ct);
 
         var snapshot = new ApiAccessRestrictionsSnapshotDto
         {
             GeneratedAt = DateTimeOffset.UtcNow,
-            Rules = rules.Select(r => new ApiAccessRuleSnapshotDto
+            Rules = rules.Select(static r => new ApiAccessRuleSnapshotDto
             {
                 Id = r.Id,
                 Name = r.Name,
@@ -44,7 +44,7 @@ public class GetApiAccessRestrictionsSnapshotEndpoint(IIpRestrictionRepository i
                 RegionCodes = r.RegionCodes,
                 ResponseTemplateId = r.ResponseTemplateId
             }).ToList(),
-            ResponseTemplates = templates.Select(t => new ApiAccessResponseTemplateSnapshotDto
+            ResponseTemplates = templates.Select(static t => new ApiAccessResponseTemplateSnapshotDto
             {
                 Id = t.Id,
                 Name = t.Name,
@@ -54,7 +54,7 @@ public class GetApiAccessRestrictionsSnapshotEndpoint(IIpRestrictionRepository i
                 Reason = t.Reason,
                 CreatedAt = t.CreatedAt
             }).ToList(),
-            IpRestrictions = ipRestrictions.Select(i => new IpRestrictionSnapshotDto
+            IpRestrictions = ipRestrictions.Select(static i => new IpRestrictionSnapshotDto
             {
                 Id = i.Id,
                 Name = i.Name,
@@ -64,7 +64,7 @@ public class GetApiAccessRestrictionsSnapshotEndpoint(IIpRestrictionRepository i
                 ExpiresAt = i.ExpiresAt,
                 IpRanges = i.IpRanges
             }).ToList(),
-            RegionRestrictions = regionRestrictions.Select(r => new RegionRestrictionSnapshotDto
+            RegionRestrictions = regionRestrictions.Select(static r => new RegionRestrictionSnapshotDto
             {
                 Id = r.Id,
                 RegionCode = r.RegionCode,

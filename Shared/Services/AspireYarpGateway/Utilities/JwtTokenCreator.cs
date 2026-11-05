@@ -1,6 +1,6 @@
+using System.Buffers;
 using System.Security.Claims;
 using System.Security.Cryptography;
-using System.Buffers;
 using System.Text;
 using FastEndpoints.Security;
 using Microsoft.IdentityModel.JsonWebTokens;

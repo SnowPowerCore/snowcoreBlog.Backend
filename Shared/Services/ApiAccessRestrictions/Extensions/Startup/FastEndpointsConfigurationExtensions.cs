@@ -1,9 +1,12 @@
-using FastEndpoints;
-using FastEndpoints.Swagger;
-using snowcoreBlog.Backend.Infrastructure.Extensions;
-using snowcoreBlog.PublicApi.Extensions;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using FastEndpoints;
+using FastEndpoints.Security;
+using FastEndpoints.Swagger;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using snowcoreBlog.Backend.Core.Constants;
+using snowcoreBlog.Backend.Infrastructure.Extensions;
+using snowcoreBlog.PublicApi.Extensions;
 
 namespace snowcoreBlog.Backend.ApiAccessRestrictions.Extensions.Startup;
 
@@ -12,8 +15,26 @@ public static class FastEndpointsConfigurationExtensions
     const int GlobalVersion = 1;
     private static readonly JsonStringEnumConverter JsonStringEnumConverter = new();
 
-    public static IServiceCollection AddFastEndpointsConfiguration(this IServiceCollection services)
+    public static IServiceCollection AddFastEndpointsConfiguration(this IServiceCollection services, string signingKey)
     {
+        services.AddAuthenticationJwtBearer(options => options.SigningKey = signingKey);
+        services.PostConfigure<JwtBearerOptions>(JwtBearerDefaults.AuthenticationScheme, options =>
+        {
+            options.Events = new JwtBearerEvents
+            {
+                OnMessageReceived = context =>
+                {
+                    var adminToken = context.Request.Cookies[AuthCookieConstants.AdminAccessTokenCookieName];
+                    if (!string.IsNullOrWhiteSpace(adminToken))
+                    {
+                        context.Token = adminToken;
+                    }
+
+                    return Task.CompletedTask;
+                }
+            };
+        });
+
         services.AddAuthorization()
                 .AddFastEndpoints()
                 .SwaggerDocument(options =>
@@ -34,7 +55,8 @@ public static class FastEndpointsConfigurationExtensions
 
     public static WebApplication UseFastEndpointsConfiguration(this WebApplication app)
     {
-        app.UseAuthorization()
+        app.UseAuthentication()
+            .UseAuthorization()
             .UseFastEndpoints(c =>
             {
                 c.Endpoints.NameGenerator = static ctx =>

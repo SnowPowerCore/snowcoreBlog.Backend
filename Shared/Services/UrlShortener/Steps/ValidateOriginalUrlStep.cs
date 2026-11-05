@@ -5,6 +5,7 @@ using snowcoreBlog.Backend.Infrastructure.Utilities;
 using snowcoreBlog.Backend.UrlShortener.Context;
 using snowcoreBlog.Backend.UrlShortener.Delegates;
 using snowcoreBlog.Backend.UrlShortener.Models;
+using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 
 namespace snowcoreBlog.Backend.UrlShortener.Steps;
 
@@ -12,7 +13,7 @@ public sealed class ValidateOriginalUrlStep : IStep<CreateShortUrlDelegate, Crea
 {
     public Task<IMaybe<CreateShortUrlOperationResult>> InvokeAsync(CreateShortUrlContext context, CreateShortUrlDelegate next, CancellationToken token = default)
     {
-        if (context is null || context.Request is null || string.IsNullOrWhiteSpace(context.Request.OriginalUrl))
+        if (context is default(CreateShortUrlContext) || context.Request is default(CreateShortUrlRequest) || string.IsNullOrWhiteSpace(context.Request.OriginalUrl))
         {
             return Task.FromResult(Maybe.Create(new CreateShortUrlOperationResult
             {

@@ -3,7 +3,4 @@ using snowcoreBlog.Backend.Core.Interfaces.Repositories;
 
 namespace snowcoreBlog.Backend.ReadersManagement.Interfaces.Repositories.Marten;
 
-public interface IReaderRepository : IRepository<ReaderEntity>
-{
-
-}
+public interface IReaderRepository : IRepository<ReaderEntity>;

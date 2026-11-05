@@ -1,19 +1,19 @@
 using Ixnas.AltchaNet;
+using Microsoft.IdentityModel.JsonWebTokens;
 using snowcoreBlog.Backend.Core.Interfaces.Services;
+using snowcoreBlog.Backend.Gateway.Middleware.Middleware;
 using snowcoreBlog.Backend.Infrastructure.Services;
 using snowcoreBlog.Backend.Infrastructure.Stores;
 using snowcoreBlog.Backend.ReadersManagement.Interfaces.Repositories.Marten;
 using snowcoreBlog.Backend.ReadersManagement.Repositories.Marten;
+using snowcoreBlog.Backend.ReadersManagement.Services;
 using snowcoreBlog.Backend.ReadersManagement.Steps.Assertion;
 using snowcoreBlog.Backend.ReadersManagement.Steps.Attestation;
 using snowcoreBlog.Backend.ReadersManagement.Steps.NickName;
-using snowcoreBlog.Backend.ReadersManagement.Services;
 using snowcoreBlog.Backend.ReadersManagement.Steps.OneTimeCode;
 using snowcoreBlog.Backend.ReadersManagement.Steps.ReaderAccount.Authenticator;
-using snowcoreBlog.Backend.ReadersManagement.Steps.ReaderAccount.Request;
-using Microsoft.IdentityModel.JsonWebTokens;
 using snowcoreBlog.Backend.ReadersManagement.Steps.ReaderAccount.Confirm;
-using snowcoreBlog.Backend.Gateway.Middleware.Middleware;
+using snowcoreBlog.Backend.ReadersManagement.Steps.ReaderAccount.Request;
 
 namespace snowcoreBlog.Backend.ReadersManagement.Extensions.Startup;
 

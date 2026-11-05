@@ -74,7 +74,7 @@ public class UploadDocumentEndpoint : EndpointWithoutRequest<ApiResponse?>
         var form = await HttpContext.Request.ReadFormAsync(ct);
         var file = form.Files.GetFiles(FileFormField).FirstOrDefault();
 
-        if (file is null)
+        if (file is default(IFormFile))
         {
             await Send.ResponseAsync(
                 ErrorResponseUtilities.ApiResponseWithErrors(

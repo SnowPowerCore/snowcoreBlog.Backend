@@ -4,6 +4,7 @@ using MaybeResults;
 using MinimalStepifiedSystem.Interfaces;
 using snowcoreBlog.Backend.Core.Contracts;
 using snowcoreBlog.Backend.IAM.Core.Contracts;
+using snowcoreBlog.Backend.Infrastructure.RequestPersistence;
 using snowcoreBlog.Backend.Infrastructure.StepProgress;
 using snowcoreBlog.Backend.ReadersManagement.Constants;
 using snowcoreBlog.Backend.ReadersManagement.Context;
@@ -15,6 +16,7 @@ using StackExchange.Redis;
 
 namespace snowcoreBlog.Backend.ReadersManagement.Steps.ReaderAccount.Confirm;
 
+[CheckpointedStep]
 public class CreateReaderAccountUserStep(IRequestClient<CreateUser> client,
                                          IPublishEndpoint publishEndpoint,
                                          IConnectionMultiplexer redis) : IStep<ConfirmCreateReaderAccountDelegate, ConfirmCreateReaderAccountContext, IMaybe<ReaderAccountCreatedDto>>

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using snowcoreBlog.Backend.ApiAccessRestrictions.GatewayIntegration;
+using snowcoreBlog.Backend.ApiAccessRestrictions.Interfaces;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 
 namespace snowcoreBlog.Backend.Gateway.Middleware.Middleware;
@@ -71,7 +72,7 @@ public sealed class ApiAccessRestrictionMiddleware(RequestDelegate next,
                 logger.LogWarning(ex, "ApiAccessRestrictions recall lookup failed for client '{ClientId}'.", clientId);
             }
 
-            if (recall is not null)
+            if (recall is not default(ApiAccessRecallEntry))
             {
                 await DenyAsync(context, ToDecision(recall), optionsValue);
                 return;
@@ -79,7 +80,7 @@ public sealed class ApiAccessRestrictionMiddleware(RequestDelegate next,
 
             // 1) Local in-memory evaluation against the compiled snapshot.
             var snapshot = snapshotStore.CurrentCompiled;
-            if (snapshot is null)
+            if (snapshot is default(CompiledApiAccessRestrictionsSnapshot))
             {
                 if (optionsValue.FailOpen)
                 {

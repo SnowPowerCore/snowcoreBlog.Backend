@@ -1,19 +1,10 @@
-using snowcoreBlog.Backend.Infrastructure;
+using Apizr;
+using snowcoreBlog.Backend.ApiAccessRestrictions.Interfaces;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 
 namespace snowcoreBlog.Backend.ApiAccessRestrictions.GatewayIntegration;
 
-public interface IApiAccessRestrictionsSnapshotRefresher
-{
-    /// <summary>
-    /// Fetches the latest restrictions snapshot from the ApiAccessRestrictions service
-    /// and swaps it into the snapshot store. Shared by the periodic polling hosted
-    /// service and the instant-refresh MassTransit consumer in the gateway.
-    /// </summary>
-    Task RefreshAsync(CancellationToken cancellationToken);
-}
-
-public sealed class ApiAccessRestrictionsSnapshotRefresher(IHttpClientFactory httpClientFactory,
+public sealed class ApiAccessRestrictionsSnapshotRefresher(IApizrManager<Api.IApiAccessRestrictionsApi> api,
                                                            IApiAccessRestrictionsSnapshotStore store,
                                                            ILogger<ApiAccessRestrictionsSnapshotRefresher> logger) : IApiAccessRestrictionsSnapshotRefresher
 {
@@ -21,12 +12,8 @@ public sealed class ApiAccessRestrictionsSnapshotRefresher(IHttpClientFactory ht
     {
         try
         {
-            var client = httpClientFactory.CreateClient("ApiAccessRestrictions");
-
-            var snapshot = await client.GetFromJsonAsync(
-                "snapshot/v1",
-                CoreSerializationContext.Default.ApiAccessRestrictionsSnapshotDto,
-                ct);
+            var snapshot = await api.ExecuteAsync(static (opt, client) => client.GetSnapshot(opt),
+                o => o.WithCancellation(ct));
             if (snapshot is default(ApiAccessRestrictionsSnapshotDto))
                 return;
 
