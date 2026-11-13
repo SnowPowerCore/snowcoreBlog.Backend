@@ -1,3 +1,4 @@
+using FastSharp.Modules;
 using snowcoreBlog.Backend.ServiceNotifications.Extensions.Startup;
 
 var builder = WebApplication.CreateSlimBuilder(args);
@@ -5,7 +6,7 @@ var builder = WebApplication.CreateSlimBuilder(args);
 builder.UseServiceDefaultsConfiguration();
 
 // OpenTelemetry
-builder.Services.AddTelemetryConfiguration();
+builder.Services.AddOpenTelemetryConfiguration();
 
 // PostgreSQL and Marten
 builder.AddNpgsqlDataSourceConfiguration("db-snowcore-blog-entities");
@@ -21,8 +22,12 @@ builder.Services.AddMassTransitConfiguration(
 // Hosting options
 builder.Services.AddHostingConfiguration();
 
-// FastEndpoints and Authentication
-builder.Services.AddFastEndpointsConfiguration(
+// OpenAPI document generation (development only mapping)
+builder.Services.AddOpenApiConfiguration();
+
+// FastSharp endpoints + JWT auth + antiforgery
+builder.Services.AddFastSharpEndpoints();
+builder.Services.AddApiAuthenticationConfiguration(
     builder.Configuration["Security:Signing:User:SigningKey"] ?? throw new InvalidOperationException("Signing key not configured"));
 
 // Core services

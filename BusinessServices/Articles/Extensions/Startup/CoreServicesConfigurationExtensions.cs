@@ -1,8 +1,8 @@
 using snowcoreBlog.ApplicationLaunch.Implementations.BackgroundServices;
 using snowcoreBlog.ApplicationLaunch.Interfaces;
 using snowcoreBlog.Backend.Articles.Services;
-using snowcoreBlog.Backend.Articles.Steps;
-using snowcoreBlog.Backend.Articles.Steps.Articles;
+using snowcoreBlog.Backend.Articles.Steps.Articles.Create;
+using snowcoreBlog.Backend.Articles.Steps.Articles.Get;
 
 namespace snowcoreBlog.Backend.Articles.Extensions.Startup;
 

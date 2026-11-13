@@ -1,25 +1,11 @@
-using System.Net;
-using System.Net.Mime;
-using FastEndpoints;
-using snowcoreBlog.Backend.Infrastructure;
-using snowcoreBlog.PublicApi.Constants;
+using FastSharp.Modules.Core;
 
 namespace snowcoreBlog.Backend.ServiceNotifications.Endpoints.Root;
 
-public class PingEndpoint : EndpointWithoutRequest<string>
+public sealed class PingEndpoint : IEndpoint
 {
-    public override void Configure()
+    public void Map(RouteGroupBuilder app)
     {
-        Get("ping");
-        Version(1);
-        SerializerContext(CoreSerializationContext.Default);
-        AllowAnonymous();
-        Description(b => b
-            .WithTags(ApiTagConstants.TechnicalNotifications)
-            .Produces<string>((int)HttpStatusCode.OK, MediaTypeNames.Application.Json)
-            .ProducesProblemFE((int)HttpStatusCode.BadRequest));
+        app.MapGet("/ping/v1", () => Results.Json("pong"));
     }
-
-    public override Task HandleAsync(CancellationToken ct) =>
-        Send.ResponseAsync("pong", (int)HttpStatusCode.OK, ct);
 }

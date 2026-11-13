@@ -1,33 +1,29 @@
-using FastEndpoints;
-using MassTransit;
-using snowcoreBlog.Backend.ApiAccessRestrictions.Constants;
-using snowcoreBlog.Backend.ApiAccessRestrictions.Interfaces.Repositories.Marten;
-using snowcoreBlog.Backend.AspireYarpGateway.Core.Contracts;
-using snowcoreBlog.Backend.Core.Entities.ApiAccessRestrictions;
+using FastSharp.Modules.Core;
+using MaybeResults;
+using MinimalStepifiedSystem.Attributes;
+using snowcoreBlog.Backend.ApiAccessRestrictions.Context;
+using snowcoreBlog.Backend.ApiAccessRestrictions.Delegates;
+using snowcoreBlog.Backend.ApiAccessRestrictions.Steps.ApiAccessResponseTemplates.Delete;
+using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 
 namespace snowcoreBlog.Backend.ApiAccessRestrictions.Endpoints.ApiAccessResponseTemplates;
 
-public class DeleteApiAccessResponseTemplateEndpoint(IApiAccessResponseTemplateRepository repo,
-                                                     IPublishEndpoint publisher) : EndpointWithoutRequest
+public sealed class DeleteApiAccessResponseTemplateEndpoint : IEndpoint
 {
-    public override void Configure()
-    {
-        Delete("templates/{id:guid}");
-        Claims(AdminClaimConstants.AdminAccountClaimKey);
-        Version(1);
-    }
+    [StepifiedProcess(Steps = [
+        typeof(ResolveApiAccessResponseTemplateForDeleteStep),
+        typeof(DeleteApiAccessResponseTemplateStep),
+    ])]
+    public DeleteApiAccessResponseTemplateDelegate DeleteApiAccessResponseTemplate { get; } = default!;
 
-    public override async Task HandleAsync(CancellationToken ct)
+    public void Map(RouteGroupBuilder app)
     {
-        var id = Route<Guid>("id");
-        var entity = await repo.GetByIdAsync(id, ct);
-        if (entity is default(ApiAccessResponseTemplateEntity))
+        app.MapDelete("/{id:guid}/v1", async (Guid id, CancellationToken ct) =>
         {
-            await Send.NotFoundAsync(cancellation: ct);
-            return;
-        }
-        await repo.RemoveAsync(entity, token: ct);
-        await publisher.Publish(new ApiAccessRestrictionsChanged(DateTimeOffset.UtcNow), ct);
-        await Send.OkAsync(cancellation: ct);
+            var context = new DeleteApiAccessResponseTemplateContext(id);
+            var result = await DeleteApiAccessResponseTemplate(context, ct);
+
+            return result.ToEnvelopeResult();
+        });
     }
 }

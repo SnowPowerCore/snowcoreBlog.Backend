@@ -1,3 +1,4 @@
+using MinimalStepifiedSystem.Extensions;
 using snowcoreBlog.ServiceDefaults.Extensions;
 
 namespace snowcoreBlog.Backend.UrlShortener.Extensions.Startup;
@@ -6,7 +7,12 @@ public static class ApplicationConfigurationExtensions
 {
     public static WebApplication UseApplicationMiddleware(this WebApplication app)
     {
-        app.UseMiddlewareConfiguration();
+        app.UseStepifiedSystem();
+
+        app.UseMiddlewareConfiguration()
+           .UseCustomMiddlewareConfiguration()
+           .UseFastEndpointsConfiguration()
+           .UseOpenApiConfiguration();
 
         return app;
     }

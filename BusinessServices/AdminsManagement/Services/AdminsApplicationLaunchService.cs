@@ -1,5 +1,5 @@
-using MassTransit;
 using Marten;
+using MassTransit;
 using Microsoft.Extensions.Options;
 using snowcoreBlog.ApplicationLaunch.Interfaces;
 using snowcoreBlog.Backend.AdminsManagement.Options;

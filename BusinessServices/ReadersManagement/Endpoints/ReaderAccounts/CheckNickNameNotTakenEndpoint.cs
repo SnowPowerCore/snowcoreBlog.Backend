@@ -23,7 +23,7 @@ public class CheckNickNameNotTakenEndpoint : Endpoint<CheckNickNameNotTakenDto, 
     [StepifiedProcess(Steps = [
         typeof(ValidateNickNameWasNotTakenStep),
     ])]
-    protected CheckNickNameNotTakenDelegate CheckNickNameNotTaken { get; }
+    protected CheckNickNameNotTakenDelegate CheckNickNameNotTaken { get; } = default!;
 
     public override void Configure()
     {

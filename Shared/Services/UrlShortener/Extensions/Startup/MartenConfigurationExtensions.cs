@@ -1,8 +1,6 @@
 using Marten;
 using Marten.Services;
 using snowcoreBlog.Backend.Infrastructure;
-using snowcoreBlog.Backend.UrlShortener.Interfaces.Repositories.Marten;
-using snowcoreBlog.Backend.UrlShortener.Repositories.Marten;
 
 namespace snowcoreBlog.Backend.UrlShortener.Extensions.Startup;
 
@@ -20,8 +18,6 @@ public static class MartenConfigurationExtensions
         })
             .UseLightweightSessions()
             .UseNpgsqlDataSource();
-
-        services.AddScoped<IUrlMappingRepository, UrlMappingRepository>();
 
         return services;
     }

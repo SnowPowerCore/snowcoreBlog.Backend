@@ -1,23 +1,22 @@
 using System.Net;
 using System.Net.Mime;
 using FastEndpoints;
-using MaybeResults;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.Extensions.Options;
 using MinimalStepifiedSystem.Attributes;
 using snowcoreBlog.Backend.Infrastructure;
 using snowcoreBlog.Backend.ReadersManagement.Context;
 using snowcoreBlog.Backend.ReadersManagement.Delegates;
-using snowcoreBlog.Backend.ReadersManagement.Models;
 using snowcoreBlog.Backend.ReadersManagement.Steps.Tokens;
 using snowcoreBlog.PublicApi.Constants;
+using snowcoreBlog.PublicApi.Extensions;
 using snowcoreBlog.PublicApi.Utilities.Api;
 
 namespace snowcoreBlog.Backend.ReadersManagement.Endpoints.Tokens;
 
 public class RefreshReaderAccountTokenEndpoint : Endpoint<string, ApiResponse?>
 {
-    public IOptions<JsonOptions> JsonOptions { get; set; } = default!;
+    public required IOptions<JsonOptions> JsonOptions { get; set; }
 
     [StepifiedProcess(Steps = [
         typeof(ResolveRefreshTokenStep),
@@ -47,17 +46,12 @@ public class RefreshReaderAccountTokenEndpoint : Endpoint<string, ApiResponse?>
     public override async Task HandleAsync(string req, CancellationToken ct)
     {
         var context = new RefreshReaderJwtPairContext(req);
-        var maybeResult = await RefreshReaderJwtPair(context, ct);
 
-        // Steps always return a Some with an operation result (including error cases).
-        var op = maybeResult is Some<RefreshReaderJwtPairOperationResult> s
-            ? s.Value
-            : new RefreshReaderJwtPairOperationResult
-            {
-                HttpStatusCode = 500,
-                Response = new ApiResponse(default, 0, 500, [ApiResponseConstants.UnknownError])
-            };
+        var result = await RefreshReaderJwtPair(context, ct);
 
-        await Send.ResponseAsync(op.Response, op.HttpStatusCode, ct);
+        await Send.ResponseAsync(
+            result?.ToApiResponse(serializerOptions: JsonOptions.Value.SerializerOptions),
+            result?.ToStatusCode() ?? (int)HttpStatusCode.InternalServerError,
+            ct);
     }
 }

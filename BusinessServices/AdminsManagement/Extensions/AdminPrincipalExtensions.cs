@@ -1,7 +1,5 @@
 using System.Security.Claims;
 using snowcoreBlog.Backend.AdminsManagement.Constants;
-using snowcoreBlog.Backend.Core.Entities.Admin;
-using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 
 namespace snowcoreBlog.Backend.AdminsManagement.Extensions;
 
@@ -16,15 +14,4 @@ public static class AdminPrincipalExtensions
 
     public static string GetAdminEmail(this ClaimsPrincipal principal)
         => principal.FindFirst(AdminClaimConstants.AdminEmailClaimKey)?.Value ?? string.Empty;
-
-    public static AdminDto ToDto(this AdminEntity admin)
-        => new()
-        {
-            Id = admin.Id,
-            Email = admin.Email,
-            NickName = admin.NickName,
-            InvitedByAdminId = admin.InvitedByAdminId,
-            InvitedAtUtc = admin.InvitedAtUtc,
-            IsActive = admin.IsActive,
-        };
 }

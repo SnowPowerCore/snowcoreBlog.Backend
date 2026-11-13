@@ -1,14 +1,14 @@
 using System.Net;
 using System.Net.Mime;
 using FastEndpoints;
-using Marten;
 using MaybeResults;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.Extensions.Options;
+using snowcoreBlog.Backend.AdminsManagement.ErrorResults;
+using snowcoreBlog.Backend.AdminsManagement.Interfaces.Repositories.Marten;
 using snowcoreBlog.Backend.AdminsManagement.Services;
 using snowcoreBlog.Backend.Core.Entities.Admin;
 using snowcoreBlog.Backend.Infrastructure;
-using snowcoreBlog.Backend.Infrastructure.Utilities;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 using snowcoreBlog.PublicApi.Constants;
 using snowcoreBlog.PublicApi.Extensions;
@@ -24,7 +24,7 @@ public class ResolveAdminInviteEndpoint : EndpointWithoutRequest<ApiResponse?>
 {
     public required IOptions<JsonOptions> JsonOptions { get; set; }
 
-    public required IQuerySession QuerySession { get; set; }
+    protected IAdminInviteRepository InviteRepository { get; } = default!;
 
     public override void Configure()
     {
@@ -41,34 +41,30 @@ public class ResolveAdminInviteEndpoint : EndpointWithoutRequest<ApiResponse?>
 
     public override async Task HandleAsync(CancellationToken ct)
     {
+        IMaybe<AdminInviteResolutionDto> result;
         var token = Query<string?>("token");
         var tokenHash = string.IsNullOrEmpty(token) ? string.Empty : AdminTokenUtilities.Sha256Hex(token);
 
-        var invite = await QuerySession.Query<AdminInviteEntity>()
-            .FirstOrDefaultAsync(x => x.TokenHash == tokenHash, ct);
-
-        if (invite is default(AdminInviteEntity) || !invite.IsUsable)
+        var invite = await InviteRepository.GetByTokenHashAsync(tokenHash, ct);
+        if (invite is { IsUsable: true })
         {
-            await Send.ResponseAsync(
-                ErrorResponseUtilities.ApiResponseWithErrors(
-                    ["This invitation is invalid, already used, or expired."],
-                    (int)HttpStatusCode.NotFound),
-                (int)HttpStatusCode.NotFound,
-                ct);
-            return;
+            result = Maybe.Create(new AdminInviteResolutionDto
+            {
+                Email = invite.Email,
+                NickName = invite.NickName,
+                InvitedByAdminId = invite.InvitedByAdminId,
+                ExpiresAtUtc = invite.ExpiresAtUtc,
+            });
+        }
+        else
+        {
+            result = InviteNotFoundOrNotUsableError<AdminInviteResolutionDto>.Create(
+                "This invitation is invalid, already used, or expired.");
         }
 
-        var result = Maybe.Create(new AdminInviteResolutionDto
-        {
-            Email = invite.Email,
-            NickName = invite.NickName,
-            InvitedByAdminId = invite.InvitedByAdminId,
-            ExpiresAtUtc = invite.ExpiresAtUtc,
-        });
-
         await Send.ResponseAsync(
-            result.ToApiResponse(serializerOptions: JsonOptions.Value.SerializerOptions),
-            result.ToStatusCode(),
+            result?.ToApiResponse(serializerOptions: JsonOptions.Value.SerializerOptions),
+            result?.ToStatusCode() ?? (int)HttpStatusCode.InternalServerError,
             ct);
     }
 }

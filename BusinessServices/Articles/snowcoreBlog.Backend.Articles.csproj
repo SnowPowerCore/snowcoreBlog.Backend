@@ -30,6 +30,8 @@
     <PackageReference Include="Ixnas.AltchaNet" />
     <PackageReference Include="MinimalStepifiedSystem.SourceGen" />
     <PackageReference Include="MinimalStepifiedSystem.Core" />
+    <PackageReference Include="OpenTelemetry.Instrumentation.StackExchangeRedis" />
+    <PackageReference Include="Scalar.AspNetCore" />
     <PackageReference Include="Riok.Mapperly">
       <ExcludeAssets>runtime</ExcludeAssets>
       <PrivateAssets>all</PrivateAssets>

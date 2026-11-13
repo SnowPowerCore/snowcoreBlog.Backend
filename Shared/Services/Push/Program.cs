@@ -1,17 +1,12 @@
 using snowcoreBlog.Backend.Push.Extensions.Startup;
-using snowcoreBlog.ServiceDefaults.Extensions;
 
 var builder = WebApplication.CreateSlimBuilder(args);
 
 // Hosting configuration
-builder.Host.UseDefaultServiceProvider(static (c, opts) =>
-{
-    opts.ValidateScopes = true;
-    opts.ValidateOnBuild = true;
-});
+builder.UseHostingConfiguration();
 
-builder.WebHost.UseKestrelHttpsConfiguration();
-builder.AddServiceDefaults();
+// Service defaults and OpenTelemetry
+builder.UseServiceDefaultsConfiguration();
 
 // Ntfy configuration
 builder.Services.AddNtfyConfiguration();
@@ -23,4 +18,8 @@ builder.Services.AddMassTransitConfiguration(
 // Validation
 builder.Services.AddValidationConfiguration();
 
-await builder.Build().RunAsync();
+var app = builder.Build();
+
+app.UseApplicationMiddleware();
+app.MapEndpoints();
+await app.RunApplicationAsync();

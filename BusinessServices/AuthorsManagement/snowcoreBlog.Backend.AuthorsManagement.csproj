@@ -22,13 +22,22 @@
     <PackageReference Include="ActualLab.Rpc" />
     <PackageReference Include="FastEndpoints" />
     <PackageReference Include="FastEndpoints.Security" />
+    <PackageReference Include="FastEndpoints.Swagger" />
+    <PackageReference Include="FastEndpoints.Generator">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
     <PackageReference Include="Fody">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="ConfigureAwait.Fody" />
     <PackageReference Include="Marten" />
+    <PackageReference Include="Marten.SourceGenerator" PrivateAssets="all" />
     <PackageReference Include="MinimalStepifiedSystem.Core" />
+    <PackageReference Include="MinimalStepifiedSystem.SourceGen" />
+    <PackageReference Include="OpenTelemetry.Instrumentation.StackExchangeRedis" />
+    <PackageReference Include="Scalar.AspNetCore" />
     <PackageReference Include="Riok.Mapperly">
       <IncludeAssets>runtime</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>

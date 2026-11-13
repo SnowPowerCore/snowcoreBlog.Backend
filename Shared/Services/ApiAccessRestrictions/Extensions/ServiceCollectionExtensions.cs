@@ -2,7 +2,7 @@ using Apizr;
 using Microsoft.Extensions.Http.Resilience;
 using snowcoreBlog.Backend.ApiAccessRestrictions.Api;
 using snowcoreBlog.Backend.ApiAccessRestrictions.GatewayIntegration;
-using snowcoreBlog.Backend.ApiAccessRestrictions.Interfaces;
+using snowcoreBlog.Backend.ApiAccessRestrictions.Interfaces.Services;
 using StackExchange.Redis;
 
 namespace snowcoreBlog.Backend.ApiAccessRestrictions.Extensions;

@@ -2,7 +2,7 @@ using System.Net;
 using System.Net.Mime;
 using FastEndpoints;
 using snowcoreBlog.Backend.Documents.Interfaces.Repositories.Marten;
-using snowcoreBlog.Backend.Documents.Interfaces.Storage;
+using snowcoreBlog.Backend.Documents.Interfaces.Services;
 using snowcoreBlog.Backend.Infrastructure;
 using snowcoreBlog.Backend.Infrastructure.Utilities;
 using snowcoreBlog.PublicApi.Constants;

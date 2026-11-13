@@ -1,21 +1,17 @@
 using System.Net;
 using System.Net.Mime;
 using FastEndpoints;
-using MassTransit;
-using Marten;
-using MaybeResults;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.Extensions.Options;
-using snowcoreBlog.Backend.AdminsManagement.Services;
-using snowcoreBlog.Backend.Core.Entities.Admin;
-using snowcoreBlog.Backend.IAM.Core.Contracts;
+using MinimalStepifiedSystem.Attributes;
+using snowcoreBlog.Backend.AdminsManagement.Context;
+using snowcoreBlog.Backend.AdminsManagement.Delegates;
+using snowcoreBlog.Backend.AdminsManagement.Steps.Invites.Accept;
 using snowcoreBlog.Backend.Infrastructure;
-using snowcoreBlog.Backend.Infrastructure.Utilities;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 using snowcoreBlog.PublicApi.Constants;
 using snowcoreBlog.PublicApi.Extensions;
 using snowcoreBlog.PublicApi.Utilities.Api;
-using snowcoreBlog.PublicApi.Utilities.DataResult;
 
 namespace snowcoreBlog.Backend.AdminsManagement.Endpoints.Invites;
 
@@ -28,11 +24,14 @@ public class AcceptAdminInviteEndpoint : Endpoint<AcceptAdminInviteDto, ApiRespo
 {
     public required IOptions<JsonOptions> JsonOptions { get; set; }
 
-    public required IDocumentSession DocumentSession { get; set; }
-
-    public required IRequestClient<CreateAdmin> CreateAdminClient { get; set; }
-
-    public required AdminTokenPairIssuer TokenIssuer { get; set; }
+    [StepifiedProcess(Steps = [
+        typeof(ResolveAdminInviteStep),
+        typeof(CreateAdminIdentityStep),
+        typeof(CreateAdminEntityStep),
+        typeof(ConsumeAdminInviteStep),
+        typeof(IssueAdminSessionStep),
+    ])]
+    protected AcceptAdminInviteDelegate AcceptAdminInvite { get; } = default!;
 
     public override void Configure()
     {
@@ -50,70 +49,13 @@ public class AcceptAdminInviteEndpoint : Endpoint<AcceptAdminInviteDto, ApiRespo
 
     public override async Task HandleAsync(AcceptAdminInviteDto req, CancellationToken ct)
     {
-        var tokenHash = AdminTokenUtilities.Sha256Hex(req.Token);
+        var context = new AcceptAdminInviteContext(req.Token, req.NickName);
 
-        var invite = await DocumentSession.Query<AdminInviteEntity>()
-            .FirstOrDefaultAsync(x => x.TokenHash == tokenHash, ct);
-
-        if (invite is default(AdminInviteEntity) || !invite.IsUsable)
-        {
-            await Send.ResponseAsync(
-                ErrorResponseUtilities.ApiResponseWithErrors(
-                    ["This invitation is invalid, already used, or expired."],
-                    (int)HttpStatusCode.NotFound),
-                (int)HttpStatusCode.NotFound,
-                ct);
-            return;
-        }
-
-        var nickName = string.IsNullOrWhiteSpace(req.NickName) ? invite.NickName : req.NickName.Trim();
-
-        // Create the IAM identity FIRST — the Marten admin row references it.
-        // FromAdmin = the inviting admin (must exist in IAM; every admin has an
-        // IAM identity since this wiring, incl. the bootstrap admin).
-        var iamResponse = await CreateAdminClient.GetResponse<DataResult<AdminCreationResult>>(
-            new CreateAdmin
-            {
-                FromAdmin = invite.InvitedByAdminId,
-                Email = invite.Email,
-                NickName = nickName,
-            }, ct);
-
-        if (!iamResponse.Message.IsSuccess || iamResponse.Message.Value is default(AdminCreationResult))
-        {
-            await Send.ResponseAsync(
-                ErrorResponseUtilities.ApiResponseWithErrors(
-                    iamResponse.Message.Errors?.Select(static e => $"{e.Code}: {e.Description}").ToList()
-                        ?? ["Failed to create the admin identity in IAM."],
-                    (int)HttpStatusCode.Conflict),
-                (int)HttpStatusCode.Conflict,
-                ct);
-            return;
-        }
-
-        var admin = new AdminEntity
-        {
-            Email = invite.Email,
-            NickName = nickName,
-            // STRONG inviter reference — non-null for every invited admin.
-            InvitedByAdminId = invite.InvitedByAdminId,
-            IamUserId = iamResponse.Message.Value.Id,
-            InvitedAtUtc = DateTime.UtcNow,
-            IsActive = true,
-        };
-
-        DocumentSession.Insert(admin);
-        invite = invite with { AcceptedAtUtc = DateTime.UtcNow };
-        DocumentSession.Update(invite);
-        await DocumentSession.SaveChangesAsync(ct);
-
-        TokenIssuer.IssueAndSetCookie(admin);
-
-        var result = Maybe.Create(admin.ToDto());
+        var result = await AcceptAdminInvite(context, ct);
 
         await Send.ResponseAsync(
-            result.ToApiResponse(serializerOptions: JsonOptions.Value.SerializerOptions),
-            result.ToStatusCode(),
+            result?.ToApiResponse(serializerOptions: JsonOptions.Value.SerializerOptions),
+            result?.ToStatusCode() ?? (int)HttpStatusCode.InternalServerError,
             ct);
     }
 }

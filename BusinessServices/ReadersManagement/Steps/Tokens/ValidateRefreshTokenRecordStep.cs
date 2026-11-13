@@ -1,21 +1,19 @@
-using System.Net;
 using System.Text.Json;
 using MaybeResults;
 using MinimalStepifiedSystem.Interfaces;
 using snowcoreBlog.Backend.Infrastructure;
-using snowcoreBlog.Backend.Infrastructure.Utilities;
 using snowcoreBlog.Backend.ReadersManagement.Constants;
 using snowcoreBlog.Backend.ReadersManagement.Context;
 using snowcoreBlog.Backend.ReadersManagement.Delegates;
-using snowcoreBlog.Backend.ReadersManagement.Models;
+using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 using StackExchange.Redis;
 
 namespace snowcoreBlog.Backend.ReadersManagement.Steps.Tokens;
 
 public sealed class ValidateRefreshTokenRecordStep(IConnectionMultiplexer redis)
-    : IStep<RefreshReaderJwtPairDelegate, RefreshReaderJwtPairContext, IMaybe<RefreshReaderJwtPairOperationResult>>
+    : IStep<RefreshReaderJwtPairDelegate, RefreshReaderJwtPairContext, IMaybe<RefreshReaderAccountTokenResultDto>>
 {
-    public async Task<IMaybe<RefreshReaderJwtPairOperationResult>> InvokeAsync(
+    public async Task<IMaybe<RefreshReaderAccountTokenResultDto>> InvokeAsync(
         RefreshReaderJwtPairContext context,
         RefreshReaderJwtPairDelegate next,
         CancellationToken token = default)
@@ -23,11 +21,8 @@ public sealed class ValidateRefreshTokenRecordStep(IConnectionMultiplexer redis)
         var refreshToken = context.RefreshToken;
         if (string.IsNullOrWhiteSpace(refreshToken))
         {
-            return Maybe.Create(new RefreshReaderJwtPairOperationResult
-            {
-                HttpStatusCode = (int)HttpStatusCode.BadRequest,
-                Response = ErrorResponseUtilities.ApiResponseWithErrors(["Missing refresh token"], (int)HttpStatusCode.BadRequest)
-            });
+            return RefreshTokenMissingError<RefreshReaderAccountTokenResultDto>.Create(
+                "Missing refresh token.");
         }
 
         var db = redis.GetDatabase();
@@ -35,11 +30,8 @@ public sealed class ValidateRefreshTokenRecordStep(IConnectionMultiplexer redis)
         var recordJson = await db.StringGetAsync(recordKey);
         if (!recordJson.HasValue)
         {
-            return Maybe.Create(new RefreshReaderJwtPairOperationResult
-            {
-                HttpStatusCode = (int)HttpStatusCode.Unauthorized,
-                Response = ErrorResponseUtilities.ApiResponseWithErrors(["Invalid refresh token"], (int)HttpStatusCode.Unauthorized)
-            });
+            return RefreshTokenInvalidError<RefreshReaderAccountTokenResultDto>.Create(
+                "Invalid refresh token.");
         }
 
         ReaderRefreshTokenRecord? record;
@@ -50,32 +42,23 @@ public sealed class ValidateRefreshTokenRecordStep(IConnectionMultiplexer redis)
         catch
         {
             await db.KeyDeleteAsync(recordKey);
-            return Maybe.Create(new RefreshReaderJwtPairOperationResult
-            {
-                HttpStatusCode = (int)HttpStatusCode.Unauthorized,
-                Response = ErrorResponseUtilities.ApiResponseWithErrors(["Invalid refresh token"], (int)HttpStatusCode.Unauthorized)
-            });
+            return RefreshTokenInvalidError<RefreshReaderAccountTokenResultDto>.Create(
+                "Invalid refresh token.");
         }
 
         if (record is default(ReaderRefreshTokenRecord) || record.ExpiresAt <= DateTimeOffset.UtcNow)
         {
             await db.KeyDeleteAsync(recordKey);
-            return Maybe.Create(new RefreshReaderJwtPairOperationResult
-            {
-                HttpStatusCode = (int)HttpStatusCode.Unauthorized,
-                Response = ErrorResponseUtilities.ApiResponseWithErrors(["Refresh token expired"], (int)HttpStatusCode.Unauthorized)
-            });
+            return RefreshTokenExpiredError<RefreshReaderAccountTokenResultDto>.Create(
+                "Refresh token expired.");
         }
 
         var userCurrentKey = ReaderRefreshTokenConstants.UserCurrentRefreshTokenKey(record.UserId);
         var currentForUser = await db.StringGetAsync(userCurrentKey);
         if (!currentForUser.HasValue || !string.Equals(currentForUser.ToString(), refreshToken, StringComparison.Ordinal))
         {
-            return Maybe.Create(new RefreshReaderJwtPairOperationResult
-            {
-                HttpStatusCode = (int)HttpStatusCode.Unauthorized,
-                Response = ErrorResponseUtilities.ApiResponseWithErrors(["Refresh token revoked"], (int)HttpStatusCode.Unauthorized)
-            });
+            return RefreshTokenRevokedError<RefreshReaderAccountTokenResultDto>.Create(
+                "Refresh token revoked.");
         }
 
         context.Record = record;

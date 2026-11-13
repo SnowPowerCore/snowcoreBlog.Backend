@@ -1,15 +1,15 @@
 using System.Net;
 using System.Net.Mime;
 using FastEndpoints;
-using Marten;
-using MaybeResults;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.Extensions.Options;
+using MinimalStepifiedSystem.Attributes;
 using snowcoreBlog.Backend.AdminsManagement.Constants;
-using snowcoreBlog.Backend.AdminsManagement.Services;
-using snowcoreBlog.Backend.Core.Entities.Admin;
+using snowcoreBlog.Backend.AdminsManagement.Context;
+using snowcoreBlog.Backend.AdminsManagement.Delegates;
+using snowcoreBlog.Backend.AdminsManagement.Extensions;
+using snowcoreBlog.Backend.AdminsManagement.Steps.Admins.Delete;
 using snowcoreBlog.Backend.Infrastructure;
-using snowcoreBlog.Backend.Infrastructure.Utilities;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 using snowcoreBlog.PublicApi.Constants;
 using snowcoreBlog.PublicApi.Extensions;
@@ -25,7 +25,13 @@ public class DeleteAdminAccountEndpoint : EndpointWithoutRequest<ApiResponse?>
 {
     public required IOptions<JsonOptions> JsonOptions { get; set; }
 
-    public required IDocumentSession DocumentSession { get; set; }
+    [StepifiedProcess(Steps = [
+        typeof(ValidateNotDeletingSelfStep),
+        typeof(ValidateAdminExistsForDeleteStep),
+        typeof(ValidateNotLastActiveAdminStep),
+        typeof(SoftDeleteAdminStep),
+    ])]
+    protected DeleteAdminAccountDelegate DeleteAdminAccount { get; } = default!;
 
     public override void Configure()
     {
@@ -43,55 +49,13 @@ public class DeleteAdminAccountEndpoint : EndpointWithoutRequest<ApiResponse?>
 
     public override async Task HandleAsync(CancellationToken ct)
     {
-        var id = Route<Guid>("id");
-        var currentAdminId = User.GetAdminId();
+        var context = new DeleteAdminAccountContext(Route<Guid>("id"), User.GetAdminId());
 
-        if (id == currentAdminId)
-        {
-            await Send.ResponseAsync(
-                ErrorResponseUtilities.ApiResponseWithErrors(
-                    ["You cannot delete your own admin account."],
-                    (int)HttpStatusCode.Conflict),
-                (int)HttpStatusCode.Conflict,
-                ct);
-            return;
-        }
-
-        var entity = await DocumentSession.LoadAsync<AdminEntity>(id, ct);
-        if (entity is default(AdminEntity))
-        {
-            await Send.ResponseAsync(
-                ErrorResponseUtilities.ApiResponseWithErrors(
-                    [$"Admin account with ID '{id}' was not found."],
-                    (int)HttpStatusCode.NotFound),
-                (int)HttpStatusCode.NotFound,
-                ct);
-            return;
-        }
-
-        // Enforce at least one remaining active admin.
-        var activeAdmins = await DocumentSession.Query<AdminEntity>()
-            .Where(static x => x.IsActive)
-            .ToListAsync(ct);
-        if (entity.IsActive && !activeAdmins.Any(x => x.Id != id))
-        {
-            await Send.ResponseAsync(
-                ErrorResponseUtilities.ApiResponseWithErrors(
-                    ["The last active admin cannot be deleted."],
-                    (int)HttpStatusCode.Conflict),
-                (int)HttpStatusCode.Conflict,
-                ct);
-            return;
-        }
-
-        DocumentSession.Delete(entity);
-        await DocumentSession.SaveChangesAsync(ct);
-
-        var result = Maybe.Create(entity.ToDto());
+        var result = await DeleteAdminAccount(context, ct);
 
         await Send.ResponseAsync(
-            result.ToApiResponse(serializerOptions: JsonOptions.Value.SerializerOptions),
-            result.ToStatusCode(),
+            result?.ToApiResponse(serializerOptions: JsonOptions.Value.SerializerOptions),
+            result?.ToStatusCode() ?? (int)HttpStatusCode.InternalServerError,
             ct);
     }
 }

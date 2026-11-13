@@ -1,46 +1,27 @@
 using System.Net;
-using System.Net.Mime;
-using FastEndpoints;
+using FastSharp.Modules.Core;
 using MaybeResults;
-using Microsoft.AspNetCore.Http.Json;
-using Microsoft.Extensions.Options;
-using snowcoreBlog.Backend.Infrastructure;
 using snowcoreBlog.Backend.ServiceNotifications.Extensions;
 using snowcoreBlog.Backend.ServiceNotifications.Interfaces.Repositories.Marten;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
-using snowcoreBlog.PublicApi.Constants;
 using snowcoreBlog.PublicApi.Extensions;
-using snowcoreBlog.PublicApi.Utilities.Api;
 
 namespace snowcoreBlog.Backend.ServiceNotifications.Endpoints.Notifications;
 
-public class GetAllNotificationsEndpoint : EndpointWithoutRequest<ApiResponse?>
+// TODO: Add proper authorization for admin users
+public sealed class GetAllNotificationsEndpoint(INotificationRepository notificationRepository) : IEndpoint
 {
-    public required IOptions<JsonOptions> JsonOptions { get; set; }
-
-    public required INotificationRepository NotificationRepository { get; set; }
-
-    public override void Configure()
+    public void Map(RouteGroupBuilder app)
     {
-        Get(string.Empty);
-        Version(1);
-        SerializerContext(CoreSerializationContext.Default);
-        AllowAnonymous(); // TODO: Add proper authorization for admin users
-        Description(b => b
-            .WithTags(ApiTagConstants.TechnicalNotifications)
-            .Produces<ApiResponseForOpenApi<IEnumerable<NotificationDto>>>((int)HttpStatusCode.OK, MediaTypeNames.Application.Json)
-            .ProducesProblemFE((int)HttpStatusCode.BadRequest));
-    }
+        app.MapGet("/v1", async (CancellationToken ct) =>
+        {
+            var notifications = await notificationRepository.GetAllAsync(ct);
+            var dtos = notifications.ToDtos().ToList();
+            var result = Maybe.Create<IReadOnlyList<NotificationDto>>(dtos);
 
-    public override async Task HandleAsync(CancellationToken ct)
-    {
-        var notifications = await NotificationRepository.GetAllAsync(ct);
-        var dtos = notifications.ToDtos().ToList();
-        var result = Maybe.Create<IReadOnlyList<NotificationDto>>(dtos);
-
-        await Send.ResponseAsync(
-            result.ToApiResponse(serializerOptions: JsonOptions.Value.SerializerOptions),
-            result.ToStatusCode(),
-            ct);
+            return new ApiResponseResult(
+                result.ToApiResponse(),
+                result.ToStatusCode());
+        });
     }
 }

@@ -5,6 +5,10 @@ var builder = WebApplication.CreateSlimBuilder(args);
 // Hosting configuration
 builder.UseHostingConfiguration();
 
+// Service defaults and OpenTelemetry
+builder.UseServiceDefaultsConfiguration();
+builder.Services.AddOpenTelemetryConfiguration();
+
 // PostgreSQL and Marten
 builder.AddNpgsqlDataSource("db-snowcore-blog-entities");
 builder.Services.AddMartenConfiguration();

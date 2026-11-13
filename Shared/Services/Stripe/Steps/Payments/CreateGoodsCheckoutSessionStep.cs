@@ -33,7 +33,7 @@ public sealed class CreateGoodsCheckoutSessionStep(
         var currency = string.IsNullOrWhiteSpace(request.Currency)
             ? settings.DefaultCurrency
             : request.Currency.ToLowerInvariant();
-        var expiresAt = DateTimeOffset.UtcNow.AddMinutes(settings.CheckoutSessionExpirationMinutes);
+        var expiresAt = DateTime.UtcNow.AddMinutes(settings.CheckoutSessionExpirationMinutes);
 
         // Attach to a Stripe customer only when BOTH identity hints are present —
         // otherwise this is a guest checkout and Checkout collects the e-mail itself.
@@ -120,7 +120,7 @@ public sealed class CreateGoodsCheckoutSessionStep(
             AmountMinor = request.AmountMinor,
             Currency = currency,
             Status = StripePaymentStatus.Pending,
-            CreatedAt = DateTimeOffset.UtcNow
+            CreatedAt = DateTime.UtcNow
         };
 
         return await next(context, token);

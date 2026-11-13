@@ -13,25 +13,26 @@
     <PackageReference Include="Apizr.Extensions.Microsoft.DependencyInjection" />
     <PackageReference Include="Aspire.Npgsql" />
     <PackageReference Include="Aspire.StackExchange.Redis" />
-    <PackageReference Include="FastEndpoints" />
-    <PackageReference Include="FastEndpoints.Security" />
-    <PackageReference Include="FastEndpoints.Generator">
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-    <PackageReference Include="FastEndpoints.Swagger" />
+    <PackageReference Include="FastSharp.Models" />
+    <PackageReference Include="FastSharp.Modules" />
     <PackageReference Include="Fody">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="ConfigureAwait.Fody" />
     <PackageReference Include="MassTransit.RabbitMQ" />
-    <PackageReference Include="Marten" />
+        <PackageReference Include="Marten.SourceGenerator" PrivateAssets="all" />
     <PackageReference Include="Marten.CommandLine" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
     <PackageReference Include="MinimalStepifiedSystem.Core" />
     <PackageReference Include="MinimalStepifiedSystem.SourceGen" />
     <PackageReference Include="OpenTelemetry.Instrumentation.StackExchangeRedis" />
-    <PackageReference Include="Scalar.AspNetCore" />
+    <PackageReference Include="Riok.Mapperly">
+      <ExcludeAssets>runtime</ExcludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>compile; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="TickerQ" />
   </ItemGroup>
 

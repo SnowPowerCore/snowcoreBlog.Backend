@@ -1,7 +1,7 @@
 using MaybeResults;
 using snowcoreBlog.Backend.UrlShortener.Context;
-using snowcoreBlog.Backend.UrlShortener.Models;
+using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 
 namespace snowcoreBlog.Backend.UrlShortener.Delegates;
 
-public delegate Task<IMaybe<CreateShortUrlOperationResult>> CreateShortUrlDelegate(CreateShortUrlContext context, CancellationToken token = default);
+public delegate Task<IMaybe<CreateShortUrlResult>> CreateShortUrlDelegate(CreateShortUrlContext context, CancellationToken token = default);

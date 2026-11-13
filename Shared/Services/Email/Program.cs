@@ -1,17 +1,12 @@
 using snowcoreBlog.Backend.Email.Extensions.Startup;
-using snowcoreBlog.ServiceDefaults.Extensions;
 
 var builder = WebApplication.CreateSlimBuilder(args);
 
 // Hosting configuration
-builder.Host.UseDefaultServiceProvider(static (c, opts) =>
-{
-    opts.ValidateScopes = true;
-    opts.ValidateOnBuild = true;
-});
+builder.UseHostingConfiguration();
 
-builder.WebHost.UseKestrelHttpsConfiguration();
-builder.AddServiceDefaults();
+// Service defaults and OpenTelemetry
+builder.UseServiceDefaultsConfiguration();
 
 // Redis cache
 builder.AddRedisClientConfiguration("cache");
@@ -31,7 +26,6 @@ builder.Services.AddExternalApiConfiguration();
 
 var app = builder.Build();
 
-app.UseHttpsRedirection();
-app.MapDefaultEndpoints();
-
-await app.RunAsync();
+app.UseApplicationMiddleware();
+app.MapEndpoints();
+await app.RunApplicationAsync();

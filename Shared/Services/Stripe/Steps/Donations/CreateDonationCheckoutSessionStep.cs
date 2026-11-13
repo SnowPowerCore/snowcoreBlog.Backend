@@ -33,7 +33,7 @@ public sealed class CreateDonationCheckoutSessionStep(
         var currency = string.IsNullOrWhiteSpace(request.Currency)
             ? settings.DefaultCurrency
             : request.Currency.ToLowerInvariant();
-        var expiresAt = DateTimeOffset.UtcNow.AddMinutes(settings.CheckoutSessionExpirationMinutes);
+        var expiresAt = DateTime.UtcNow.AddMinutes(settings.CheckoutSessionExpirationMinutes);
 
         var sessionOptions = new SessionCreateOptions
         {
@@ -104,7 +104,7 @@ public sealed class CreateDonationCheckoutSessionStep(
             Status = StripePaymentStatus.Pending,
             Message = string.IsNullOrWhiteSpace(request.Message) ? null : request.Message,
             Metadata = request.DonorUserId is null ? null : new Dictionary<string, string> { ["donor_user_id"] = request.DonorUserId.Value.ToString() },
-            CreatedAt = DateTimeOffset.UtcNow
+            CreatedAt = DateTime.UtcNow
         };
 
         return await next(context, token);

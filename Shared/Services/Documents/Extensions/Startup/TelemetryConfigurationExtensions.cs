@@ -11,7 +11,7 @@ public static class TelemetryConfigurationExtensions
         return builder;
     }
 
-    public static IServiceCollection AddTelemetryConfiguration(this IServiceCollection services)
+    public static IServiceCollection AddOpenTelemetryConfiguration(this IServiceCollection services)
     {
         services.AddHttpContextAccessor();
         services.AddOpenTelemetry().ConnectBackendServices();

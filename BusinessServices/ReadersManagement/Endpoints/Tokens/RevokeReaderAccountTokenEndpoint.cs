@@ -2,10 +2,15 @@ using System.Net;
 using System.Net.Mime;
 using System.Text.Json;
 using FastEndpoints;
+using MaybeResults;
+using Microsoft.AspNetCore.Http.Json;
+using Microsoft.Extensions.Options;
 using snowcoreBlog.Backend.Core.Constants;
 using snowcoreBlog.Backend.Infrastructure;
 using snowcoreBlog.Backend.ReadersManagement.Constants;
+using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 using snowcoreBlog.PublicApi.Constants;
+using snowcoreBlog.PublicApi.Extensions;
 using snowcoreBlog.PublicApi.Utilities.Api;
 using StackExchange.Redis;
 
@@ -21,6 +26,7 @@ namespace snowcoreBlog.Backend.ReadersManagement.Endpoints.Tokens;
 public class RevokeReaderAccountTokenEndpoint(IHttpContextAccessor httpContextAccessor,
                                              IConnectionMultiplexer redis) : EndpointWithoutRequest<ApiResponse?>
 {
+    public required IOptions<JsonOptions> JsonOptions { get; set; }
     public override void Configure()
     {
         Post("tokens/revoke");
@@ -70,8 +76,11 @@ public class RevokeReaderAccountTokenEndpoint(IHttpContextAccessor httpContextAc
         responseCookies?.Delete(AuthCookieConstants.BitzArtAccessTokenCookieName);
         responseCookies?.Delete(AuthCookieConstants.BitzArtRefreshTokenCookieName);
 
+        var result = Maybe.Create(new RevokeReaderAccountTokenResultDto());
+
         await Send.ResponseAsync(
-            new ApiResponse(default, 0, (int)HttpStatusCode.OK, Array.Empty<string>()),
-            (int)HttpStatusCode.OK, ct);
+            result?.ToApiResponse(serializerOptions: JsonOptions.Value.SerializerOptions),
+            result?.ToStatusCode() ?? (int)HttpStatusCode.InternalServerError,
+            ct);
     }
 }

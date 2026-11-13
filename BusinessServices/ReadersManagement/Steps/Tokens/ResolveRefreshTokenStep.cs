@@ -1,18 +1,16 @@
-using System.Net;
 using MaybeResults;
 using MinimalStepifiedSystem.Interfaces;
 using snowcoreBlog.Backend.Core.Constants;
-using snowcoreBlog.Backend.Infrastructure.Utilities;
 using snowcoreBlog.Backend.ReadersManagement.Context;
 using snowcoreBlog.Backend.ReadersManagement.Delegates;
-using snowcoreBlog.Backend.ReadersManagement.Models;
+using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 
 namespace snowcoreBlog.Backend.ReadersManagement.Steps.Tokens;
 
 public sealed class ResolveRefreshTokenStep(IHttpContextAccessor httpContextAccessor)
-    : IStep<RefreshReaderJwtPairDelegate, RefreshReaderJwtPairContext, IMaybe<RefreshReaderJwtPairOperationResult>>
+    : IStep<RefreshReaderJwtPairDelegate, RefreshReaderJwtPairContext, IMaybe<RefreshReaderAccountTokenResultDto>>
 {
-    public async Task<IMaybe<RefreshReaderJwtPairOperationResult>> InvokeAsync(
+    public async Task<IMaybe<RefreshReaderAccountTokenResultDto>> InvokeAsync(
         RefreshReaderJwtPairContext context,
         RefreshReaderJwtPairDelegate next,
         CancellationToken token = default)
@@ -41,11 +39,8 @@ public sealed class ResolveRefreshTokenStep(IHttpContextAccessor httpContextAcce
 
         if (string.IsNullOrWhiteSpace(resolved))
         {
-            return Maybe.Create(new RefreshReaderJwtPairOperationResult
-            {
-                HttpStatusCode = (int)HttpStatusCode.BadRequest,
-                Response = ErrorResponseUtilities.ApiResponseWithErrors(["Missing refresh token"], (int)HttpStatusCode.BadRequest)
-            });
+            return RefreshTokenMissingError<RefreshReaderAccountTokenResultDto>.Create(
+                "Missing refresh token.");
         }
 
         // If both are present, treat a mismatch as suspicious.
@@ -53,11 +48,8 @@ public sealed class ResolveRefreshTokenStep(IHttpContextAccessor httpContextAcce
             !string.IsNullOrWhiteSpace(context.RefreshTokenFromBody) &&
             !string.Equals(context.RefreshTokenFromCookie, context.RefreshTokenFromBody, StringComparison.Ordinal))
         {
-            return Maybe.Create(new RefreshReaderJwtPairOperationResult
-            {
-                HttpStatusCode = (int)HttpStatusCode.Unauthorized,
-                Response = ErrorResponseUtilities.ApiResponseWithErrors(["Refresh token mismatch"], (int)HttpStatusCode.Unauthorized)
-            });
+            return RefreshTokenMismatchError<RefreshReaderAccountTokenResultDto>.Create(
+                "Refresh token cookie and body do not match.");
         }
 
         context.RefreshToken = resolved;

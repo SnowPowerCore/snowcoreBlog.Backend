@@ -1,5 +1,6 @@
 using FluentAssertions;
 using snowcoreBlog.Backend.ApiAccessRestrictions.GatewayIntegration;
+using snowcoreBlog.Backend.ApiAccessRestrictions.Interfaces.Services;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 
 namespace snowcoreBlog.Backend.ApiAccessRestrictions.Tests.GatewayIntegration;

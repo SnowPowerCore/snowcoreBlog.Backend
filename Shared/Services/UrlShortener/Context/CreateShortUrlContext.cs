@@ -1,18 +1,14 @@
+using MinimalStepifiedSystem.Base;
 using snowcoreBlog.Backend.Core.Entities.UrlShortener;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 
 namespace snowcoreBlog.Backend.UrlShortener.Context;
 
-public class CreateShortUrlContext
+public class CreateShortUrlContext(CreateShortUrlRequest request) : BaseGenericContext
 {
-    public CreateShortUrlRequest Request { get; }
+    public CreateShortUrlRequest Request { get; } = request;
 
-    // Filled by steps
     public string? Code { get; set; }
-    public UrlMappingEntity? Mapping { get; set; }
 
-    public CreateShortUrlContext(CreateShortUrlRequest req)
-    {
-        Request = req;
-    }
+    public UrlMappingEntity? Mapping { get; set; }
 }

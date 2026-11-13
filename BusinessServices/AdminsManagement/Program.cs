@@ -5,7 +5,7 @@ var builder = WebApplication.CreateSlimBuilder(args);
 builder.UseServiceDefaultsConfiguration();
 
 // OpenTelemetry
-builder.Services.AddTelemetryConfiguration();
+builder.Services.AddOpenTelemetryConfiguration();
 
 // PostgreSQL and Marten
 builder.AddNpgsqlDataSourceConfiguration("db-admins-entities");
@@ -27,6 +27,7 @@ builder.Services.AddFastEndpointsConfiguration(
 
 // Core services
 builder.Services.AddCoreServicesConfiguration(builder.Configuration);
+builder.Services.AddAdminRepositoriesConfiguration();
 
 var app = builder.Build();
 

@@ -1,51 +1,34 @@
-using System.Net;
-using System.Net.Mime;
-using FastEndpoints;
-using Microsoft.AspNetCore.Http.Json;
-using Microsoft.Extensions.Options;
+using FastSharp.Modules.Core;
 using MinimalStepifiedSystem.Attributes;
-using snowcoreBlog.Backend.Infrastructure;
+using snowcoreBlog.Backend.Core.Constants;
 using snowcoreBlog.Backend.ServiceNotifications.Context;
 using snowcoreBlog.Backend.ServiceNotifications.Delegates;
 using snowcoreBlog.Backend.ServiceNotifications.Steps.Notification.Get;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
-using snowcoreBlog.PublicApi.Constants;
 using snowcoreBlog.PublicApi.Extensions;
-using snowcoreBlog.PublicApi.Utilities.Api;
 
 namespace snowcoreBlog.Backend.ServiceNotifications.Endpoints.Notifications;
 
-public class GetUserNotificationsEndpoint : Endpoint<GetActiveNotificationsDto, ApiResponse?>
+public sealed class GetUserNotificationsEndpoint : IEndpoint
 {
-    public IOptions<JsonOptions> JsonOptions { get; set; }
-
     [StepifiedProcess(Steps = [
         typeof(GetActiveNotificationsForUserStep)
     ])]
     protected GetActiveNotificationsDelegate GetUserNotifications { get; } = default!;
 
-    public override void Configure()
+    public void Map(RouteGroupBuilder app)
     {
-        Get("active/user");
-        ResponseCache(900); // 15 minutes response cache
-        Version(1);
-        SerializerContext(CoreSerializationContext.Default);
-        Claims(Core.Constants.ReaderAccountClaimConstants.ReaderAccountReaderAccountClaimKey);
-        Description(b => b
-            .WithTags(ApiTagConstants.TechnicalNotifications)
-            .Accepts<GetActiveNotificationsDto>(MediaTypeNames.Application.Json)
-            .Produces<ApiResponseForOpenApi<IEnumerable<NotificationDto>>>((int)HttpStatusCode.OK, MediaTypeNames.Application.Json)
-            .ProducesProblemFE((int)HttpStatusCode.BadRequest));
-    }
+        app.MapGet("/active/user/v1", async (GetActiveNotificationsDto request, CancellationToken ct) =>
+            {
+                var context = new GetActiveNotificationsContext(request.MaxCount);
+                var result = await GetUserNotifications(context, ct);
 
-    public override async Task HandleAsync(GetActiveNotificationsDto req, CancellationToken ct)
-    {
-        var context = new GetActiveNotificationsContext(req.MaxCount);
-        var result = await GetUserNotifications(context, ct);
-
-        await Send.ResponseAsync(
-            result?.ToApiResponse(serializerOptions: JsonOptions.Value.SerializerOptions),
-            result?.ToStatusCode() ?? (int)HttpStatusCode.OK,
-            ct);
+                return new ApiResponseResult(
+                    result?.ToApiResponse(),
+                    result?.ToStatusCode() ?? StatusCodes.Status200OK);
+            })
+            .WithMetadata(new Microsoft.AspNetCore.Mvc.ResponseCacheAttribute { Duration = 900 }) // 15 minutes response cache
+            .RequireAuthorization(static policy =>
+                policy.RequireClaim(ReaderAccountClaimConstants.ReaderAccountReaderAccountClaimKey));
     }
 }

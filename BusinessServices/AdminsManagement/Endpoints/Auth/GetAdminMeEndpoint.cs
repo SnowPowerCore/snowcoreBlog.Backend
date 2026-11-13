@@ -1,15 +1,14 @@
 using System.Net;
 using System.Net.Mime;
 using FastEndpoints;
-using Marten;
 using MaybeResults;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.Extensions.Options;
 using snowcoreBlog.Backend.AdminsManagement.Constants;
-using snowcoreBlog.Backend.AdminsManagement.Services;
-using snowcoreBlog.Backend.Core.Entities.Admin;
+using snowcoreBlog.Backend.AdminsManagement.ErrorResults;
+using snowcoreBlog.Backend.AdminsManagement.Extensions;
+using snowcoreBlog.Backend.AdminsManagement.Interfaces.Repositories.Marten;
 using snowcoreBlog.Backend.Infrastructure;
-using snowcoreBlog.Backend.Infrastructure.Utilities;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 using snowcoreBlog.PublicApi.Constants;
 using snowcoreBlog.PublicApi.Extensions;
@@ -25,7 +24,7 @@ public class GetAdminMeEndpoint : EndpointWithoutRequest<ApiResponse?>
 {
     public required IOptions<JsonOptions> JsonOptions { get; set; }
 
-    public required IQuerySession QuerySession { get; set; }
+    protected IAdminRepository AdminRepository { get; } = default!;
 
     public override void Configure()
     {
@@ -42,25 +41,22 @@ public class GetAdminMeEndpoint : EndpointWithoutRequest<ApiResponse?>
 
     public override async Task HandleAsync(CancellationToken ct)
     {
-        var adminId = User.GetAdminId();
-        var admin = await QuerySession.LoadAsync<AdminEntity>(adminId, ct);
+        IMaybe<AdminDto>? result;
+        var admin = await AdminRepository.GetByIdAsync(User.GetAdminId(), ct);
 
-        if (admin is default(AdminEntity) || !admin.IsActive)
+        if (admin is { IsActive: true })
         {
-            await Send.ResponseAsync(
-                ErrorResponseUtilities.ApiResponseWithErrors(
-                    ["Admin account not found or inactive."],
-                    (int)HttpStatusCode.NotFound),
-                (int)HttpStatusCode.NotFound,
-                ct);
-            return;
+            result = Maybe.Create(admin.ToDto());
+        }
+        else
+        {
+            result = AdminNotExistsOrInactiveError<AdminDto>.Create(
+                "Admin account not found or inactive.");
         }
 
-        var result = Maybe.Create(admin.ToDto());
-
         await Send.ResponseAsync(
-            result.ToApiResponse(serializerOptions: JsonOptions.Value.SerializerOptions),
-            result.ToStatusCode(),
+            result?.ToApiResponse(serializerOptions: JsonOptions.Value.SerializerOptions),
+            result?.ToStatusCode() ?? (int)HttpStatusCode.InternalServerError,
             ct);
     }
 }

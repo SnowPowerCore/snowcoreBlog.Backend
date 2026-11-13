@@ -1,4 +1,3 @@
-using System.Net;
 using System.Text.Json;
 using MassTransit;
 using MaybeResults;
@@ -7,15 +6,13 @@ using MinimalStepifiedSystem.Interfaces;
 using snowcoreBlog.Backend.AspireYarpGateway.Core.Contracts;
 using snowcoreBlog.Backend.Core.Constants;
 using snowcoreBlog.Backend.Infrastructure;
-using snowcoreBlog.Backend.Infrastructure.Utilities;
 using snowcoreBlog.Backend.ReadersManagement.Constants;
 using snowcoreBlog.Backend.ReadersManagement.Context;
 using snowcoreBlog.Backend.ReadersManagement.Delegates;
 using snowcoreBlog.Backend.ReadersManagement.Extensions;
-using snowcoreBlog.Backend.ReadersManagement.Models;
 using snowcoreBlog.Backend.ReadersManagement.Options;
 using snowcoreBlog.Backend.ReadersManagement.Services;
-using snowcoreBlog.PublicApi.Utilities.Api;
+using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 using snowcoreBlog.PublicApi.Utilities.DataResult;
 using StackExchange.Redis;
 
@@ -26,9 +23,9 @@ public sealed class RotateReaderTokenPairStep(
     IRequestClient<GetUserTokenPairWithPayload> requestClient,
     IOptions<ReaderAccountTokenRequirementOptions> tokenReqOpts,
     ReaderAccountTokenPairIssuer tokenPairIssuer,
-    IConnectionMultiplexer redis) : IStep<RefreshReaderJwtPairDelegate, RefreshReaderJwtPairContext, IMaybe<RefreshReaderJwtPairOperationResult>>
+    IConnectionMultiplexer redis) : IStep<RefreshReaderJwtPairDelegate, RefreshReaderJwtPairContext, IMaybe<RefreshReaderAccountTokenResultDto>>
 {
-    public async Task<IMaybe<RefreshReaderJwtPairOperationResult>> InvokeAsync(
+    public async Task<IMaybe<RefreshReaderAccountTokenResultDto>> InvokeAsync(
         RefreshReaderJwtPairContext context,
         RefreshReaderJwtPairDelegate next,
         CancellationToken token = default)
@@ -37,11 +34,8 @@ public sealed class RotateReaderTokenPairStep(
         var record = context.Record;
         if (string.IsNullOrWhiteSpace(refreshToken) || record is default(ReaderRefreshTokenRecord))
         {
-            return Maybe.Create(new RefreshReaderJwtPairOperationResult
-            {
-                HttpStatusCode = (int)HttpStatusCode.Unauthorized,
-                Response = ErrorResponseUtilities.ApiResponseWithErrors(["Invalid refresh token"], (int)HttpStatusCode.Unauthorized)
-            });
+            return RefreshTokenInvalidError<RefreshReaderAccountTokenResultDto>.Create(
+                "Invalid refresh token.");
         }
 
         var tokenRequest = tokenReqOpts.Value.ToGetUserTokenPairWithPayload();
@@ -65,11 +59,8 @@ public sealed class RotateReaderTokenPairStep(
 
         if (!result.Message.IsSuccess || result.Message.Value is default(UserTokenPairWithPayloadGenerated) || string.IsNullOrWhiteSpace(result.Message.Value.AccessToken))
         {
-            return Maybe.Create(new RefreshReaderJwtPairOperationResult
-            {
-                HttpStatusCode = (int)HttpStatusCode.Unauthorized,
-                Response = ErrorResponseUtilities.ApiResponseWithErrors(["Unable to refresh token"], (int)HttpStatusCode.Unauthorized)
-            });
+            return ReaderTokenRefreshFailedError<RefreshReaderAccountTokenResultDto>.Create(
+                "Unable to refresh token.");
         }
 
         var newPair = result.Message.Value;
@@ -106,13 +97,6 @@ public sealed class RotateReaderTokenPairStep(
         currentCookies?.Append(AuthCookieConstants.UserRefreshTokenCookieName, newPair.RefreshToken,
             new CookieOptions { MaxAge = TimeSpan.FromMinutes(tokenReqOpts.Value.RefreshTokenValidityDurationInMinutes) });
 
-        var opResult = new RefreshReaderJwtPairOperationResult
-        {
-            HttpStatusCode = (int)HttpStatusCode.OK,
-            Response = new ApiResponse(default, 0, (int)HttpStatusCode.OK, Array.Empty<string>())
-        };
-
-        context.Result = opResult;
-        return Maybe.Create(opResult);
+        return Maybe.Create(new RefreshReaderAccountTokenResultDto());
     }
 }

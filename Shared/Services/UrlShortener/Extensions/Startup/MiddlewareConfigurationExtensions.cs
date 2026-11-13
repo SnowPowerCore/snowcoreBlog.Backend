@@ -1,5 +1,6 @@
 using System.Net.Mime;
 using FastEndpoints;
+using MinimalStepifiedSystem.Extensions;
 
 namespace snowcoreBlog.Backend.UrlShortener.Extensions.Startup;
 
@@ -9,9 +10,14 @@ public static class MiddlewareConfigurationExtensions
     {
         app.UseHttpsRedirection()
             .UseAuthentication()
-            .UseAuthorization()
-            .UseAntiforgeryFE(additionalContentTypes: [MediaTypeNames.Application.Json])
-            .UseFastEndpoints();
+            .UseAuthorization();
+
+        return app;
+    }
+
+    public static WebApplication UseCustomMiddlewareConfiguration(this WebApplication app)
+    {
+        app.UseAntiforgeryFE(additionalContentTypes: [MediaTypeNames.Application.Json]);
 
         return app;
     }

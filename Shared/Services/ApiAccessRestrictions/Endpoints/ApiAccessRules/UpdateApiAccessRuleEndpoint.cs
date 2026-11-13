@@ -1,57 +1,30 @@
-using FastEndpoints;
-using MassTransit;
-using snowcoreBlog.Backend.ApiAccessRestrictions.Constants;
-using snowcoreBlog.Backend.ApiAccessRestrictions.Interfaces.Repositories.Marten;
-using snowcoreBlog.Backend.AspireYarpGateway.Core.Contracts;
-using snowcoreBlog.Backend.Core.Entities.ApiAccessRestrictions;
+using FastSharp.Modules.Core;
+using MaybeResults;
+using MinimalStepifiedSystem.Attributes;
+using snowcoreBlog.Backend.ApiAccessRestrictions.Context;
+using snowcoreBlog.Backend.ApiAccessRestrictions.Delegates;
+using snowcoreBlog.Backend.ApiAccessRestrictions.Steps.ApiAccessRules.Update;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 
 namespace snowcoreBlog.Backend.ApiAccessRestrictions.Endpoints.ApiAccessRules;
 
-public class UpdateApiAccessRuleEndpoint(IApiAccessRuleRepository repo,
-                                         IPublishEndpoint publisher) : Endpoint<UpdateApiAccessRuleDto>
+public sealed class UpdateApiAccessRuleEndpoint : IEndpoint
 {
-    public override void Configure()
+    [StepifiedProcess(Steps = [
+        typeof(ValidateApiAccessRuleIdMatchesStep),
+        typeof(ResolveApiAccessRuleForUpdateStep),
+        typeof(UpdateApiAccessRuleStep),
+    ])]
+    public UpdateApiAccessRuleDelegate UpdateApiAccessRule { get; } = default!;
+
+    public void Map(RouteGroupBuilder app)
     {
-        Put("rules/{id:guid}");
-        Claims(AdminClaimConstants.AdminAccountClaimKey);
-        Version(1);
-    }
-
-    public override async Task HandleAsync(UpdateApiAccessRuleDto req, CancellationToken ct)
-    {
-        var id = Route<Guid>("id");
-        if (req.Id != id)
+        app.MapPut("/{id:guid}/v1", async (Guid id, UpdateApiAccessRuleDto request, CancellationToken ct) =>
         {
-            await Send.ErrorsAsync(400, ct);
-            return;
-        }
+            var context = new UpdateApiAccessRuleContext(request, id);
+            var result = await UpdateApiAccessRule(context, ct);
 
-        var existing = await repo.GetByIdAsync(id, ct);
-        if (existing is default(ApiAccessRuleEntity))
-        {
-            await Send.NotFoundAsync(ct);
-            return;
-        }
-
-        existing = existing with
-        {
-            Name = req.Name,
-            Description = req.Description,
-            Enabled = req.Enabled,
-            Priority = req.Priority,
-            Action = (RestrictionLevel)req.Action,
-            Methods = req.Methods?.ToList(),
-            PathPatterns = req.PathPatterns?.ToList(),
-            Tags = req.Tags?.ToList(),
-            IpRanges = req.IpRanges?.ToList(),
-            RegionCodes = req.RegionCodes?.ToList(),
-            ResponseTemplateId = req.ResponseTemplateId,
-            ExpiresAt = req.ExpiresAt
-        };
-
-        await repo.AddOrUpdateAsync(existing, existing.Id, token: ct);
-        await publisher.Publish(new ApiAccessRestrictionsChanged(DateTimeOffset.UtcNow), ct);
-        await Send.OkAsync(cancellation: ct);
+            return result.ToEnvelopeResult();
+        });
     }
 }

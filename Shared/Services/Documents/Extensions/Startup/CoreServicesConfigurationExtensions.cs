@@ -7,7 +7,7 @@ public static class CoreServicesConfigurationExtensions
     public static IServiceCollection AddCoreServicesConfiguration(this IServiceCollection services)
     {
         // Content storage (swap the implementation to move documents to blob storage)
-        services.AddScoped<Interfaces.Storage.IDocumentContentStore, Services.Storage.FileSystemDocumentContentStore>();
+        services.AddScoped<Interfaces.Services.IDocumentContentStore, Services.FileSystemDocumentContentStore>();
 
         // Repositories
         services.AddScoped<Interfaces.Repositories.Marten.IDocumentRepository, Repositories.Marten.DocumentRepository>();

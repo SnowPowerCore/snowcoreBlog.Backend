@@ -2,7 +2,7 @@ using MaybeResults;
 using MinimalStepifiedSystem.Interfaces;
 using snowcoreBlog.Backend.Documents.Context;
 using snowcoreBlog.Backend.Documents.Delegates;
-using snowcoreBlog.Backend.Documents.Interfaces.Storage;
+using snowcoreBlog.Backend.Documents.Interfaces.Services;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 
 namespace snowcoreBlog.Backend.Documents.Steps.Documents.Upload;

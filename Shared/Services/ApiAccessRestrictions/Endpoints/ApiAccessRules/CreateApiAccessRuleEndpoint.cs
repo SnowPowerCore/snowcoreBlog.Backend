@@ -1,43 +1,27 @@
-using FastEndpoints;
-using MassTransit;
-using snowcoreBlog.Backend.ApiAccessRestrictions.Constants;
-using snowcoreBlog.Backend.ApiAccessRestrictions.Interfaces.Repositories.Marten;
-using snowcoreBlog.Backend.AspireYarpGateway.Core.Contracts;
-using snowcoreBlog.Backend.Core.Entities.ApiAccessRestrictions;
+using FastSharp.Modules.Core;
+using MaybeResults;
+using MinimalStepifiedSystem.Attributes;
+using snowcoreBlog.Backend.ApiAccessRestrictions.Context;
+using snowcoreBlog.Backend.ApiAccessRestrictions.Delegates;
+using snowcoreBlog.Backend.ApiAccessRestrictions.Steps.ApiAccessRules.Create;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 
 namespace snowcoreBlog.Backend.ApiAccessRestrictions.Endpoints.ApiAccessRules;
 
-public class CreateApiAccessRuleEndpoint(IApiAccessRuleRepository repo,
-                                         IPublishEndpoint publisher) : Endpoint<CreateApiAccessRuleDto, ApiAccessRuleEntity>
+public sealed class CreateApiAccessRuleEndpoint : IEndpoint
 {
-    public override void Configure()
-    {
-        Post("rules");
-        Claims(AdminClaimConstants.AdminAccountClaimKey);
-        Version(1);
-    }
+    [StepifiedProcess(Steps = [
+        typeof(CreateApiAccessRuleStep),
+    ])]
+    public CreateApiAccessRuleDelegate CreateApiAccessRule { get; } = default!;
 
-    public override async Task HandleAsync(CreateApiAccessRuleDto req, CancellationToken ct)
+    public void Map(RouteGroupBuilder app)
     {
-        var entity = new ApiAccessRuleEntity
+        app.MapPost("/v1", async (CreateApiAccessRuleDto request, CancellationToken ct) =>
         {
-            Name = req.Name,
-            Description = req.Description,
-            Enabled = req.Enabled,
-            Priority = req.Priority,
-            Action = (RestrictionLevel)req.Action,
-            Methods = req.Methods?.ToList(),
-            PathPatterns = req.PathPatterns?.ToList(),
-            Tags = req.Tags?.ToList(),
-            IpRanges = req.IpRanges?.ToList(),
-            RegionCodes = req.RegionCodes?.ToList(),
-            ResponseTemplateId = req.ResponseTemplateId,
-            ExpiresAt = req.ExpiresAt
-        };
+            var result = await CreateApiAccessRule(new CreateApiAccessRuleContext(request), ct);
 
-        await repo.AddOrUpdateAsync(entity, token: ct);
-        await publisher.Publish(new ApiAccessRestrictionsChanged(DateTimeOffset.UtcNow), ct);
-        await Send.CreatedAtAsync<GetApiAccessRulesEndpoint>(entity, cancellation: ct);
+            return result.ToEnvelopeResult();
+        });
     }
 }

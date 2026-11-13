@@ -1,13 +1,12 @@
 using System.Net;
 using System.Net.Mime;
 using FastEndpoints;
-using Marten;
 using MaybeResults;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.Extensions.Options;
 using snowcoreBlog.Backend.AdminsManagement.Constants;
-using snowcoreBlog.Backend.AdminsManagement.Services;
-using snowcoreBlog.Backend.Core.Entities.Admin;
+using snowcoreBlog.Backend.AdminsManagement.Extensions;
+using snowcoreBlog.Backend.AdminsManagement.Interfaces.Repositories.Marten;
 using snowcoreBlog.Backend.Infrastructure;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 using snowcoreBlog.PublicApi.Constants;
@@ -23,7 +22,7 @@ public class SearchAdminAccountsEndpoint : EndpointWithoutRequest<ApiResponse?>
 {
     public required IOptions<JsonOptions> JsonOptions { get; set; }
 
-    public required IQuerySession QuerySession { get; set; }
+    protected IAdminRepository AdminRepository { get; } = default!;
 
     public override void Configure()
     {
@@ -43,26 +42,12 @@ public class SearchAdminAccountsEndpoint : EndpointWithoutRequest<ApiResponse?>
         var page = Math.Max(1, Query<int?>("page") ?? 1);
         var pageSize = Math.Clamp(Query<int?>("pageSize") ?? 25, 1, 100);
 
-        var query = QuerySession.Query<AdminEntity>().AsQueryable();
-        if (!string.IsNullOrWhiteSpace(search))
-        {
-            var term = search.Trim();
-            query = query.Where(x =>
-                x.Email.Contains(term, StringComparison.OrdinalIgnoreCase)
-                || x.NickName.Contains(term, StringComparison.OrdinalIgnoreCase));
-        }
-
-        var items = await query
-            .OrderBy(static x => x.Email)
-            .Skip((page - 1) * pageSize)
-            .Take(pageSize)
-            .ToListAsync(ct);
-
+        var items = await AdminRepository.SearchAsync(search, page, pageSize, ct);
         var result = Maybe.Create(items.Select(static a => a.ToDto()).ToList());
-
+        
         await Send.ResponseAsync(
-            result.ToApiResponse(serializerOptions: JsonOptions.Value.SerializerOptions),
-            result.ToStatusCode(),
+            result?.ToApiResponse(serializerOptions: JsonOptions.Value.SerializerOptions),
+            result?.ToStatusCode() ?? (int)HttpStatusCode.InternalServerError,
             ct);
     }
 }

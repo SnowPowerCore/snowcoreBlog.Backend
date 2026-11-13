@@ -1,7 +1,7 @@
 using FluentAssertions;
 using Microsoft.Extensions.Logging.Abstractions;
 using snowcoreBlog.Backend.Documents.Options;
-using snowcoreBlog.Backend.Documents.Services.Storage;
+using snowcoreBlog.Backend.Documents.Services;
 
 namespace snowcoreBlog.Backend.Documents.Tests.Storage;
 

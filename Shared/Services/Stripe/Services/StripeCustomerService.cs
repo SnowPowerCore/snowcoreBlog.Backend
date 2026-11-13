@@ -44,7 +44,7 @@ public class StripeCustomerService(
             Email = email,
             Name = name,
             StripeCustomerId = customer.Id,
-            CreatedAt = DateTimeOffset.UtcNow
+            CreatedAt = DateTime.UtcNow
         };
 
         await customerRepository.AddOrUpdateAsync(mapping, mapping.Id, true, token);

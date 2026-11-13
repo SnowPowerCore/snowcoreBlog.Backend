@@ -1,4 +1,4 @@
-using snowcoreBlog.Backend.ApiAccessRestrictions.Interfaces;
+using snowcoreBlog.Backend.ApiAccessRestrictions.Interfaces.Services;
 
 namespace snowcoreBlog.Backend.ApiAccessRestrictions.GatewayIntegration;
 

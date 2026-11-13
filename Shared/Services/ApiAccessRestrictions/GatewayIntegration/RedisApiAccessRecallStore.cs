@@ -1,4 +1,4 @@
-using snowcoreBlog.Backend.ApiAccessRestrictions.Interfaces;
+using snowcoreBlog.Backend.ApiAccessRestrictions.Interfaces.Services;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 using StackExchange.Redis;
 

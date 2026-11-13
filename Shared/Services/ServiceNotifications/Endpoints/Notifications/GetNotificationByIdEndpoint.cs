@@ -1,62 +1,39 @@
 using System.Net;
-using System.Net.Mime;
-using FastEndpoints;
+using FastSharp.Modules.Core;
 using MaybeResults;
-using Microsoft.AspNetCore.Http.Json;
-using Microsoft.Extensions.Options;
-using snowcoreBlog.Backend.Infrastructure;
 using snowcoreBlog.Backend.Infrastructure.Utilities;
+using snowcoreBlog.Backend.ServiceNotifications.Endpoints;
 using snowcoreBlog.Backend.ServiceNotifications.Extensions;
 using snowcoreBlog.Backend.ServiceNotifications.Interfaces.Repositories.Marten;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
-using snowcoreBlog.PublicApi.Constants;
 using snowcoreBlog.PublicApi.Extensions;
-using snowcoreBlog.PublicApi.Utilities.Api;
 
 namespace snowcoreBlog.Backend.ServiceNotifications.Endpoints.Notifications;
 
-public class GetNotificationByIdEndpoint : EndpointWithoutRequest<ApiResponse?>
+public sealed class GetNotificationByIdEndpoint(INotificationRepository notificationRepository) : IEndpoint
 {
-    public required IOptions<JsonOptions> JsonOptions { get; set; }
-
-    public required INotificationRepository NotificationRepository { get; set; }
-
-    public override void Configure()
+    public void Map(RouteGroupBuilder app)
     {
-        Get("{id:guid}");
-        ResponseCache(300); // 5 minutes response cache
-        Version(1);
-        SerializerContext(CoreSerializationContext.Default);
-        AllowAnonymous();
-        Description(b => b
-            .WithTags(ApiTagConstants.TechnicalNotifications)
-            .Produces<ApiResponseForOpenApi<NotificationDto>>((int)HttpStatusCode.OK, MediaTypeNames.Application.Json)
-            .Produces<ApiResponse>((int)HttpStatusCode.NotFound, MediaTypeNames.Application.Json)
-            .ProducesProblemFE((int)HttpStatusCode.BadRequest));
-    }
+        app.MapGet("/{id:guid}/v1", async (Guid id, CancellationToken ct) =>
+            {
+                var notification = await notificationRepository.GetByIdAsync(id, ct);
 
-    public override async Task HandleAsync(CancellationToken ct)
-    {
-        var id = Route<Guid>("id");
-        var notification = await NotificationRepository.GetByIdAsync(id, ct);
+                if (notification is default(Core.Entities.Notification.NotificationEntity))
+                {
+                    return new ApiResponseResult(
+                        ErrorResponseUtilities.ApiResponseWithErrors(
+                            [$"Notification with ID '{id}' was not found."],
+                            (int)HttpStatusCode.NotFound),
+                        (int)HttpStatusCode.NotFound);
+                }
 
-        if (notification is default(Core.Entities.Notification.NotificationEntity))
-        {
-            await Send.ResponseAsync(
-                ErrorResponseUtilities.ApiResponseWithErrors(
-                    [$"Notification with ID '{id}' was not found."],
-                    (int)HttpStatusCode.NotFound),
-                (int)HttpStatusCode.NotFound,
-                ct);
-            return;
-        }
+                var dto = notification.ToDto();
+                var result = Maybe.Create(dto);
 
-        var dto = notification.ToDto();
-        var result = Maybe.Create(dto);
-
-        await Send.ResponseAsync(
-            result.ToApiResponse(serializerOptions: JsonOptions.Value.SerializerOptions),
-            result.ToStatusCode(),
-            ct);
+                return new ApiResponseResult(
+                    result.ToApiResponse(),
+                    result.ToStatusCode());
+            })
+            .WithMetadata(new Microsoft.AspNetCore.Mvc.ResponseCacheAttribute { Duration = 300 }); // 5 minutes response cache
     }
 }

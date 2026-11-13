@@ -1,12 +1,12 @@
 using System.Net;
 using System.Net.Mime;
 using FastEndpoints;
-using Marten;
 using MaybeResults;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.Extensions.Options;
 using snowcoreBlog.Backend.AdminsManagement.Constants;
-using snowcoreBlog.Backend.Core.Entities.Admin;
+using snowcoreBlog.Backend.AdminsManagement.Extensions;
+using snowcoreBlog.Backend.AdminsManagement.Interfaces.Repositories.Marten;
 using snowcoreBlog.Backend.Infrastructure;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 using snowcoreBlog.PublicApi.Constants;
@@ -22,7 +22,7 @@ public class GetAdminInvitesEndpoint : EndpointWithoutRequest<ApiResponse?>
 {
     public required IOptions<JsonOptions> JsonOptions { get; set; }
 
-    public required IQuerySession QuerySession { get; set; }
+    protected IAdminInviteRepository InviteRepository { get; } = default!;
 
     public override void Configure()
     {
@@ -38,25 +38,13 @@ public class GetAdminInvitesEndpoint : EndpointWithoutRequest<ApiResponse?>
 
     public override async Task HandleAsync(CancellationToken ct)
     {
-        var items = await QuerySession.Query<AdminInviteEntity>()
-            .OrderByDescending(static x => x.CreatedAtUtc)
-            .Take(100)
-            .ToListAsync(ct);
+        var items = await InviteRepository.ListLatestAsync(100, ct);
 
-        var result = Maybe.Create(items.Select(static i => new AdminInviteDto
-        {
-            Id = i.Id,
-            Email = i.Email,
-            NickName = i.NickName,
-            InvitedByAdminId = i.InvitedByAdminId,
-            CreatedAtUtc = i.CreatedAtUtc,
-            ExpiresAtUtc = i.ExpiresAtUtc,
-            AcceptedAtUtc = i.AcceptedAtUtc,
-        }).ToList());
+        var result = Maybe.Create(items.Select(static i => i.ToDto()));
 
         await Send.ResponseAsync(
-            result.ToApiResponse(serializerOptions: JsonOptions.Value.SerializerOptions),
-            result.ToStatusCode(),
+            result?.ToApiResponse(serializerOptions: JsonOptions.Value.SerializerOptions),
+            result?.ToStatusCode() ?? (int)HttpStatusCode.InternalServerError,
             ct);
     }
 }

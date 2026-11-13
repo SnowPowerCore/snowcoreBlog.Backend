@@ -1,36 +1,27 @@
-using FastEndpoints;
-using MassTransit;
-using snowcoreBlog.Backend.ApiAccessRestrictions.Constants;
-using snowcoreBlog.Backend.ApiAccessRestrictions.Interfaces.Repositories.Marten;
-using snowcoreBlog.Backend.AspireYarpGateway.Core.Contracts;
-using snowcoreBlog.Backend.Core.Entities.ApiAccessRestrictions;
+using FastSharp.Modules.Core;
+using MaybeResults;
+using MinimalStepifiedSystem.Attributes;
+using snowcoreBlog.Backend.ApiAccessRestrictions.Context;
+using snowcoreBlog.Backend.ApiAccessRestrictions.Delegates;
+using snowcoreBlog.Backend.ApiAccessRestrictions.Steps.ApiAccessResponseTemplates.Create;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 
 namespace snowcoreBlog.Backend.ApiAccessRestrictions.Endpoints.ApiAccessResponseTemplates;
 
-public class CreateApiAccessResponseTemplateEndpoint(IApiAccessResponseTemplateRepository repo,
-                                                     IPublishEndpoint publisher) : Endpoint<CreateApiAccessResponseTemplateDto, ApiAccessResponseTemplateEntity>
+public sealed class CreateApiAccessResponseTemplateEndpoint : IEndpoint
 {
-    public override void Configure()
-    {
-        Post("templates");
-        Claims(AdminClaimConstants.AdminAccountClaimKey);
-        Version(1);
-    }
+    [StepifiedProcess(Steps = [
+        typeof(CreateApiAccessResponseTemplateStep),
+    ])]
+    public CreateApiAccessResponseTemplateDelegate CreateApiAccessResponseTemplate { get; } = default!;
 
-    public override async Task HandleAsync(CreateApiAccessResponseTemplateDto req, CancellationToken ct)
+    public void Map(RouteGroupBuilder app)
     {
-        var entity = new ApiAccessResponseTemplateEntity
+        app.MapPost("/v1", async (CreateApiAccessResponseTemplateDto request, CancellationToken ct) =>
         {
-            Name = req.Name,
-            StatusCode = req.StatusCode,
-            ContentType = req.ContentType,
-            BodyJson = req.BodyJson,
-            Reason = req.Reason
-        };
+            var result = await CreateApiAccessResponseTemplate(new CreateApiAccessResponseTemplateContext(request), ct);
 
-        await repo.AddOrUpdateAsync(entity, token: ct);
-        await publisher.Publish(new ApiAccessRestrictionsChanged(DateTimeOffset.UtcNow), ct);
-        await Send.CreatedAtAsync<GetApiAccessResponseTemplatesEndpoint>(entity, cancellation: ct);
+            return result.ToEnvelopeResult();
+        });
     }
 }

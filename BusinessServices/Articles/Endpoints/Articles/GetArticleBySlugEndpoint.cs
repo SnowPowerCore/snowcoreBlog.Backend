@@ -7,7 +7,7 @@ using Microsoft.Extensions.Options;
 using MinimalStepifiedSystem.Attributes;
 using snowcoreBlog.Backend.Articles.Context;
 using snowcoreBlog.Backend.Articles.Delegates;
-using snowcoreBlog.Backend.Articles.Steps.Articles;
+using snowcoreBlog.Backend.Articles.Steps.Articles.Get;
 using snowcoreBlog.Backend.Infrastructure;
 using snowcoreBlog.Backend.Infrastructure.Utilities;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;

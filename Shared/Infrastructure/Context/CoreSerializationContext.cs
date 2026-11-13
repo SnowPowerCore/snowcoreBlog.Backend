@@ -7,9 +7,10 @@ using MassTransit;
 using MassTransit.Events;
 using snowcoreBlog.Backend.AspireYarpGateway.Core.Contracts;
 using snowcoreBlog.Backend.Core.Contracts;
+using snowcoreBlog.Backend.Core.Entities.Admin;
+using snowcoreBlog.Backend.Core.Entities.ApiAccessRestrictions;
 using snowcoreBlog.Backend.Core.Entities.Article;
 using snowcoreBlog.Backend.Core.Entities.Author;
-using snowcoreBlog.Backend.Core.Entities.Admin;
 using snowcoreBlog.Backend.Core.Entities.Documents;
 using snowcoreBlog.Backend.Core.Entities.Notification;
 using snowcoreBlog.Backend.Core.Entities.Reader;
@@ -44,6 +45,21 @@ namespace snowcoreBlog.Backend.Infrastructure;
 [JsonSerializable(typeof(IpRestrictionSnapshotDto))]
 [JsonSerializable(typeof(RegionRestrictionSnapshotDto))]
 [JsonSerializable(typeof(ApiAccessRestrictionsChanged))]
+// ApiAccessRestrictions FastSharp wire types (endpoints + gateway refresher + admin frontend)
+[JsonSerializable(typeof(ApiAccessRuleEntity))]
+[JsonSerializable(typeof(List<ApiAccessRuleEntity>))]
+[JsonSerializable(typeof(ApiAccessResponseTemplateEntity))]
+[JsonSerializable(typeof(List<ApiAccessResponseTemplateEntity>))]
+[JsonSerializable(typeof(CreateApiAccessRuleDto))]
+[JsonSerializable(typeof(UpdateApiAccessRuleDto))]
+[JsonSerializable(typeof(ApiAccessRuleDto))]
+[JsonSerializable(typeof(List<ApiAccessRuleDto>))]
+[JsonSerializable(typeof(CreateApiAccessResponseTemplateDto))]
+[JsonSerializable(typeof(UpdateApiAccessResponseTemplateDto))]
+[JsonSerializable(typeof(ApiAccessResponseTemplateDto))]
+[JsonSerializable(typeof(List<ApiAccessResponseTemplateDto>))]
+[JsonSerializable(typeof(CheckApiAccessRequestDto))]
+[JsonSerializable(typeof(CheckApiAccessResponseDto))]
 [JsonSerializable(typeof(AltchaChallenge))]
 [JsonSerializable(typeof(AltchaResponse))]
 [JsonSerializable(typeof(ApplicationAdminEntity))]
@@ -97,6 +113,10 @@ namespace snowcoreBlog.Backend.Infrastructure;
 [JsonSerializable(typeof(CreateAdminInviteDto))]
 [JsonSerializable(typeof(AcceptAdminInviteDto))]
 [JsonSerializable(typeof(AdminInviteResolutionDto))]
+[JsonSerializable(typeof(RevokeAdminInviteResultDto))]
+[JsonSerializable(typeof(RequestAdminLoginLinkResultDto))]
+[JsonSerializable(typeof(DeleteAdminAccountResultDto))]
+[JsonSerializable(typeof(AdminLogoutResultDto))]
 [JsonSerializable(typeof(RequestUserNotifications))]
 [JsonSerializable(typeof(UserNotificationsResponse))]
 [JsonSerializable(typeof(NotificationTypeDto))]
@@ -106,6 +126,12 @@ namespace snowcoreBlog.Backend.Infrastructure;
 [JsonSerializable(typeof(DeleteNotificationDto))]
 [JsonSerializable(typeof(DeleteNotificationResultDto))]
 [JsonSerializable(typeof(GetActiveNotificationsDto))]
+[JsonSerializable(typeof(CreateShortUrlRequest))]
+[JsonSerializable(typeof(CreateShortUrlResult))]
+[JsonSerializable(typeof(ResolveShortUrlResultDto))]
+[JsonSerializable(typeof(ShortUrlStatsDto))]
+[JsonSerializable(typeof(RefreshReaderAccountTokenResultDto))]
+[JsonSerializable(typeof(RevokeReaderAccountTokenResultDto))]
 [JsonSerializable(typeof(AltchaStoredChallengeEntity))]
 [JsonSerializable(typeof(CreateAdmin))]
 [JsonSerializable(typeof(CreateUser))]

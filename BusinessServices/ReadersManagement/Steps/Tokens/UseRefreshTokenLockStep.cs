@@ -1,19 +1,17 @@
-using System.Net;
 using MaybeResults;
 using MinimalStepifiedSystem.Interfaces;
-using snowcoreBlog.Backend.Infrastructure.Utilities;
 using snowcoreBlog.Backend.ReadersManagement.Constants;
 using snowcoreBlog.Backend.ReadersManagement.Context;
 using snowcoreBlog.Backend.ReadersManagement.Delegates;
-using snowcoreBlog.Backend.ReadersManagement.Models;
+using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 using StackExchange.Redis;
 
 namespace snowcoreBlog.Backend.ReadersManagement.Steps.Tokens;
 
 public sealed class UseRefreshTokenLockStep(IConnectionMultiplexer redis)
-    : IStep<RefreshReaderJwtPairDelegate, RefreshReaderJwtPairContext, IMaybe<RefreshReaderJwtPairOperationResult>>
+    : IStep<RefreshReaderJwtPairDelegate, RefreshReaderJwtPairContext, IMaybe<RefreshReaderAccountTokenResultDto>>
 {
-    public async Task<IMaybe<RefreshReaderJwtPairOperationResult>> InvokeAsync(
+    public async Task<IMaybe<RefreshReaderAccountTokenResultDto>> InvokeAsync(
         RefreshReaderJwtPairContext context,
         RefreshReaderJwtPairDelegate next,
         CancellationToken token = default)
@@ -21,11 +19,8 @@ public sealed class UseRefreshTokenLockStep(IConnectionMultiplexer redis)
         var refreshToken = context.RefreshToken;
         if (string.IsNullOrWhiteSpace(refreshToken))
         {
-            return Maybe.Create(new RefreshReaderJwtPairOperationResult
-            {
-                HttpStatusCode = (int)HttpStatusCode.BadRequest,
-                Response = ErrorResponseUtilities.ApiResponseWithErrors(["Missing refresh token"], (int)HttpStatusCode.BadRequest)
-            });
+            return RefreshTokenMissingError<RefreshReaderAccountTokenResultDto>.Create(
+                "Missing refresh token.");
         }
 
         var db = redis.GetDatabase();
@@ -35,11 +30,8 @@ public sealed class UseRefreshTokenLockStep(IConnectionMultiplexer redis)
         var lockAcquired = await db.StringSetAsync(lockKey, "1", expiry: TimeSpan.FromSeconds(5), when: When.NotExists);
         if (!lockAcquired)
         {
-            return Maybe.Create(new RefreshReaderJwtPairOperationResult
-            {
-                HttpStatusCode = (int)HttpStatusCode.Unauthorized,
-                Response = ErrorResponseUtilities.ApiResponseWithErrors(["Refresh already in progress"], (int)HttpStatusCode.Unauthorized)
-            });
+            return RefreshAlreadyInProgressError<RefreshReaderAccountTokenResultDto>.Create(
+                "A refresh for this token is already in progress.");
         }
 
         try

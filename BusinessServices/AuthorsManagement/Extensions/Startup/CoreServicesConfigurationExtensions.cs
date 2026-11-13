@@ -1,7 +1,7 @@
 using snowcoreBlog.ApplicationLaunch.Implementations.BackgroundServices;
 using snowcoreBlog.ApplicationLaunch.Interfaces;
 using snowcoreBlog.Backend.AuthorsManagement.Services;
-using snowcoreBlog.Backend.AuthorsManagement.Steps;
+using snowcoreBlog.Backend.AuthorsManagement.Steps.AuthorAccounts.Create;
 using snowcoreBlog.Backend.Gateway.Middleware.Middleware;
 using StackExchange.Redis;
 

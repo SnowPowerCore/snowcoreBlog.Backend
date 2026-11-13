@@ -3,9 +3,10 @@ using FastEndpoints;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.Extensions.Options;
 using MinimalStepifiedSystem.Attributes;
+using snowcoreBlog.Backend.Infrastructure;
 using snowcoreBlog.Backend.UrlShortener.Context;
 using snowcoreBlog.Backend.UrlShortener.Delegates;
-using snowcoreBlog.Backend.UrlShortener.Steps;
+using snowcoreBlog.Backend.UrlShortener.Steps.Create;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 using snowcoreBlog.PublicApi.Extensions;
 using snowcoreBlog.PublicApi.Utilities.Api;
@@ -14,8 +15,8 @@ namespace snowcoreBlog.Backend.UrlShortener.Endpoints.UrlShortener;
 
 public class CreateShortUrlEndpoint : Endpoint<CreateShortUrlRequest, ApiResponse?>
 {
-    public IOptions<JsonOptions> JsonOptions { get; set; }
-    
+    public required IOptions<JsonOptions> JsonOptions { get; set; }
+
     [StepifiedProcess(Steps = [
         typeof(ValidateOriginalUrlStep),
         typeof(GenerateCodeStep),
@@ -28,6 +29,7 @@ public class CreateShortUrlEndpoint : Endpoint<CreateShortUrlRequest, ApiRespons
     {
         Post("create");
         Version(1);
+        SerializerContext(CoreSerializationContext.Default);
     }
 
     public override async Task HandleAsync(CreateShortUrlRequest req, CancellationToken ct)

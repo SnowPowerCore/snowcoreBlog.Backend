@@ -1,14 +1,16 @@
 using System.Net;
 using System.Net.Mime;
 using FastEndpoints;
-using Marten;
+using MaybeResults;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.Extensions.Options;
 using snowcoreBlog.Backend.AdminsManagement.Constants;
-using snowcoreBlog.Backend.Core.Entities.Admin;
+using snowcoreBlog.Backend.AdminsManagement.ErrorResults;
+using snowcoreBlog.Backend.AdminsManagement.Interfaces.Repositories.Marten;
+using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 using snowcoreBlog.Backend.Infrastructure;
-using snowcoreBlog.Backend.Infrastructure.Utilities;
 using snowcoreBlog.PublicApi.Constants;
+using snowcoreBlog.PublicApi.Extensions;
 using snowcoreBlog.PublicApi.Utilities.Api;
 
 namespace snowcoreBlog.Backend.AdminsManagement.Endpoints.Invites;
@@ -20,7 +22,7 @@ public class RevokeAdminInviteEndpoint : EndpointWithoutRequest<ApiResponse?>
 {
     public required IOptions<JsonOptions> JsonOptions { get; set; }
 
-    public required IDocumentSession DocumentSession { get; set; }
+    protected IAdminInviteRepository InviteRepository { get; } = default!;
 
     public override void Configure()
     {
@@ -37,26 +39,24 @@ public class RevokeAdminInviteEndpoint : EndpointWithoutRequest<ApiResponse?>
 
     public override async Task HandleAsync(CancellationToken ct)
     {
+        IMaybe<RevokeAdminInviteResultDto> result;
         var id = Route<Guid>("id");
-        var invite = await DocumentSession.LoadAsync<AdminInviteEntity>(id, ct);
+        var invite = await InviteRepository.GetByIdAsync(id, ct);
 
-        if (invite is default(AdminInviteEntity))
+        if (invite is default(Core.Entities.Admin.AdminInviteEntity))
         {
-            await Send.ResponseAsync(
-                ErrorResponseUtilities.ApiResponseWithErrors(
-                    [$"Invite with ID '{id}' was not found."],
-                    (int)HttpStatusCode.NotFound),
-                (int)HttpStatusCode.NotFound,
-                ct);
-            return;
+            result = InviteNotFoundError<RevokeAdminInviteResultDto>.Create(
+                $"Admin invite was not found.");
+        }
+        else
+        {
+            await InviteRepository.RemoveAsync(invite, token: ct);
+            result = Maybe.Create(new RevokeAdminInviteResultDto());
         }
 
-        DocumentSession.Delete(invite);
-        await DocumentSession.SaveChangesAsync(ct);
-
         await Send.ResponseAsync(
-            new ApiResponse(StatusCode: (int)HttpStatusCode.OK),
-            (int)HttpStatusCode.OK,
+            result?.ToApiResponse(serializerOptions: JsonOptions.Value.SerializerOptions),
+            result?.ToStatusCode() ?? (int)HttpStatusCode.InternalServerError,
             ct);
     }
 }

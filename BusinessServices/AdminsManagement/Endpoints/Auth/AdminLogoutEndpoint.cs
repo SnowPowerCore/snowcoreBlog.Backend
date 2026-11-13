@@ -1,11 +1,14 @@
 using System.Net;
 using System.Net.Mime;
 using FastEndpoints;
+using MaybeResults;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.Extensions.Options;
+using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 using snowcoreBlog.Backend.AdminsManagement.Services;
 using snowcoreBlog.Backend.Infrastructure;
 using snowcoreBlog.PublicApi.Constants;
+using snowcoreBlog.PublicApi.Extensions;
 using snowcoreBlog.PublicApi.Utilities.Api;
 
 namespace snowcoreBlog.Backend.AdminsManagement.Endpoints.Auth;
@@ -18,7 +21,7 @@ public class AdminLogoutEndpoint : EndpointWithoutRequest<ApiResponse?>
 {
     public required IOptions<JsonOptions> JsonOptions { get; set; }
 
-    public required AdminTokenPairIssuer TokenIssuer { get; set; }
+    protected AdminTokenPairIssuer TokenIssuer { get; } = default!;
 
     public override void Configure()
     {
@@ -35,9 +38,11 @@ public class AdminLogoutEndpoint : EndpointWithoutRequest<ApiResponse?>
     {
         TokenIssuer.ClearCookie();
 
+        var result = Maybe.Create(new AdminLogoutResultDto());
+
         await Send.ResponseAsync(
-            new ApiResponse(StatusCode: (int)HttpStatusCode.OK),
-            (int)HttpStatusCode.OK,
+            result?.ToApiResponse(serializerOptions: JsonOptions.Value.SerializerOptions),
+            result?.ToStatusCode() ?? (int)HttpStatusCode.InternalServerError,
             ct);
     }
 }

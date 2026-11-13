@@ -7,7 +7,6 @@ using snowcoreBlog.Backend.AdminsManagement.Constants;
 using snowcoreBlog.Backend.AdminsManagement.Options;
 using snowcoreBlog.Backend.Core.Constants;
 using snowcoreBlog.Backend.Core.Entities.Admin;
-using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 
 namespace snowcoreBlog.Backend.AdminsManagement.Services;
 
@@ -25,12 +24,13 @@ public sealed class AdminTokenPairIssuer(
 {
     public string IssueAndSetCookie(AdminEntity admin)
     {
-        var expiresAt = DateTime.UtcNow.AddMinutes(options.Value.AccessTokenValidityDurationInMinutes);
+        var now = DateTime.UtcNow;
+        var expiresAt = now.AddMinutes(options.Value.AccessTokenValidityDurationInMinutes);
 
         var descriptor = new SecurityTokenDescriptor
         {
             Issuer = AdminSecurityConstants.AdminIssuer,
-            IssuedAt = DateTime.UtcNow,
+            IssuedAt = now,
             Expires = expiresAt,
             SigningCredentials = new SigningCredentials(
                 new SymmetricSecurityKey(Encoding.ASCII.GetBytes(signingKey.Value.Value)),
@@ -63,28 +63,4 @@ public sealed class AdminTokenPairIssuer(
     {
         httpContextAccessor.HttpContext?.Response.Cookies.Delete(AuthCookieConstants.AdminAccessTokenCookieName);
     }
-}
-
-/// <summary>Helpers to read the admin from the current principal (admin-scheme JWT).</summary>
-public static class AdminPrincipalExtensions
-{
-    public static bool IsAdmin(this ClaimsPrincipal principal)
-        => principal.HasClaim(AdminClaimConstants.AdminAccountClaimKey, AdminClaimConstants.AdminAccountClaimValue);
-
-    public static Guid GetAdminId(this ClaimsPrincipal principal)
-        => Guid.TryParse(principal.FindFirst(AdminClaimConstants.AdminUserIdClaimKey)?.Value, out var id) ? id : Guid.Empty;
-
-    public static string GetAdminEmail(this ClaimsPrincipal principal)
-        => principal.FindFirst(AdminClaimConstants.AdminEmailClaimKey)?.Value ?? string.Empty;
-
-    public static AdminDto ToDto(this AdminEntity admin)
-        => new()
-        {
-            Id = admin.Id,
-            Email = admin.Email,
-            NickName = admin.NickName,
-            InvitedByAdminId = admin.InvitedByAdminId,
-            InvitedAtUtc = admin.InvitedAtUtc,
-            IsActive = admin.IsActive,
-        };
 }

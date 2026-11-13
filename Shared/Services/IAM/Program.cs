@@ -10,22 +10,16 @@ using snowcoreBlog.ServiceDefaults.Extensions;
 var builder = WebApplication.CreateSlimBuilder(args);
 
 // Hosting configuration
-builder.Host.UseDefaultServiceProvider(static (c, opts) =>
-{
-    opts.ValidateScopes = true;
-    opts.ValidateOnBuild = true;
-});
+builder.UseHostingConfiguration();
+
+// Service defaults and OpenTelemetry
+builder.UseServiceDefaultsConfiguration();
+builder.Services.AddOpenTelemetryConfiguration();
 
 builder.Services.Configure<ValidStates<HashedStringsVerificationResult>>(static options =>
 {
     options.States = [HashedStringsVerificationResult.Success, HashedStringsVerificationResult.SuccessRehashNeeded];
 });
-
-builder.WebHost.UseKestrelHttpsConfiguration();
-builder.AddServiceDefaults();
-
-// OpenTelemetry
-builder.Services.AddOpenTelemetry().ConnectBackendServices();
 
 // PostgreSQL configuration
 builder.AddNpgsqlDataSource("db-iam-entities", configureDataSourceBuilder: b => b.ConnectionStringBuilder.IncludeErrorDetail = true);
@@ -50,6 +44,6 @@ builder.Services.AddFido2Configuration(builder.Configuration.GetSection(nameof(F
 builder.Services.AddValidationConfiguration();
 
 var app = builder.Build();
-app.UseApplicationConfiguration();
+app.UseApplicationMiddleware();
 app.MapEndpoints();
 await app.RunApplicationAsync();

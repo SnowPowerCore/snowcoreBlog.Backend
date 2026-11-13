@@ -16,6 +16,4 @@ public sealed class RefreshReaderJwtPairContext(string refreshTokenFromBody) : B
     public ReaderRefreshTokenRecord? Record { get; set; }
 
     public AspireYarpGateway.Core.Contracts.UserTokenPairWithPayloadGenerated? NewPair { get; set; }
-
-    public Models.RefreshReaderJwtPairOperationResult? Result { get; set; }
 }

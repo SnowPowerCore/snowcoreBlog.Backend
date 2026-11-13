@@ -1,50 +1,30 @@
-using FastEndpoints;
-using MassTransit;
-using snowcoreBlog.Backend.ApiAccessRestrictions.Constants;
-using snowcoreBlog.Backend.ApiAccessRestrictions.Interfaces.Repositories.Marten;
-using snowcoreBlog.Backend.AspireYarpGateway.Core.Contracts;
-using snowcoreBlog.Backend.Core.Entities.ApiAccessRestrictions;
+using FastSharp.Modules.Core;
+using MaybeResults;
+using MinimalStepifiedSystem.Attributes;
+using snowcoreBlog.Backend.ApiAccessRestrictions.Context;
+using snowcoreBlog.Backend.ApiAccessRestrictions.Delegates;
+using snowcoreBlog.Backend.ApiAccessRestrictions.Steps.ApiAccessResponseTemplates.Update;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 
 namespace snowcoreBlog.Backend.ApiAccessRestrictions.Endpoints.ApiAccessResponseTemplates;
 
-public class UpdateApiAccessResponseTemplateEndpoint(IApiAccessResponseTemplateRepository repo,
-                                                     IPublishEndpoint publisher) : Endpoint<UpdateApiAccessResponseTemplateDto>
+public sealed class UpdateApiAccessResponseTemplateEndpoint : IEndpoint
 {
-    public override void Configure()
+    [StepifiedProcess(Steps = [
+        typeof(ValidateApiAccessResponseTemplateIdMatchesStep),
+        typeof(ResolveApiAccessResponseTemplateForUpdateStep),
+        typeof(UpdateApiAccessResponseTemplateStep),
+    ])]
+    public UpdateApiAccessResponseTemplateDelegate UpdateApiAccessResponseTemplate { get; } = default!;
+
+    public void Map(RouteGroupBuilder app)
     {
-        Put("templates/{id:guid}");
-        Claims(AdminClaimConstants.AdminAccountClaimKey);
-        Version(1);
-    }
-
-    public override async Task HandleAsync(UpdateApiAccessResponseTemplateDto req, CancellationToken ct)
-    {
-        var id = Route<Guid>("id");
-        if (req.Id != id)
+        app.MapPut("/{id:guid}/v1", async (Guid id, UpdateApiAccessResponseTemplateDto request, CancellationToken ct) =>
         {
-            await Send.ErrorsAsync(400, ct);
-            return;
-        }
+            var context = new UpdateApiAccessResponseTemplateContext(request, id);
+            var result = await UpdateApiAccessResponseTemplate(context, ct);
 
-        var existing = await repo.GetByIdAsync(id, ct);
-        if (existing is default(ApiAccessResponseTemplateEntity))
-        {
-            await Send.NotFoundAsync(ct);
-            return;
-        }
-
-        existing = existing with
-        {
-            Name = req.Name,
-            StatusCode = req.StatusCode,
-            ContentType = req.ContentType,
-            BodyJson = req.BodyJson,
-            Reason = req.Reason
-        };
-
-        await repo.AddOrUpdateAsync(existing, existing.Id, token: ct);
-        await publisher.Publish(new ApiAccessRestrictionsChanged(DateTimeOffset.UtcNow), ct);
-        await Send.OkAsync(cancellation: ct);
+            return result.ToEnvelopeResult();
+        });
     }
 }

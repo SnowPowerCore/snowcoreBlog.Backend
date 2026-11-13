@@ -100,7 +100,7 @@ public class StripeWebhookProcessor(
             return StripeWebhookResult.EntityNotFound($"No {MetadataRecordIdKey} metadata on paid session {TryGetString(dataObject, "id")}.");
         }
 
-        var now = DateTimeOffset.UtcNow;
+        var now = DateTime.UtcNow;
 
         if (kind == KindDonation)
         {
@@ -219,7 +219,7 @@ public class StripeWebhookProcessor(
         var failureReason = targetStatus == StripePaymentStatus.Failed
             ? TryGetString(dataObject, "last_payment_error", "message") ?? "Payment failed."
             : null;
-        var now = DateTimeOffset.UtcNow;
+        var now = DateTime.UtcNow;
 
         if (kind == KindDonation)
         {
@@ -390,7 +390,7 @@ public class StripeWebhookProcessor(
             EventType = stripeEvent.Type,
             RelatedEntityType = kind,
             RelatedEntityId = recordId,
-            ProcessedAt = DateTimeOffset.UtcNow
+            ProcessedAt = DateTime.UtcNow
         });
 
         await session.SaveChangesAsync(token);

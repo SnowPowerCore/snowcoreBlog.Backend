@@ -1,4 +1,4 @@
-using snowcoreBlog.Backend.ApiAccessRestrictions.Interfaces;
+using snowcoreBlog.Backend.ApiAccessRestrictions.Interfaces.Services;
 using TickerQ.Utilities.Base;
 using TickerQ.Utilities.Interfaces;
 

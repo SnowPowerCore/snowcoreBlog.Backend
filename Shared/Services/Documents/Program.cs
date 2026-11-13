@@ -6,7 +6,7 @@ var builder = WebApplication.CreateSlimBuilder(args);
 builder.UseServiceDefaultsConfiguration();
 
 // OpenTelemetry
-builder.Services.AddTelemetryConfiguration();
+builder.Services.AddOpenTelemetryConfiguration();
 
 // PostgreSQL and Marten
 builder.AddNpgsqlDataSourceConfiguration("db-documents-entities");

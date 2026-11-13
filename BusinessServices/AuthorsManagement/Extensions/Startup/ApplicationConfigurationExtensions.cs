@@ -7,7 +7,8 @@ public static class ApplicationConfigurationExtensions
     public static WebApplication UseApplicationMiddleware(this WebApplication app)
     {
         app.UseMiddlewareConfiguration()
-           .UseFastEndpointsConfiguration();
+           .UseFastEndpointsConfiguration()
+           .UseOpenApiConfiguration();
 
         return app;
     }

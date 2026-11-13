@@ -26,7 +26,7 @@
     </PackageReference>
     <PackageReference Include="ConfigureAwait.Fody" />
     <PackageReference Include="MassTransit.RabbitMQ" />
-    <PackageReference Include="Marten" />
+        <PackageReference Include="Marten.SourceGenerator" PrivateAssets="all" />
     <PackageReference Include="Marten.CommandLine" />
     <PackageReference Include="MinimalStepifiedSystem.Core" />
     <PackageReference Include="MinimalStepifiedSystem.SourceGen" />

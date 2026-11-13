@@ -78,7 +78,7 @@ public sealed class LocalApiAccessRestrictionsEvaluator : ILocalApiAccessRestric
             MatchedRuleId = rule.Id,
             Action = rule.Action,
             Reason = reason,
-            StatusCode = isAllowed ? default : status,
+            StatusCode = isAllowed ? null : status,
             ContentType = isAllowed ? default : contentType,
             BodyJson = isAllowed ? default : bodyJson
         };

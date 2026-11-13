@@ -1,5 +1,3 @@
-using System.Security.Cryptography;
-using System.Text;
 using MassTransit;
 using Microsoft.Extensions.Options;
 using snowcoreBlog.Backend.AdminsManagement.Options;
@@ -23,10 +21,4 @@ public sealed class AdminEmailPublisher(IPublishEndpoint publishEndpoint, IOptio
             Subject = subject,
             Content = content,
         }, ct);
-
-    public static string Sha256Hex(string value)
-        => Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(value))).ToLowerInvariant();
-
-    public static string NewToken()
-        => Convert.ToHexString(RandomNumberGenerator.GetBytes(32)).ToLowerInvariant();
 }

@@ -1,17 +1,22 @@
 using System.Net;
 using FastEndpoints;
 using MaybeResults;
+using Microsoft.AspNetCore.Http.Json;
+using Microsoft.Extensions.Options;
 using MinimalStepifiedSystem.Attributes;
-using snowcoreBlog.Backend.Infrastructure.Utilities;
 using snowcoreBlog.Backend.UrlShortener.Context;
 using snowcoreBlog.Backend.UrlShortener.Delegates;
-using snowcoreBlog.Backend.UrlShortener.Models;
-using snowcoreBlog.Backend.UrlShortener.Steps;
+using snowcoreBlog.Backend.UrlShortener.Steps.Resolve;
+using snowcoreBlog.PublicApi.BusinessObjects.Dto;
+using snowcoreBlog.PublicApi.Extensions;
+using snowcoreBlog.PublicApi.Utilities.Api;
 
 namespace snowcoreBlog.Backend.UrlShortener.Endpoints.UrlShortener;
 
 public class ResolveShortUrlEndpoint : EndpointWithoutRequest
 {
+    public required IOptions<JsonOptions> JsonOptions { get; set; }
+
     [StepifiedProcess(Steps = [
         typeof(LoadMappingStep),
         typeof(CheckActiveStep),
@@ -29,30 +34,22 @@ public class ResolveShortUrlEndpoint : EndpointWithoutRequest
 
     public override async Task HandleAsync(CancellationToken ct)
     {
-        var code = HttpContext.Request.RouteValues["code"]?.ToString() ?? string.Empty;
-        if (string.IsNullOrWhiteSpace(code))
+        var context = new ResolveShortUrlContext(Route<string>("code") ?? string.Empty);
+
+        var result = await ResolveShortUrl(context, ct);
+
+        // Successful resolves redirect (302) to the target URL; failures are
+        // mapped to the standard envelope at endpoint level.
+        if (result is Some<ResolveShortUrlResultDto> resolved
+            && !string.IsNullOrWhiteSpace(resolved.Value.RedirectUrl))
         {
-            await Send.StatusCodeAsync((int)HttpStatusCode.BadRequest, ct);
+            HttpContext.Response.Redirect(resolved.Value.RedirectUrl);
             return;
         }
 
-        var context = new ResolveShortUrlContext(code);
-        var maybeResult = await ResolveShortUrl(context, ct);
-
-        var op = maybeResult is Some<ResolveShortUrlOperationResult> s
-            ? s.Value
-            : new ResolveShortUrlOperationResult
-            {
-                HttpStatusCode = 500,
-                Response = ErrorResponseUtilities.ApiResponseWithErrors(["Unknown error"], 500)
-            };
-
-        if (!string.IsNullOrWhiteSpace(op.RedirectUrl))
-        {
-            HttpContext.Response.Redirect(op.RedirectUrl!);
-            return;
-        }
-
-        await Send.ResponseAsync(op.Response, op.HttpStatusCode, ct);
+        await Send.ResponseAsync(
+            result?.ToApiResponse(serializerOptions: JsonOptions.Value.SerializerOptions),
+            result?.ToStatusCode() ?? (int)HttpStatusCode.InternalServerError,
+            ct);
     }
 }

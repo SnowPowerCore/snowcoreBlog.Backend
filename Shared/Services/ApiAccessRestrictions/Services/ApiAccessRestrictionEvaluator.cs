@@ -1,7 +1,7 @@
 using System.Net;
 using System.Text.RegularExpressions;
-using snowcoreBlog.Backend.ApiAccessRestrictions.Interfaces;
 using snowcoreBlog.Backend.ApiAccessRestrictions.Interfaces.Repositories.Marten;
+using snowcoreBlog.Backend.ApiAccessRestrictions.Interfaces.Services;
 using snowcoreBlog.Backend.Core.Entities.ApiAccessRestrictions;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 
@@ -85,7 +85,7 @@ public class ApiAccessRestrictionEvaluator(
             MatchedRuleId = rule.Id,
             Action = (ApiAccessRestrictionActionDto)rule.Action,
             Reason = reason,
-            StatusCode = isAllowed ? default : status,
+            StatusCode = isAllowed ? null : status,
             ContentType = isAllowed ? default : contentType,
             BodyJson = isAllowed ? default : bodyJson
         };

@@ -4,7 +4,7 @@ namespace snowcoreBlog.Backend.IAM.Extensions.Startup;
 
 public static class ApplicationConfigurationExtensions
 {
-    public static WebApplication UseApplicationConfiguration(this WebApplication app)
+    public static WebApplication UseApplicationMiddleware(this WebApplication app)
     {
         app.UseHttpsRedirection();
 

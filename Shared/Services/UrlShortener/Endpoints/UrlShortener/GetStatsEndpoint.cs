@@ -1,18 +1,27 @@
 using System.Net;
 using FastEndpoints;
+using MaybeResults;
+using Microsoft.AspNetCore.Http.Json;
+using Microsoft.Extensions.Options;
 using snowcoreBlog.Backend.Core.Entities.UrlShortener;
+using snowcoreBlog.Backend.UrlShortener.ErrorResults;
+using snowcoreBlog.Backend.UrlShortener.Extensions;
 using snowcoreBlog.Backend.UrlShortener.Interfaces.Repositories.Marten;
+using snowcoreBlog.PublicApi.BusinessObjects.Dto;
+using snowcoreBlog.PublicApi.Extensions;
+using snowcoreBlog.PublicApi.Utilities.Api;
 
 namespace snowcoreBlog.Backend.UrlShortener.Endpoints.UrlShortener;
 
-public class GetStatsEndpoint : EndpointWithoutRequest
+/// <summary>
+/// Admin: returns click statistics for a short URL. Short and stable by
+/// design, so it consumes the repository directly (non-stepified).
+/// </summary>
+public class GetStatsEndpoint : EndpointWithoutRequest<ApiResponse?>
 {
-    private readonly IUrlMappingRepository _repo;
+    public required IOptions<JsonOptions> JsonOptions { get; set; }
 
-    public GetStatsEndpoint(IUrlMappingRepository repo)
-    {
-        _repo = repo;
-    }
+    protected IUrlMappingRepository UrlMappingRepository { get; } = default!;
 
     public override void Configure()
     {
@@ -22,23 +31,30 @@ public class GetStatsEndpoint : EndpointWithoutRequest
 
     public override async Task HandleAsync(CancellationToken ct)
     {
-        var code = HttpContext.Request.RouteValues["code"]?.ToString() ?? string.Empty;
-        if (string.IsNullOrWhiteSpace(code))
-        {
-            await Send.StatusCodeAsync((int)HttpStatusCode.BadRequest, ct);
-            return;
-        }
+        var code = Route<string>("code") ?? string.Empty;
+        IMaybe<ShortUrlStatsDto> result;
 
-        var mapping = await _repo.GetByCodeAsync(code, ct);
+        var mapping = await UrlMappingRepository.GetByCodeAsync(code, ct);
         if (mapping is default(UrlMappingEntity))
         {
-            await Send.StatusCodeAsync((int)HttpStatusCode.NotFound, ct);
-            return;
+            result = ShortUrlNotFoundError<ShortUrlStatsDto>.Create(
+                $"Short URL '{ code }' was not found.");
+        }
+        else
+        {
+            var since = mapping.WindowDurationSeconds.HasValue
+                ? DateTime.UtcNow.AddSeconds(-mapping.WindowDurationSeconds.Value)
+                : DateTime.UtcNow.AddYears(-1);
+
+            var dto = mapping.ToStatsDto();
+            dto.ClicksInWindow = await UrlMappingRepository.CountClicksInWindowAsync(mapping.Id, since, ct);
+
+            result = Maybe.Create(dto);
         }
 
-        var since = mapping.WindowDurationSeconds.HasValue ? DateTime.UtcNow.AddSeconds(-mapping.WindowDurationSeconds.Value) : DateTime.UtcNow.AddYears(-1);
-        var count = await _repo.CountClicksInWindowAsync(mapping.Id, since, ct);
-
-        await Send.ResponseAsync(new { mapping.Code, mapping.OriginalUrl, mapping.CreatedAt, mapping.MaxClicksPerWindow, mapping.WindowDurationSeconds, ClicksInWindow = count }, (int)HttpStatusCode.OK, ct);
+        await Send.ResponseAsync(
+            result?.ToApiResponse(serializerOptions: JsonOptions.Value.SerializerOptions),
+            result?.ToStatusCode() ?? (int)HttpStatusCode.InternalServerError,
+            ct);
     }
 }

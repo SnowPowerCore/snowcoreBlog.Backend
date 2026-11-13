@@ -1,16 +1,11 @@
+using MinimalStepifiedSystem.Base;
 using snowcoreBlog.Backend.Core.Entities.UrlShortener;
 
 namespace snowcoreBlog.Backend.UrlShortener.Context;
 
-public class ResolveShortUrlContext
+public class ResolveShortUrlContext(string code) : BaseGenericContext
 {
-    public string Code { get; }
+    public string Code { get; } = code ?? string.Empty;
 
-    // Filled by steps
     public UrlMappingEntity? Mapping { get; set; }
-
-    public ResolveShortUrlContext(string code)
-    {
-        Code = code ?? string.Empty;
-    }
 }

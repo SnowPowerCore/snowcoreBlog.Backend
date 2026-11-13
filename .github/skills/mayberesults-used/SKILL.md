@@ -54,23 +54,12 @@ using MaybeResults;
 public partial record ReaderAccountNotExistsError;
 ```
 
-Example returned operation result (models/RefreshReaderJwtPairOperationResult.cs)
-```csharp
-public sealed record RefreshReaderJwtPairOperationResult
-{
-    public int HttpStatusCode { get; init; }
-    public ApiResponse Response { get; init; } = default!;
-}
-```
-
 Usage in a step
 ```csharp
-if (record == null)
-    return Maybe.Create(new RefreshReaderJwtPairOperationResult
-    {
-        HttpStatusCode = 404,
-        Response = ErrorResponseUtilities.ApiResponseWithErrors(["Not found"], 404)
-    });
+// Typed [None] errors are GENERIC at the call site: XError<TTargetDto>.Create(message).
+if (record is null)
+    return RefreshTokenInvalidError<RefreshReaderAccountTokenResultDto>.Create(
+        "Invalid refresh token.");
 
 // Continue to next step
 return await next(context, token);
@@ -78,4 +67,6 @@ return await next(context, token);
 
 Notes for agents
 - Prefer generator-backed `None` error records and `Maybe.Create(...)` for early returns instead of throwing exceptions for expected validation/flow failures.
-- Keep operation result types simple and serializable by the source-gen serializer.
+- Steps must return `IMaybe<DomainDto>` where the DTO carries domain data (PublicApi `BusinessObjects/Dto` preferred). NEVER wrap `ApiResponse`/`HttpStatusCode` in a result type — the op-result pattern (`OperationResult { ApiResponse Response; int HttpStatusCode }`) was removed repo-wide on 2026-11-11; HTTP concerns live at endpoint level via `ToApiResponse`/`ToStatusCode`.
+- `[None]` records generate a GENERIC CLASS: call `XError<TTarget>.Create(message)`, not `XError.Create<TTarget>(...)`.
+- Keep DTOs serializable by the source-gen `CoreSerializationContext` (register new types there).

@@ -1,3 +1,4 @@
+using System.Text.Json;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.AspNetCore.HttpOverrides;
@@ -32,7 +33,11 @@ public static class HostingConfigurationExtensions
 
         services.ConfigureHttpJsonOptions(static options =>
         {
+            // Wire parity with the previous FastEndpoints serializer: camelCase properties,
+            // enums as strings, numbers readable from strings, source-gen context first in the chain.
+            options.SerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
             options.SerializerOptions.NumberHandling = JsonNumberHandling.AllowReadingFromString;
+            options.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
             options.SerializerOptions.SetJsonSerializationContext();
         });
 
