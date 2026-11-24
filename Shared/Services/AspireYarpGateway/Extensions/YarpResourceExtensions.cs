@@ -32,6 +32,8 @@ using TickerQ.Dashboard.DependencyInjection;
 using TickerQ.DependencyInjection;
 using Yarp.ReverseProxy.Configuration;
 
+using snowcoreBlog.Backend.AspireYarpGateway;
+
 namespace Aspire.Hosting;
 
 public static class YarpResourceExtensions
@@ -261,7 +263,7 @@ public static class YarpResourceExtensions
         builder.Services.ConfigureHttpJsonOptions(static options =>
         {
             options.SerializerOptions.NumberHandling = JsonNumberHandling.AllowReadingFromString;
-            options.SerializerOptions.SetJsonSerializationContext();
+            options.SerializerOptions.SetJsonSerializationContext(AspireYarpGatewaySerializationContext.Default);
         });
 
         builder.Services.Configure<CookiePolicyOptions>(static options =>
@@ -288,11 +290,11 @@ public static class YarpResourceExtensions
             busConfigurator.ConfigureHttpJsonOptions(static o =>
             {
                 o.SerializerOptions.NumberHandling = JsonNumberHandling.AllowReadingFromString;
-                o.SerializerOptions.SetJsonSerializationContext();
+                o.SerializerOptions.SetJsonSerializationContext(AspireYarpGatewaySerializationContext.Default);
             });
             busConfigurator.UsingRabbitMq((context, config) =>
             {
-                config.ConfigureJsonSerializerOptions(static options => options.SetJsonSerializationContext());
+                config.ConfigureJsonSerializerOptions(static options => options.SetJsonSerializationContext(AspireYarpGatewaySerializationContext.Default));
                 config.Host(builder.Configuration.GetConnectionString("rabbitmq"));
                 config.ConfigureEndpoints(context);
             });

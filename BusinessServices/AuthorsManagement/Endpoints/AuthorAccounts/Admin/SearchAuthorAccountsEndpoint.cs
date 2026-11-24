@@ -1,4 +1,4 @@
-﻿using System.Net;
+using System.Net;
 using System.Net.Mime;
 using FastEndpoints;
 using Marten;
@@ -27,7 +27,7 @@ public class SearchAuthorAccountsEndpoint : EndpointWithoutRequest<ApiResponse?>
     {
         Get("admin/accounts");
         Version(1);
-        SerializerContext(CoreSerializationContext.Default);
+        SerializerContext(AuthorsManagementSerializationContext.Default);
         AllowAnonymous(); // TODO: restrict to admin users once IAM admin accounts exist
         Description(b => b
             .WithTags(ApiTagConstants.Administration)

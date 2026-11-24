@@ -1,4 +1,4 @@
-﻿using System.Net;
+using System.Net;
 using System.Net.Mime;
 using FastEndpoints;
 using Microsoft.AspNetCore.Http.Json;
@@ -30,7 +30,7 @@ public class BecomeAuthorAccountEndpoint : Endpoint<BecomeAuthorAccountRequestDt
     {
         Post("author/become");
         Version(1);
-        SerializerContext(CoreSerializationContext.Default);
+        SerializerContext(AuthorsManagementSerializationContext.Default);
         EnableAntiforgery();
         Claims(ReaderAccountClaimConstants.ReaderAccountReaderAccountClaimKey);
         Description(b => b

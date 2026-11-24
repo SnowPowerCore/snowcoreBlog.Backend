@@ -1,4 +1,4 @@
-﻿using System.Security.Cryptography;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using FastEndpoints;
@@ -45,7 +45,7 @@ public class PersistRequestPreProcessor(
 
     private static readonly JsonSerializerOptions SnapshotOptions = new(JsonSerializerDefaults.Web)
     {
-        TypeInfoResolver = CoreSerializationContext.Default
+        TypeInfoResolver = InfrastructureSerializationContext.Default
     };
 
     private static readonly string[] AuthRelevantHeaders = ["Cookie", "Authorization"];

@@ -22,7 +22,7 @@ public class DeleteDocumentEndpoint : EndpointWithoutRequest
     {
         Delete("{id:guid}");
         Version(1);
-        SerializerContext(CoreSerializationContext.Default);
+        SerializerContext(DocumentsSerializationContext.Default);
         AllowAnonymous();
         Description(b => b
             .WithTags(ApiTagConstants.Documents)

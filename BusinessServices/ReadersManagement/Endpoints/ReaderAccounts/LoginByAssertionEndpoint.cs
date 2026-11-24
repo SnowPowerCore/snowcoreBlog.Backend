@@ -1,4 +1,4 @@
-﻿using System.Net;
+using System.Net;
 using System.Net.Mime;
 using FastEndpoints;
 using Microsoft.AspNetCore.Http.Json;
@@ -32,7 +32,7 @@ public class LoginByAssertionEndpoint : Endpoint<LoginByAssertionDto, ApiRespons
     {
         Post("login/assertion");
         Version(1);
-        SerializerContext(CoreSerializationContext.Default);
+        SerializerContext(ReadersManagementSerializationContext.Default);
         Validator<LoginByAssertionValidator>();
         AllowAnonymous();
         EnableAntiforgery();

@@ -47,7 +47,7 @@ public class UploadDocumentEndpoint : EndpointWithoutRequest<ApiResponse?>
     {
         Post("upload");
         Version(1);
-        SerializerContext(CoreSerializationContext.Default);
+        SerializerContext(DocumentsSerializationContext.Default);
         AllowAnonymous();
         AllowFileUploads();
         Description(b => b

@@ -1,4 +1,4 @@
-﻿using System.Net;
+using System.Net;
 using System.Net.Mime;
 using FastEndpoints;
 using Microsoft.AspNetCore.Http.Json;
@@ -24,7 +24,7 @@ public sealed class CreateNotificationEndpoint(INotificationRepository notificat
     {
         Post(string.Empty);
         Version(1);
-        SerializerContext(CoreSerializationContext.Default);
+        SerializerContext(ServiceNotificationsSerializationContext.Default);
         Validator<CreateNotificationValidator>();
         EnableAntiforgery();
         Description(b => b

@@ -39,7 +39,7 @@ public class CreateDonationCheckoutEndpoint : Endpoint<CreateDonationCheckoutDto
     {
         Post("donations/checkout");
         Version(1);
-        SerializerContext(CoreSerializationContext.Default);
+        SerializerContext(StripeSerializationContext.Default);
         Validator<CreateDonationCheckoutValidator>();
         AllowAnonymous();
         Description(b => b

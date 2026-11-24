@@ -27,7 +27,7 @@ public class GetApiAccessResponseTemplatesEndpoint(IApiAccessResponseTemplateRep
     {
         Get("templates");
         Version(1);
-        SerializerContext(CoreSerializationContext.Default);
+        SerializerContext(ApiAccessRestrictionsSerializationContext.Default);
         Claims(AdminClaimConstants.AdminAccountClaimKey);
         Description(b => b
             .WithTags("ApiAccessResponseTemplates")

@@ -33,7 +33,7 @@ public class GetApiAccessRestrictionsSnapshotEndpoint : EndpointWithoutRequest<A
         Get("snapshot");
         AllowAnonymous();
         Version(1);
-        SerializerContext(CoreSerializationContext.Default);
+        SerializerContext(ApiAccessRestrictionsSerializationContext.Default);
         Description(b => b
             .WithTags("ApiAccess")
             .Produces<ApiResponse>((int)HttpStatusCode.OK, MediaTypeNames.Application.Json)

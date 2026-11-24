@@ -46,8 +46,8 @@
   <ItemGroup>
     <ProjectReference Include="..\..\snowcoreBlog.Universal\ServiceDefaults\snowcoreBlog.ServiceDefaults.csproj" />
     <ProjectReference Include="..\..\snowcoreBlog.Universal\PublicApi\snowcoreBlog.PublicApi.csproj" />
-    <ProjectReference Include="..\..\Shared\Infrastructure\snowcoreBlog.Backend.Infrastructure.csproj" />
-    <ProjectReference Include="..\..\Shared\Articles.Core\snowcoreBlog.Backend.Articles.Core.csproj" />
+    <PackageReference Include="snowcoreBlog.Backend.Infrastructure" />
+    <ProjectReference Include="..\Articles.Core\snowcoreBlog.Backend.Articles.Core.csproj" />
     <ProjectReference Include="..\..\snowcoreBlog.Universal\UniversalModules\ApplicationLaunch.Implementations\snowcoreBlog.ApplicationLaunch.Implementations.csproj" />
   </ItemGroup>
 

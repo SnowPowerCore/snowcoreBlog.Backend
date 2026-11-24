@@ -30,7 +30,7 @@ public class GetPaymentEndpoint : EndpointWithoutRequest<ApiResponse?>
     {
         Get("payments/{id:guid}");
         Version(1);
-        SerializerContext(CoreSerializationContext.Default);
+        SerializerContext(StripeSerializationContext.Default);
         AllowAnonymous();
         Description(b => b
             .WithTags(ApiTagConstants.Stripe)

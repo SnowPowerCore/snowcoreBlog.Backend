@@ -23,7 +23,7 @@ public class GetAntiforgeryTokenEndpoint(IAntiforgery antiforgery) : EndpointWit
     {
         Get("antiforgerytoken");
         Version(1);
-        SerializerContext(CoreSerializationContext.Default);
+        SerializerContext(ArticlesSerializationContext.Default);
         AllowAnonymous();
         Description(b => b
             .WithTags(ApiTagConstants.Tokens)

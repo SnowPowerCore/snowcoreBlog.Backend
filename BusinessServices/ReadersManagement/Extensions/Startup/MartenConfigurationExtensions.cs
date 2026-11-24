@@ -1,4 +1,4 @@
-﻿using System.Security.Cryptography;
+using System.Security.Cryptography;
 using Ixnas.AltchaNet;
 using Marten;
 using Marten.Services;
@@ -43,7 +43,7 @@ public static class MartenConfigurationExtensions
             // Durable request persistence: claims + step checkpoints (unique idempotency-key index)
             options.AddPersistRequestDocuments();
 
-            _serializer.UseTypeInfoResolver(CoreSerializationContext.Default);
+            _serializer.UseTypeInfoResolver(ReadersManagementSerializationContext.Default);
             options.Serializer(_serializer);
             options.Policies.AllDocumentsSoftDeleted();
         })

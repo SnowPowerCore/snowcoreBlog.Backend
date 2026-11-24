@@ -24,7 +24,7 @@ public class GetDocumentsByCategoryEndpoint : EndpointWithoutRequest<ApiResponse
     {
         Get("category/{category}");
         Version(1);
-        SerializerContext(CoreSerializationContext.Default);
+        SerializerContext(DocumentsSerializationContext.Default);
         AllowAnonymous();
         Description(b => b
             .WithTags(ApiTagConstants.Documents)

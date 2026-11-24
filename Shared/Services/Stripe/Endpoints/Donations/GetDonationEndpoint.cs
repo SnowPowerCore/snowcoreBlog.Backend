@@ -29,7 +29,7 @@ public class GetDonationEndpoint : EndpointWithoutRequest<ApiResponse?>
     {
         Get("donations/{id:guid}");
         Version(1);
-        SerializerContext(CoreSerializationContext.Default);
+        SerializerContext(StripeSerializationContext.Default);
         AllowAnonymous();
         Description(b => b
             .WithTags(ApiTagConstants.Stripe)

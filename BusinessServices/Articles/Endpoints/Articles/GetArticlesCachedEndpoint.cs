@@ -29,7 +29,7 @@ public class GetArticlesCachedEndpoint : EndpointWithoutRequest<ApiResponse?>
         Get("cached");
         ResponseCache(1800);
         Version(1);
-        SerializerContext(CoreSerializationContext.Default);
+        SerializerContext(ArticlesSerializationContext.Default);
         EnableAntiforgery();
         AllowAnonymous();
         Description(b => b

@@ -15,7 +15,7 @@ public class AltchaChallengeStore : IAltchaCancellableChallengeStore
     public AltchaChallengeStore(IConfiguration configuration)
     {
         _connectionString = configuration.GetConnectionString("db-snowcore-blog-entities")!;
-        _serializer.UseTypeInfoResolver(CoreSerializationContext.Default);
+        _serializer.UseTypeInfoResolver(InfrastructureSerializationContext.Default);
     }
 
     public async Task<bool> Exists(string challenge, CancellationToken cancellationToken)

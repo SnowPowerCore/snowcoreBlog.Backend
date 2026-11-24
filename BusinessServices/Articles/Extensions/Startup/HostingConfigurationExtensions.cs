@@ -43,7 +43,7 @@ public static class HostingConfigurationExtensions
         services.ConfigureHttpJsonOptions(static options =>
         {
             options.SerializerOptions.NumberHandling = JsonNumberHandling.AllowReadingFromString;
-            options.SerializerOptions.SetJsonSerializationContext();
+            options.SerializerOptions.SetJsonSerializationContext(ArticlesSerializationContext.Default);
         });
 
         return services;

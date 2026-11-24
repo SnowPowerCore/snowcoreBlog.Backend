@@ -60,7 +60,7 @@ public static class FastEndpointsConfigurationExtensions
                     options.SerializerSettings = s =>
                     {
                         s.Converters.Add(JsonStringEnumConverter);
-                        s.SetJsonSerializationContext();
+                        s.SetJsonSerializationContext(ArticlesSerializationContext.Default);
                         s.PropertyNamingPolicy = null;
                         s.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
                     };
@@ -90,7 +90,7 @@ public static class FastEndpointsConfigurationExtensions
                 c.Versioning.Prefix = "v";
                 c.Serializer.Options.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
                 c.Serializer.Options.Converters.Add(JsonStringEnumConverter);
-                c.Serializer.Options.SetJsonSerializationContext();
+                c.Serializer.Options.SetJsonSerializationContext(ArticlesSerializationContext.Default);
             });
 
         return app;

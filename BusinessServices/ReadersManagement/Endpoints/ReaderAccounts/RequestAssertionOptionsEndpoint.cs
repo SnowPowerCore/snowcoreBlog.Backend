@@ -1,4 +1,4 @@
-﻿using System.Net;
+using System.Net;
 using System.Net.Mime;
 using FastEndpoints;
 using Fido2NetLib;
@@ -30,7 +30,7 @@ public class RequestAssertionOptionsEndpoint : Endpoint<RequestAssertionOptionsD
     {
         Post("request/assertion");
         Version(1);
-        SerializerContext(CoreSerializationContext.Default);
+        SerializerContext(ReadersManagementSerializationContext.Default);
         Validator<RequestAssertionOptionsValidator>();
         AllowAnonymous();
         EnableAntiforgery();

@@ -28,7 +28,7 @@ public sealed class GetActiveNotificationsEndpoint : Endpoint<GetActiveNotificat
     {
         Get("active");
         Version(1);
-        SerializerContext(CoreSerializationContext.Default);
+        SerializerContext(ServiceNotificationsSerializationContext.Default);
         AllowAnonymous();
         ResponseCache(300); // 5 minutes response cache
         Description(b => b

@@ -37,7 +37,7 @@ public sealed class ValidateRefreshTokenRecordStep(IConnectionMultiplexer redis)
         ReaderRefreshTokenRecord? record;
         try
         {
-            record = JsonSerializer.Deserialize((ReadOnlySpan<byte>)recordJson!, CoreSerializationContext.Default.ReaderRefreshTokenRecord);
+            record = JsonSerializer.Deserialize((ReadOnlySpan<byte>)recordJson!, InfrastructureSerializationContext.Default.ReaderRefreshTokenRecord);
         }
         catch
         {

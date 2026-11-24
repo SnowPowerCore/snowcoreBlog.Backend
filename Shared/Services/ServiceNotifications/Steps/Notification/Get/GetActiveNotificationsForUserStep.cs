@@ -1,4 +1,4 @@
-﻿using System.Security.Claims;
+using System.Security.Claims;
 using System.Text.Json;
 using MassTransit;
 using MaybeResults;
@@ -87,7 +87,7 @@ public class GetActiveNotificationsForUserStep(IHttpContextAccessor httpContextA
         {
             try
             {
-                var fromCache = JsonSerializer.Deserialize(cached.ToString(), CoreSerializationContext.Default.ListNotificationDto);
+                var fromCache = JsonSerializer.Deserialize(cached.ToString(), ServiceNotificationsSerializationContext.Default.ListNotificationDto);
                 if (fromCache is not default(List<NotificationDto>))
                     return Maybe.Create(fromCache);
             }
@@ -141,7 +141,7 @@ public class GetActiveNotificationsForUserStep(IHttpContextAccessor httpContextA
             // Cache the aggregated result for the user to avoid frequent provider fan-out
             try
             {
-                var json = JsonSerializer.Serialize(aggregated, CoreSerializationContext.Default.ListNotificationDto);
+                var json = JsonSerializer.Serialize(aggregated, ServiceNotificationsSerializationContext.Default.ListNotificationDto);
                 await db.StringSetAsync(cacheKey, json, CacheTtl);
             }
             catch { /* caching failure should not break the request */ }

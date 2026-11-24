@@ -1,4 +1,4 @@
-﻿using Marten;
+using Marten;
 using Marten.Services;
 using snowcoreBlog.Backend.ServiceNotifications.Core.Entities.Notification;
 using snowcoreBlog.Backend.Infrastructure;
@@ -16,7 +16,7 @@ public static class MartenConfigurationExtensions
         services.AddMarten(options =>
         {
             options.RegisterDocumentType<NotificationEntity>();
-            _serializer.UseTypeInfoResolver(CoreSerializationContext.Default);
+            _serializer.UseTypeInfoResolver(ServiceNotificationsSerializationContext.Default);
             options.Serializer(_serializer);
             options.Policies.AllDocumentsSoftDeleted();
         })

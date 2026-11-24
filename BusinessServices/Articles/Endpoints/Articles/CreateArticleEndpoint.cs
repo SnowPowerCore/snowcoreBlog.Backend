@@ -30,7 +30,7 @@ public class CreateArticleEndpoint : Endpoint<CreateArticleDto, ApiResponse?>
     {
         Post("create");
         Version(1);
-        SerializerContext(CoreSerializationContext.Default);
+        SerializerContext(ArticlesSerializationContext.Default);
         EnableAntiforgery();
         Claims("authorAccount");
         Description(b => b

@@ -1,4 +1,4 @@
-﻿using System.Net.Mime;
+using System.Net.Mime;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -60,7 +60,7 @@ public static class FastEndpointsConfigurationExtensions
                 options.SerializerSettings = s =>
                 {
                     s.Converters.Add(_jsonStringEnumConverter);
-                    s.SetJsonSerializationContext();
+                    s.SetJsonSerializationContext(ReadersManagementSerializationContext.Default);
                     s.PropertyNamingPolicy = null;
                     s.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
                 };
@@ -85,7 +85,7 @@ public static class FastEndpointsConfigurationExtensions
             c.Versioning.Prefix = "v";
             c.Serializer.Options.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
             c.Serializer.Options.Converters.Add(_jsonStringEnumConverter);
-            c.Serializer.Options.SetJsonSerializationContext();
+            c.Serializer.Options.SetJsonSerializationContext(ReadersManagementSerializationContext.Default);
             c.Serializer.ResponseSerializer = static (rsp, dto, contentType, _, cancellation) =>
             {
                 if (dto is default(object))
@@ -94,7 +94,7 @@ public static class FastEndpointsConfigurationExtensions
                 return rsp.WriteAsJsonAsync(
                     value: dto,
                     type: dto.GetType(),
-                    context: CoreSerializationContext.Default,
+                    context: ReadersManagementSerializationContext.Default,
                     cancellationToken: cancellation);
             };
             c.Endpoints.Configurator = static ep =>

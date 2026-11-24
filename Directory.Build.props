@@ -1,0 +1,11 @@
+<Project>
+
+  <!-- Shared version for all packable backend projects (Shared.Core, <Service>.Core,
+       PublicApi, Infrastructure). Must stay in sync with the Version passed by
+       pack-shared-packages.ps1 and the PackageVersion entries in the parent repo's
+       Directory.Packages.props. -->
+  <PropertyGroup>
+    <Version>0.1.0</Version>
+  </PropertyGroup>
+
+</Project>

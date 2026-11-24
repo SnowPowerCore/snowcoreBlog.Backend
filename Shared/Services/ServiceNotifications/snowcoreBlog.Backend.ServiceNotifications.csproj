@@ -45,9 +45,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\snowcoreBlog.Universal\ServiceDefaults\snowcoreBlog.ServiceDefaults.csproj" />
-    <ProjectReference Include="..\..\Infrastructure\snowcoreBlog.Backend.Infrastructure.csproj" />
-    <ProjectReference Include="..\..\ServiceNotifications.Core\snowcoreBlog.Backend.ServiceNotifications.Core.csproj" />
     <ProjectReference Include="..\..\..\snowcoreBlog.Universal\PublicApi\snowcoreBlog.PublicApi.csproj" />
+    <PackageReference Include="snowcoreBlog.Backend.Infrastructure" />
+    <ProjectReference Include="..\..\ServiceNotifications.Core\snowcoreBlog.Backend.ServiceNotifications.Core.csproj" />
+    
   </ItemGroup>
 
 </Project>

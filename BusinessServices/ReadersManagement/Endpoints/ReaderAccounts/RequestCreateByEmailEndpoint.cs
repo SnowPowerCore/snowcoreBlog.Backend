@@ -1,4 +1,4 @@
-﻿using System.Net;
+using System.Net;
 using System.Net.Mime;
 using FastEndpoints;
 using Microsoft.AspNetCore.Http.Json;
@@ -35,7 +35,7 @@ public class RequestCreateByEmailEndpoint : Endpoint<RequestCreateReaderAccountD
     {
         Post("create/request/email");
         Version(1);
-        SerializerContext(CoreSerializationContext.Default);
+        SerializerContext(ReadersManagementSerializationContext.Default);
         Validator<RequestCreateReaderAccountValidator>();
         AllowAnonymous();
         EnableAntiforgery();

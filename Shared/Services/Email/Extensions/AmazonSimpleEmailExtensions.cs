@@ -55,7 +55,7 @@ public static partial class AmazonSimpleEmailExtensions
             Template = new()
             {
                 TemplateName = templatedEmail.TemplateId,
-                TemplateData = JsonSerializer.Serialize(templatedEmail.DynamicTemplateData, CoreSerializationContext.Default.DictionaryStringString)
+                TemplateData = JsonSerializer.Serialize(templatedEmail.DynamicTemplateData, InfrastructureSerializationContext.Default.DictionaryStringString)
             }
         };
         return request;

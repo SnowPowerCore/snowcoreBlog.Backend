@@ -37,7 +37,7 @@ public class AcceptAdminInviteEndpoint : Endpoint<AcceptAdminInviteDto, ApiRespo
     {
         Post("invites/accept");
         Version(1);
-        SerializerContext(CoreSerializationContext.Default);
+        SerializerContext(AdminsManagementSerializationContext.Default);
         AllowAnonymous();
         Description(b => b
             .WithTags(ApiTagConstants.Administration)

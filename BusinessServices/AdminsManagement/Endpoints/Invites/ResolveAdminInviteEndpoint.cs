@@ -1,4 +1,4 @@
-﻿using System.Net;
+using System.Net;
 using System.Net.Mime;
 using FastEndpoints;
 using MaybeResults;
@@ -30,7 +30,7 @@ public class ResolveAdminInviteEndpoint : EndpointWithoutRequest<ApiResponse?>
     {
         Get("invites/resolve");
         Version(1);
-        SerializerContext(CoreSerializationContext.Default);
+        SerializerContext(AdminsManagementSerializationContext.Default);
         AllowAnonymous();
         Description(b => b
             .WithTags(ApiTagConstants.Administration)

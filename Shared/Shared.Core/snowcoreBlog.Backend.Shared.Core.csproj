@@ -11,4 +11,5 @@
     <PackageReference Include="WTorricos.Results" />
   </ItemGroup>
 
+  <!-- packed as snowcoreBlog.Backend.Shared.Core to the local feed (see pack-shared-packages.ps1) -->
 </Project>

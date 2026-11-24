@@ -1,4 +1,4 @@
-﻿using System.Net;
+using System.Net;
 using System.Net.Mime;
 using FastEndpoints;
 using MassTransit;
@@ -32,7 +32,7 @@ public class CreateApiAccessResponseTemplateEndpoint(IApiAccessResponseTemplateR
     {
         Post("templates");
         Version(1);
-        SerializerContext(CoreSerializationContext.Default);
+        SerializerContext(ApiAccessRestrictionsSerializationContext.Default);
         Claims(AdminClaimConstants.AdminAccountClaimKey);
         Description(b => b
             .WithTags("ApiAccessResponseTemplates")

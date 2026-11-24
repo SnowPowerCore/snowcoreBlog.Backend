@@ -31,7 +31,7 @@ public static class HostingConfigurationExtensions
             options.SerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
             options.SerializerOptions.NumberHandling = JsonNumberHandling.AllowReadingFromString;
             options.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
-            options.SerializerOptions.SetJsonSerializationContext();
+            options.SerializerOptions.SetJsonSerializationContext(ApiAccessRestrictionsSerializationContext.Default);
         });
 
         return services;

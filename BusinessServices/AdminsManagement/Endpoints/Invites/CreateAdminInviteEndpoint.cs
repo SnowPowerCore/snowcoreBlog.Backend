@@ -39,7 +39,7 @@ public class CreateAdminInviteEndpoint : Endpoint<CreateAdminInviteDto, ApiRespo
     {
         Post("invites");
         Version(1);
-        SerializerContext(CoreSerializationContext.Default);
+        SerializerContext(AdminsManagementSerializationContext.Default);
         Validator<CreateAdminInviteValidator>();
         Claims(AdminClaimConstants.AdminAccountClaimKey);
         Description(b => b

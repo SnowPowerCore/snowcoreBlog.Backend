@@ -1,4 +1,4 @@
-﻿using System.Net;
+using System.Net;
 using System.Net.Mime;
 using FastEndpoints;
 using Ixnas.AltchaNet;
@@ -13,7 +13,7 @@ public class GetAltchaChallengeEndpoint(AltchaService altcha) : EndpointWithoutR
     {
         Get("captcha/challenge");
         Version(1);
-        SerializerContext(CoreSerializationContext.Default);
+        SerializerContext(ReadersManagementSerializationContext.Default);
         AllowAnonymous();
         Description(b => b
             .WithTags(ApiTagConstants.Tokens)

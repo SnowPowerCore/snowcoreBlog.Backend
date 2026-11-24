@@ -30,7 +30,7 @@ public class GetAdminMeEndpoint : EndpointWithoutRequest<ApiResponse?>
     {
         Get("me");
         Version(1);
-        SerializerContext(CoreSerializationContext.Default);
+        SerializerContext(AdminsManagementSerializationContext.Default);
         Claims(AdminClaimConstants.AdminAccountClaimKey);
         Description(b => b
             .WithTags(ApiTagConstants.Administration)

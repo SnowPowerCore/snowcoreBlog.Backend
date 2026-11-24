@@ -30,7 +30,7 @@ public class SetupAuthenticatorEndpoint : Endpoint<SetupReaderAccountAuthenticat
     {
         Post("create/totp/setup");
         Version(1);
-        SerializerContext(CoreSerializationContext.Default);
+        SerializerContext(ReadersManagementSerializationContext.Default);
         Validator<SetupReaderAccountAuthenticatorValidator>();
         AllowAnonymous();
         EnableAntiforgery();

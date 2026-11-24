@@ -26,7 +26,7 @@ public class GetArticleBySlugStep(IArticleRepository articleRepository, IConnect
         {
             try
             {
-                var fromCache = JsonSerializer.Deserialize(cached.ToString(), CoreSerializationContext.Default.ArticleDto);
+                var fromCache = JsonSerializer.Deserialize(cached.ToString(), ArticlesSerializationContext.Default.ArticleDto);
                 if (fromCache is not default(ArticleDto))
                     return Maybe.Create(fromCache);
             }
@@ -57,7 +57,7 @@ public class GetArticleBySlugStep(IArticleRepository articleRepository, IConnect
         // Cache the serialized DTO for TTL
         try
         {
-            var json = JsonSerializer.Serialize(dto, CoreSerializationContext.Default.ArticleDto);
+            var json = JsonSerializer.Serialize(dto, ArticlesSerializationContext.Default.ArticleDto);
             await db.StringSetAsync(cacheKey, json, CacheTtl);
         }
         catch { }

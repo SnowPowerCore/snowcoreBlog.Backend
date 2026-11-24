@@ -27,7 +27,7 @@ public class AdminLogoutEndpoint : EndpointWithoutRequest<ApiResponse?>
     {
         Post("logout");
         Version(1);
-        SerializerContext(CoreSerializationContext.Default);
+        SerializerContext(AdminsManagementSerializationContext.Default);
         AllowAnonymous();
         Description(b => b
             .WithTags(ApiTagConstants.Administration)

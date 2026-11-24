@@ -1,4 +1,4 @@
-﻿using Marten;
+using Marten;
 using Marten.Services;
 using snowcoreBlog.Backend.Documents.Core.Entities.Documents;
 using snowcoreBlog.Backend.Documents.Interfaces.Repositories.Marten;
@@ -16,7 +16,7 @@ public static class MartenConfigurationExtensions
         services.AddMarten(options =>
         {
             options.RegisterDocumentType<DocumentEntity>();
-            _serializer.UseTypeInfoResolver(CoreSerializationContext.Default);
+            _serializer.UseTypeInfoResolver(DocumentsSerializationContext.Default);
             options.Serializer(_serializer);
             options.Policies.AllDocumentsSoftDeleted();
         })

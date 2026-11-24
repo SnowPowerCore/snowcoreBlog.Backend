@@ -29,7 +29,7 @@ public class CreateShortUrlEndpoint : Endpoint<CreateShortUrlRequest, ApiRespons
     {
         Post("create");
         Version(1);
-        SerializerContext(CoreSerializationContext.Default);
+        SerializerContext(UrlShortenerSerializationContext.Default);
     }
 
     public override async Task HandleAsync(CreateShortUrlRequest req, CancellationToken ct)

@@ -13,7 +13,7 @@ public static class MartenConfigurationExtensions
         services.AddMarten(options =>
         {
             options.Policies.AllDocumentsSoftDeleted();
-            _serializer.UseTypeInfoResolver(CoreSerializationContext.Default);
+            _serializer.UseTypeInfoResolver(UrlShortenerSerializationContext.Default);
             options.Serializer(_serializer);
         })
             .UseLightweightSessions()

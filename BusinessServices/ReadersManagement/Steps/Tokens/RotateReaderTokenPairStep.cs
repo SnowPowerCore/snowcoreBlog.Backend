@@ -1,4 +1,4 @@
-﻿using System.Text.Json;
+using System.Text.Json;
 using MassTransit;
 using MaybeResults;
 using Microsoft.Extensions.Options;
@@ -87,7 +87,7 @@ public sealed class RotateReaderTokenPairStep(
         if (ttl <= TimeSpan.Zero)
             ttl = TimeSpan.FromMinutes(tokenReqOpts.Value.RefreshTokenValidityDurationInMinutes);
 
-        await db.StringSetAsync(newRecordKey, JsonSerializer.Serialize(newRecord, CoreSerializationContext.Default.ReaderRefreshTokenRecord), expiry: ttl);
+        await db.StringSetAsync(newRecordKey, JsonSerializer.Serialize(newRecord, InfrastructureSerializationContext.Default.ReaderRefreshTokenRecord), expiry: ttl);
         await db.StringSetAsync(userCurrentKey, newPair.RefreshToken, expiry: ttl);
 
         // Set cookies on response.

@@ -13,7 +13,7 @@ public class GetAltchaChallengeEndpoint(AltchaService altcha) : EndpointWithoutR
     {
         Get("captcha/challenge");
         Version(1);
-        SerializerContext(CoreSerializationContext.Default);
+        SerializerContext(ArticlesSerializationContext.Default);
         AllowAnonymous();
         Description(b => b
             .WithTags(ApiTagConstants.Tokens)

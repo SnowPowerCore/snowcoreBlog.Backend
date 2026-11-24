@@ -1,4 +1,4 @@
-﻿using MassTransit;
+using MassTransit;
 using MaybeResults;
 using Microsoft.Extensions.Options;
 using snowcoreBlog.Backend.AspireYarpGateway.Core.Contracts;
@@ -74,7 +74,7 @@ public sealed class ReaderAccountTokenPairIssuer(IHttpContextAccessor httpContex
             await db.KeyDeleteAsync(ReaderRefreshTokenConstants.RefreshTokenKey(previousToken.ToString()));
         }
 
-        await db.StringSetAsync(refreshKey, System.Text.Json.JsonSerializer.Serialize(refreshRecord, CoreSerializationContext.Default.ReaderRefreshTokenRecord), expiry: ttl);
+        await db.StringSetAsync(refreshKey, System.Text.Json.JsonSerializer.Serialize(refreshRecord, InfrastructureSerializationContext.Default.ReaderRefreshTokenRecord), expiry: ttl);
         await db.StringSetAsync(userCurrentKey, curPair.RefreshToken, expiry: ttl);
 
         return (true, []);
