@@ -1,4 +1,4 @@
-using System.Net;
+﻿using System.Net;
 using System.Net.Mime;
 using FastEndpoints;
 using MassTransit;
@@ -9,7 +9,7 @@ using snowcoreBlog.Backend.ApiAccessRestrictions.Constants;
 using snowcoreBlog.Backend.ApiAccessRestrictions.Extensions;
 using snowcoreBlog.Backend.ApiAccessRestrictions.Interfaces.Repositories.Marten;
 using snowcoreBlog.Backend.AspireYarpGateway.Core.Contracts;
-using snowcoreBlog.Backend.Core.Entities.ApiAccessRestrictions;
+using snowcoreBlog.Backend.ApiAccessRestrictions.Core.Entities.ApiAccessRestrictions;
 using snowcoreBlog.Backend.Infrastructure;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 using snowcoreBlog.PublicApi.Extensions;
@@ -19,7 +19,7 @@ namespace snowcoreBlog.Backend.ApiAccessRestrictions.Endpoints.ApiAccessRules;
 
 /// <summary>
 /// Admin: creates an API access rule and notifies the gateway about the change.
-/// Simple CRUD write (map, persist, publish) — no branching, so it consumes the
+/// Simple CRUD write (map, persist, publish) вЂ” no branching, so it consumes the
 /// repository directly (non-stepified).
 /// </summary>
 public class CreateApiAccessRuleEndpoint(IApiAccessRuleRepository ruleRepository,

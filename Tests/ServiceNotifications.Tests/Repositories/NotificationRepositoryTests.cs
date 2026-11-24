@@ -1,7 +1,7 @@
-using FluentAssertions;
+﻿using FluentAssertions;
 using Marten;
 using NSubstitute;
-using snowcoreBlog.Backend.Core.Entities.Notification;
+using snowcoreBlog.Backend.ServiceNotifications.Core.Entities.Notification;
 using snowcoreBlog.Backend.ServiceNotifications.Repositories.Marten;
 
 namespace snowcoreBlog.Backend.ServiceNotifications.Tests.Repositories;

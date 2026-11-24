@@ -1,8 +1,8 @@
-using FluentAssertions;
+﻿using FluentAssertions;
 using Marten;
 using NSubstitute;
 using snowcoreBlog.Backend.Articles.Repositories.Marten;
-using snowcoreBlog.Backend.Core.Entities.Article;
+using snowcoreBlog.Backend.Articles.Core.Entities.Article;
 
 namespace snowcoreBlog.Backend.Articles.Tests.Repositories;
 

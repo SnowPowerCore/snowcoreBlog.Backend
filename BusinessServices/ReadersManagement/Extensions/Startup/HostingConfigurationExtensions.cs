@@ -1,8 +1,8 @@
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Routing.Constraints;
-using snowcoreBlog.Backend.Core.Options;
+using snowcoreBlog.Backend.ReadersManagement.Core.Options;
 using snowcoreBlog.Backend.Email.Core.Options;
 using snowcoreBlog.Backend.Infrastructure.Extensions;
 using snowcoreBlog.Backend.Infrastructure.Utilities;

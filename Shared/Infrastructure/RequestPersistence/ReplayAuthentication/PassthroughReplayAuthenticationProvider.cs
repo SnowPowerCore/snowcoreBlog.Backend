@@ -1,6 +1,6 @@
-using System.Text.Json;
+﻿using System.Text.Json;
 using Microsoft.Extensions.Logging;
-using snowcoreBlog.Backend.Core.Entities.RequestPersistence;
+using snowcoreBlog.Backend.Shared.Core.Entities.RequestPersistence;
 
 namespace snowcoreBlog.Backend.Infrastructure.RequestPersistence.ReplayAuthentication;
 

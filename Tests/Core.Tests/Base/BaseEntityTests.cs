@@ -1,7 +1,7 @@
-using FluentAssertions;
-using snowcoreBlog.Backend.Core.Base;
+﻿using FluentAssertions;
+using snowcoreBlog.Backend.Shared.Core.Base;
 
-namespace snowcoreBlog.Backend.Core.Tests.Base;
+namespace snowcoreBlog.Backend.Shared.Core.Tests.Base;
 
 public class BaseEntityTests
 {

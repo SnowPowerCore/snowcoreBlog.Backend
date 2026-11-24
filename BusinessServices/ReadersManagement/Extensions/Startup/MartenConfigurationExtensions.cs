@@ -1,8 +1,8 @@
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
 using Ixnas.AltchaNet;
 using Marten;
 using Marten.Services;
-using snowcoreBlog.Backend.Core.Entities.Reader;
+using snowcoreBlog.Backend.ReadersManagement.Core.Entities.Reader;
 using snowcoreBlog.Backend.Infrastructure;
 using snowcoreBlog.Backend.Infrastructure.Entities;
 using snowcoreBlog.Backend.Infrastructure.Extensions;

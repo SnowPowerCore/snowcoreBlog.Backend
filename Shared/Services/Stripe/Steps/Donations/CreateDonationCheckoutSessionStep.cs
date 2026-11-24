@@ -1,9 +1,9 @@
-using MaybeResults;
+﻿using MaybeResults;
 using MinimalStepifiedSystem.Interfaces;
 using Microsoft.Extensions.Options;
 using Stripe;
 using Stripe.Checkout;
-using snowcoreBlog.Backend.Core.Entities.Stripe;
+using snowcoreBlog.Backend.Stripe.Core.Entities.Stripe;
 using snowcoreBlog.Backend.Stripe.Context;
 using snowcoreBlog.Backend.Stripe.Delegates;
 using snowcoreBlog.Backend.Stripe.Options;
@@ -16,7 +16,7 @@ namespace snowcoreBlog.Backend.Stripe.Steps.Donations;
 /// Creates the Stripe Checkout Session (payment mode, donate submit type) and the
 /// local <see cref="DonationEntity"/> in one go. The record id travels inside the
 /// session (<c>client_reference_id</c> + metadata) so every webhook payload can be
-/// traced back here, and the entity is persisted by the NEXT step — the record
+/// traced back here, and the entity is persisted by the NEXT step вЂ” the record
 /// exists before the checkout URL is handed out, so a webhook racing the HTTP
 /// response always finds it.
 /// </summary>

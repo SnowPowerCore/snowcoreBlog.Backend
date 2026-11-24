@@ -1,4 +1,4 @@
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using FastEndpoints;
@@ -7,8 +7,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Npgsql;
-using snowcoreBlog.Backend.Core.Entities.RequestPersistence;
-using snowcoreBlog.Backend.Core.Interfaces.Repositories;
+using snowcoreBlog.Backend.Shared.Core.Entities.RequestPersistence;
+using snowcoreBlog.Backend.Shared.Core.Interfaces.Repositories;
 using snowcoreBlog.Backend.Infrastructure.RequestPersistence;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 using snowcoreBlog.PublicApi.Constants;
@@ -20,9 +20,9 @@ namespace snowcoreBlog.Backend.Infrastructure.Processors;
 /// serialized and durably committed (independent session) before any business logic runs; if the
 /// commit fails the request is refused (503) so unpersisted requests never execute.
 /// <para>
-/// Existing claims: payload-hash mismatch → conflict-informative; Succeeded/Failed → completed-
-/// informative (stored business response is never returned); fresh Processing lease → in-progress-
-/// informative; stale/takeover-able → atomic takeover + resume scope for the checkpoint advices.
+/// Existing claims: payload-hash mismatch в†’ conflict-informative; Succeeded/Failed в†’ completed-
+/// informative (stored business response is never returned); fresh Processing lease в†’ in-progress-
+/// informative; stale/takeover-able в†’ atomic takeover + resume scope for the checkpoint advices.
 /// </para>
 /// <para>
 /// The response body of non-streaming endpoints is captured (stream swap) so the post-processor
@@ -30,7 +30,7 @@ namespace snowcoreBlog.Backend.Infrastructure.Processors;
 /// </para>
 /// </summary>
 /// <remarks>
-/// FastEndpoints constructs global processor instances as singletons from the ROOT provider —
+/// FastEndpoints constructs global processor instances as singletons from the ROOT provider вЂ”
 /// scoped services must be resolved per request via <see cref="IServiceScopeFactory"/>.
 /// </remarks>
 public class PersistRequestPreProcessor(
@@ -93,7 +93,7 @@ public class PersistRequestPreProcessor(
         claim = claim with { RequestId = claim.Id };
 
         // Check-first: known duplicates short-circuit WITHOUT touching the insert path (Marten
-        // logs command exceptions as `fail:` even when handled — avoid the noise entirely).
+        // logs command exceptions as `fail:` even when handled вЂ” avoid the noise entirely).
         var existing = await repository.GetByIdempotencyKeyAsync(idempotencyKey, ct);
         if (existing is default(PersistedRequestEntity))
         {
@@ -103,7 +103,7 @@ public class PersistRequestPreProcessor(
             }
             catch (Exception ex) when (IsUniqueViolation(ex))
             {
-                // Concurrent first-arrival race — converge on the winner's row.
+                // Concurrent first-arrival race вЂ” converge on the winner's row.
                 existing = await repository.GetByIdempotencyKeyAsync(idempotencyKey, ct);
                 if (existing is default(PersistedRequestEntity))
                 {
@@ -115,7 +115,7 @@ public class PersistRequestPreProcessor(
         if (existing is not default(PersistedRequestEntity))
         {
             logger.LogInformation(
-                "[PersistRequest] Duplicate key {Key} — existing row {RequestId} status={Status} hashMatch={HashMatch}",
+                "[PersistRequest] Duplicate key {Key} вЂ” existing row {RequestId} status={Status} hashMatch={HashMatch}",
                 idempotencyKey, existing.Id, existing.Status,
                 string.Equals(existing.RequestHash, requestHash, StringComparison.Ordinal));
             await HandleExistingAsync(repository, http, existing, requestHash, isStreaming, now, ct);
@@ -123,10 +123,10 @@ public class PersistRequestPreProcessor(
         }
 
         logger.LogInformation(
-            "[PersistRequest] Claim persisted durably: {RequestId} key={Key} streaming={Streaming} — entering execution",
+            "[PersistRequest] Claim persisted durably: {RequestId} key={Key} streaming={Streaming} вЂ” entering execution",
             claim.Id, idempotencyKey, isStreaming);
 
-        // Fresh claim — transition into the Processing lease. The claim commit above is already
+        // Fresh claim вЂ” transition into the Processing lease. The claim commit above is already
         // durable; losing this transition sends the request to the recovery worker (T1 window).
         if (!await repository.TryTakeOverAsync(claim.Id, claim.RetryCount, now, options.Value.LeaseTtl, ct))
         {
@@ -189,28 +189,28 @@ public class PersistRequestPreProcessor(
                 return;
 
             default:
-                break; // Persisted / Received / stale Processing / due RetryNeeded → takeover
+                break; // Persisted / Received / stale Processing / due RetryNeeded в†’ takeover
         }
 
         // Eligibility was already checked above (stale Processing lease / Persisted / due
         // RetryNeeded); the takeover re-derives expiry comparison atomically.
         if (!await repository.TryTakeOverAsync(existing.Id, existing.RetryCount, now, opts.LeaseTtl, ct))
         {
-            logger.LogInformation("[PersistRequest] Takeover of {RequestId} lost — another execution holds the lease.", existing.Id);
+            logger.LogInformation("[PersistRequest] Takeover of {RequestId} lost вЂ” another execution holds the lease.", existing.Id);
             await SendIdempotencyStatusAsync(
                 http, IdempotencyRequestState.InProgress, existing.Id, existing.CreatedAt,
                 "The request is currently being processed.", StatusCodes.Status202Accepted, ct);
             return;
         }
 
-        // Won the takeover — resume from the highest contiguous checkpoint (if any).
+        // Won the takeover вЂ” resume from the highest contiguous checkpoint (if any).
         var checkpoints = await repository.GetCheckpointsAsync(existing.Id, ct);
         var contiguous = TakeContiguous(checkpoints);
         var lastCheckpoint = checkpoints.Count > 0 ? checkpoints[^1] : null;
         var last = contiguous.Count > 0 ? contiguous[^1] : null;
 
         logger.LogInformation(
-            "[PersistRequest] Takeover of {RequestId} won — {Checkpoints} checkpoint(s), resuming from step index {ResumeIndex} ({ResumeStep}).",
+            "[PersistRequest] Takeover of {RequestId} won вЂ” {Checkpoints} checkpoint(s), resuming from step index {ResumeIndex} ({ResumeStep}).",
             existing.Id, contiguous.Count, last?.StepIndex ?? -1, last?.StepTypeName ?? "<from scratch>");
 
         RequestResumeScope.Current = new RequestResumeScope
@@ -334,7 +334,7 @@ public class PersistRequestPreProcessor(
                 return true;
             }
 
-            // Marten wraps Npgsql failures in MartenCommandException — keep a message fallback
+            // Marten wraps Npgsql failures in MartenCommandException вЂ” keep a message fallback
             // in case the inner-chain shape changes across versions.
             if (current.Message.Contains("23505", StringComparison.Ordinal))
             {

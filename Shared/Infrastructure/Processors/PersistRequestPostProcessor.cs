@@ -1,11 +1,11 @@
-using System.Text;
+﻿using System.Text;
 using FastEndpoints;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using snowcoreBlog.Backend.Core.Entities.RequestPersistence;
-using snowcoreBlog.Backend.Core.Interfaces.Repositories;
+using snowcoreBlog.Backend.Shared.Core.Entities.RequestPersistence;
+using snowcoreBlog.Backend.Shared.Core.Interfaces.Repositories;
 using snowcoreBlog.Backend.Infrastructure.RequestPersistence;
 
 namespace snowcoreBlog.Backend.Infrastructure.Processors;
@@ -16,13 +16,13 @@ namespace snowcoreBlog.Backend.Infrastructure.Processors;
 /// the retention policy (tombstone plain first-attempt finishes / keep recovered for audit) and
 /// only then flushes the captured response body to the original stream.
 /// <para>
-/// Streaming (SSE) endpoints skip response capture — only completion status is recorded. On
+/// Streaming (SSE) endpoints skip response capture вЂ” only completion status is recorded. On
 /// unhandled handler exceptions this processor does not run; the recovery worker takes over after
 /// lease expiry.
 /// </para>
 /// </summary>
 /// <remarks>
-/// FastEndpoints constructs global processor instances as singletons from the ROOT provider —
+/// FastEndpoints constructs global processor instances as singletons from the ROOT provider вЂ”
 /// scoped services are resolved per request via <see cref="IServiceScopeFactory"/>.
 /// </remarks>
 public class PersistRequestPostProcessor(
@@ -91,7 +91,7 @@ public class PersistRequestPostProcessor(
 
         logger.LogInformation(
             "[PersistRequest] {RequestId} finished: status={Status} http={StatusCode} retries={Retries} payloadCaptured={Captured}"
-            + " — marker durable, flushing response to client.",
+            + " вЂ” marker durable, flushing response to client.",
             requestId, status, statusCode, updated.RetryCount, !string.IsNullOrWhiteSpace(responsePayload));
 
         RestoreBody(http, flushResponse: true);

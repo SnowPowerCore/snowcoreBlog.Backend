@@ -1,8 +1,8 @@
-using System.Net;
+﻿using System.Net;
 using System.Text.RegularExpressions;
 using snowcoreBlog.Backend.ApiAccessRestrictions.Interfaces.Repositories.Marten;
 using snowcoreBlog.Backend.ApiAccessRestrictions.Interfaces.Services;
-using snowcoreBlog.Backend.Core.Entities.ApiAccessRestrictions;
+using snowcoreBlog.Backend.ApiAccessRestrictions.Core.Entities.ApiAccessRestrictions;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 
 namespace snowcoreBlog.Backend.ApiAccessRestrictions.Services;

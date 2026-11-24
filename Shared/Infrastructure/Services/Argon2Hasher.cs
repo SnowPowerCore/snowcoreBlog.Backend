@@ -1,6 +1,6 @@
-using Microsoft.Extensions.Options;
-using snowcoreBlog.Backend.Core.Interfaces.Services;
-using snowcoreBlog.Backend.Core.Utilities;
+﻿using Microsoft.Extensions.Options;
+using snowcoreBlog.Backend.Shared.Core.Interfaces.Services;
+using snowcoreBlog.Backend.Shared.Core.Utilities;
 using snowcoreBlog.Backend.Infrastructure.Utilities;
 using Sodium;
 

@@ -1,12 +1,12 @@
-using Marten;
+﻿using Marten;
 using Marten.Patching;
-using snowcoreBlog.Backend.Core.Entities.RequestPersistence;
-using snowcoreBlog.Backend.Core.Interfaces.Repositories;
+using snowcoreBlog.Backend.Shared.Core.Entities.RequestPersistence;
+using snowcoreBlog.Backend.Shared.Core.Interfaces.Repositories;
 
 namespace snowcoreBlog.Backend.Infrastructure.Repositories;
 
 /// <summary>
-/// Marten-backed claim store. Every operation opens its own short-lived session — durability of
+/// Marten-backed claim store. Every operation opens its own short-lived session вЂ” durability of
 /// claims/checkpoints is never entangled with the business session state of the running request.
 /// Takeover is an atomic conditional update (patched statements + increment committed in one
 /// transaction), verified by a fresh re-read.
@@ -44,7 +44,7 @@ public class RequestPersistenceRepository(IDocumentStore store) : IRequestPersis
 
     public async Task<bool> TryTakeOverAsync(Guid id, int expectedRetryCount, DateTimeOffset now, TimeSpan leaseTtl, CancellationToken ct = default)
     {
-        // Ownership token — timestamp-only verification is unreliable: Postgres timestamptz
+        // Ownership token вЂ” timestamp-only verification is unreliable: Postgres timestamptz
         // truncates sub-microsecond precision (exact-value equality can mismatch), and a
         // concurrent taker can compute the same lease timestamp. A per-takeover GUID makes the
         // win-check unambiguous.
@@ -53,12 +53,12 @@ public class RequestPersistenceRepository(IDocumentStore store) : IRequestPersis
 
         using (var session = store.LightweightSession())
         {
-            // IMPORTANT: each branch uses ONE chained patch (single UPDATE) — separate
+            // IMPORTANT: each branch uses ONE chained patch (single UPDATE) вЂ” separate
             // Patch(filter) calls run as sequential UPDATEs and earlier ones invalidate the
-            // WHERE of later ones (e.g. Status→Processing makes `Status == Persisted` stop
+            // WHERE of later ones (e.g. Statusв†’Processing makes `Status == Persisted` stop
             // matching), silently skipping the remaining sets.
 
-            // Expired Processing lease — take over from the crashed/restarted execution. A live
+            // Expired Processing lease вЂ” take over from the crashed/restarted execution. A live
             // holder has LeaseUntil in the future and never matches this filter. Null leases
             // (legacy/corrupt rows) are eligible too.
             var staleLeaseFilter = (System.Linq.Expressions.Expression<Func<PersistedRequestEntity, bool>>)
@@ -71,7 +71,7 @@ public class RequestPersistenceRepository(IDocumentStore store) : IRequestPersis
                 .Set(x => x.RetryCount, expectedRetryCount + 1)
                 .Set(x => x.UpdatedAt, now);
 
-            // Persisted (claimed but never executed — keeps RetryCount at its plain-attempt
+            // Persisted (claimed but never executed вЂ” keeps RetryCount at its plain-attempt
             // value for the retention policy).
             var persistedFilter = (System.Linq.Expressions.Expression<Func<PersistedRequestEntity, bool>>)
                 (x => x.Id == id && x.Status == RequestPersistenceStatus.Persisted);

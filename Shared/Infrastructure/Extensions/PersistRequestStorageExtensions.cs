@@ -1,8 +1,8 @@
-using System.Net;
+﻿using System.Net;
 using Marten;
 using Microsoft.Extensions.DependencyInjection;
-using snowcoreBlog.Backend.Core.Entities.RequestPersistence;
-using snowcoreBlog.Backend.Core.Interfaces.Repositories;
+using snowcoreBlog.Backend.Shared.Core.Entities.RequestPersistence;
+using snowcoreBlog.Backend.Shared.Core.Interfaces.Repositories;
 using snowcoreBlog.Backend.Infrastructure.Repositories;
 using snowcoreBlog.Backend.Infrastructure.RequestPersistence;
 using snowcoreBlog.Backend.Infrastructure.RequestPersistence.ReplayAuthentication;
@@ -15,7 +15,7 @@ public static class PersistRequestStorageExtensions
 
     /// <summary>
     /// Registers the claim/checkpoint document types (with the unique idempotency-key index) on a
-    /// service's Marten store — call inside the service's <c>AddMarten(options => ...)</c>.
+    /// service's Marten store вЂ” call inside the service's <c>AddMarten(options => ...)</c>.
     /// </summary>
     public static StoreOptions AddPersistRequestDocuments(this StoreOptions options)
     {
@@ -35,7 +35,7 @@ public static class PersistRequestStorageExtensions
     /// <summary>
     /// Registers the full persistence machinery: checkpoint coordinator (consumed by the woven
     /// step advices), replay dispatcher and the replay HTTP client. The recovery poll itself is
-    /// a TickerQ job (<see cref="PersistRequestRecoveryJob"/>) — wire TickerQ via
+    /// a TickerQ job (<see cref="PersistRequestRecoveryJob"/>) вЂ” wire TickerQ via
     /// <c>AddTickerQConfiguration</c>/<c>UseTickerQConfigurationAsync</c> (ReadersManagement).
     /// </summary>
     public static IServiceCollection AddPersistRequestProcessing(

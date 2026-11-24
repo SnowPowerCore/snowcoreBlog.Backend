@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using snowcoreBlog.Backend.AspireYarpGateway.Constants;
-using snowcoreBlog.Backend.Core.Constants;
+using snowcoreBlog.Backend.Shared.Core.Constants;
 
 namespace snowcoreBlog.Backend.AspireYarpGateway.Extensions;
 

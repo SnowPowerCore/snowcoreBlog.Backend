@@ -1,9 +1,9 @@
-using Marten;
+﻿using Marten;
 using MassTransit;
 using Microsoft.Extensions.Options;
 using snowcoreBlog.ApplicationLaunch.Interfaces;
 using snowcoreBlog.Backend.AdminsManagement.Options;
-using snowcoreBlog.Backend.Core.Entities.Admin;
+using snowcoreBlog.Backend.AdminsManagement.Core.Entities.Admin;
 using snowcoreBlog.Backend.IAM.Core.Contracts;
 using snowcoreBlog.PublicApi.Utilities.DataResult;
 
@@ -12,7 +12,7 @@ namespace snowcoreBlog.Backend.AdminsManagement.Services;
 /// <summary>
 /// Seeds the FIRST EVER admin (InvitedByAdminId = null) when the store is
 /// empty. The bootstrap admin is the only admin allowed to exist without an
-/// inviter reference — every subsequent admin MUST be invited by an
+/// inviter reference вЂ” every subsequent admin MUST be invited by an
 /// existing admin (FK-enforced AdminEntity.InvitedByAdminId). The IAM admin
 /// identity is created through the CreateAdmin request (FromAdmin = empty
 /// marks the bootstrap path in the IAM consumer).
@@ -36,7 +36,7 @@ public sealed class AdminsApplicationLaunchService(IServiceProvider serviceProvi
         var iamResponse = await createAdminClient.GetResponse<DataResult<AdminCreationResult>>(
             new CreateAdmin
             {
-                FromAdmin = Guid.Empty, // bootstrap marker — IAM skips the inviter check
+                FromAdmin = Guid.Empty, // bootstrap marker вЂ” IAM skips the inviter check
                 Email = bootstrapEmail,
                 NickName = options.Value.BootstrapAdminNickName,
             });
@@ -53,7 +53,7 @@ public sealed class AdminsApplicationLaunchService(IServiceProvider serviceProvi
         {
             Email = bootstrapEmail,
             NickName = options.Value.BootstrapAdminNickName,
-            InvitedByAdminId = null, // first ever admin — the ONLY allowed null
+            InvitedByAdminId = null, // first ever admin вЂ” the ONLY allowed null
             IamUserId = iamResponse.Message.Value.Id,
             InvitedAtUtc = DateTime.UtcNow,
             IsActive = true,

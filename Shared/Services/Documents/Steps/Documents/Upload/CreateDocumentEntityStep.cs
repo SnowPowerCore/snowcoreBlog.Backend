@@ -1,6 +1,6 @@
-using MaybeResults;
+﻿using MaybeResults;
 using MinimalStepifiedSystem.Interfaces;
-using snowcoreBlog.Backend.Core.Entities.Documents;
+using snowcoreBlog.Backend.Documents.Core.Entities.Documents;
 using snowcoreBlog.Backend.Documents.Context;
 using snowcoreBlog.Backend.Documents.Delegates;
 using snowcoreBlog.Backend.Documents.Interfaces.Repositories.Marten;

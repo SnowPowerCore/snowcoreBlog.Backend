@@ -1,5 +1,5 @@
-using snowcoreBlog.Backend.Core.Entities.UrlShortener;
-using snowcoreBlog.Backend.Core.Interfaces.Repositories;
+﻿using snowcoreBlog.Backend.UrlShortener.Core.Entities.UrlShortener;
+using snowcoreBlog.Backend.Shared.Core.Interfaces.Repositories;
 
 namespace snowcoreBlog.Backend.UrlShortener.Interfaces.Repositories.Marten;
 

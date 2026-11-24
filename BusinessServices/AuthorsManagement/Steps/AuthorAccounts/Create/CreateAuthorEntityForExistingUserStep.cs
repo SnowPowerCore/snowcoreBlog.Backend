@@ -1,10 +1,10 @@
-using MaybeResults;
+﻿using MaybeResults;
 using MinimalStepifiedSystem.Interfaces;
 using snowcoreBlog.Backend.AuthorsManagement.Context;
 using snowcoreBlog.Backend.AuthorsManagement.Delegates;
 using snowcoreBlog.Backend.AuthorsManagement.ErrorResults;
 using snowcoreBlog.Backend.AuthorsManagement.Interfaces.Repositories.Marten;
-using snowcoreBlog.Backend.Core.Entities.Author;
+using snowcoreBlog.Backend.AuthorsManagement.Core.Entities.Author;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 using snowcoreBlog.PublicApi.Services;
 
@@ -26,7 +26,7 @@ public class CreateAuthorEntityForExistingUserStep(
         if (exists)
             return AuthorAccountAlreadyExistsError<AuthorDto>.Create("Author account already exists");
 
-        // Authoritative final check — the real-time indicator is advisory only;
+        // Authoritative final check вЂ” the real-time indicator is advisory only;
         // a display name claimed between the last keystroke and this submit
         // must still be rejected here.
         var displayNameTaken = await authorRepository.AnyByDisplayNameAsync(displayName, cancellationToken);

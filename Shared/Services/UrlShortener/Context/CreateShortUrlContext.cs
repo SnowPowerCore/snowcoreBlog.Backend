@@ -1,5 +1,5 @@
-using MinimalStepifiedSystem.Base;
-using snowcoreBlog.Backend.Core.Entities.UrlShortener;
+﻿using MinimalStepifiedSystem.Base;
+using snowcoreBlog.Backend.UrlShortener.Core.Entities.UrlShortener;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 
 namespace snowcoreBlog.Backend.UrlShortener.Context;

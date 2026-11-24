@@ -1,6 +1,6 @@
-using System.Net;
+﻿using System.Net;
 using System.Text;
-using snowcoreBlog.Backend.Core.Entities.RequestPersistence;
+using snowcoreBlog.Backend.Shared.Core.Entities.RequestPersistence;
 using snowcoreBlog.Backend.Infrastructure.Extensions;
 using snowcoreBlog.Backend.Infrastructure.RequestPersistence.ReplayAuthentication;
 
@@ -9,7 +9,7 @@ namespace snowcoreBlog.Backend.ReadersManagement.RequestPersistence;
 /// <summary>
 /// Re-authenticates replays via the service's own refresh-token rotation flow: the stored cookie
 /// snapshot is attached to a cookie-only proactive rotation call; the rotated pair from the
-/// response replaces the stored cookies. A definitive refresh rejection (401/403 — revoked or
+/// response replaces the stored cookies. A definitive refresh rejection (401/403 вЂ” revoked or
 /// expired refresh token) aborts the replay into terminal Failed (manual handling).
 /// </summary>
 public sealed class ReadersReplayAuthenticationProvider(
@@ -58,7 +58,7 @@ public sealed class ReadersReplayAuthenticationProvider(
             using var response = await client.SendAsync(refreshRequest, ct);
             if (response.StatusCode is HttpStatusCode.Unauthorized or HttpStatusCode.Forbidden)
             {
-                // Refresh token revoked/expired — the original caller's session cannot be restored.
+                // Refresh token revoked/expired вЂ” the original caller's session cannot be restored.
                 logger.LogWarning("Replay re-auth for request {RequestId} rejected by the refresh flow.", request.Id);
                 return null;
             }
@@ -71,7 +71,7 @@ public sealed class ReadersReplayAuthenticationProvider(
         }
         catch (Exception ex) when (ex is not OperationCanceledException)
         {
-            // Refresh endpoint unreachable — try replays with the stored credentials untouched.
+            // Refresh endpoint unreachable вЂ” try replays with the stored credentials untouched.
             logger.LogWarning(ex, "Replay re-auth for request {RequestId} could not reach the refresh flow; using stored credentials.", request.Id);
         }
 

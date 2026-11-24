@@ -1,7 +1,7 @@
-using FluentAssertions;
-using snowcoreBlog.Backend.Core.Utilities;
+﻿using FluentAssertions;
+using snowcoreBlog.Backend.Shared.Core.Utilities;
 
-namespace snowcoreBlog.Backend.Core.Tests.Utilities;
+namespace snowcoreBlog.Backend.Shared.Core.Tests.Utilities;
 
 public class HashedStringsVerificationResultTests
 {

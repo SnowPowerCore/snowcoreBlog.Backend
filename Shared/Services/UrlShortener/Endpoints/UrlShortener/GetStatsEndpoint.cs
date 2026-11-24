@@ -1,9 +1,9 @@
-using System.Net;
+﻿using System.Net;
 using FastEndpoints;
 using MaybeResults;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.Extensions.Options;
-using snowcoreBlog.Backend.Core.Entities.UrlShortener;
+using snowcoreBlog.Backend.UrlShortener.Core.Entities.UrlShortener;
 using snowcoreBlog.Backend.UrlShortener.ErrorResults;
 using snowcoreBlog.Backend.UrlShortener.Extensions;
 using snowcoreBlog.Backend.UrlShortener.Interfaces.Repositories.Marten;

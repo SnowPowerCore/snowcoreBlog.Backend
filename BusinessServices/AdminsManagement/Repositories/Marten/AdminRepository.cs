@@ -1,6 +1,6 @@
-using Marten;
+﻿using Marten;
 using snowcoreBlog.Backend.AdminsManagement.Interfaces.Repositories.Marten;
-using snowcoreBlog.Backend.Core.Entities.Admin;
+using snowcoreBlog.Backend.AdminsManagement.Core.Entities.Admin;
 using snowcoreBlog.Backend.Infrastructure.Repositories.Marten.Base;
 
 namespace snowcoreBlog.Backend.AdminsManagement.Repositories.Marten;

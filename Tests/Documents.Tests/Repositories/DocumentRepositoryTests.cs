@@ -1,7 +1,7 @@
-using FluentAssertions;
+﻿using FluentAssertions;
 using Marten;
 using NSubstitute;
-using snowcoreBlog.Backend.Core.Entities.Documents;
+using snowcoreBlog.Backend.Documents.Core.Entities.Documents;
 using snowcoreBlog.Backend.Documents.Repositories.Marten;
 
 namespace snowcoreBlog.Backend.Documents.Tests.Repositories;

@@ -1,5 +1,5 @@
-using Riok.Mapperly.Abstractions;
-using snowcoreBlog.Backend.Core.Entities.Notification;
+﻿using Riok.Mapperly.Abstractions;
+using snowcoreBlog.Backend.ServiceNotifications.Core.Entities.Notification;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 
 namespace snowcoreBlog.Backend.ServiceNotifications.Extensions;

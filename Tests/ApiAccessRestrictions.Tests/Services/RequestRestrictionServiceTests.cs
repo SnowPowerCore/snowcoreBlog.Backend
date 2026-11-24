@@ -1,9 +1,9 @@
-using System.Net;
+﻿using System.Net;
 using FluentAssertions;
 using NSubstitute;
 using snowcoreBlog.Backend.ApiAccessRestrictions.Interfaces.Repositories.Marten;
 using snowcoreBlog.Backend.ApiAccessRestrictions.Services;
-using snowcoreBlog.Backend.Core.Entities.ApiAccessRestrictions;
+using snowcoreBlog.Backend.ApiAccessRestrictions.Core.Entities.ApiAccessRestrictions;
 
 namespace snowcoreBlog.Backend.ApiAccessRestrictions.Tests.Services;
 

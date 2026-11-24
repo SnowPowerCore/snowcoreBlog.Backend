@@ -42,6 +42,7 @@
     <ProjectReference Include="..\..\..\snowcoreBlog.Universal\ServiceDefaults\snowcoreBlog.ServiceDefaults.csproj" />
     <ProjectReference Include="..\..\..\snowcoreBlog.Universal\PublicApi\snowcoreBlog.PublicApi.csproj" />
     <ProjectReference Include="..\..\IAM.Core\snowcoreBlog.Backend.IAM.Core.csproj" />
+    <ProjectReference Include="..\..\Shared.Core\snowcoreBlog.Backend.Shared.Core.csproj" />
     <ProjectReference Include="..\..\AspireYarpGateway.Core\snowcoreBlog.Backend.AspireYarpGateway.Core.csproj" />
   </ItemGroup>
 

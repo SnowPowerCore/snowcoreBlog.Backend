@@ -1,6 +1,6 @@
-using Ixnas.AltchaNet;
+﻿using Ixnas.AltchaNet;
 using Microsoft.IdentityModel.JsonWebTokens;
-using snowcoreBlog.Backend.Core.Interfaces.Services;
+using snowcoreBlog.Backend.Shared.Core.Interfaces.Services;
 using snowcoreBlog.Backend.Gateway.Middleware.Middleware;
 using snowcoreBlog.Backend.Infrastructure.Services;
 using snowcoreBlog.Backend.Infrastructure.Stores;

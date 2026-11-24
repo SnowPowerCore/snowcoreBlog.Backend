@@ -1,7 +1,7 @@
 ﻿using MaybeResults;
 using MinimalStepifiedSystem.Base;
-using snowcoreBlog.Backend.Core.Contracts;
-using snowcoreBlog.Backend.Core.Interfaces.Steps;
+using snowcoreBlog.Backend.ReadersManagement.Core.Contracts;
+using snowcoreBlog.Backend.Shared.Core.Interfaces.Steps;
 using snowcoreBlog.Backend.IAM.Core.Contracts;
 using snowcoreBlog.Backend.ReadersManagement.Constants;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;

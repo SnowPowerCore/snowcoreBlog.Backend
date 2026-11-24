@@ -1,10 +1,10 @@
-using System.Net;
+﻿using System.Net;
 using System.Net.Mime;
 using FastEndpoints;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.Extensions.Options;
 using MaybeResults;
-using snowcoreBlog.Backend.Core.Entities.Notification;
+using snowcoreBlog.Backend.ServiceNotifications.Core.Entities.Notification;
 using snowcoreBlog.Backend.Infrastructure;
 using snowcoreBlog.Backend.ServiceNotifications.Extensions;
 using snowcoreBlog.Backend.ServiceNotifications.Interfaces.Repositories.Marten;

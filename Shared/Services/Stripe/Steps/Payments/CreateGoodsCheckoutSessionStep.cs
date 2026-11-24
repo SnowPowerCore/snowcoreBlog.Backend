@@ -1,9 +1,9 @@
-using MaybeResults;
+﻿using MaybeResults;
 using MinimalStepifiedSystem.Interfaces;
 using Microsoft.Extensions.Options;
 using Stripe;
 using Stripe.Checkout;
-using snowcoreBlog.Backend.Core.Entities.Stripe;
+using snowcoreBlog.Backend.Stripe.Core.Entities.Stripe;
 using snowcoreBlog.Backend.Stripe.Context;
 using snowcoreBlog.Backend.Stripe.Delegates;
 using snowcoreBlog.Backend.Stripe.Interfaces.Services;
@@ -35,7 +35,7 @@ public sealed class CreateGoodsCheckoutSessionStep(
             : request.Currency.ToLowerInvariant();
         var expiresAt = DateTime.UtcNow.AddMinutes(settings.CheckoutSessionExpirationMinutes);
 
-        // Attach to a Stripe customer only when BOTH identity hints are present —
+        // Attach to a Stripe customer only when BOTH identity hints are present вЂ”
         // otherwise this is a guest checkout and Checkout collects the e-mail itself.
         string? stripeCustomerId = null;
         if (request.BuyerUserId is not null && !string.IsNullOrWhiteSpace(request.BuyerEmail))
@@ -47,7 +47,7 @@ public sealed class CreateGoodsCheckoutSessionStep(
             }
             catch (StripeException ex)
             {
-                // Customer creation must never block the checkout — fall back to guest.
+                // Customer creation must never block the checkout вЂ” fall back to guest.
                 logger.LogWarning(ex, "Could not ensure Stripe customer for buyer {BuyerUserId}; falling back to guest checkout.", request.BuyerUserId);
             }
         }

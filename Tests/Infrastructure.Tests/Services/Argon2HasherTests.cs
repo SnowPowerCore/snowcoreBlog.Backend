@@ -1,6 +1,6 @@
-using FluentAssertions;
+﻿using FluentAssertions;
 using Microsoft.Extensions.Options;
-using snowcoreBlog.Backend.Core.Utilities;
+using snowcoreBlog.Backend.Shared.Core.Utilities;
 using snowcoreBlog.Backend.Infrastructure.Services;
 using snowcoreBlog.Backend.Infrastructure.Utilities;
 

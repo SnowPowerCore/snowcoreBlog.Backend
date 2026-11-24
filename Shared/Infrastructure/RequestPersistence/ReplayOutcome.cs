@@ -1,4 +1,4 @@
-using snowcoreBlog.Backend.Core.Entities.RequestPersistence;
+﻿using snowcoreBlog.Backend.Shared.Core.Entities.RequestPersistence;
 
 namespace snowcoreBlog.Backend.Infrastructure.RequestPersistence;
 

@@ -1,5 +1,5 @@
 ﻿using Riok.Mapperly.Abstractions;
-using snowcoreBlog.Backend.Core.Contracts;
+using snowcoreBlog.Backend.ReadersManagement.Core.Contracts;
 using snowcoreBlog.Backend.Email.Core.Contracts;
 using snowcoreBlog.Backend.Email.Core.Options;
 

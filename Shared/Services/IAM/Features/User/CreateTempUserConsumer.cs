@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using MassTransit;
 using MaybeResults;
-using snowcoreBlog.Backend.Core.Interfaces.Services;
+using snowcoreBlog.Backend.Shared.Core.Interfaces.Services;
 using snowcoreBlog.Backend.IAM.Constants;
 using snowcoreBlog.Backend.IAM.Core.Contracts;
 using snowcoreBlog.Backend.IAM.Core.Entities;

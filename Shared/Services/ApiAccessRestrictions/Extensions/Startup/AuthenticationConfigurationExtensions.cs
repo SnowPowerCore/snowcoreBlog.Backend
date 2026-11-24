@@ -1,7 +1,7 @@
-using System.Text;
+﻿using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using snowcoreBlog.Backend.Core.Constants;
+using snowcoreBlog.Backend.Shared.Core.Constants;
 
 namespace snowcoreBlog.Backend.ApiAccessRestrictions.Extensions.Startup;
 

@@ -1,5 +1,5 @@
-using Riok.Mapperly.Abstractions;
-using snowcoreBlog.Backend.Core.Entities.UrlShortener;
+﻿using Riok.Mapperly.Abstractions;
+using snowcoreBlog.Backend.UrlShortener.Core.Entities.UrlShortener;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 
 namespace snowcoreBlog.Backend.UrlShortener.Extensions;

@@ -1,5 +1,5 @@
-using snowcoreBlog.Backend.Core.Entities.Notification;
-using snowcoreBlog.Backend.Core.Interfaces.Repositories;
+﻿using snowcoreBlog.Backend.ServiceNotifications.Core.Entities.Notification;
+using snowcoreBlog.Backend.Shared.Core.Interfaces.Repositories;
 
 namespace snowcoreBlog.Backend.ServiceNotifications.Interfaces.Repositories.Marten;
 

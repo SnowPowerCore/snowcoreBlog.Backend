@@ -1,10 +1,10 @@
-using System.Net;
+﻿using System.Net;
 using System.Net.Mime;
 using FastEndpoints;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.Extensions.Options;
 using MinimalStepifiedSystem.Attributes;
-using snowcoreBlog.Backend.Core.Constants;
+using snowcoreBlog.Backend.Shared.Core.Constants;
 using snowcoreBlog.Backend.Infrastructure;
 using snowcoreBlog.Backend.ServiceNotifications.Context;
 using snowcoreBlog.Backend.ServiceNotifications.Delegates;

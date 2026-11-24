@@ -1,4 +1,4 @@
-using snowcoreBlog.Backend.Core.Interfaces.Repositories;
+﻿using snowcoreBlog.Backend.Shared.Core.Interfaces.Repositories;
 using snowcoreBlog.Backend.IAM.Core.Entities;
 
 namespace snowcoreBlog.Backend.IAM.Interfaces.Repositories.Marten;

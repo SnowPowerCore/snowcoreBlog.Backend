@@ -1,7 +1,7 @@
-using Marten;
+﻿using Marten;
 using snowcoreBlog.Backend.AuthorsManagement.CompiledQueries.Marten;
 using snowcoreBlog.Backend.AuthorsManagement.Interfaces.Repositories.Marten;
-using snowcoreBlog.Backend.Core.Entities.Author;
+using snowcoreBlog.Backend.AuthorsManagement.Core.Entities.Author;
 using snowcoreBlog.Backend.Infrastructure.QueryProvider;
 using snowcoreBlog.Backend.Infrastructure.Repositories.Marten.Base;
 

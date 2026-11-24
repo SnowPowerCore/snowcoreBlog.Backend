@@ -1,4 +1,4 @@
-using System.Net;
+﻿using System.Net;
 using System.Net.Mime;
 using FastEndpoints;
 using MaybeResults;
@@ -7,7 +7,7 @@ using Microsoft.Extensions.Options;
 using snowcoreBlog.Backend.AdminsManagement.ErrorResults;
 using snowcoreBlog.Backend.AdminsManagement.Interfaces.Repositories.Marten;
 using snowcoreBlog.Backend.AdminsManagement.Services;
-using snowcoreBlog.Backend.Core.Entities.Admin;
+using snowcoreBlog.Backend.AdminsManagement.Core.Entities.Admin;
 using snowcoreBlog.Backend.Infrastructure;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 using snowcoreBlog.PublicApi.Constants;

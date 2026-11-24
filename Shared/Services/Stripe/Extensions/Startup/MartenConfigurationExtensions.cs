@@ -1,6 +1,6 @@
-using Marten;
+﻿using Marten;
 using Marten.Services;
-using snowcoreBlog.Backend.Core.Entities.Stripe;
+using snowcoreBlog.Backend.Stripe.Core.Entities.Stripe;
 using snowcoreBlog.Backend.Infrastructure;
 using snowcoreBlog.Backend.Stripe.Interfaces.Repositories.Marten;
 using snowcoreBlog.Backend.Stripe.Repositories.Marten;

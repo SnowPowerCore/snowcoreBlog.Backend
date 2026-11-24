@@ -1,19 +1,19 @@
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using System.Text;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 using snowcoreBlog.Backend.AdminsManagement.Constants;
 using snowcoreBlog.Backend.AdminsManagement.Options;
-using snowcoreBlog.Backend.Core.Constants;
-using snowcoreBlog.Backend.Core.Entities.Admin;
+using snowcoreBlog.Backend.Shared.Core.Constants;
+using snowcoreBlog.Backend.AdminsManagement.Core.Entities.Admin;
 
 namespace snowcoreBlog.Backend.AdminsManagement.Services;
 
 /// <summary>
 /// Mints admin access tokens (gateway AdminScheme: issuer "admin", admin
 /// signing key) and attaches the admin auth cookie. Unlike readers, admins
-/// have NO rotating refresh token in this prototype — the access cookie is
+/// have NO rotating refresh token in this prototype вЂ” the access cookie is
 /// the single credential and is simply re-obtained via a fresh login link.
 /// Token creation mirrors the gateway JwtTokenCreator symmetric branch.
 /// </summary>

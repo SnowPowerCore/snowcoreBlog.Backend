@@ -1,10 +1,10 @@
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
 using Ixnas.AltchaNet;
 using Marten;
 using Marten.Services;
 using snowcoreBlog.Backend.Articles.Interfaces.Repositories.Marten;
 using snowcoreBlog.Backend.Articles.Repositories.Marten;
-using snowcoreBlog.Backend.Core.Entities.Article;
+using snowcoreBlog.Backend.Articles.Core.Entities.Article;
 using snowcoreBlog.Backend.Gateway.Middleware.Middleware;
 using snowcoreBlog.Backend.Infrastructure;
 

@@ -1,4 +1,4 @@
-using snowcoreBlog.Backend.Core.Entities.Stripe;
+﻿using snowcoreBlog.Backend.Stripe.Core.Entities.Stripe;
 
 namespace snowcoreBlog.Backend.Stripe.Interfaces.Services;
 
@@ -11,7 +11,7 @@ public interface IStripeCustomerService
 {
     /// <summary>
     /// Returns the existing mapping or creates the Stripe customer and the mapping.
-    /// Safe to call repeatedly — the lookup happens before any Stripe API call.
+    /// Safe to call repeatedly вЂ” the lookup happens before any Stripe API call.
     /// </summary>
     Task<StripeCustomerEntity> EnsureAsync(Guid? userId, string email, string? name, CancellationToken token = default);
 

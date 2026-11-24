@@ -1,4 +1,4 @@
-using MaybeResults;
+﻿using MaybeResults;
 using Microsoft.Extensions.Options;
 using MinimalStepifiedSystem.Interfaces;
 using snowcoreBlog.Backend.AdminsManagement.Context;
@@ -7,7 +7,7 @@ using snowcoreBlog.Backend.AdminsManagement.Interfaces.Repositories.Marten;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 using snowcoreBlog.Backend.AdminsManagement.Options;
 using snowcoreBlog.Backend.AdminsManagement.Services;
-using snowcoreBlog.Backend.Core.Entities.Admin;
+using snowcoreBlog.Backend.AdminsManagement.Core.Entities.Admin;
 
 namespace snowcoreBlog.Backend.AdminsManagement.Steps.Auth.LoginLink;
 

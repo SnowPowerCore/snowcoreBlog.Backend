@@ -1,8 +1,8 @@
 ﻿using Marten;
 using Marten.Linq;
-using snowcoreBlog.Backend.Core.Base;
-using snowcoreBlog.Backend.Core.Interfaces.CompiledQueries;
-using snowcoreBlog.Backend.Core.Interfaces.Repositories;
+using snowcoreBlog.Backend.Shared.Core.Base;
+using snowcoreBlog.Backend.Shared.Core.Interfaces.CompiledQueries;
+using snowcoreBlog.Backend.Shared.Core.Interfaces.Repositories;
 
 namespace snowcoreBlog.Backend.Infrastructure.Repositories.Marten.Base;
 

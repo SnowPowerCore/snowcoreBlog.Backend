@@ -1,4 +1,4 @@
-using snowcoreBlog.Backend.Core.Contracts;
+﻿using snowcoreBlog.Backend.ReadersManagement.Core.Contracts;
 using snowcoreBlog.Backend.IAM.Core.Contracts;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 using snowcoreBlog.PublicApi.Utilities.DataResult;
