@@ -38,7 +38,7 @@ public class CreateGoodsCheckoutEndpoint : Endpoint<CreateGoodsCheckoutDto, ApiR
     {
         Post("payments/checkout");
         Version(1);
-        SerializerContext(CoreSerializationContext.Default);
+        SerializerContext(StripeSerializationContext.Default);
         Validator<CreateGoodsCheckoutValidator>();
         AllowAnonymous();
         Description(b => b

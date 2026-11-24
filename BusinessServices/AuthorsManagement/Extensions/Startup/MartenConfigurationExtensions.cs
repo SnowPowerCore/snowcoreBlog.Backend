@@ -1,4 +1,4 @@
-﻿using Marten;
+using Marten;
 using Marten.Services;
 using snowcoreBlog.Backend.AuthorsManagement.CompiledQueries.Marten;
 using snowcoreBlog.Backend.AuthorsManagement.Interfaces.Repositories.Marten;
@@ -20,7 +20,7 @@ public static class MartenConfigurationExtensions
             // Admin endpoints query AuthorEntity directly (outside compiled
             // queries), so the document type has to be registered explicitly.
             opts.RegisterDocumentType<AuthorEntity>();
-            Serializer.UseTypeInfoResolver(CoreSerializationContext.Default);
+            Serializer.UseTypeInfoResolver(AuthorsManagementSerializationContext.Default);
             opts.Serializer(Serializer);
 
             // Compiled queries MUST be registered on the same StoreOptions instance вЂ”

@@ -1,4 +1,4 @@
-﻿using System.Net;
+using System.Net;
 using System.Net.Mime;
 using FastEndpoints;
 using Microsoft.AspNetCore.Http.Json;
@@ -24,7 +24,7 @@ public sealed class GetNotificationByIdEndpoint(INotificationRepository notifica
     {
         Get("{id:guid}");
         Version(1);
-        SerializerContext(CoreSerializationContext.Default);
+        SerializerContext(ServiceNotificationsSerializationContext.Default);
         AllowAnonymous();
         ResponseCache(300);
         Description(b => b

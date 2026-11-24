@@ -37,7 +37,7 @@ public class DeleteAdminAccountEndpoint : EndpointWithoutRequest<ApiResponse?>
     {
         Delete("admins/{id:guid}");
         Version(1);
-        SerializerContext(CoreSerializationContext.Default);
+        SerializerContext(AdminsManagementSerializationContext.Default);
         Claims(AdminClaimConstants.AdminAccountClaimKey);
         Description(b => b
             .WithTags(ApiTagConstants.Administration)

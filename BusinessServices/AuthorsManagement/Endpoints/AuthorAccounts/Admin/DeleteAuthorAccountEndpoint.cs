@@ -1,4 +1,4 @@
-﻿using System.Net;
+using System.Net;
 using System.Net.Mime;
 using FastEndpoints;
 using Marten;
@@ -29,7 +29,7 @@ public class DeleteAuthorAccountEndpoint : EndpointWithoutRequest<ApiResponse?>
     {
         Delete("admin/accounts/{id:guid}");
         Version(1);
-        SerializerContext(CoreSerializationContext.Default);
+        SerializerContext(AuthorsManagementSerializationContext.Default);
         AllowAnonymous(); // TODO: restrict to admin users once IAM admin accounts exist
         Description(b => b
             .WithTags(ApiTagConstants.Administration)

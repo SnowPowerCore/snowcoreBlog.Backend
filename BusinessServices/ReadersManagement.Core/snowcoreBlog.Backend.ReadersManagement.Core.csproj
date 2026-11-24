@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Shared.Core\snowcoreBlog.Backend.Shared.Core.csproj" />
+    <ProjectReference Include="..\..\Shared\Shared.Core\snowcoreBlog.Backend.Shared.Core.csproj" />
   </ItemGroup>
 
 </Project>

@@ -20,7 +20,7 @@ public class CheckApiAccessEndpoint(IApiAccessRestrictionEvaluator evaluator)
         Post("check");
         AllowAnonymous();
         Version(1);
-        SerializerContext(CoreSerializationContext.Default);
+        SerializerContext(ApiAccessRestrictionsSerializationContext.Default);
         Description(b => b
             .WithTags("ApiAccess")
             .Produces<CheckApiAccessResponseDto>((int)HttpStatusCode.OK, MediaTypeNames.Application.Json));

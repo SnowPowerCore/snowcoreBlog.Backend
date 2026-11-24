@@ -30,7 +30,7 @@ public class StripeWebhookEndpoint : EndpointWithoutRequest<string>
     {
         Post("webhook");
         Version(1);
-        SerializerContext(CoreSerializationContext.Default);
+        SerializerContext(StripeSerializationContext.Default);
         AllowAnonymous();
         Description(b => b
             .WithTags(ApiTagConstants.Stripe)

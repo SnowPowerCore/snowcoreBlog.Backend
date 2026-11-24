@@ -22,7 +22,7 @@ public sealed class GetAllNotificationsEndpoint(INotificationRepository notifica
     {
         Get(string.Empty);
         Version(1);
-        SerializerContext(CoreSerializationContext.Default);
+        SerializerContext(ServiceNotificationsSerializationContext.Default);
         AllowAnonymous();
         Description(b => b
             .WithTags(ApiTagConstants.TechnicalNotifications)

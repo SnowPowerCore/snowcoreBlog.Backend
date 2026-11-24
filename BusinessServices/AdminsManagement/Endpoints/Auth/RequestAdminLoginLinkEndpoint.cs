@@ -34,7 +34,7 @@ public class RequestAdminLoginLinkEndpoint : Endpoint<RequestAdminLoginLinkDto, 
     {
         Post("login/link");
         Version(1);
-        SerializerContext(CoreSerializationContext.Default);
+        SerializerContext(AdminsManagementSerializationContext.Default);
         AllowAnonymous();
         Description(b => b
             .WithTags(ApiTagConstants.Administration)

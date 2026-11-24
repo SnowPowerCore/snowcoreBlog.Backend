@@ -30,7 +30,7 @@ public static class HostingConfigurationExtensions
         services.ConfigureHttpJsonOptions(static options =>
         {
             options.SerializerOptions.NumberHandling = JsonNumberHandling.AllowReadingFromString;
-            options.SerializerOptions.SetJsonSerializationContext();
+            options.SerializerOptions.SetJsonSerializationContext(AuthorsManagementSerializationContext.Default);
         });
 
         services.Configure<CookiePolicyOptions>(static options =>

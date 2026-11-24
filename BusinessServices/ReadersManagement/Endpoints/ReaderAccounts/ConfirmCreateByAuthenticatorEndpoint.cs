@@ -33,7 +33,7 @@ public class ConfirmCreateByAuthenticatorEndpoint : Endpoint<ConfirmCreateReader
     {
         Post("create/confirm/totp");
         Version(1);
-        SerializerContext(CoreSerializationContext.Default);
+        SerializerContext(ReadersManagementSerializationContext.Default);
         Validator<ConfirmCreateReaderAccountWithAuthenticatorValidator>();
         AllowAnonymous();
         EnableAntiforgery();

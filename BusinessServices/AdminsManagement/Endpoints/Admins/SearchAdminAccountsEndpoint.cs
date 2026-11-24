@@ -28,7 +28,7 @@ public class SearchAdminAccountsEndpoint : EndpointWithoutRequest<ApiResponse?>
     {
         Get("admins");
         Version(1);
-        SerializerContext(CoreSerializationContext.Default);
+        SerializerContext(AdminsManagementSerializationContext.Default);
         Claims(AdminClaimConstants.AdminAccountClaimKey);
         Description(b => b
             .WithTags(ApiTagConstants.Administration)

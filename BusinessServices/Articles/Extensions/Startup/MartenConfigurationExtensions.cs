@@ -1,4 +1,4 @@
-﻿using System.Security.Cryptography;
+using System.Security.Cryptography;
 using Ixnas.AltchaNet;
 using Marten;
 using Marten.Services;
@@ -36,7 +36,7 @@ public static class MartenConfigurationExtensions
         {
             options.RegisterDocumentType<ArticleEntity>();
             options.RegisterDocumentType<ArticleSnapshotEntity>();
-            Serializer.UseTypeInfoResolver(CoreSerializationContext.Default);
+            Serializer.UseTypeInfoResolver(ArticlesSerializationContext.Default);
             options.Serializer(Serializer);
             options.Policies.AllDocumentsSoftDeleted();
         })

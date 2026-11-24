@@ -1,4 +1,4 @@
-﻿using Marten;
+using Marten;
 using Marten.Services;
 using snowcoreBlog.Backend.Stripe.Core.Entities.Stripe;
 using snowcoreBlog.Backend.Infrastructure;
@@ -33,7 +33,7 @@ public static class MartenConfigurationExtensions
             options.Schema.For<StripeCustomerEntity>()
                 .Index(x => x.StripeCustomerId, idx => idx.IsUnique = true);
 
-            _serializer.UseTypeInfoResolver(CoreSerializationContext.Default);
+            _serializer.UseTypeInfoResolver(StripeSerializationContext.Default);
             options.Serializer(_serializer);
             options.Policies.AllDocumentsSoftDeleted();
         })

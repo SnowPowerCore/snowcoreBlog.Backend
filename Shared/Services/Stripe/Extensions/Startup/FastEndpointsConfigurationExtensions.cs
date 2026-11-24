@@ -37,7 +37,7 @@ public static class FastEndpointsConfigurationExtensions
                 options.SerializerSettings = s =>
                 {
                     s.Converters.Add(JsonStringEnumConverter);
-                    s.SetJsonSerializationContext();
+                    s.SetJsonSerializationContext(StripeSerializationContext.Default);
                     s.PropertyNamingPolicy = null;
                     s.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
                 };
@@ -64,7 +64,7 @@ public static class FastEndpointsConfigurationExtensions
                 c.Versioning.Prefix = "v";
                 c.Serializer.Options.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
                 c.Serializer.Options.Converters.Add(JsonStringEnumConverter);
-                c.Serializer.Options.SetJsonSerializationContext();
+                c.Serializer.Options.SetJsonSerializationContext(StripeSerializationContext.Default);
                 c.Serializer.ResponseSerializer = static (rsp, dto, contentType, _, cancellation) =>
                 {
                     if (dto is default(object))
@@ -73,7 +73,7 @@ public static class FastEndpointsConfigurationExtensions
                     return rsp.WriteAsJsonAsync(
                         value: dto,
                         type: dto.GetType(),
-                        context: CoreSerializationContext.Default,
+                        context: StripeSerializationContext.Default,
                         cancellationToken: cancellation);
                 };
                 c.Errors.UseProblemDetails(static x =>

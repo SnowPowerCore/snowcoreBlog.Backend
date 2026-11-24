@@ -48,17 +48,22 @@
     </PackageReference>
     <PackageReference Include="TickerQ" />
     <PackageReference Include="TickerQ.Dashboard" />
+    <ProjectReference Include="..\..\Shared\IAM.Core\snowcoreBlog.Backend.IAM.Core.csproj" />
+    <ProjectReference Include="..\..\Shared\AspireYarpGateway.Core\snowcoreBlog.Backend.AspireYarpGateway.Core.csproj" />
+    <ProjectReference Include="..\..\Shared\Email.Core\snowcoreBlog.Backend.Email.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <None Update="**/FodyWeavers.*" Visible="false" />
+    <ProjectReference Include="..\..\Shared\Email.Core\snowcoreBlog.Backend.Email.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\snowcoreBlog.Universal\ServiceDefaults\snowcoreBlog.ServiceDefaults.csproj" />
-    <ProjectReference Include="..\..\Shared\Infrastructure\snowcoreBlog.Backend.Infrastructure.csproj" />
-    <ProjectReference Include="..\..\Shared\ReadersManagement.Core\snowcoreBlog.Backend.ReadersManagement.Core.csproj" />
+    <PackageReference Include="snowcoreBlog.Backend.Infrastructure" />
+    <ProjectReference Include="..\ReadersManagement.Core\snowcoreBlog.Backend.ReadersManagement.Core.csproj" />
     <ProjectReference Include="..\..\snowcoreBlog.Universal\PublicApi\snowcoreBlog.PublicApi.csproj" />
+    <ProjectReference Include="..\..\Shared\Email.Core\snowcoreBlog.Backend.Email.Core.csproj" />
   </ItemGroup>
 
 </Project>

@@ -24,7 +24,7 @@ public class GetArticlesCachedStep(IArticleRepository articleRepository, IConnec
         {
             try
             {
-                var fromCache = JsonSerializer.Deserialize(cached.ToString(), CoreSerializationContext.Default.ListArticleDto);
+                var fromCache = JsonSerializer.Deserialize(cached.ToString(), ArticlesSerializationContext.Default.ListArticleDto);
                 if (fromCache is not default(List<ArticleDto>))
                     return Maybe.Create(fromCache);
             }
@@ -53,7 +53,7 @@ public class GetArticlesCachedStep(IArticleRepository articleRepository, IConnec
         // Cache the serialized DTO list for TTL
         try
         {
-            var json = JsonSerializer.Serialize(dtos, CoreSerializationContext.Default.ListArticleDto);
+            var json = JsonSerializer.Serialize(dtos, ArticlesSerializationContext.Default.ListArticleDto);
             await db.StringSetAsync(ArticlesCacheKeys.Latest, json, CacheTtl);
         }
         catch { }

@@ -54,7 +54,7 @@ public static class MartenConfigurationExtensions
                 })
                 .SoftDeletedWithIndex(static x => x.Name = "iam_del_fido2_pub_key_cred_idx");
 
-            _serializer.UseTypeInfoResolver(CoreSerializationContext.Default);
+            _serializer.UseTypeInfoResolver(IAMSerializationContext.Default);
             options.Serializer(_serializer);
         })
             .UseLightweightSessions()

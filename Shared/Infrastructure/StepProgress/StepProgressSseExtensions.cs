@@ -100,7 +100,7 @@ public static class StepProgressSseExtensions
         new JsonStreamItem<StepProgressFinalEvent>(
             StepProgressEventConstants.FinalResultEvent,
             new StepProgressFinalEvent(statusCode, response),
-            CoreSerializationContext.Default.StepProgressFinalEvent);
+            InfrastructureSerializationContext.Default.StepProgressFinalEvent);
 
     private static async IAsyncEnumerable<StreamItem> StreamProgressAsync(
         ChannelReader<string> stepCodes,
@@ -112,7 +112,7 @@ public static class StepProgressSseExtensions
             yield return new JsonStreamItem<StepProgressEvent>(
                 StepProgressEventConstants.StepProgressEvent,
                 new StepProgressEvent(stepCode),
-                CoreSerializationContext.Default.StepProgressEvent);
+                InfrastructureSerializationContext.Default.StepProgressEvent);
         }
 
         var finalFrame = await finalFrameTask;

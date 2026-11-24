@@ -36,7 +36,7 @@ public class ConfirmAdminLoginEndpoint : Endpoint<ConfirmAdminLoginDto, ApiRespo
     {
         Post("login/confirm");
         Version(1);
-        SerializerContext(CoreSerializationContext.Default);
+        SerializerContext(AdminsManagementSerializationContext.Default);
         AllowAnonymous();
         Description(b => b
             .WithTags(ApiTagConstants.Administration)

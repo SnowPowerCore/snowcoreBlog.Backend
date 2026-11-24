@@ -1,4 +1,4 @@
-﻿using System.Net;
+using System.Net;
 using System.Net.Mime;
 using FastEndpoints;
 using Fido2NetLib;
@@ -30,7 +30,7 @@ public class RequestAttestationOptionsEndpoint : Endpoint<RequestAttestationOpti
     {
         Post("create/attestation");
         Version(1);
-        SerializerContext(CoreSerializationContext.Default);
+        SerializerContext(ReadersManagementSerializationContext.Default);
         Validator<RequestAttestationOptionsValidator>();
         AllowAnonymous();
         EnableAntiforgery();

@@ -33,7 +33,7 @@ public class DeleteApiAccessRuleEndpoint : EndpointWithoutRequest<ApiResponse?>
     {
         Delete("rules/{id:guid}");
         Version(1);
-        SerializerContext(CoreSerializationContext.Default);
+        SerializerContext(ApiAccessRestrictionsSerializationContext.Default);
         Claims(AdminClaimConstants.AdminAccountClaimKey);
         Description(b => b
             .WithTags("ApiAccessRules")

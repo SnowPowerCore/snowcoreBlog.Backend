@@ -12,7 +12,7 @@ public class PingEndpoint : EndpointWithoutRequest<string>
     {
         Get("ping");
         Version(1);
-        SerializerContext(CoreSerializationContext.Default);
+        SerializerContext(AuthorsManagementSerializationContext.Default);
         Description(b => b
             .WithTags(ApiTagConstants.AuthorManagement)
             .Produces<string>((int)HttpStatusCode.OK, MediaTypeNames.Application.Json)

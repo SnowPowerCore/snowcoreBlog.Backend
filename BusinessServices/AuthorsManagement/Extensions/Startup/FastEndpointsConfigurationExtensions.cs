@@ -63,7 +63,7 @@ public static class FastEndpointsConfigurationExtensions
                 c.Endpoints.RoutePrefix = default;
                 c.Versioning.Prefix = "v";
                 c.Serializer.Options.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
-                c.Serializer.Options.SetJsonSerializationContext();
+                c.Serializer.Options.SetJsonSerializationContext(AuthorsManagementSerializationContext.Default);
             });
 
         return app;

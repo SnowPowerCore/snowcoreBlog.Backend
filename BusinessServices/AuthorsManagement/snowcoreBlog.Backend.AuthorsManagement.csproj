@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
@@ -7,7 +7,7 @@
     <InvariantGlobalization>true</InvariantGlobalization>
     <PublishTrimmed>true</PublishTrimmed>
     <PublishReadyToRun>true</PublishReadyToRun>
-    <!-- Shared dev-time secrets (same ID as ReadersManagement/AspireYarpGateway/etc.) —
+    <!-- Shared dev-time secrets (same ID as ReadersManagement/AspireYarpGateway/etc.) вЂ”
          provides Security:Signing:User:SigningKey for JWT bearer validation. -->
     <UserSecretsId>f4650b45-fed6-4a9a-9b97-2918092e0f30</UserSecretsId>
   </PropertyGroup>
@@ -42,6 +42,8 @@
       <IncludeAssets>runtime</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+    <ProjectReference Include="..\..\Shared\IAM.Core\snowcoreBlog.Backend.IAM.Core.csproj" />
+    <ProjectReference Include="..\..\Shared\AspireYarpGateway.Core\snowcoreBlog.Backend.AspireYarpGateway.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -54,8 +56,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\snowcoreBlog.Universal\ServiceDefaults\snowcoreBlog.ServiceDefaults.csproj" />
-    <ProjectReference Include="..\..\Shared\Infrastructure\snowcoreBlog.Backend.Infrastructure.csproj" />
-    <ProjectReference Include="..\..\Shared\AuthorsManagement.Core\snowcoreBlog.Backend.AuthorsManagement.Core.csproj" />
+    <PackageReference Include="snowcoreBlog.Backend.Infrastructure" />
+    <ProjectReference Include="..\AuthorsManagement.Core\snowcoreBlog.Backend.AuthorsManagement.Core.csproj" />
     <ProjectReference Include="..\..\snowcoreBlog.Universal\UniversalModules\ApplicationLaunch.Implementations\snowcoreBlog.ApplicationLaunch.Implementations.csproj" />
     <ProjectReference Include="..\..\snowcoreBlog.Universal\PublicApi\snowcoreBlog.PublicApi.csproj" />
   </ItemGroup>

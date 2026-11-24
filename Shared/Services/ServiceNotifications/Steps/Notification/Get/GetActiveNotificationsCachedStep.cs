@@ -33,7 +33,7 @@ public class GetActiveNotificationsCachedStep(INotificationRepository notificati
         {
             try
             {
-                var fromCache = JsonSerializer.Deserialize(cached.ToString(), CoreSerializationContext.Default.ListNotificationDto);
+                var fromCache = JsonSerializer.Deserialize(cached.ToString(), ServiceNotificationsSerializationContext.Default.ListNotificationDto);
                 if (fromCache is not default(List<NotificationDto>))
                     return Maybe.Create(fromCache);
             }
@@ -47,7 +47,7 @@ public class GetActiveNotificationsCachedStep(INotificationRepository notificati
         // Cache the result
         try
         {
-            var json = JsonSerializer.Serialize(dtos, CoreSerializationContext.Default.ListNotificationDto);
+            var json = JsonSerializer.Serialize(dtos, ServiceNotificationsSerializationContext.Default.ListNotificationDto);
             await db.StringSetAsync(cacheKey, json, CacheTtl);
         }
         catch { /* Caching failure should not break the request */ }

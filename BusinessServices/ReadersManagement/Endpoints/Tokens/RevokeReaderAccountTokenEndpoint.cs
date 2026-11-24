@@ -1,4 +1,4 @@
-﻿using System.Net;
+using System.Net;
 using System.Net.Mime;
 using System.Text.Json;
 using FastEndpoints;
@@ -31,7 +31,7 @@ public class RevokeReaderAccountTokenEndpoint(IHttpContextAccessor httpContextAc
     {
         Post("tokens/revoke");
         Version(1);
-        SerializerContext(CoreSerializationContext.Default);
+        SerializerContext(ReadersManagementSerializationContext.Default);
         AllowAnonymous();
         EnableAntiforgery();
         Description(b => b
@@ -53,7 +53,7 @@ public class RevokeReaderAccountTokenEndpoint(IHttpContextAccessor httpContextAc
             var recordJson = await db.StringGetDeleteAsync(recordKey);
             if (recordJson.HasValue)
             {
-                var record = JsonSerializer.Deserialize(recordJson.ToString(), CoreSerializationContext.Default.ReaderRefreshTokenRecord);
+                var record = JsonSerializer.Deserialize(recordJson.ToString(), InfrastructureSerializationContext.Default.ReaderRefreshTokenRecord);
                 if (record is not default(ReaderRefreshTokenRecord))
                 {
                     // Only clear the "current token" pointer when it still points at

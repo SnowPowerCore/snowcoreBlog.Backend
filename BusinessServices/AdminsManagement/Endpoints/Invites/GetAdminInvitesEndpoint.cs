@@ -28,7 +28,7 @@ public class GetAdminInvitesEndpoint : EndpointWithoutRequest<ApiResponse?>
     {
         Get("invites");
         Version(1);
-        SerializerContext(CoreSerializationContext.Default);
+        SerializerContext(AdminsManagementSerializationContext.Default);
         Claims(AdminClaimConstants.AdminAccountClaimKey);
         Description(b => b
             .WithTags(ApiTagConstants.Administration)

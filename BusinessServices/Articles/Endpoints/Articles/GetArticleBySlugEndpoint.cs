@@ -31,7 +31,7 @@ public class GetArticleBySlugEndpoint : EndpointWithoutRequest<ApiResponse?>
         Get("{slug}");
         ResponseCache(1800);
         Version(1);
-        SerializerContext(CoreSerializationContext.Default);
+        SerializerContext(ArticlesSerializationContext.Default);
         EnableAntiforgery();
         AllowAnonymous();
         Description(b => b

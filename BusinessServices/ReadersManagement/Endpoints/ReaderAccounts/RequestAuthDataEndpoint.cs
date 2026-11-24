@@ -1,4 +1,4 @@
-﻿using System.Net;
+using System.Net;
 using System.Net.Mime;
 using FastEndpoints;
 using MaybeResults;
@@ -29,7 +29,7 @@ public class RequestAuthDataEndpoint(
     {
         Get("check/me");
         Version(1);
-        SerializerContext(CoreSerializationContext.Default);
+        SerializerContext(ReadersManagementSerializationContext.Default);
         EnableAntiforgery();
         Claims(ReaderAccountClaimConstants.ReaderAccountReaderAccountClaimKey);
         Description(b => b

@@ -1,4 +1,4 @@
-﻿using System.Net;
+using System.Net;
 using System.Net.Mime;
 using FastEndpoints;
 using Microsoft.AspNetCore.Http.Json;
@@ -29,7 +29,7 @@ public class CheckNickNameNotTakenEndpoint : Endpoint<CheckNickNameNotTakenDto, 
     {
         Post("check/nickname");
         Version(1);
-        SerializerContext(CoreSerializationContext.Default);
+        SerializerContext(ReadersManagementSerializationContext.Default);
         Validator<CheckNickNameNotTakenValidator>();
         AllowAnonymous();
         EnableAntiforgery();

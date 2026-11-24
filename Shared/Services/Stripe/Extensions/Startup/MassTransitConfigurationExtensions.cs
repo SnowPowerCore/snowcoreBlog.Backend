@@ -21,14 +21,14 @@ public static class MassTransitConfigurationExtensions
             busConfigurator.ConfigureHttpJsonOptions(static o =>
             {
                 o.SerializerOptions.NumberHandling = JsonNumberHandling.AllowReadingFromString;
-                o.SerializerOptions.SetJsonSerializationContext();
+                o.SerializerOptions.SetJsonSerializationContext(StripeSerializationContext.Default);
             });
 
             busConfigurator.AddConsumer<EnsureStripeCustomerConsumer>();
 
             busConfigurator.UsingRabbitMq((context, config) =>
             {
-                config.ConfigureJsonSerializerOptions(static options => options.SetJsonSerializationContext());
+                config.ConfigureJsonSerializerOptions(static options => options.SetJsonSerializationContext(StripeSerializationContext.Default));
                 config.Host(rabbitMqConnectionString);
                 config.ConfigureEndpoints(context);
             });

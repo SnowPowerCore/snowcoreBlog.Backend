@@ -1,4 +1,4 @@
-﻿using Marten;
+using Marten;
 using Marten.Services;
 using snowcoreBlog.Backend.ApiAccessRestrictions.Interfaces.Repositories.Marten;
 using snowcoreBlog.Backend.ApiAccessRestrictions.Interfaces.Services;
@@ -22,7 +22,7 @@ public static class MartenConfigurationExtensions
             options.RegisterDocumentType<RegionRestrictionEntity>();
             options.RegisterDocumentType<ApiAccessRuleEntity>();
             options.RegisterDocumentType<ApiAccessResponseTemplateEntity>();
-            _serializer.UseTypeInfoResolver(CoreSerializationContext.Default);
+            _serializer.UseTypeInfoResolver(ApiAccessRestrictionsSerializationContext.Default);
             options.Serializer(_serializer);
             options.Policies.AllDocumentsSoftDeleted();
         })

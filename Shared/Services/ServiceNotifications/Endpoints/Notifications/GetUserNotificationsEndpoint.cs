@@ -1,4 +1,4 @@
-﻿using System.Net;
+using System.Net;
 using System.Net.Mime;
 using FastEndpoints;
 using Microsoft.AspNetCore.Http.Json;
@@ -29,7 +29,7 @@ public sealed class GetUserNotificationsEndpoint : Endpoint<GetActiveNotificatio
     {
         Get("active/user");
         Version(1);
-        SerializerContext(CoreSerializationContext.Default);
+        SerializerContext(ServiceNotificationsSerializationContext.Default);
         ResponseCache(900); // 15 minutes response cache
         Claims(ReaderAccountClaimConstants.ReaderAccountReaderAccountClaimKey);
         Description(b => b

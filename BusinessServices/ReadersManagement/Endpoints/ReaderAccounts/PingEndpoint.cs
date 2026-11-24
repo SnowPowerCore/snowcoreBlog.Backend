@@ -1,4 +1,4 @@
-﻿using System.Net;
+using System.Net;
 using System.Net.Mime;
 using FastEndpoints;
 using snowcoreBlog.Backend.Infrastructure;
@@ -12,7 +12,7 @@ public class PingEndpoint : EndpointWithoutRequest<string>
     {
         Get("ping");
         Version(1);
-        SerializerContext(CoreSerializationContext.Default);
+        SerializerContext(ReadersManagementSerializationContext.Default);
         EnableAntiforgery();
         Claims("readerAccount");
         Description(b => b
