@@ -4,7 +4,7 @@ using FastEndpoints;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.Extensions.Options;
 using MinimalStepifiedSystem.Attributes;
-using snowcoreBlog.Backend.Core.Constants;
+using snowcoreBlog.Backend.Shared.Core.Constants;
 using snowcoreBlog.Backend.Infrastructure;
 using snowcoreBlog.Backend.ReadersManagement.Context;
 using snowcoreBlog.Backend.ReadersManagement.Delegates;

@@ -1,5 +1,5 @@
-using snowcoreBlog.Backend.Core.Entities.Author;
-using snowcoreBlog.Backend.Core.Interfaces.Repositories;
+﻿using snowcoreBlog.Backend.AuthorsManagement.Core.Entities.Author;
+using snowcoreBlog.Backend.Shared.Core.Interfaces.Repositories;
 
 namespace snowcoreBlog.Backend.AuthorsManagement.Interfaces.Repositories.Marten;
 

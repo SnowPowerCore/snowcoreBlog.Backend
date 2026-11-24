@@ -1,11 +1,11 @@
-using System.Net;
+﻿using System.Net;
 using System.Net.Mime;
 using FastEndpoints;
 using Marten;
 using MaybeResults;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.Extensions.Options;
-using snowcoreBlog.Backend.Core.Entities.Reader;
+using snowcoreBlog.Backend.ReadersManagement.Core.Entities.Reader;
 using snowcoreBlog.Backend.Infrastructure;
 using snowcoreBlog.Backend.Infrastructure.Utilities;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
@@ -17,7 +17,7 @@ namespace snowcoreBlog.Backend.ReadersManagement.Endpoints.ReaderAccounts.Admin;
 
 /// <summary>
 /// Admin: soft-deletes a reader account entity (Marten soft-delete policy).
-/// The linked IAM user is NOT touched — this only removes the reader business record.
+/// The linked IAM user is NOT touched вЂ” this only removes the reader business record.
 /// </summary>
 public class DeleteReaderAccountEndpoint : EndpointWithoutRequest<ApiResponse?>
 {

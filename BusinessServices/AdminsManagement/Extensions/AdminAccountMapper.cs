@@ -1,5 +1,5 @@
-using Riok.Mapperly.Abstractions;
-using snowcoreBlog.Backend.Core.Entities.Admin;
+﻿using Riok.Mapperly.Abstractions;
+using snowcoreBlog.Backend.AdminsManagement.Core.Entities.Admin;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 
 namespace snowcoreBlog.Backend.AdminsManagement.Extensions;

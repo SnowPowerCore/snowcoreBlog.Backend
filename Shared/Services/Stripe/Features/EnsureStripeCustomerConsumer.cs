@@ -1,5 +1,5 @@
-using MassTransit;
-using snowcoreBlog.Backend.Core.Contracts.Stripe;
+﻿using MassTransit;
+using snowcoreBlog.Backend.Stripe.Core.Contracts.Stripe;
 using snowcoreBlog.Backend.Stripe.Interfaces.Services;
 using snowcoreBlog.PublicApi.Utilities.DataResult;
 

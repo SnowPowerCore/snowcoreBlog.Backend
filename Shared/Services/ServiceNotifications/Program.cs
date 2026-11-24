@@ -1,4 +1,3 @@
-using FastSharp.Modules;
 using snowcoreBlog.Backend.ServiceNotifications.Extensions.Startup;
 
 var builder = WebApplication.CreateSlimBuilder(args);
@@ -22,12 +21,8 @@ builder.Services.AddMassTransitConfiguration(
 // Hosting options
 builder.Services.AddHostingConfiguration();
 
-// OpenAPI document generation (development only mapping)
-builder.Services.AddOpenApiConfiguration();
-
-// FastSharp endpoints + JWT auth + antiforgery
-builder.Services.AddFastSharpEndpoints();
-builder.Services.AddApiAuthenticationConfiguration(
+// FastEndpoints and Authentication
+builder.Services.AddFastEndpointsConfiguration(
     builder.Configuration["Security:Signing:User:SigningKey"] ?? throw new InvalidOperationException("Signing key not configured"));
 
 // Core services

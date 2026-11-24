@@ -1,9 +1,9 @@
-using System.Text.Json;
+﻿using System.Text.Json;
 using Marten;
 using Microsoft.Extensions.Options;
 using Stripe;
-using snowcoreBlog.Backend.Core.Contracts.Stripe;
-using snowcoreBlog.Backend.Core.Entities.Stripe;
+using snowcoreBlog.Backend.Stripe.Core.Contracts.Stripe;
+using snowcoreBlog.Backend.Stripe.Core.Entities.Stripe;
 using snowcoreBlog.Backend.Stripe.Interfaces.Services;
 using snowcoreBlog.Backend.Stripe.Options;
 
@@ -37,7 +37,7 @@ public class StripeWebhookProcessor(
         var webhookSecret = options.Value.WebhookSecret;
         if (string.IsNullOrWhiteSpace(webhookSecret))
         {
-            logger.LogError("Stripe webhook received but Stripe:WebhookSecret is not configured — rejecting with 500.");
+            logger.LogError("Stripe webhook received but Stripe:WebhookSecret is not configured вЂ” rejecting with 500.");
             return StripeWebhookResult.Misconfigured("Stripe:WebhookSecret is not configured.");
         }
 
@@ -60,12 +60,12 @@ public class StripeWebhookProcessor(
         if (await session.Query<StripeWebhookEventEntity>()
                 .AnyAsync(e => e.EventId == stripeEvent.Id, token))
         {
-            logger.LogInformation("Stripe event {EventId} already processed — acknowledging duplicate.", stripeEvent.Id);
+            logger.LogInformation("Stripe event {EventId} already processed вЂ” acknowledging duplicate.", stripeEvent.Id);
             return StripeWebhookResult.Duplicate();
         }
 
         // 3. Route on the raw payload. Parsing is decoupled from Stripe.net's typed
-        //    event models on purpose — the JSON shape of data.object is Stripe's
+        //    event models on purpose вЂ” the JSON shape of data.object is Stripe's
         //    stable public API and keeps this processor independent from SDK churn.
         using var document = JsonDocument.Parse(json);
         var dataObject = document.RootElement.GetProperty("data").GetProperty("object");
@@ -125,7 +125,7 @@ public class StripeWebhookProcessor(
             }
             else
             {
-                logger.LogInformation("Donation {DonationId} already in status {Status} — paid session event is a no-op.", donation.Id, donation.Status);
+                logger.LogInformation("Donation {DonationId} already in status {Status} вЂ” paid session event is a no-op.", donation.Id, donation.Status);
             }
 
             return await PersistAsync(stripeEvent, donation.Id, kind, donation, events, token);
@@ -152,7 +152,7 @@ public class StripeWebhookProcessor(
         }
         else
         {
-            logger.LogInformation("Payment {PaymentId} already in status {Status} — paid session event is a no-op.", payment.Id, payment.Status);
+            logger.LogInformation("Payment {PaymentId} already in status {Status} вЂ” paid session event is a no-op.", payment.Id, payment.Status);
         }
 
         return await PersistAsync(stripeEvent, payment.Id, kind, payment, paymentEvents, token);
@@ -372,10 +372,10 @@ public class StripeWebhookProcessor(
     // --- Persistence (single atomic transaction) -----------------------------------------
 
     /// <summary>
-    /// Stores the entity update and the webhook-ledger row in ONE SaveChangesAsync —
+    /// Stores the entity update and the webhook-ledger row in ONE SaveChangesAsync вЂ”
     /// the scoped IDocumentSession is shared with all repositories, so this is a single
     /// Postgres transaction: either both land or neither does. The unique EventId index
-    /// also arbitrates concurrent replays (second insert fails → treated as duplicate).
+    /// also arbitrates concurrent replays (second insert fails в†’ treated as duplicate).
     /// Domain events are returned to the caller and published only AFTER the commit.
     /// </summary>
     private async Task<StripeWebhookResult> PersistAsync(

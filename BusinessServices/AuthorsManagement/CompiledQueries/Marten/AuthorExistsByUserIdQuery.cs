@@ -1,6 +1,6 @@
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
 using Marten.Linq;
-using snowcoreBlog.Backend.Core.Entities.Author;
+using snowcoreBlog.Backend.AuthorsManagement.Core.Entities.Author;
 
 namespace snowcoreBlog.Backend.AuthorsManagement.CompiledQueries.Marten;
 

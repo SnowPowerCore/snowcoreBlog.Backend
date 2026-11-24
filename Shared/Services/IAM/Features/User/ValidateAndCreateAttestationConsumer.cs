@@ -2,8 +2,8 @@
 using Fido2NetLib.Objects;
 using MassTransit;
 using Microsoft.Extensions.Options;
-using snowcoreBlog.Backend.Core.Interfaces.Services;
-using snowcoreBlog.Backend.Core.Utilities;
+using snowcoreBlog.Backend.Shared.Core.Interfaces.Services;
+using snowcoreBlog.Backend.Shared.Core.Utilities;
 using snowcoreBlog.Backend.IAM.Constants;
 using snowcoreBlog.Backend.IAM.Core.Contracts;
 using snowcoreBlog.Backend.IAM.Core.Entities;

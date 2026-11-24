@@ -36,7 +36,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Core\snowcoreBlog.Backend.Core.csproj" />
+    <ProjectReference Include="..\Shared.Core\snowcoreBlog.Backend.Shared.Core.csproj" />
+    <ProjectReference Include="..\Articles.Core\snowcoreBlog.Backend.Articles.Core.csproj" />
+    <ProjectReference Include="..\AuthorsManagement.Core\snowcoreBlog.Backend.AuthorsManagement.Core.csproj" />
+    <ProjectReference Include="..\AdminsManagement.Core\snowcoreBlog.Backend.AdminsManagement.Core.csproj" />
+    <ProjectReference Include="..\ReadersManagement.Core\snowcoreBlog.Backend.ReadersManagement.Core.csproj" />
+    <ProjectReference Include="..\ServiceNotifications.Core\snowcoreBlog.Backend.ServiceNotifications.Core.csproj" />
+    <ProjectReference Include="..\Stripe.Core\snowcoreBlog.Backend.Stripe.Core.csproj" />
+    <ProjectReference Include="..\Documents.Core\snowcoreBlog.Backend.Documents.Core.csproj" />
+    <ProjectReference Include="..\UrlShortener.Core\snowcoreBlog.Backend.UrlShortener.Core.csproj" />
+    <ProjectReference Include="..\ApiAccessRestrictions.Core\snowcoreBlog.Backend.ApiAccessRestrictions.Core.csproj" />
     <ProjectReference Include="..\IAM.Core\snowcoreBlog.Backend.IAM.Core.csproj" />
     <ProjectReference Include="..\Email.Core\snowcoreBlog.Backend.Email.Core.csproj" />
     <ProjectReference Include="..\..\snowcoreBlog.Universal\PublicApi\snowcoreBlog.PublicApi.csproj" />

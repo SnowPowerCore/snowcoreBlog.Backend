@@ -1,6 +1,6 @@
-using MaybeResults;
+﻿using MaybeResults;
 using MinimalStepifiedSystem.Interfaces;
-using snowcoreBlog.Backend.Core.Entities.Documents;
+using snowcoreBlog.Backend.Documents.Core.Entities.Documents;
 using snowcoreBlog.Backend.Documents.Context;
 using snowcoreBlog.Backend.Documents.Delegates;
 using snowcoreBlog.Backend.Documents.Interfaces.Repositories.Marten;
@@ -10,7 +10,7 @@ namespace snowcoreBlog.Backend.Documents.Steps.Documents.Upload;
 
 /// <summary>
 /// Content-addressable deduplication: when a document with the same checksum already
-/// exists the pipeline switches to "duplicate mode" — the content store write and the
+/// exists the pipeline switches to "duplicate mode" вЂ” the content store write and the
 /// <c>DocumentUploaded</c> publication are skipped downstream and the existing record
 /// is returned instead. Extend or reorder this step when a domain service needs a
 /// per-owner (instead of global) deduplication scope.

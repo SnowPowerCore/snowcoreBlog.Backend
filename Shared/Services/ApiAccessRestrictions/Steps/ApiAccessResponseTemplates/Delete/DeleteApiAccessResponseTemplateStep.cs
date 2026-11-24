@@ -1,4 +1,4 @@
-using MassTransit;
+﻿using MassTransit;
 using MaybeResults;
 using MinimalStepifiedSystem.Interfaces;
 using snowcoreBlog.Backend.ApiAccessRestrictions.Context;
@@ -6,7 +6,7 @@ using snowcoreBlog.Backend.ApiAccessRestrictions.Delegates;
 using snowcoreBlog.Backend.ApiAccessRestrictions.Extensions;
 using snowcoreBlog.Backend.ApiAccessRestrictions.Interfaces.Repositories.Marten;
 using snowcoreBlog.Backend.AspireYarpGateway.Core.Contracts;
-using snowcoreBlog.Backend.Core.Entities.ApiAccessRestrictions;
+using snowcoreBlog.Backend.ApiAccessRestrictions.Core.Entities.ApiAccessRestrictions;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 
 namespace snowcoreBlog.Backend.ApiAccessRestrictions.Steps.ApiAccessResponseTemplates.Delete;

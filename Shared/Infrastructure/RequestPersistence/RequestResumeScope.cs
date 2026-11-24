@@ -1,12 +1,5 @@
 namespace snowcoreBlog.Backend.Infrastructure.RequestPersistence;
 
-/// <summary>One completed step of an interrupted pipeline (from persisted checkpoints).</summary>
-public sealed record ResumeStepState(
-    int StepIndex,
-    string StepTypeName,
-    string SnapshotType,
-    string SnapshotJson);
-
 /// <summary>
 /// Ambient (async-local) resume state for a persisted request, established by the pre-processor and
 /// consumed by <c>StepCheckpointCoordinator</c> through the woven step advices. A scope with no

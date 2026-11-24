@@ -43,7 +43,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\snowcoreBlog.Universal\ServiceDefaults\snowcoreBlog.ServiceDefaults.csproj" />
     <ProjectReference Include="..\..\Infrastructure\snowcoreBlog.Backend.Infrastructure.csproj" />
-    <ProjectReference Include="..\..\Core\snowcoreBlog.Backend.Core.csproj" />
+    <ProjectReference Include="..\..\Documents.Core\snowcoreBlog.Backend.Documents.Core.csproj" />
     <ProjectReference Include="..\..\..\snowcoreBlog.Universal\PublicApi\snowcoreBlog.PublicApi.csproj" />
   </ItemGroup>
 

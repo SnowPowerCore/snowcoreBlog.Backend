@@ -1,5 +1,5 @@
-using snowcoreBlog.Backend.Core.Entities.ApiAccessRestrictions;
-using snowcoreBlog.Backend.Core.Interfaces.Repositories;
+﻿using snowcoreBlog.Backend.ApiAccessRestrictions.Core.Entities.ApiAccessRestrictions;
+using snowcoreBlog.Backend.Shared.Core.Interfaces.Repositories;
 
 namespace snowcoreBlog.Backend.ApiAccessRestrictions.Interfaces.Repositories.Marten;
 

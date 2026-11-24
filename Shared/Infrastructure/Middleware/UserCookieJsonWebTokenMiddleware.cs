@@ -1,7 +1,7 @@
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Net.Http.Headers;
-using snowcoreBlog.Backend.Core.Constants;
+using snowcoreBlog.Backend.Shared.Core.Constants;
 
 namespace snowcoreBlog.Backend.Gateway.Middleware.Middleware;
 

@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Core\snowcoreBlog.Backend.Core.csproj" />
+    <ProjectReference Include="..\Shared.Core\snowcoreBlog.Backend.Shared.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>

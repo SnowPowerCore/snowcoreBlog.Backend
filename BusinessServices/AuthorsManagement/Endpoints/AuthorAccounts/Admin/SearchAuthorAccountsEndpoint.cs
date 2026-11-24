@@ -1,11 +1,11 @@
-using System.Net;
+﻿using System.Net;
 using System.Net.Mime;
 using FastEndpoints;
 using Marten;
 using MaybeResults;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.Extensions.Options;
-using snowcoreBlog.Backend.Core.Entities.Author;
+using snowcoreBlog.Backend.AuthorsManagement.Core.Entities.Author;
 using snowcoreBlog.Backend.Infrastructure;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 using snowcoreBlog.PublicApi.Constants;

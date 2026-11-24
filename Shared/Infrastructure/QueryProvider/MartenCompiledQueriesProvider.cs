@@ -1,5 +1,5 @@
 ﻿using Marten.Linq;
-using snowcoreBlog.Backend.Core.Interfaces.CompiledQueries;
+using snowcoreBlog.Backend.Shared.Core.Interfaces.CompiledQueries;
 
 namespace snowcoreBlog.Backend.Infrastructure.QueryProvider;
 

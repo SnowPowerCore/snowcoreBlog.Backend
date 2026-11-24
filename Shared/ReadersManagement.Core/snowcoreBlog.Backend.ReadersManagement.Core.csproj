@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="kli.Localize" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Localize Include="Resources\RouteResources_*.json" NamespaceName="snowcoreBlog.Backend.ReadersManagement.Core.Resources" ClassName="RouteResources" NeutralCulture="en" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Shared.Core\snowcoreBlog.Backend.Shared.Core.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,4 +1,4 @@
-using System.Net;
+﻿using System.Net;
 using System.Net.Mime;
 using FastEndpoints;
 using Microsoft.AspNetCore.Http.Json;
@@ -7,7 +7,7 @@ using MinimalStepifiedSystem.Attributes;
 using snowcoreBlog.Backend.AuthorsManagement.Context;
 using snowcoreBlog.Backend.AuthorsManagement.Delegates;
 using snowcoreBlog.Backend.AuthorsManagement.Steps.AuthorAccounts.Create;
-using snowcoreBlog.Backend.Core.Constants;
+using snowcoreBlog.Backend.Shared.Core.Constants;
 using snowcoreBlog.Backend.Infrastructure;
 using snowcoreBlog.Backend.Infrastructure.Utilities;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;

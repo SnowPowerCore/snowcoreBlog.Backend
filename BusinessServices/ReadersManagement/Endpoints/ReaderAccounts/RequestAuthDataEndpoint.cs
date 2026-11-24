@@ -8,7 +8,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Net.Http.Headers;
-using snowcoreBlog.Backend.Core.Constants;
+using snowcoreBlog.Backend.Shared.Core.Constants;
 using snowcoreBlog.Backend.Infrastructure;
 using snowcoreBlog.Backend.Infrastructure.Utilities;
 using snowcoreBlog.Backend.ReadersManagement.Constants;

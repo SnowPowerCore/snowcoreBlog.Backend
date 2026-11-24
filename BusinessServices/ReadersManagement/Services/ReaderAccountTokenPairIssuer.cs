@@ -1,8 +1,8 @@
-using MassTransit;
+﻿using MassTransit;
 using MaybeResults;
 using Microsoft.Extensions.Options;
 using snowcoreBlog.Backend.AspireYarpGateway.Core.Contracts;
-using snowcoreBlog.Backend.Core.Constants;
+using snowcoreBlog.Backend.Shared.Core.Constants;
 using snowcoreBlog.Backend.Infrastructure;
 using snowcoreBlog.Backend.ReadersManagement.Constants;
 using snowcoreBlog.Backend.ReadersManagement.Extensions;

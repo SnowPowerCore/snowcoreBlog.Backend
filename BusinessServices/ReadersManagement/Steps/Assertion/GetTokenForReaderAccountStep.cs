@@ -15,7 +15,13 @@ public class GetTokenForReaderAccountStep(ReaderAccountTokenPairIssuer tokenPair
     {
         var currentUserId = context.GetFromData<Guid>(ReaderAccountUserConstants.CurrentUserId);
 
-        var (success, errors) = await tokenPairIssuer.TryIssueAsync(currentUserId, context.LoginByAssertion.Email, token);
+        // Passkey sign-ins resolve the actual account in IAM — prefer the resolved email
+        // over the one entered in the login form (they may differ).
+        var email = context.GetFromData<string>(ReaderAccountUserConstants.CurrentUserEmail) is { Length: > 0 } resolvedEmail
+            ? resolvedEmail
+            : context.LoginByAssertion.Email;
+
+        var (success, errors) = await tokenPairIssuer.TryIssueAsync(currentUserId, email, token);
         if (success)
         {
             return Maybe.Create<LoginByAssertionResultDto>(new());

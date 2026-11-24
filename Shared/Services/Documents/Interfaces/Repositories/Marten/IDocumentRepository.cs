@@ -1,5 +1,5 @@
-using snowcoreBlog.Backend.Core.Entities.Documents;
-using snowcoreBlog.Backend.Core.Interfaces.Repositories;
+﻿using snowcoreBlog.Backend.Documents.Core.Entities.Documents;
+using snowcoreBlog.Backend.Shared.Core.Interfaces.Repositories;
 
 namespace snowcoreBlog.Backend.Documents.Interfaces.Repositories.Marten;
 

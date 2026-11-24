@@ -1,4 +1,4 @@
-using snowcoreBlog.Backend.Core.Entities.Documents;
+﻿using snowcoreBlog.Backend.Documents.Core.Entities.Documents;
 
 namespace snowcoreBlog.Backend.Documents.Context;
 

@@ -1,6 +1,5 @@
-using MinimalStepifiedSystem.Base;
-using snowcoreBlog.Backend.Core.Entities.ApiAccessRestrictions;
-using snowcoreBlog.PublicApi.BusinessObjects.Dto;
+﻿using MinimalStepifiedSystem.Base;
+using snowcoreBlog.Backend.ApiAccessRestrictions.Core.Entities.ApiAccessRestrictions;
 
 namespace snowcoreBlog.Backend.ApiAccessRestrictions.Context;
 

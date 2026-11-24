@@ -12,8 +12,14 @@
   <ItemGroup>
     <PackageReference Include="Aspire.Npgsql" />
     <PackageReference Include="Aspire.StackExchange.Redis" />
-    <PackageReference Include="FastSharp.Models" />
-    <PackageReference Include="FastSharp.Modules" />
+    <PackageReference Include="FastEndpoints" />
+    <PackageReference Include="FastEndpoints.Security" />
+    <PackageReference Include="FastEndpoints.Generator">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="FastEndpoints.Swagger" />
+    <PackageReference Include="FastEndpoints.OpenTelemetry" />
     <PackageReference Include="Fody">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
@@ -22,8 +28,6 @@
     <PackageReference Include="MassTransit.RabbitMQ" />
         <PackageReference Include="Marten.SourceGenerator" PrivateAssets="all" />
     <PackageReference Include="Marten.CommandLine" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" />
-    <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
     <PackageReference Include="MinimalStepifiedSystem.Core" />
     <PackageReference Include="MinimalStepifiedSystem.SourceGen" />
     <PackageReference Include="OpenTelemetry.Instrumentation.StackExchangeRedis" />
@@ -42,7 +46,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\snowcoreBlog.Universal\ServiceDefaults\snowcoreBlog.ServiceDefaults.csproj" />
     <ProjectReference Include="..\..\Infrastructure\snowcoreBlog.Backend.Infrastructure.csproj" />
-    <ProjectReference Include="..\..\Core\snowcoreBlog.Backend.Core.csproj" />
+    <ProjectReference Include="..\..\ServiceNotifications.Core\snowcoreBlog.Backend.ServiceNotifications.Core.csproj" />
     <ProjectReference Include="..\..\..\snowcoreBlog.Universal\PublicApi\snowcoreBlog.PublicApi.csproj" />
   </ItemGroup>
 

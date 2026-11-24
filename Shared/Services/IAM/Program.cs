@@ -1,5 +1,5 @@
-using Fido2NetLib;
-using snowcoreBlog.Backend.Core.Utilities;
+﻿using Fido2NetLib;
+using snowcoreBlog.Backend.Shared.Core.Utilities;
 using snowcoreBlog.Backend.IAM.Extensions.Startup;
 using snowcoreBlog.Backend.Infrastructure.Extensions;
 using snowcoreBlog.Backend.Infrastructure.Utilities;

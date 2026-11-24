@@ -1,5 +1,5 @@
-using Riok.Mapperly.Abstractions;
-using snowcoreBlog.Backend.Core.Entities.Stripe;
+﻿using Riok.Mapperly.Abstractions;
+using snowcoreBlog.Backend.Stripe.Core.Entities.Stripe;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 
 namespace snowcoreBlog.Backend.Stripe.Extensions;

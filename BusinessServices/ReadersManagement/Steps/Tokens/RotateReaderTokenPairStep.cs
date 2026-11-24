@@ -1,10 +1,10 @@
-using System.Text.Json;
+﻿using System.Text.Json;
 using MassTransit;
 using MaybeResults;
 using Microsoft.Extensions.Options;
 using MinimalStepifiedSystem.Interfaces;
 using snowcoreBlog.Backend.AspireYarpGateway.Core.Contracts;
-using snowcoreBlog.Backend.Core.Constants;
+using snowcoreBlog.Backend.Shared.Core.Constants;
 using snowcoreBlog.Backend.Infrastructure;
 using snowcoreBlog.Backend.ReadersManagement.Constants;
 using snowcoreBlog.Backend.ReadersManagement.Context;
@@ -46,7 +46,7 @@ public sealed class RotateReaderTokenPairStep(
         // (e.g. a reader that became an author) are picked up without forcing a
         // full re-authentication. Base claims from the stored record stay in
         // place; fresh provider claims override them. Provider outages are
-        // tolerated by the issuer — the record claims are then kept as-is.
+        // tolerated by the issuer вЂ” the record claims are then kept as-is.
         var freshClaims = await tokenPairIssuer.MergeExternalClaimsAsync(
             record.UserId,
             record.Claims.GetValueOrDefault(ReaderAccountClaimConstants.ReaderAccountEmailClaimKey) ?? string.Empty,

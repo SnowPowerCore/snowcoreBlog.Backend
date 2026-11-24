@@ -1,4 +1,4 @@
-﻿using snowcoreBlog.Backend.Core.Base;
+﻿using snowcoreBlog.Backend.Shared.Core.Base;
 
 namespace snowcoreBlog.Backend.IAM.Core.Entities;
 

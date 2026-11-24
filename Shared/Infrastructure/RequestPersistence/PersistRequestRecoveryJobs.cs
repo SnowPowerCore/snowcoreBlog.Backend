@@ -1,16 +1,16 @@
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using snowcoreBlog.Backend.Core.Entities.RequestPersistence;
-using snowcoreBlog.Backend.Core.Interfaces.Repositories;
+using snowcoreBlog.Backend.Shared.Core.Entities.RequestPersistence;
+using snowcoreBlog.Backend.Shared.Core.Interfaces.Repositories;
 using TickerQ.Utilities.Base;
 using TickerQ.Utilities.Interfaces;
 
 namespace snowcoreBlog.Backend.Infrastructure.RequestPersistence;
 
 /// <summary>
-/// TickerQ job: polls the claim store for interrupted requests — aged Persisted (claimed but
-/// never executed), due RetryNeeded, Processing with expired lease — takes them over atomically
+/// TickerQ job: polls the claim store for interrupted requests вЂ” aged Persisted (claimed but
+/// never executed), due RetryNeeded, Processing with expired lease вЂ” takes them over atomically
 /// and replays them through <see cref="ReplayRequestDispatcher"/> (loopback re-dispatch, resume
 /// from checkpoints). Replaces the former <c>PersistRequestRecoveryWorker</c> BackgroundService;
 /// the cadence comes from the seeded cron ticker (<see cref="PersistRequestTickerQ"/>), which
@@ -35,7 +35,7 @@ public sealed class PersistRequestRecoveryJob(
         }
         catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
         {
-            // Host shutdown — the next scheduled occurrence picks the pass back up.
+            // Host shutdown вЂ” the next scheduled occurrence picks the pass back up.
         }
         catch (Exception ex)
         {

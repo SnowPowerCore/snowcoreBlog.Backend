@@ -1,11 +1,11 @@
-using System.Net;
+﻿using System.Net;
 using System.Net.Mime;
 using FastEndpoints;
 using Marten;
 using MaybeResults;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.Extensions.Options;
-using snowcoreBlog.Backend.Core.Entities.Article;
+using snowcoreBlog.Backend.Articles.Core.Entities.Article;
 using snowcoreBlog.Backend.Infrastructure;
 using snowcoreBlog.Backend.Infrastructure.Utilities;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
@@ -57,7 +57,7 @@ public class SetArticlePublicationEndpoint : Endpoint<SetArticlePublicationDto, 
             ? (req.PublishedAt?.UtcDateTime ?? DateTime.UtcNow)
             : (DateTime?)null;
 
-        // ArticleEntity is an init-only record — update by storing a `with` copy (same Id = upsert).
+        // ArticleEntity is an init-only record вЂ” update by storing a `with` copy (same Id = upsert).
         var updated = article with { PublishedAt = publishedAt };
         DocumentSession.Store(updated);
         await DocumentSession.SaveChangesAsync(ct);

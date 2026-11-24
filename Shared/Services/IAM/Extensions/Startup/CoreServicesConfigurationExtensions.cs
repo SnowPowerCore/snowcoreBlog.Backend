@@ -1,5 +1,5 @@
-using Microsoft.AspNetCore.Identity;
-using snowcoreBlog.Backend.Core.Interfaces.Services;
+﻿using Microsoft.AspNetCore.Identity;
+using snowcoreBlog.Backend.Shared.Core.Interfaces.Services;
 using snowcoreBlog.Backend.IAM.Core.Entities;
 using snowcoreBlog.Backend.IAM.Interfaces.Repositories.Marten;
 using snowcoreBlog.Backend.IAM.Repositories.Marten;

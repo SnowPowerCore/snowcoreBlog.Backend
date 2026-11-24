@@ -1,11 +1,11 @@
-using System.Net;
+﻿using System.Net;
 using System.Net.Mime;
 using System.Text.Json;
 using FastEndpoints;
 using MaybeResults;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.Extensions.Options;
-using snowcoreBlog.Backend.Core.Constants;
+using snowcoreBlog.Backend.Shared.Core.Constants;
 using snowcoreBlog.Backend.Infrastructure;
 using snowcoreBlog.Backend.ReadersManagement.Constants;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
@@ -19,7 +19,7 @@ namespace snowcoreBlog.Backend.ReadersManagement.Endpoints.Tokens;
 /// <summary>
 /// Signs the current reader out: deletes the refresh-token record from Redis
 /// (so the stored pair can no longer be rotated) and expires both auth cookies
-/// on the response. Intentionally AllowAnonymous — sign-out must never fail
+/// on the response. Intentionally AllowAnonymous вЂ” sign-out must never fail
 /// with 401, and the caller is identified by the refresh-token cookie alone.
 /// The antiforgery check is enabled because this is a state-changing action.
 /// </summary>
@@ -57,7 +57,7 @@ public class RevokeReaderAccountTokenEndpoint(IHttpContextAccessor httpContextAc
                 if (record is not default(ReaderRefreshTokenRecord))
                 {
                     // Only clear the "current token" pointer when it still points at
-                    // the revoked token — another login may have rotated it already.
+                    // the revoked token вЂ” another login may have rotated it already.
                     var userCurrentKey = ReaderRefreshTokenConstants.UserCurrentRefreshTokenKey(record.UserId);
                     var current = await db.StringGetAsync(userCurrentKey);
                     if (current.HasValue && string.Equals(current.ToString(), refreshToken, StringComparison.Ordinal))
@@ -66,7 +66,7 @@ public class RevokeReaderAccountTokenEndpoint(IHttpContextAccessor httpContextAc
             }
         }
 
-        // Always expire both cookies, even when no refresh cookie was present —
+        // Always expire both cookies, even when no refresh cookie was present вЂ”
         // the browser pair must never survive a sign-out attempt. Also expire
         // the BitzArt.Blazor.Auth-named cookies: when sign-in completed through
         // the Blazor host, those are the only auth cookies the browser holds.

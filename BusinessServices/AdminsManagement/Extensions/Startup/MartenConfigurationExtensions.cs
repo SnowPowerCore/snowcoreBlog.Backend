@@ -1,6 +1,6 @@
-using Marten;
+﻿using Marten;
 using Marten.Services;
-using snowcoreBlog.Backend.Core.Entities.Admin;
+using snowcoreBlog.Backend.AdminsManagement.Core.Entities.Admin;
 using snowcoreBlog.Backend.Infrastructure;
 
 namespace snowcoreBlog.Backend.AdminsManagement.Extensions.Startup;
@@ -18,7 +18,7 @@ public static class MartenConfigurationExtensions
             options.RegisterDocumentType<AdminLoginTokenEntity>();
 
             // Strong inviter reference enforced ON THE DATABASE LEVEL.
-            // The FK column is nullable — null is reserved for the first ever
+            // The FK column is nullable вЂ” null is reserved for the first ever
             // (bootstrap) admin only; invites always carry a non-null inviter.
             options.Schema.For<AdminEntity>()
                 .ForeignKey<AdminEntity>(static x => x.InvitedByAdminId, static x =>

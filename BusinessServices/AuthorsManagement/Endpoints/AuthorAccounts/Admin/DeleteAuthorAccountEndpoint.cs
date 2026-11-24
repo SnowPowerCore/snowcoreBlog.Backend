@@ -1,11 +1,11 @@
-using System.Net;
+﻿using System.Net;
 using System.Net.Mime;
 using FastEndpoints;
 using Marten;
 using MaybeResults;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.Extensions.Options;
-using snowcoreBlog.Backend.Core.Entities.Author;
+using snowcoreBlog.Backend.AuthorsManagement.Core.Entities.Author;
 using snowcoreBlog.Backend.Infrastructure;
 using snowcoreBlog.Backend.Infrastructure.Utilities;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
@@ -17,7 +17,7 @@ namespace snowcoreBlog.Backend.AuthorsManagement.Endpoints.AuthorAccounts.Admin;
 
 /// <summary>
 /// Admin: soft-deletes an author account entity (Marten soft-delete policy).
-/// The linked IAM user is NOT touched — this only removes the author business record.
+/// The linked IAM user is NOT touched вЂ” this only removes the author business record.
 /// </summary>
 public class DeleteAuthorAccountEndpoint : EndpointWithoutRequest<ApiResponse?>
 {

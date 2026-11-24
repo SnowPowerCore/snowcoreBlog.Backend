@@ -1,4 +1,4 @@
-using snowcoreBlog.Backend.Core.Interfaces.Repositories;
+﻿using snowcoreBlog.Backend.Shared.Core.Interfaces.Repositories;
 using snowcoreBlog.Backend.IAM.Core.Entities;
 
 namespace snowcoreBlog.Backend.IAM.Interfaces.Repositories.Marten;
@@ -10,4 +10,6 @@ public interface IFido2PublicKeyCredentialRepository : IRepository<Fido2PublicKe
     Task<IEnumerable<Fido2PublicKeyCredentialEntity>> GetAllByUserIdAsync(Guid userId, CancellationToken token = default);
     
     Task<Fido2PublicKeyCredentialEntity> GetByUserIdAndPubKeyCredIdAsync(Guid userId, string publicKeyCredentialId, CancellationToken token = default);
+
+    Task<Fido2PublicKeyCredentialEntity> GetByPubKeyCredIdAsync(string publicKeyCredentialId, CancellationToken token = default);
 }

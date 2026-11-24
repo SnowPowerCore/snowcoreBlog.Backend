@@ -1,7 +1,6 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Routing.Constraints;
-using snowcoreBlog.Backend.ApiAccessRestrictions.Context;
 using snowcoreBlog.Backend.Infrastructure.Extensions;
 using snowcoreBlog.ServiceDefaults.Extensions;
 
@@ -26,14 +25,13 @@ public static class HostingConfigurationExtensions
 
         services.ConfigureHttpJsonOptions(static options =>
         {
-            // Wire parity with the previous FastEndpoints serializer: camelCase properties,
-            // enums as strings, numbers readable from strings, source-gen context first in the chain.
+            // Wire parity with the FastEndpoints serializer: camelCase properties,
+            // enums as strings, numbers readable from strings, shared source-gen
+            // context first in the resolver chain.
             options.SerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
             options.SerializerOptions.NumberHandling = JsonNumberHandling.AllowReadingFromString;
             options.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
             options.SerializerOptions.SetJsonSerializationContext();
-            options.SerializerOptions.TypeInfoResolverChain.Insert(
-                1, ApiAccessRestrictionsSerializationContext.Default);
         });
 
         return services;

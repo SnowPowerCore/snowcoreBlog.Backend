@@ -1,5 +1,5 @@
-using snowcoreBlog.Backend.Core.Entities.RequestPersistence;
-using snowcoreBlog.Backend.Core.Interfaces.Repositories;
+﻿using snowcoreBlog.Backend.Shared.Core.Entities.RequestPersistence;
+using snowcoreBlog.Backend.Shared.Core.Interfaces.Repositories;
 
 namespace snowcoreBlog.Backend.Infrastructure.RequestPersistence;
 

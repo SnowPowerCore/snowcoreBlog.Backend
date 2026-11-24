@@ -1,0 +1,34 @@
+using Microsoft.Extensions.Logging;
+
+namespace Aspire.Hosting;
+
+// Helper class for proxying logs to the resource logger
+internal class ResourceLoggerProvider(ILogger logger) : ILoggerProvider
+{
+    public ILogger CreateLogger(string categoryName)
+    {
+        return new ResourceLogger(logger);
+    }
+
+    public void Dispose()
+    {
+    }
+
+    private class ResourceLogger(ILogger logger) : ILogger
+    {
+        public IDisposable? BeginScope<TState>(TState state) where TState : notnull
+        {
+            return logger.BeginScope(state);
+        }
+
+        public bool IsEnabled(LogLevel logLevel)
+        {
+            return logger.IsEnabled(logLevel);
+        }
+
+        public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception? exception, Func<TState, Exception?, string> formatter)
+        {
+            logger.Log(logLevel, eventId, state, exception, formatter);
+        }
+    }
+}

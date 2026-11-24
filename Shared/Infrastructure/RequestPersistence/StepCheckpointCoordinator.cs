@@ -1,10 +1,10 @@
-using System.Text.Json;
+﻿using System.Text.Json;
 using System.Text.Json.Serialization.Metadata;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using snowcoreBlog.Backend.Core.Entities.RequestPersistence;
-using snowcoreBlog.Backend.Core.Interfaces.Repositories;
-using snowcoreBlog.Backend.Core.Interfaces.Steps;
+using snowcoreBlog.Backend.Shared.Core.Entities.RequestPersistence;
+using snowcoreBlog.Backend.Shared.Core.Interfaces.Repositories;
+using snowcoreBlog.Backend.Shared.Core.Interfaces.Steps;
 
 namespace snowcoreBlog.Backend.Infrastructure.RequestPersistence;
 
@@ -13,7 +13,7 @@ namespace snowcoreBlog.Backend.Infrastructure.RequestPersistence;
 /// durable claim store.
 /// <para>
 /// Registered as a singleton; on construction it publishes itself to
-/// <see cref="Current"/> — the static reference the woven advice reads (no package-supplied
+/// <see cref="Current"/> вЂ” the static reference the woven advice reads (no package-supplied
 /// service-locator involved). Per-operation dependencies are resolved through
 /// <see cref="IServiceScopeFactory"/> so checkpoint writes never share the business session.
 /// Eager construction is guaranteed by the recovery worker's constructor dependency.
@@ -69,7 +69,7 @@ public sealed class StepCheckpointCoordinator : IStepCheckpointCoordinator
         if (!string.Equals(scope.PipelineKey, pipelineKey, StringComparison.Ordinal)
             && !string.Equals(scope.PipelineKey, WildcardPipelineKey, StringComparison.Ordinal))
         {
-            // Different pipeline running inside a persisted request scope (unexpected) — do not interfere.
+            // Different pipeline running inside a persisted request scope (unexpected) вЂ” do not interfere.
             return StepCheckpointDecision.Run;
         }
 
@@ -79,7 +79,7 @@ public sealed class StepCheckpointCoordinator : IStepCheckpointCoordinator
             scope.StepPositions[stepTypeName] = position;
         }
 
-        // Hydrate exactly once per resumed execution — every subsequent skip/run observes the
+        // Hydrate exactly once per resumed execution вЂ” every subsequent skip/run observes the
         // restored context state.
         if (!scope.RestoreApplied)
         {
@@ -96,7 +96,7 @@ public sealed class StepCheckpointCoordinator : IStepCheckpointCoordinator
                 if (scope.StepPositions.Count == 1 && position == 0)
                 {
                     throw new InvalidOperationException(
-                        $"Pipeline context '{pipelineKey}' does not implement IStepCheckpointState — "
+                        $"Pipeline context '{pipelineKey}' does not implement IStepCheckpointState вЂ” "
                         + "checkpointed steps require snapshot-capable contexts.");
                 }
             }
@@ -134,7 +134,7 @@ public sealed class StepCheckpointCoordinator : IStepCheckpointCoordinator
         if (context is not IStepCheckpointState state)
         {
             throw new InvalidOperationException(
-                $"Pipeline context '{pipelineKey}' does not implement IStepCheckpointState — cannot "
+                $"Pipeline context '{pipelineKey}' does not implement IStepCheckpointState вЂ” cannot "
                 + $"resume from checkpoint (snapshot '{restoreState.SnapshotType}'). Register snapshot "
                 + "providers for checkpointed pipelines.");
         }
@@ -184,7 +184,7 @@ public sealed class StepCheckpointCoordinator : IStepCheckpointCoordinator
         {
             _logger.LogError(
                 ex,
-                "Failed to persist checkpoint (request {RequestId}, step {Step}) — replay will restart from the previous checkpoint.",
+                "Failed to persist checkpoint (request {RequestId}, step {Step}) вЂ” replay will restart from the previous checkpoint.",
                 scope.PersistedRequestId,
                 stepTypeName);
         }

@@ -1,5 +1,5 @@
-using Marten;
-using snowcoreBlog.Backend.Core.Entities.Notification;
+﻿using Marten;
+using snowcoreBlog.Backend.ServiceNotifications.Core.Entities.Notification;
 using snowcoreBlog.Backend.Infrastructure.Repositories.Marten.Base;
 using snowcoreBlog.Backend.ServiceNotifications.Interfaces.Repositories.Marten;
 

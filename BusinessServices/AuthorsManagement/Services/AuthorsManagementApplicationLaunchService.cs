@@ -1,6 +1,6 @@
 ﻿using snowcoreBlog.ApplicationLaunch.Interfaces;
 using snowcoreBlog.Backend.AuthorsManagement.Features;
-using snowcoreBlog.Backend.Core.Constants;
+using snowcoreBlog.Backend.Shared.Core.Constants;
 using snowcoreBlog.PublicApi.Extensions;
 using StackExchange.Redis;
 

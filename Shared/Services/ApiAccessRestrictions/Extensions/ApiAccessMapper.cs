@@ -1,5 +1,5 @@
-using Riok.Mapperly.Abstractions;
-using snowcoreBlog.Backend.Core.Entities.ApiAccessRestrictions;
+﻿using Riok.Mapperly.Abstractions;
+using snowcoreBlog.Backend.ApiAccessRestrictions.Core.Entities.ApiAccessRestrictions;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 
 namespace snowcoreBlog.Backend.ApiAccessRestrictions.Extensions;

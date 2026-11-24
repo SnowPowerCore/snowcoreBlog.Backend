@@ -1,4 +1,5 @@
-﻿using MassTransit;
+﻿using Fido2NetLib;
+using MassTransit;
 using MaybeResults;
 using MinimalStepifiedSystem.Interfaces;
 using snowcoreBlog.Backend.IAM.Core.Contracts;
@@ -14,6 +15,13 @@ public class ValidateReaderAccountExistsStep(IRequestClient<ValidateUserExists> 
 {
     public async Task<IMaybe<LoginByAssertionResultDto>> InvokeAsync(LoginByAssertionContext context, LoginByAssertionDelegate next, CancellationToken token = default)
     {
+        // Passkey sign-ins resolve identity from the assertion's credential owner in IAM —
+        // the entered email is advisory and may belong to a different (or no) account.
+        if (context.LoginByAssertion.AuthenticatorAssertion is not default(AuthenticatorAssertionRawResponse))
+        {
+            return await next(context, token);
+        }
+
         var result = await requestClient.GetResponse<DataResult<UserExistsValidationResult>>(
             context.LoginByAssertion.ToValidateUserExists(), token);
         if (result.Message.IsSuccess)

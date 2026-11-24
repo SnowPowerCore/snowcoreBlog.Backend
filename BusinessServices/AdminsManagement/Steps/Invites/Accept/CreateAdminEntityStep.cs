@@ -1,9 +1,9 @@
-using MaybeResults;
+﻿using MaybeResults;
 using MinimalStepifiedSystem.Interfaces;
 using snowcoreBlog.Backend.AdminsManagement.Context;
 using snowcoreBlog.Backend.AdminsManagement.Delegates;
 using snowcoreBlog.Backend.AdminsManagement.Interfaces.Repositories.Marten;
-using snowcoreBlog.Backend.Core.Entities.Admin;
+using snowcoreBlog.Backend.AdminsManagement.Core.Entities.Admin;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 
 namespace snowcoreBlog.Backend.AdminsManagement.Steps.Invites.Accept;
@@ -20,7 +20,7 @@ public sealed class CreateAdminEntityStep(IAdminRepository adminRepository)
         {
             Email = context.Invite!.Email,
             NickName = context.EffectiveNickName,
-            // STRONG inviter reference — non-null for every invited admin.
+            // STRONG inviter reference вЂ” non-null for every invited admin.
             InvitedByAdminId = context.Invite.InvitedByAdminId,
             IamUserId = context.CreatedIamUserId,
             InvitedAtUtc = DateTime.UtcNow,

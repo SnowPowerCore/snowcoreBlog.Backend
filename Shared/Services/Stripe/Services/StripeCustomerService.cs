@@ -1,5 +1,5 @@
-using Stripe;
-using snowcoreBlog.Backend.Core.Entities.Stripe;
+﻿using Stripe;
+using snowcoreBlog.Backend.Stripe.Core.Entities.Stripe;
 using snowcoreBlog.Backend.Stripe.Interfaces.Repositories.Marten;
 using snowcoreBlog.Backend.Stripe.Interfaces.Services;
 
@@ -13,7 +13,7 @@ public class StripeCustomerService(
 {
     public async Task<StripeCustomerEntity> EnsureAsync(Guid? userId, string email, string? name, CancellationToken token = default)
     {
-        // 1. Application-account mapping wins — one Stripe customer per account.
+        // 1. Application-account mapping wins вЂ” one Stripe customer per account.
         if (userId is not null)
         {
             var existing = await customerRepository.GetByUserIdAsync(userId.Value, token);

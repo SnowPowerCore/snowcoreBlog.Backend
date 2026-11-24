@@ -6,14 +6,15 @@ using Ixnas.AltchaNet;
 using MassTransit;
 using MassTransit.Events;
 using snowcoreBlog.Backend.AspireYarpGateway.Core.Contracts;
-using snowcoreBlog.Backend.Core.Contracts;
-using snowcoreBlog.Backend.Core.Entities.Admin;
-using snowcoreBlog.Backend.Core.Entities.ApiAccessRestrictions;
-using snowcoreBlog.Backend.Core.Entities.Article;
-using snowcoreBlog.Backend.Core.Entities.Author;
-using snowcoreBlog.Backend.Core.Entities.Documents;
-using snowcoreBlog.Backend.Core.Entities.Notification;
-using snowcoreBlog.Backend.Core.Entities.Reader;
+using snowcoreBlog.Backend.Documents.Core.Contracts;
+using snowcoreBlog.Backend.ReadersManagement.Core.Contracts;
+using snowcoreBlog.Backend.AdminsManagement.Core.Entities.Admin;
+using snowcoreBlog.Backend.ApiAccessRestrictions.Core.Entities.ApiAccessRestrictions;
+using snowcoreBlog.Backend.Articles.Core.Entities.Article;
+using snowcoreBlog.Backend.AuthorsManagement.Core.Entities.Author;
+using snowcoreBlog.Backend.Documents.Core.Entities.Documents;
+using snowcoreBlog.Backend.ServiceNotifications.Core.Entities.Notification;
+using snowcoreBlog.Backend.ReadersManagement.Core.Entities.Reader;
 using snowcoreBlog.Backend.Email.Core.Contracts;
 using snowcoreBlog.Backend.IAM.Core.Contracts;
 using snowcoreBlog.Backend.IAM.Core.Entities;
@@ -45,7 +46,7 @@ namespace snowcoreBlog.Backend.Infrastructure;
 [JsonSerializable(typeof(IpRestrictionSnapshotDto))]
 [JsonSerializable(typeof(RegionRestrictionSnapshotDto))]
 [JsonSerializable(typeof(ApiAccessRestrictionsChanged))]
-// ApiAccessRestrictions FastSharp wire types (endpoints + gateway refresher + admin frontend)
+// ApiAccessRestrictions wire types (endpoints + gateway refresher + admin frontend)
 [JsonSerializable(typeof(ApiAccessRuleEntity))]
 [JsonSerializable(typeof(List<ApiAccessRuleEntity>))]
 [JsonSerializable(typeof(ApiAccessResponseTemplateEntity))]
@@ -263,4 +264,4 @@ namespace snowcoreBlog.Backend.Infrastructure;
     UseStringEnumConverter = true,
     WriteIndented = true,
     DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull)]
-public partial class CoreSerializationContext : JsonSerializerContext { }
+public partial class CoreSerializationContext : JsonSerializerContext;

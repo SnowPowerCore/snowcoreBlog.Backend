@@ -2,7 +2,7 @@
 using MassTransit;
 using MaybeResults;
 using MinimalStepifiedSystem.Interfaces;
-using snowcoreBlog.Backend.Core.Contracts;
+using snowcoreBlog.Backend.ReadersManagement.Core.Contracts;
 using snowcoreBlog.Backend.IAM.Core.Contracts;
 using snowcoreBlog.Backend.Infrastructure.RequestPersistence;
 using snowcoreBlog.Backend.Infrastructure.StepProgress;

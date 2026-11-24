@@ -1,7 +1,7 @@
 ﻿using Marten;
 using snowcoreBlog.ApplicationLaunch.Interfaces;
 using snowcoreBlog.Backend.Articles.Interfaces.Repositories.Marten;
-using snowcoreBlog.Backend.Core.Entities.Article;
+using snowcoreBlog.Backend.Articles.Core.Entities.Article;
 
 namespace snowcoreBlog.Backend.Articles.Services;
 

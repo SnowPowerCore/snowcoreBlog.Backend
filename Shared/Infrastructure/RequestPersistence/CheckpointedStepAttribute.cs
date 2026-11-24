@@ -15,6 +15,4 @@ namespace snowcoreBlog.Backend.Infrastructure.RequestPersistence;
 /// </summary>
 [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
 [Injection(typeof(StepCheckpointAspect))]
-public sealed class CheckpointedStepAttribute : Attribute
-{
-}
+public sealed class CheckpointedStepAttribute : Attribute;
