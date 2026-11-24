@@ -35,7 +35,22 @@ public class CheckAndPerformAssertionConsumer(IFido2 fido2,
 
         var loginMsgAuthAssertion = loginMsg.AuthenticatorAssertion;
 
-        var user = await userManager.FindByEmailAsync(userManager.NormalizeEmail(loginMsg.Email));
+        // The email entered in the login form is advisory only: identity is resolved from the
+        // credential that produced the assertion, so a passkey belonging to a different
+        // account (and email) authenticates that account, not the one in the form.
+        var options = AssertionOptions.FromJson(loginMsg.AssertionOptionsJson);
+
+        var targetCredential = await fido2PublicKeyCredentialRepository
+            .GetByPubKeyCredIdAsync(loginMsgAuthAssertion.Id);
+        if (targetCredential is default(Fido2PublicKeyCredentialEntity))
+        {
+            await context.RespondAsync(
+                new DataResult<UserLoginResult>(
+                    Errors: [new(nameof(targetCredential), AssertionConstants.AuthCredentialNotFoundError)]));
+            return;
+        }
+
+        var user = await userManager.FindByIdAsync(targetCredential.UserId.ToString());
         if (user is default(ApplicationUserEntity))
         {
             await context.RespondAsync(
@@ -45,18 +60,6 @@ public class CheckAndPerformAssertionConsumer(IFido2 fido2,
         }
 
         var userIdGuid = new Guid(user.Id);
-
-        var options = AssertionOptions.FromJson(loginMsg.AssertionOptionsJson);
-
-        var targetCredential = await fido2PublicKeyCredentialRepository
-            .GetByUserIdAndPubKeyCredIdAsync(userIdGuid, loginMsgAuthAssertion.Id);
-        if (targetCredential is default(Fido2PublicKeyCredentialEntity))
-        {
-            await context.RespondAsync(
-                new DataResult<UserLoginResult>(
-                    Errors: [new(nameof(targetCredential), AssertionConstants.AuthCredentialNotFoundError)]));
-            return;
-        }
 
         async Task<bool> IsUserHandleOwnerOfCredentialIdCallback(Fido2NetLib.Objects.IsUserHandleOwnerOfCredentialIdParams @params, CancellationToken cancellationToken)
         {
@@ -89,7 +92,7 @@ public class CheckAndPerformAssertionConsumer(IFido2 fido2,
         var pubKeyCredsUpdateTask = fido2PublicKeyCredentialRepository
             .AddOrUpdateAsync(targetCredential, targetCredential.Id, token: ctxCancellationToken);
         var responseTask = context.RespondAsync(
-            new DataResult<UserLoginResult>(new() { Id = userIdGuid }));
+            new DataResult<UserLoginResult>(new() { Id = userIdGuid, Email = user.Email }));
 
         await Task.WhenAll(pubKeyCredsUpdateTask, responseTask);
     }

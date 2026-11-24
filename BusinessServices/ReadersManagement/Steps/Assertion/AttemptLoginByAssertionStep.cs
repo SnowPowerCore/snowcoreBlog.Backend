@@ -36,10 +36,13 @@ public class AttemptLoginByAssertionStep(IRequestClient<LoginUser> requestClient
             context.LoginByAssertion.ToLoginUser(assertionOptionsForUser), token);
         if (result.Message.IsSuccess)
         {
+            // IAM resolves the actual account from the assertion's credential owner —
+            // its email may differ from the one entered in the login form.
             await publishEndpoint.Publish<ReaderAccountUserLoggedIn>(
-                new(result.Message.Value!.Id, context.LoginByAssertion.Email), token);
+                new(result.Message.Value!.Id, result.Message.Value.Email), token);
 
             context.SetDataWith(ReaderAccountUserConstants.CurrentUserId, result.Message.Value.Id);
+            context.SetDataWith(ReaderAccountUserConstants.CurrentUserEmail, result.Message.Value.Email);
 
             return await next(context, token);
         }

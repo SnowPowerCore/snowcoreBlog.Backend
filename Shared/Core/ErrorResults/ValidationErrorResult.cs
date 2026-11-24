@@ -21,8 +21,3 @@ public sealed partial record ValidationErrorResult<T>
         Details = errorList;
     }
 }
-
-public sealed class ValidationErrorResultException : Exception
-{
-    public ValidationErrorResultException() : base($"{nameof(ValidationErrorResult)} cannot be created from a successful validation") { }
-}

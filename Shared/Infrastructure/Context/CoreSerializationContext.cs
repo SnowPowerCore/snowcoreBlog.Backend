@@ -45,7 +45,7 @@ namespace snowcoreBlog.Backend.Infrastructure;
 [JsonSerializable(typeof(IpRestrictionSnapshotDto))]
 [JsonSerializable(typeof(RegionRestrictionSnapshotDto))]
 [JsonSerializable(typeof(ApiAccessRestrictionsChanged))]
-// ApiAccessRestrictions FastSharp wire types (endpoints + gateway refresher + admin frontend)
+// ApiAccessRestrictions wire types (endpoints + gateway refresher + admin frontend)
 [JsonSerializable(typeof(ApiAccessRuleEntity))]
 [JsonSerializable(typeof(List<ApiAccessRuleEntity>))]
 [JsonSerializable(typeof(ApiAccessResponseTemplateEntity))]
@@ -263,4 +263,4 @@ namespace snowcoreBlog.Backend.Infrastructure;
     UseStringEnumConverter = true,
     WriteIndented = true,
     DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull)]
-public partial class CoreSerializationContext : JsonSerializerContext { }
+public partial class CoreSerializationContext : JsonSerializerContext;

@@ -104,8 +104,3 @@ public sealed class ReadersReplayAuthenticationProvider(
         return string.Join("; ", cookies);
     }
 }
-
-internal static class SnapshotSource
-{
-    public static readonly System.Text.Json.JsonSerializerOptions Options = new(System.Text.Json.JsonSerializerDefaults.Web);
-}

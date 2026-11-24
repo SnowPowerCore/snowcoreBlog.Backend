@@ -47,33 +47,33 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "snowcoreBlog.Backend.Stripe
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{D1E4B9F6-D533-D423-8818-2E1510152B85}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "snowcoreBlog.Backend.Core.Tests", "Shared\Core.Tests\snowcoreBlog.Backend.Core.Tests.csproj", "{23032FFF-6953-48BB-B87B-6C4989DE57CC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "snowcoreBlog.Backend.Core.Tests", "Tests\Core.Tests\snowcoreBlog.Backend.Core.Tests.csproj", "{23032FFF-6953-48BB-B87B-6C4989DE57CC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "snowcoreBlog.Backend.Infrastructure.Tests", "Shared\Infrastructure.Tests\snowcoreBlog.Backend.Infrastructure.Tests.csproj", "{AD925C89-9E2D-41C9-BA25-0649985AD951}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "snowcoreBlog.Backend.Infrastructure.Tests", "Tests\Infrastructure.Tests\snowcoreBlog.Backend.Infrastructure.Tests.csproj", "{AD925C89-9E2D-41C9-BA25-0649985AD951}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "snowcoreBlog.Backend.IAM.Core.Tests", "Shared\IAM.Core.Tests\snowcoreBlog.Backend.IAM.Core.Tests.csproj", "{F9F2D6B9-A914-4084-BDB2-67FE81E17FAC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "snowcoreBlog.Backend.IAM.Core.Tests", "Tests\IAM.Core.Tests\snowcoreBlog.Backend.IAM.Core.Tests.csproj", "{F9F2D6B9-A914-4084-BDB2-67FE81E17FAC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "snowcoreBlog.Backend.Email.Core.Tests", "Shared\Email.Core.Tests\snowcoreBlog.Backend.Email.Core.Tests.csproj", "{38412D7D-6E2E-472D-975D-9148520752F2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "snowcoreBlog.Backend.Email.Core.Tests", "Tests\Email.Core.Tests\snowcoreBlog.Backend.Email.Core.Tests.csproj", "{38412D7D-6E2E-472D-975D-9148520752F2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "snowcoreBlog.Backend.Push.Core.Tests", "Shared\Push.Core.Tests\snowcoreBlog.Backend.Push.Core.Tests.csproj", "{536F32B5-1F7C-451C-B4E0-2009D07C0611}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "snowcoreBlog.Backend.Push.Core.Tests", "Tests\Push.Core.Tests\snowcoreBlog.Backend.Push.Core.Tests.csproj", "{536F32B5-1F7C-451C-B4E0-2009D07C0611}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "snowcoreBlog.Backend.IAM.Tests", "Shared\Services\IAM.Tests\snowcoreBlog.Backend.IAM.Tests.csproj", "{E8E9AAA4-1F15-4199-B860-54C0FE43E2BB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "snowcoreBlog.Backend.IAM.Tests", "Tests\IAM.Tests\snowcoreBlog.Backend.IAM.Tests.csproj", "{E8E9AAA4-1F15-4199-B860-54C0FE43E2BB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "snowcoreBlog.Backend.Email.Tests", "Shared\Services\Email.Tests\snowcoreBlog.Backend.Email.Tests.csproj", "{4320F2A9-8FDA-4000-AA3B-65C402F4863A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "snowcoreBlog.Backend.Email.Tests", "Tests\Email.Tests\snowcoreBlog.Backend.Email.Tests.csproj", "{4320F2A9-8FDA-4000-AA3B-65C402F4863A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "snowcoreBlog.Backend.Push.Tests", "Shared\Services\Push.Tests\snowcoreBlog.Backend.Push.Tests.csproj", "{05200EF1-087A-4167-8BF6-1E2ED2773AF3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "snowcoreBlog.Backend.Push.Tests", "Tests\Push.Tests\snowcoreBlog.Backend.Push.Tests.csproj", "{05200EF1-087A-4167-8BF6-1E2ED2773AF3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "snowcoreBlog.Backend.Articles.Tests", "BusinessServices\Articles.Tests\snowcoreBlog.Backend.Articles.Tests.csproj", "{247B4C3A-5E9C-42E6-ACCD-CF981081264F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "snowcoreBlog.Backend.Articles.Tests", "Tests\Articles.Tests\snowcoreBlog.Backend.Articles.Tests.csproj", "{247B4C3A-5E9C-42E6-ACCD-CF981081264F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "snowcoreBlog.Backend.AuthorsManagement.Tests", "BusinessServices\AuthorsManagement.Tests\snowcoreBlog.Backend.AuthorsManagement.Tests.csproj", "{1399DF57-7670-4E2E-9353-8A6C9C359FE3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "snowcoreBlog.Backend.AuthorsManagement.Tests", "Tests\AuthorsManagement.Tests\snowcoreBlog.Backend.AuthorsManagement.Tests.csproj", "{1399DF57-7670-4E2E-9353-8A6C9C359FE3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "snowcoreBlog.Backend.ReadersManagement.Tests", "BusinessServices\ReadersManagement.Tests\snowcoreBlog.Backend.ReadersManagement.Tests.csproj", "{59103BB6-FC1C-4CDF-AD26-1346DE134F19}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "snowcoreBlog.Backend.ReadersManagement.Tests", "Tests\ReadersManagement.Tests\snowcoreBlog.Backend.ReadersManagement.Tests.csproj", "{59103BB6-FC1C-4CDF-AD26-1346DE134F19}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "snowcoreBlog.Backend.ServiceNotifications.Tests", "Shared\Services\ServiceNotifications.Tests\snowcoreBlog.Backend.ServiceNotifications.Tests.csproj", "{6AF64136-60E8-40C8-903A-2D2D22825A47}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "snowcoreBlog.Backend.ServiceNotifications.Tests", "Tests\ServiceNotifications.Tests\snowcoreBlog.Backend.ServiceNotifications.Tests.csproj", "{6AF64136-60E8-40C8-903A-2D2D22825A47}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "snowcoreBlog.Backend.ApiAccessRestrictions.Tests", "Shared\Services\ApiAccessRestrictions.Tests\snowcoreBlog.Backend.ApiAccessRestrictions.Tests.csproj", "{D1D1F377-68AB-4EA6-9B78-87F15F24A867}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "snowcoreBlog.Backend.ApiAccessRestrictions.Tests", "Tests\ApiAccessRestrictions.Tests\snowcoreBlog.Backend.ApiAccessRestrictions.Tests.csproj", "{D1D1F377-68AB-4EA6-9B78-87F15F24A867}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "snowcoreBlog.Backend.Documents.Tests", "Shared\Services\Documents.Tests\snowcoreBlog.Backend.Documents.Tests.csproj", "{91C3D7E5-4A62-4B08-8D33-F27E91A05B46}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "snowcoreBlog.Backend.Documents.Tests", "Tests\Documents.Tests\snowcoreBlog.Backend.Documents.Tests.csproj", "{91C3D7E5-4A62-4B08-8D33-F27E91A05B46}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

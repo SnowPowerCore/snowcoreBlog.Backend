@@ -1,4 +1,3 @@
-using FastSharp.Modules;
 using snowcoreBlog.Backend.ApiAccessRestrictions.Extensions.Startup;
 
 var builder = WebApplication.CreateSlimBuilder(args);
@@ -21,13 +20,10 @@ builder.Services.AddMassTransitConfiguration(
 builder.Services.AddHostingConfiguration();
 
 // OpenAPI document generation (development only mapping)
-builder.Services.AddOpenApiConfiguration();
-
-// OpenTelemetry
 builder.Services.AddOpenTelemetryConfiguration();
 
-// FastSharp endpoints + JWT auth
-builder.Services.AddFastSharpEndpoints();
+// FastEndpoints + JWT auth (admin token cookie lifted into the bearer context)
+builder.Services.AddFastEndpointsConfiguration();
 builder.Services.AddApiAuthenticationConfiguration(
     builder.Configuration["Security:Signing:Admin:SigningKey"]
         ?? throw new InvalidOperationException("Admin signing key not configured"));

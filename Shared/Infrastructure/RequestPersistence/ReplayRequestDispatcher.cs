@@ -11,22 +11,6 @@ using snowcoreBlog.PublicApi.Constants;
 
 namespace snowcoreBlog.Backend.Infrastructure.RequestPersistence;
 
-public sealed record ReplayOutcome(
-    RequestPersistenceStatus Status,
-    int? StatusCode,
-    string? ResponsePayload,
-    string? Note)
-{
-    public static ReplayOutcome AuthFailed { get; } =
-        new(RequestPersistenceStatus.Failed, null, null, "Replay re-authentication failed; manual handling required.");
-
-    public static ReplayOutcome AntiforgeryUnavailable { get; } =
-        new(RequestPersistenceStatus.Failed, null, null, "Antiforgery token endpoint did not produce a usable token; manual handling required.");
-
-    public static ReplayOutcome NoSelfAddress { get; } =
-        new(RequestPersistenceStatus.RetryNeeded, null, null, "Self base address not resolvable yet.");
-}
-
 /// <summary>
 /// Re-dispatches a stored request over HTTP loopback against the running service itself. The
 /// replay is a completely ordinary request: same route, same payload, same idempotency key —

@@ -1,39 +1,60 @@
 using System.Net;
-using FastSharp.Modules.Core;
+using System.Net.Mime;
+using FastEndpoints;
+using Microsoft.AspNetCore.Http.Json;
+using Microsoft.Extensions.Options;
 using MaybeResults;
+using snowcoreBlog.Backend.Core.Entities.Notification;
+using snowcoreBlog.Backend.Infrastructure;
 using snowcoreBlog.Backend.Infrastructure.Utilities;
-using snowcoreBlog.Backend.ServiceNotifications.Endpoints;
 using snowcoreBlog.Backend.ServiceNotifications.Extensions;
 using snowcoreBlog.Backend.ServiceNotifications.Interfaces.Repositories.Marten;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
+using snowcoreBlog.PublicApi.Constants;
 using snowcoreBlog.PublicApi.Extensions;
+using snowcoreBlog.PublicApi.Utilities.Api;
 
 namespace snowcoreBlog.Backend.ServiceNotifications.Endpoints.Notifications;
 
-public sealed class GetNotificationByIdEndpoint(INotificationRepository notificationRepository) : IEndpoint
+public sealed class GetNotificationByIdEndpoint(INotificationRepository notificationRepository) : EndpointWithoutRequest<ApiResponse?>
 {
-    public void Map(RouteGroupBuilder app)
+    public IOptions<JsonOptions> JsonOptions { get; set; }
+
+    public override void Configure()
     {
-        app.MapGet("/{id:guid}/v1", async (Guid id, CancellationToken ct) =>
-            {
-                var notification = await notificationRepository.GetByIdAsync(id, ct);
+        Get("{id:guid}");
+        Version(1);
+        SerializerContext(CoreSerializationContext.Default);
+        AllowAnonymous();
+        ResponseCache(300);
+        Description(b => b
+            .WithTags(ApiTagConstants.TechnicalNotifications)
+            .Produces<ApiResponseForOpenApi<NotificationDto>>((int)HttpStatusCode.OK, MediaTypeNames.Application.Json)
+            .Produces<ApiResponse>((int)HttpStatusCode.NotFound, MediaTypeNames.Application.Json)
+            .ProducesProblemFE((int)HttpStatusCode.BadRequest));
+    }
 
-                if (notification is default(Core.Entities.Notification.NotificationEntity))
-                {
-                    return new ApiResponseResult(
-                        ErrorResponseUtilities.ApiResponseWithErrors(
-                            [$"Notification with ID '{id}' was not found."],
-                            (int)HttpStatusCode.NotFound),
-                        (int)HttpStatusCode.NotFound);
-                }
+    public override async Task HandleAsync(CancellationToken ct)
+    {
+        var id = Route<Guid>("id");
+        var notification = await notificationRepository.GetByIdAsync(id, ct);
 
-                var dto = notification.ToDto();
-                var result = Maybe.Create(dto);
+        if (notification is default(NotificationEntity))
+        {
+            await Send.ResponseAsync(
+                ErrorResponseUtilities.ApiResponseWithErrors(
+                    [$"Notification with ID '{id}' was not found."],
+                    (int)HttpStatusCode.NotFound),
+                (int)HttpStatusCode.NotFound,
+                ct);
+            return;
+        }
 
-                return new ApiResponseResult(
-                    result.ToApiResponse(),
-                    result.ToStatusCode());
-            })
-            .WithMetadata(new Microsoft.AspNetCore.Mvc.ResponseCacheAttribute { Duration = 300 }); // 5 minutes response cache
+        var result = Maybe.Create(notification.ToDto());
+
+        await Send.ResponseAsync(
+            result?.ToApiResponse(serializerOptions: JsonOptions.Value.SerializerOptions),
+            result?.ToStatusCode() ?? (int)HttpStatusCode.InternalServerError,
+            ct);
     }
 }

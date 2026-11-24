@@ -1,27 +1,43 @@
 using System.Net;
-using FastSharp.Modules.Core;
+using System.Net.Mime;
+using FastEndpoints;
+using Microsoft.AspNetCore.Http.Json;
+using Microsoft.Extensions.Options;
 using MaybeResults;
+using snowcoreBlog.Backend.Infrastructure;
 using snowcoreBlog.Backend.ServiceNotifications.Extensions;
 using snowcoreBlog.Backend.ServiceNotifications.Interfaces.Repositories.Marten;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
+using snowcoreBlog.PublicApi.Constants;
 using snowcoreBlog.PublicApi.Extensions;
+using snowcoreBlog.PublicApi.Utilities.Api;
 
 namespace snowcoreBlog.Backend.ServiceNotifications.Endpoints.Notifications;
 
-// TODO: Add proper authorization for admin users
-public sealed class GetAllNotificationsEndpoint(INotificationRepository notificationRepository) : IEndpoint
+public sealed class GetAllNotificationsEndpoint(INotificationRepository notificationRepository) : EndpointWithoutRequest<ApiResponse?>
 {
-    public void Map(RouteGroupBuilder app)
-    {
-        app.MapGet("/v1", async (CancellationToken ct) =>
-        {
-            var notifications = await notificationRepository.GetAllAsync(ct);
-            var dtos = notifications.ToDtos().ToList();
-            var result = Maybe.Create<IReadOnlyList<NotificationDto>>(dtos);
+    public IOptions<JsonOptions> JsonOptions { get; set; }
 
-            return new ApiResponseResult(
-                result.ToApiResponse(),
-                result.ToStatusCode());
-        });
+    public override void Configure()
+    {
+        Get(string.Empty);
+        Version(1);
+        SerializerContext(CoreSerializationContext.Default);
+        AllowAnonymous();
+        Description(b => b
+            .WithTags(ApiTagConstants.TechnicalNotifications)
+            .Produces<ApiResponseForOpenApi<List<NotificationDto>>>((int)HttpStatusCode.OK, MediaTypeNames.Application.Json)
+            .ProducesProblemFE((int)HttpStatusCode.BadRequest));
+    }
+
+    public override async Task HandleAsync(CancellationToken ct)
+    {
+        var notifications = await notificationRepository.GetAllAsync(ct);
+        var result = Maybe.Create(notifications.ToDtos().ToList());
+
+        await Send.ResponseAsync(
+            result?.ToApiResponse(serializerOptions: JsonOptions.Value.SerializerOptions),
+            result?.ToStatusCode() ?? (int)HttpStatusCode.InternalServerError,
+            ct);
     }
 }

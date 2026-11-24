@@ -35,4 +35,8 @@ public class Fido2PublicKeyCredentialRepository(IDocumentSession session) : Base
     public Task<Fido2PublicKeyCredentialEntity> GetByUserIdAndPubKeyCredIdAsync(Guid userId, string publicKeyCredentialId, CancellationToken token = default) =>
         GetOneByQueryAsync(MartenCompiledQueryProvider<Fido2PublicKeyCredentialEntity, Fido2PublicKeyCredentialEntity>
             .Create(new PublicKeyCredentialGetByUserIdAndCredIdQuery { UserId = userId, PublicKeyCredentialId = publicKeyCredentialId }), token);
+
+    public Task<Fido2PublicKeyCredentialEntity> GetByPubKeyCredIdAsync(string publicKeyCredentialId, CancellationToken token = default) =>
+        GetOneByQueryAsync(MartenCompiledQueryProvider<Fido2PublicKeyCredentialEntity, Fido2PublicKeyCredentialEntity>
+            .Create(new PublicKeyCredentialGetByCredIdQuery { PublicKeyCredentialId = publicKeyCredentialId }), token);
 }

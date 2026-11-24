@@ -1,6 +1,6 @@
-using FastSharp.Modules;
 using MinimalStepifiedSystem.Extensions;
 using snowcoreBlog.ServiceDefaults.Extensions;
+using snowcoreBlog.Backend.ApiAccessRestrictions.Extensions.Startup;
 
 namespace snowcoreBlog.Backend.ApiAccessRestrictions.Extensions.Startup;
 
@@ -11,6 +11,7 @@ public static class ApplicationConfigurationExtensions
         app.UseMiddlewareConfiguration()
            .UseLocalizationConfiguration()
            .UseApiAuthenticationConfiguration()
+           .UseFastEndpointsConfiguration()
            .UseOpenApiConfiguration();
 
         // Registers the static service-provider supplier used by the MinimalStepifiedSystem
@@ -23,7 +24,6 @@ public static class ApplicationConfigurationExtensions
     public static void MapEndpoints(this WebApplication app)
     {
         app.MapDefaultEndpoints();
-        app.MapFastSharpEndpoints();
     }
 
     public static async Task RunApplicationAsync(this WebApplication app)

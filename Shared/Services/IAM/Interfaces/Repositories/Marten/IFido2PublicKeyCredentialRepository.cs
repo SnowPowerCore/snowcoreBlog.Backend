@@ -10,4 +10,6 @@ public interface IFido2PublicKeyCredentialRepository : IRepository<Fido2PublicKe
     Task<IEnumerable<Fido2PublicKeyCredentialEntity>> GetAllByUserIdAsync(Guid userId, CancellationToken token = default);
     
     Task<Fido2PublicKeyCredentialEntity> GetByUserIdAndPubKeyCredIdAsync(Guid userId, string publicKeyCredentialId, CancellationToken token = default);
+
+    Task<Fido2PublicKeyCredentialEntity> GetByPubKeyCredIdAsync(string publicKeyCredentialId, CancellationToken token = default);
 }

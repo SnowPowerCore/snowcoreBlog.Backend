@@ -35,7 +35,7 @@ public class ValidateUserOneTimeCodeConsumer(UserManager<ApplicationUserEntity> 
             _ = Guid.TryParse(user.Id, out var userId);
 
             await context.RespondAsync(
-                new DataResult<UserLoginResult>(new UserLoginResult { Id = userId }));
+                new DataResult<UserLoginResult>(new UserLoginResult { Id = userId, Email = user.Email }));
         }
         else
         {

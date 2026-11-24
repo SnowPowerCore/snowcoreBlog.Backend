@@ -1,43 +1,61 @@
-using FastSharp.Modules.Core;
-using FluentValidation;
-using MinimalStepifiedSystem.Attributes;
-using snowcoreBlog.Backend.ServiceNotifications.Context;
-using snowcoreBlog.Backend.ServiceNotifications.Delegates;
-using snowcoreBlog.Backend.ServiceNotifications.Extensions;
-using snowcoreBlog.Backend.ServiceNotifications.Steps.Notification.Delete;
+using System.Net;
+using System.Net.Mime;
+using FastEndpoints;
+using Microsoft.AspNetCore.Http.Json;
+using Microsoft.Extensions.Options;
+using MaybeResults;
+using snowcoreBlog.Backend.Core.Entities.Notification;
+using snowcoreBlog.Backend.Infrastructure;
+using snowcoreBlog.Backend.ServiceNotifications.ErrorResults;
 using snowcoreBlog.PublicApi.BusinessObjects.Dto;
+using snowcoreBlog.PublicApi.Constants;
 using snowcoreBlog.PublicApi.Extensions;
+using snowcoreBlog.PublicApi.Utilities.Api;
 using snowcoreBlog.PublicApi.Validation.Dto;
+using snowcoreBlog.Backend.ServiceNotifications.Interfaces.Repositories.Marten;
 
 namespace snowcoreBlog.Backend.ServiceNotifications.Endpoints.Notifications;
 
-public sealed class DeleteNotificationEndpoint(DeleteNotificationValidator validator) : IEndpoint
+public sealed class DeleteNotificationEndpoint(INotificationRepository notificationRepository) : Endpoint<DeleteNotificationDto, ApiResponse?>
 {
-    [StepifiedProcess(Steps = [
-        typeof(ValidateNotificationExistsForDeleteStep),
-        typeof(DeleteNotificationEntityStep),
-    ])]
-    protected DeleteNotificationDelegate DeleteNotification { get; }
+    public IOptions<JsonOptions> JsonOptions { get; set; }
 
-    public void Map(RouteGroupBuilder app)
+    public override void Configure()
     {
-        // TODO: Add proper authorization for admin users
-        app.MapDelete("/v1", async (DeleteNotificationDto request, CancellationToken ct) =>
-            {
-                var validationResult = await validator.ValidateAsync(request, ct);
-                if (!validationResult.IsValid)
-                {
-                    var payload = EndpointResponseHelpers.ApiResponseFromFailures(validationResult.Errors);
-                    return new ApiResponseResult(payload, StatusCodes.Status400BadRequest);
-                }
+        Delete(string.Empty);
+        Version(1);
+        SerializerContext(CoreSerializationContext.Default);
+        Validator<DeleteNotificationValidator>();
+        EnableAntiforgery();
+        Description(b => b
+            .WithTags(ApiTagConstants.TechnicalNotifications)
+            .Accepts<DeleteNotificationDto>(MediaTypeNames.Application.Json)
+            .Produces<ApiResponseForOpenApi<DeleteNotificationResultDto>>((int)HttpStatusCode.OK, MediaTypeNames.Application.Json)
+            .ProducesProblemFE((int)HttpStatusCode.BadRequest));
+    }
 
-                var context = new DeleteNotificationContext(request);
-                var result = await DeleteNotification(context, ct);
+    public override async Task HandleAsync(DeleteNotificationDto req, CancellationToken ct)
+    {
+        var existingEntity = await notificationRepository.GetByIdAsync(req.Id, ct);
 
-                return new ApiResponseResult(
-                    result?.ToApiResponse(),
-                    result?.ToStatusCode() ?? StatusCodes.Status500InternalServerError);
-            })
-            .WithMetadata(new RequireAntiforgeryMetadata());
+        if (existingEntity is default(NotificationEntity))
+        {
+            var notFound = NotificationNotFoundError<DeleteNotificationResultDto>.Create(
+                $"Notification with ID '{req.Id}' was not found.");
+
+            await Send.ResponseAsync(
+                notFound.ToApiResponse(serializerOptions: JsonOptions.Value.SerializerOptions),
+                notFound.ToStatusCode(),
+                ct);
+            return;
+        }
+
+        await notificationRepository.RemoveAsync(existingEntity!, token: ct);
+        var result = Maybe.Create(new DeleteNotificationResultDto { Success = true });
+
+        await Send.ResponseAsync(
+            result?.ToApiResponse(serializerOptions: JsonOptions.Value.SerializerOptions),
+            result?.ToStatusCode() ?? (int)HttpStatusCode.InternalServerError,
+            ct);
     }
 }
