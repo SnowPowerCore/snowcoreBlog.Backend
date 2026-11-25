@@ -1,4 +1,4 @@
-using System.Text.Json;
+﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace snowcoreBlog.Backend.AspireYarpGateway;
@@ -25,6 +25,11 @@ namespace snowcoreBlog.Backend.AspireYarpGateway;
 [JsonSerializable(typeof(Core.Contracts.CheckIpRequest))]
 [JsonSerializable(typeof(Core.Contracts.CheckIpResponse))]
 [JsonSerializable(typeof(Core.Contracts.ApiAccessRestrictionsChanged))]
+[JsonSerializable(typeof(Core.Contracts.GetUserTokenPairWithPayload))]
+[JsonSerializable(typeof(Core.Contracts.UserTokenPairWithPayloadGenerated))]
+[JsonSerializable(typeof(MassTransit.Fault<Core.Contracts.GetUserTokenPairWithPayload>))]
+[JsonSerializable(typeof(MassTransit.Events.FaultEvent<Core.Contracts.GetUserTokenPairWithPayload>))]
+[JsonSerializable(typeof(PublicApi.Utilities.DataResult.DataResult<Core.Contracts.UserTokenPairWithPayloadGenerated>))]
 [JsonSourceGenerationOptions(
     JsonSerializerDefaults.Web,
     UseStringEnumConverter = true,

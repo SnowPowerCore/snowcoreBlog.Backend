@@ -1,4 +1,4 @@
-using System.Text.Json;
+﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace snowcoreBlog.Backend.Stripe;
@@ -39,6 +39,9 @@ namespace snowcoreBlog.Backend.Stripe;
 [JsonSerializable(typeof(global::MassTransit.Events.FaultEvent<global::snowcoreBlog.PublicApi.BusinessObjects.Dto.GoodsCheckoutResultDto>))]
 [JsonSerializable(typeof(global::MassTransit.Fault<global::snowcoreBlog.PublicApi.BusinessObjects.Dto.GoodsCheckoutResultDto>))]
 [JsonSerializable(typeof(global::snowcoreBlog.PublicApi.Utilities.DataResult.DataResult<global::snowcoreBlog.PublicApi.BusinessObjects.Dto.GoodsCheckoutResultDto>))]
+[JsonSerializable(typeof(global::snowcoreBlog.PublicApi.BusinessObjects.Dto.DonationDto))]
+[JsonSerializable(typeof(global::snowcoreBlog.PublicApi.BusinessObjects.Dto.PaymentDto))]
+[JsonSerializable(typeof(global::snowcoreBlog.PublicApi.BusinessObjects.Dto.StripePaymentStatusDto))]
 [JsonSourceGenerationOptions(
     JsonSerializerDefaults.Web,
     UseStringEnumConverter = true,
