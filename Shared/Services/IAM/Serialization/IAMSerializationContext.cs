@@ -1,4 +1,4 @@
-using System.Text.Json;
+﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace snowcoreBlog.Backend.IAM;
@@ -119,6 +119,13 @@ namespace snowcoreBlog.Backend.IAM;
 [JsonSerializable(typeof(MassTransit.Events.FaultEvent<Email.Core.Contracts.EmailDomainChecked>))]
 [JsonSerializable(typeof(MassTransit.Fault<Email.Core.Contracts.EmailDomainChecked>))]
 [JsonSerializable(typeof(PublicApi.Utilities.DataResult.DataResult<Email.Core.Contracts.EmailDomainChecked>))]
+[JsonSerializable(typeof(Core.Contracts.DeleteUser))]
+[JsonSerializable(typeof(MassTransit.Fault<Core.Contracts.DeleteUser>))]
+[JsonSerializable(typeof(MassTransit.Events.FaultEvent<Core.Contracts.DeleteUser>))]
+[JsonSerializable(typeof(Core.Contracts.ValidateAdminExists))]
+[JsonSerializable(typeof(MassTransit.Fault<Core.Contracts.ValidateAdminExists>))]
+[JsonSerializable(typeof(MassTransit.Events.FaultEvent<Core.Contracts.ValidateAdminExists>))]
+[JsonSerializable(typeof(PublicApi.Utilities.DataResult.DataResult<Core.Contracts.ValidateAdminExists>))]
 [JsonSourceGenerationOptions(
     JsonSerializerDefaults.Web,
     UseStringEnumConverter = true,

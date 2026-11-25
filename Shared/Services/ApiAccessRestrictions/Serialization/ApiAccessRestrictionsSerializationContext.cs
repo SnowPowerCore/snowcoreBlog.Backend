@@ -1,4 +1,4 @@
-using System.Text.Json;
+﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace snowcoreBlog.Backend.ApiAccessRestrictions;
@@ -42,6 +42,7 @@ namespace snowcoreBlog.Backend.ApiAccessRestrictions;
 [JsonSerializable(typeof(AspireYarpGateway.Core.Contracts.CheckIpRequest))]
 [JsonSerializable(typeof(AspireYarpGateway.Core.Contracts.CheckIpResponse))]
 [JsonSerializable(typeof(AspireYarpGateway.Core.Contracts.ApiAccessRestrictionsChanged))]
+[JsonSerializable(typeof(PublicApi.BusinessObjects.Dto.ApiAccessRestrictionActionDto))]
 [JsonSourceGenerationOptions(
     JsonSerializerDefaults.Web,
     UseStringEnumConverter = true,

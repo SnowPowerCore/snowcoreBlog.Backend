@@ -1,4 +1,4 @@
-using System.Text.Json;
+﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace snowcoreBlog.Backend.Push;
@@ -25,6 +25,13 @@ namespace snowcoreBlog.Backend.Push;
 [JsonSerializable(typeof(MassTransit.Events.FaultEvent<Core.Contracts.SendGenericPush>))]
 [JsonSerializable(typeof(MassTransit.Fault<Core.Contracts.SendGenericPush>))]
 [JsonSerializable(typeof(PublicApi.Utilities.DataResult.DataResult<Core.Contracts.SendGenericPush>))]
+// Base action type only: it is the declared member type of SendGenericPush.Actions.
+// Derived subclasses (broadcast/http/view) are Mapperly mapping inputs, never JSON
+// payloads — registering them trips a STJ source-generator bug (virtual/override
+// `Type` property → duplicate __value_Type local, CS0128).
+[JsonSerializable(typeof(Core.Contracts.NotificationAction))]
+[JsonSerializable(typeof(Core.Contracts.NotificationAttachment))]
+[JsonSerializable(typeof(Core.Contracts.NotificationPriority))]
 [JsonSourceGenerationOptions(
     JsonSerializerDefaults.Web,
     UseStringEnumConverter = true,
