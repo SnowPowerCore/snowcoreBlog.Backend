@@ -1,4 +1,4 @@
-using System.Text.Json;
+﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace snowcoreBlog.Backend.AdminsManagement;
@@ -47,6 +47,16 @@ namespace snowcoreBlog.Backend.AdminsManagement;
 [JsonSerializable(typeof(MassTransit.Events.FaultEvent<Email.Core.Contracts.EmailDomainChecked>))]
 [JsonSerializable(typeof(MassTransit.Fault<Email.Core.Contracts.EmailDomainChecked>))]
 [JsonSerializable(typeof(PublicApi.Utilities.DataResult.DataResult<Email.Core.Contracts.EmailDomainChecked>))]
+[JsonSerializable(typeof(Core.Entities.Admin.AdminEntity))]
+[JsonSerializable(typeof(Core.Entities.Admin.AdminInviteEntity))]
+[JsonSerializable(typeof(Core.Entities.Admin.AdminLoginTokenEntity))]
+[JsonSerializable(typeof(Email.Core.Contracts.SendGenericEmail))]
+[JsonSerializable(typeof(MassTransit.Fault<Email.Core.Contracts.SendGenericEmail>))]
+[JsonSerializable(typeof(MassTransit.Events.FaultEvent<Email.Core.Contracts.SendGenericEmail>))]
+[JsonSerializable(typeof(IAM.Core.Contracts.ValidateAdminExists))]
+[JsonSerializable(typeof(MassTransit.Fault<IAM.Core.Contracts.ValidateAdminExists>))]
+[JsonSerializable(typeof(MassTransit.Events.FaultEvent<IAM.Core.Contracts.ValidateAdminExists>))]
+[JsonSerializable(typeof(PublicApi.Utilities.DataResult.DataResult<IAM.Core.Contracts.ValidateAdminExists>))]
 [JsonSourceGenerationOptions(
     JsonSerializerDefaults.Web,
     UseStringEnumConverter = true,

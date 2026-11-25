@@ -126,6 +126,7 @@ namespace snowcoreBlog.Backend.IAM;
 [JsonSerializable(typeof(MassTransit.Fault<Core.Contracts.ValidateAdminExists>))]
 [JsonSerializable(typeof(MassTransit.Events.FaultEvent<Core.Contracts.ValidateAdminExists>))]
 [JsonSerializable(typeof(PublicApi.Utilities.DataResult.DataResult<Core.Contracts.ValidateAdminExists>))]
+[JsonSerializable(typeof(PublicApi.Utilities.DataResult.DataResult<Guid>))]
 [JsonSourceGenerationOptions(
     JsonSerializerDefaults.Web,
     UseStringEnumConverter = true,

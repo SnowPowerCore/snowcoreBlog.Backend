@@ -1,4 +1,4 @@
-using System.Text.Json;
+﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace snowcoreBlog.Backend.Articles;
@@ -27,6 +27,9 @@ namespace snowcoreBlog.Backend.Articles;
 [JsonSerializable(typeof(PublicApi.BusinessObjects.Dto.CreateArticleResultDto))]
 [JsonSerializable(typeof(PublicApi.BusinessObjects.Dto.AntiforgeryResultDto))]
 [JsonSerializable(typeof(Infrastructure.Entities.AltchaStoredChallengeEntity))]
+[JsonSerializable(typeof(Core.Entities.Article.ArticleEntity))]
+[JsonSerializable(typeof(Core.Entities.Article.ArticleSnapshotEntity))]
+[JsonSerializable(typeof(List<Core.Entities.Article.ArticleSnapshotEntity>))]
 [JsonSourceGenerationOptions(
     JsonSerializerDefaults.Web,
     UseStringEnumConverter = true,

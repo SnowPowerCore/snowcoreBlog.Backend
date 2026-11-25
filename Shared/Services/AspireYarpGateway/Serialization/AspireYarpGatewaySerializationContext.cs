@@ -28,8 +28,11 @@ namespace snowcoreBlog.Backend.AspireYarpGateway;
 [JsonSerializable(typeof(Core.Contracts.GetUserTokenPairWithPayload))]
 [JsonSerializable(typeof(Core.Contracts.UserTokenPairWithPayloadGenerated))]
 [JsonSerializable(typeof(MassTransit.Fault<Core.Contracts.GetUserTokenPairWithPayload>))]
-[JsonSerializable(typeof(MassTransit.Events.FaultEvent<Core.Contracts.GetUserTokenPairWithPayload>))]
 [JsonSerializable(typeof(PublicApi.Utilities.DataResult.DataResult<Core.Contracts.UserTokenPairWithPayloadGenerated>))]
+[JsonSerializable(typeof(MassTransit.Events.FaultEvent<Core.Contracts.GetUserTokenPairWithPayload>))]
+[JsonSerializable(typeof(PublicApi.Utilities.DataResult.DataResult<Core.Contracts.GetUserTokenPairWithPayload>))]
+[JsonSerializable(typeof(MassTransit.Events.FaultEvent<Core.Contracts.UserTokenPairWithPayloadGenerated>))]
+[JsonSerializable(typeof(MassTransit.Fault<Core.Contracts.UserTokenPairWithPayloadGenerated>))]
 [JsonSourceGenerationOptions(
     JsonSerializerDefaults.Web,
     UseStringEnumConverter = true,

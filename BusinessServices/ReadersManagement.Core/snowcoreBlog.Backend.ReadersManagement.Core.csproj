@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Shared\Shared.Core\snowcoreBlog.Backend.Shared.Core.csproj" />
+    <PackageReference Include="snowcoreBlog.Backend.Shared.Core" />
   </ItemGroup>
 
 </Project>

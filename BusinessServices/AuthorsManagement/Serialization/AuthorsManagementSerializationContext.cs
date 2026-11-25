@@ -1,4 +1,4 @@
-using System.Text.Json;
+﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace snowcoreBlog.Backend.AuthorsManagement;
@@ -24,6 +24,8 @@ namespace snowcoreBlog.Backend.AuthorsManagement;
 [JsonSerializable(typeof(PublicApi.BusinessObjects.Dto.AntiforgeryResultDto))]
 [JsonSerializable(typeof(AspireYarpGateway.Core.Contracts.RequestReaderClaims))]
 [JsonSerializable(typeof(AspireYarpGateway.Core.Contracts.ReaderClaimsResponse))]
+[JsonSerializable(typeof(Core.Entities.Author.AuthorEntity))]
+[JsonSerializable(typeof(PublicApi.BusinessObjects.Dto.AuthorDisplayNameAvailability))]
 [JsonSourceGenerationOptions(
     JsonSerializerDefaults.Web,
     UseStringEnumConverter = true,

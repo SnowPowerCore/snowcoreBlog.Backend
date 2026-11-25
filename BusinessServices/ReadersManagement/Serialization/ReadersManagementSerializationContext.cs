@@ -1,4 +1,4 @@
-using System.Text.Json;
+﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace snowcoreBlog.Backend.ReadersManagement;
@@ -128,6 +128,47 @@ namespace snowcoreBlog.Backend.ReadersManagement;
 [JsonSerializable(typeof(MassTransit.Events.FaultEvent<IAM.Core.Contracts.CreateTempUser>))]
 [JsonSerializable(typeof(MassTransit.Fault<IAM.Core.Contracts.CreateTempUser>))]
 [JsonSerializable(typeof(PublicApi.Utilities.DataResult.DataResult<IAM.Core.Contracts.CreateTempUser>))]
+[JsonSerializable(typeof(Core.Entities.Reader.ReaderEntity))]
+[JsonSerializable(typeof(Core.Contracts.ReaderAccountCreated))]
+[JsonSerializable(typeof(MassTransit.Fault<Core.Contracts.ReaderAccountCreated>))]
+[JsonSerializable(typeof(MassTransit.Events.FaultEvent<Core.Contracts.ReaderAccountCreated>))]
+[JsonSerializable(typeof(Core.Contracts.ReaderAccountTempUserCreated))]
+[JsonSerializable(typeof(MassTransit.Fault<Core.Contracts.ReaderAccountTempUserCreated>))]
+[JsonSerializable(typeof(MassTransit.Events.FaultEvent<Core.Contracts.ReaderAccountTempUserCreated>))]
+[JsonSerializable(typeof(Core.Contracts.ReaderAccountUserCreated))]
+[JsonSerializable(typeof(MassTransit.Fault<Core.Contracts.ReaderAccountUserCreated>))]
+[JsonSerializable(typeof(MassTransit.Events.FaultEvent<Core.Contracts.ReaderAccountUserCreated>))]
+[JsonSerializable(typeof(Core.Contracts.ReaderAccountUserLoggedIn))]
+[JsonSerializable(typeof(MassTransit.Fault<Core.Contracts.ReaderAccountUserLoggedIn>))]
+[JsonSerializable(typeof(MassTransit.Events.FaultEvent<Core.Contracts.ReaderAccountUserLoggedIn>))]
+[JsonSerializable(typeof(PublicApi.Utilities.DataResult.DataResult<Core.Contracts.ReaderAccountCreated>))]
+[JsonSerializable(typeof(Email.Core.Contracts.CheckEmailDomain))]
+[JsonSerializable(typeof(Email.Core.Contracts.EmailDomainChecked))]
+[JsonSerializable(typeof(MassTransit.Fault<Email.Core.Contracts.EmailDomainChecked>))]
+[JsonSerializable(typeof(MassTransit.Events.FaultEvent<Email.Core.Contracts.EmailDomainChecked>))]
+[JsonSerializable(typeof(PublicApi.Utilities.DataResult.DataResult<Email.Core.Contracts.EmailDomainChecked>))]
+[JsonSerializable(typeof(Email.Core.Contracts.SendGenericEmail))]
+[JsonSerializable(typeof(Email.Core.Contracts.SendTemplatedEmail))]
+[JsonSerializable(typeof(MassTransit.Fault<Email.Core.Contracts.SendGenericEmail>))]
+[JsonSerializable(typeof(MassTransit.Events.FaultEvent<Email.Core.Contracts.SendGenericEmail>))]
+[JsonSerializable(typeof(PublicApi.Utilities.DataResult.DataResult<Email.Core.Contracts.SendGenericEmail>))]
+[JsonSerializable(typeof(Email.Core.Contracts.GenericEmailSent))]
+[JsonSerializable(typeof(MassTransit.Fault<Email.Core.Contracts.GenericEmailSent>))]
+[JsonSerializable(typeof(MassTransit.Events.FaultEvent<Email.Core.Contracts.GenericEmailSent>))]
+[JsonSerializable(typeof(PublicApi.Utilities.DataResult.DataResult<Email.Core.Contracts.GenericEmailSent>))]
+[JsonSerializable(typeof(MassTransit.Fault<Email.Core.Contracts.SendTemplatedEmail>))]
+[JsonSerializable(typeof(MassTransit.Events.FaultEvent<Email.Core.Contracts.SendTemplatedEmail>))]
+[JsonSerializable(typeof(PublicApi.Utilities.DataResult.DataResult<Email.Core.Contracts.SendTemplatedEmail>))]
+[JsonSerializable(typeof(Email.Core.Contracts.TemplatedEmailSent))]
+[JsonSerializable(typeof(MassTransit.Fault<Email.Core.Contracts.TemplatedEmailSent>))]
+[JsonSerializable(typeof(MassTransit.Events.FaultEvent<Email.Core.Contracts.TemplatedEmailSent>))]
+[JsonSerializable(typeof(PublicApi.Utilities.DataResult.DataResult<Email.Core.Contracts.TemplatedEmailSent>))]
+[JsonSerializable(typeof(IAM.Core.Contracts.DeleteUser))]
+[JsonSerializable(typeof(MassTransit.Fault<IAM.Core.Contracts.DeleteUser>))]
+[JsonSerializable(typeof(MassTransit.Events.FaultEvent<IAM.Core.Contracts.DeleteUser>))]
+[JsonSerializable(typeof(PublicApi.Utilities.DataResult.DataResult<Guid>))]
+[JsonSerializable(typeof(PublicApi.BusinessObjects.Dto.NickNameAvailability))]
+[JsonSerializable(typeof(PublicApi.BusinessObjects.Dto.AuthorDisplayNameAvailability))]
 [JsonSourceGenerationOptions(
     JsonSerializerDefaults.Web,
     UseStringEnumConverter = true,
