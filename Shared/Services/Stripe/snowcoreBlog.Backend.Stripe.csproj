@@ -36,6 +36,9 @@
       <IncludeAssets>compile; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Scalar.AspNetCore" />
+    <PackageReference Include="snowcoreBlog.ServiceDefaults" />
+    <PackageReference Include="snowcoreBlog.PublicApi" />
+    <PackageReference Include="snowcoreBlog.Backend.Infrastructure" />
     <PackageReference Include="Stripe.net" />
   </ItemGroup>
 
@@ -44,9 +47,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="snowcoreBlog.ServiceDefaults" />
-    <PackageReference Include="snowcoreBlog.PublicApi" />
-    <PackageReference Include="snowcoreBlog.Backend.Infrastructure" />
     <ProjectReference Include="..\..\Stripe.Core\snowcoreBlog.Backend.Stripe.Core.csproj" />
   </ItemGroup>
 

@@ -23,6 +23,8 @@
     <PackageReference Include="MassTransit.RabbitMQ" />
     <PackageReference Include="Otp.NET" />
     <PackageReference Include="Sodium.Core" />
+    <PackageReference Include="snowcoreBlog.ServiceDefaults" />
+    <PackageReference Include="snowcoreBlog.Backend.Infrastructure" />
     <PackageReference Include="Riok.Mapperly">
       <ExcludeAssets>runtime</ExcludeAssets>
       <PrivateAssets>all</PrivateAssets>
@@ -37,12 +39,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Features\Admin\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="snowcoreBlog.ServiceDefaults" />
-    <PackageReference Include="snowcoreBlog.Backend.Infrastructure" />
     <ProjectReference Include="..\..\IAM.Core\snowcoreBlog.Backend.IAM.Core.csproj" />
   </ItemGroup>
 

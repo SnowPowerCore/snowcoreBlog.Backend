@@ -30,6 +30,10 @@
     <PackageReference Include="MinimalStepifiedSystem.SourceGen" />
     <PackageReference Include="OpenTelemetry.Instrumentation.StackExchangeRedis" />
     <PackageReference Include="Scalar.AspNetCore" />
+    <PackageReference Include="snowcoreBlog.ServiceDefaults" />
+    <PackageReference Include="snowcoreBlog.PublicApi" />
+    <PackageReference Include="snowcoreBlog.Backend.Infrastructure" />
+    <PackageReference Include="snowcoreBlog.ApplicationLaunch.Implementations" />
     <PackageReference Include="Riok.Mapperly">
       <ExcludeAssets>runtime</ExcludeAssets>
       <PrivateAssets>all</PrivateAssets>
@@ -42,16 +46,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Endpoints\" />
-    <Folder Include="Extensions\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="snowcoreBlog.ServiceDefaults" />
-    <PackageReference Include="snowcoreBlog.PublicApi" />
-    <PackageReference Include="snowcoreBlog.Backend.Infrastructure" />
     <ProjectReference Include="..\..\UrlShortener.Core\snowcoreBlog.Backend.UrlShortener.Core.csproj" />
-    <PackageReference Include="snowcoreBlog.ApplicationLaunch.Implementations" />
   </ItemGroup>
 
 </Project>

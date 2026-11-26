@@ -21,6 +21,8 @@
     <PackageReference Include="MassTransit.RabbitMQ" />
     <PackageReference Include="SendGrid" />
     <PackageReference Include="SendGrid.Extensions.DependencyInjection" />
+    <PackageReference Include="snowcoreBlog.ServiceDefaults" />
+    <PackageReference Include="snowcoreBlog.Backend.Infrastructure" />
     <PackageReference Include="Riok.Mapperly">
       <ExcludeAssets>runtime</ExcludeAssets>
       <PrivateAssets>all</PrivateAssets>
@@ -33,13 +35,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="snowcoreBlog.ServiceDefaults" />
-    <PackageReference Include="snowcoreBlog.Backend.Infrastructure" />
     <ProjectReference Include="..\..\Email.Core\snowcoreBlog.Backend.Email.Core.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Features\AmazonSimpleEmail\" />
   </ItemGroup>
 
 </Project>

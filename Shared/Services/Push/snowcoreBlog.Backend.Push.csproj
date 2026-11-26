@@ -17,6 +17,8 @@
     <PackageReference Include="ConfigureAwait.Fody" />
     <PackageReference Include="MassTransit.RabbitMQ" />
     <PackageReference Include="Sodium.Core" />
+    <PackageReference Include="snowcoreBlog.ServiceDefaults" />
+    <PackageReference Include="snowcoreBlog.Backend.Infrastructure" />
     <PackageReference Include="NtfyCator" />
     <PackageReference Include="Riok.Mapperly">
       <ExcludeAssets>runtime</ExcludeAssets>
@@ -30,8 +32,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="snowcoreBlog.ServiceDefaults" />
-    <PackageReference Include="snowcoreBlog.Backend.Infrastructure" />
     <ProjectReference Include="..\..\Push.Core\snowcoreBlog.Backend.Push.Core.csproj" />
   </ItemGroup>
 
