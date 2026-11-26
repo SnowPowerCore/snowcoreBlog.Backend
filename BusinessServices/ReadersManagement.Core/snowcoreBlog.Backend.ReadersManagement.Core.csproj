@@ -8,14 +8,11 @@
 
   <ItemGroup>
     <PackageReference Include="kli.Localize" />
+    <PackageReference Include="snowcoreBlog.Backend.Shared.Core" />
   </ItemGroup>
 
   <ItemGroup>
     <Localize Include="Resources\RouteResources_*.json" NamespaceName="snowcoreBlog.Backend.ReadersManagement.Core.Resources" ClassName="RouteResources" NeutralCulture="en" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="snowcoreBlog.Backend.Shared.Core" />
   </ItemGroup>
 
 </Project>

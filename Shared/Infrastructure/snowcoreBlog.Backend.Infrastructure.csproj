@@ -27,17 +27,14 @@
     <PackageReference Include="OpenTelemetry.Extensions.Hosting" />
     <PackageReference Include="OpenTelemetry.Instrumentation.StackExchangeRedis" />
     <PackageReference Include="Scalar.AspNetCore" />
+    <PackageReference Include="snowcoreBlog.Backend.Shared.Core" />
+    <PackageReference Include="snowcoreBlog.PublicApi" />
     <PackageReference Include="Sodium.Core" />
     <PackageReference Include="TickerQ" />
   </ItemGroup>
 
   <ItemGroup>
     <None Update="**/FodyWeavers.*" Visible="false" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="snowcoreBlog.Backend.Shared.Core" />
-    <PackageReference Include="snowcoreBlog.PublicApi" />
   </ItemGroup>
 
 </Project>

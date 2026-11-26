@@ -12,10 +12,7 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="ConfigureAwait.Fody" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\snowcoreBlog.Universal\PublicApi\snowcoreBlog.PublicApi.csproj" />
+    <PackageReference Include="snowcoreBlog.PublicApi" />
   </ItemGroup>
 
   <ItemGroup>

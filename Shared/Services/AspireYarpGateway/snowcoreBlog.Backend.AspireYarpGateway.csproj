@@ -18,6 +18,12 @@
     <PackageReference Include="MassTransit.RabbitMQ" />
     <PackageReference Include="Microsoft.Extensions.ServiceDiscovery.Yarp" />
     <PackageReference Include="OpenTelemetry.Instrumentation.StackExchangeRedis" />
+    <PackageReference Include="snowcoreBlog.Backend.Infrastructure" />
+    <PackageReference Include="snowcoreBlog.ServiceDefaults" />
+    <PackageReference Include="snowcoreBlog.PublicApi" />
+    <PackageReference Include="snowcoreBlog.Backend.IAM.Core" />
+    <PackageReference Include="snowcoreBlog.Backend.Shared.Core" />
+    <PackageReference Include="snowcoreBlog.Backend.AspireYarpGateway.Core" />
     <PackageReference Include="TickerQ" />
     <PackageReference Include="TickerQ.Dashboard" />
     <PackageReference Include="Riok.Mapperly">
@@ -38,12 +44,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Gateway.Middleware\snowcoreBlog.Backend.Gateway.Middleware.csproj" />
-    <PackageReference Include="snowcoreBlog.Backend.Infrastructure" />
-    <ProjectReference Include="..\..\..\snowcoreBlog.Universal\ServiceDefaults\snowcoreBlog.ServiceDefaults.csproj" />
-    <ProjectReference Include="..\..\..\snowcoreBlog.Universal\PublicApi\snowcoreBlog.PublicApi.csproj" />
-    <ProjectReference Include="..\..\IAM.Core\snowcoreBlog.Backend.IAM.Core.csproj" />
-    <ProjectReference Include="..\..\Shared.Core\snowcoreBlog.Backend.Shared.Core.csproj" />
-    <ProjectReference Include="..\..\AspireYarpGateway.Core\snowcoreBlog.Backend.AspireYarpGateway.Core.csproj" />
   </ItemGroup>
 
 </Project>

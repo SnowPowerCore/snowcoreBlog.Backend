@@ -1,10 +1,18 @@
-# Packs the three snowcoreBlog backend shared packages into the local NuGet feed consumed
+# Packs the snowcoreBlog backend shared packages into the local NuGet feed consumed
 # via ..\..\local-nuget-feed (registered in the parent repo's nuget.config):
-#   snowcoreBlog.Backend.Shared.Core  - the shared kernel
-#   snowcoreBlog.PublicApi            - service DTO/contract mirror (dependency of Infrastructure)
+#
+# Kernel / infrastructure layer:
+#   snowcoreBlog.Backend.Shared.Core   - the shared kernel
+#   snowcoreBlog.PublicApi             - service DTO/contract mirror (dependency of Infrastructure)
 #   snowcoreBlog.Backend.Infrastructure - cross-service infrastructure (depends on the two above)
-# Every microservice consumes Infrastructure as a package and PROJECT-references its own
-# <Service>.Core; no other packages are published or installed.
+# Service-defaults / module layer:
+#   snowcoreBlog.ServiceDefaults       - Aspire service defaults (OTel, service discovery)
+#   snowcoreBlog.ApplicationLaunch(.Implementations) - application launch module pair
+# Cross-service contract layer (consumed by other microservices as packages; a
+# microservice only PROJECT-references its own <Service>.Core):
+#   snowcoreBlog.Backend.IAM.Core
+#   snowcoreBlog.Backend.Email.Core
+#   snowcoreBlog.Backend.AspireYarpGateway.Core
 #
 # Usage:
 #   pwsh -File pack-shared-packages.ps1            # packs with version 0.1.0
@@ -15,7 +23,10 @@
 # Run this after changing any of the packed projects, then restore/build consumers.
 
 param(
-    [string]$Version = '0.1.0'
+    [string]$Version = '0.1.0',
+    # Packages must be built Release; Debug builds are never published to the feed.
+    [ValidateSet('Release', 'Debug')]
+    [string]$Configuration = 'Release'
 )
 
 $ErrorActionPreference = 'Stop'
@@ -29,6 +40,12 @@ New-Item -ItemType Directory -Force -Path $feed | Out-Null
 $projects = @(
     'Shared\Shared.Core\snowcoreBlog.Backend.Shared.Core.csproj',
     'snowcoreBlog.Universal\PublicApi\snowcoreBlog.PublicApi.csproj',
+    'Shared\IAM.Core\snowcoreBlog.Backend.IAM.Core.csproj',
+    'Shared\Email.Core\snowcoreBlog.Backend.Email.Core.csproj',
+    'Shared\AspireYarpGateway.Core\snowcoreBlog.Backend.AspireYarpGateway.Core.csproj',
+    'snowcoreBlog.Universal\ServiceDefaults\snowcoreBlog.ServiceDefaults.csproj',
+    'snowcoreBlog.Universal\UniversalModules\ApplicationLaunch\snowcoreBlog.ApplicationLaunch.csproj',
+    'snowcoreBlog.Universal\UniversalModules\ApplicationLaunch.Implementations\snowcoreBlog.ApplicationLaunch.Implementations.csproj',
     'Shared\Infrastructure\snowcoreBlog.Backend.Infrastructure.csproj'
 )
 
@@ -36,7 +53,7 @@ Push-Location $repo
 $failed = 0
 foreach ($p in $projects) {
     Write-Host ">>> pack $p"
-    dotnet pack $p -c Release -p:Version=$Version -o $feed --nologo
+    dotnet pack $p -c $Configuration -p:Version=$Version -o $feed --nologo
     if ($LASTEXITCODE -ne 0) { $failed++; Write-Host "FAILED: $p" -ForegroundColor Red }
 }
 Pop-Location

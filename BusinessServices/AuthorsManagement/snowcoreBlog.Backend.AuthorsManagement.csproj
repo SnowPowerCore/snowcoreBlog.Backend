@@ -38,12 +38,16 @@
     <PackageReference Include="MinimalStepifiedSystem.SourceGen" />
     <PackageReference Include="OpenTelemetry.Instrumentation.StackExchangeRedis" />
     <PackageReference Include="Scalar.AspNetCore" />
+    <PackageReference Include="snowcoreBlog.ServiceDefaults" />
+    <PackageReference Include="snowcoreBlog.Backend.Infrastructure" />
+    <PackageReference Include="snowcoreBlog.Backend.IAM.Core" />
+    <PackageReference Include="snowcoreBlog.Backend.AspireYarpGateway.Core" />
+    <PackageReference Include="snowcoreBlog.ApplicationLaunch.Implementations" />
+    <PackageReference Include="snowcoreBlog.PublicApi" />
     <PackageReference Include="Riok.Mapperly">
       <IncludeAssets>runtime</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <ProjectReference Include="..\..\Shared\IAM.Core\snowcoreBlog.Backend.IAM.Core.csproj" />
-    <ProjectReference Include="..\..\Shared\AspireYarpGateway.Core\snowcoreBlog.Backend.AspireYarpGateway.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -55,11 +59,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\snowcoreBlog.Universal\ServiceDefaults\snowcoreBlog.ServiceDefaults.csproj" />
-    <PackageReference Include="snowcoreBlog.Backend.Infrastructure" />
     <ProjectReference Include="..\AuthorsManagement.Core\snowcoreBlog.Backend.AuthorsManagement.Core.csproj" />
-    <ProjectReference Include="..\..\snowcoreBlog.Universal\UniversalModules\ApplicationLaunch.Implementations\snowcoreBlog.ApplicationLaunch.Implementations.csproj" />
-    <ProjectReference Include="..\..\snowcoreBlog.Universal\PublicApi\snowcoreBlog.PublicApi.csproj" />
   </ItemGroup>
 
 </Project>

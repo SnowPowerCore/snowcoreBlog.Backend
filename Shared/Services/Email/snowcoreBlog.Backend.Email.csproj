@@ -33,7 +33,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\snowcoreBlog.Universal\ServiceDefaults\snowcoreBlog.ServiceDefaults.csproj" />
+    <PackageReference Include="snowcoreBlog.ServiceDefaults" />
     <PackageReference Include="snowcoreBlog.Backend.Infrastructure" />
     <ProjectReference Include="..\..\Email.Core\snowcoreBlog.Backend.Email.Core.csproj" />
   </ItemGroup>
